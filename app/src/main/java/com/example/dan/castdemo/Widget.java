@@ -4,10 +4,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class Widget {
-    String name;
 
     public Widget() {}
-
 
     //helper method - given a widget class, instantiate it.
     //CalendarWidget.class -> new CalendarWidget()

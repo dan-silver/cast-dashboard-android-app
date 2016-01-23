@@ -11,24 +11,24 @@ import java.util.List;
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.WidgetViewHolder> {
 
     public void addWidget(Widget w) {
-        feedItemList.add(w);
+        widgetList.add(w);
     }
 
     public class WidgetViewHolder extends RecyclerView.ViewHolder {
-        protected TextView name;
-        protected TextView type;
+        protected TextView topHeader;
+        protected TextView bottomHeader;
 
         public WidgetViewHolder(View view) {
             super(view);
-            this.name = (TextView) view.findViewById(R.id.widget_name);
-            this.type = (TextView) view.findViewById(R.id.widget_type);
+            this.topHeader = (TextView) view.findViewById(R.id.widget_name);
+            this.bottomHeader = (TextView) view.findViewById(R.id.widget_type);
         }
     }
 
-    private List<Widget> feedItemList;
+    private List<Widget> widgetList;
 
-    public MyRecyclerAdapter(List<Widget> feedItemList) {
-        this.feedItemList = feedItemList;
+    public MyRecyclerAdapter(List<Widget> widgetList) {
+        this.widgetList = widgetList;
     }
 
     @Override
@@ -40,14 +40,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Wi
 
     @Override
     public void onBindViewHolder(WidgetViewHolder customViewHolder, int i) {
-        Widget widget = feedItemList.get(i);
+        Widget widget = widgetList.get(i);
 
-        customViewHolder.name.setText(widget.name);
-        customViewHolder.type.setText(widget.getClass().getSimpleName());
+        customViewHolder.topHeader.setText(widget.getClass().getSimpleName());
+        customViewHolder.bottomHeader.setText("Some specific identifying detail");
     }
 
     @Override
     public int getItemCount() {
-        return (null != feedItemList ? feedItemList.size() : 0);
+        return (null != widgetList ? widgetList.size() : 0);
     }
 }
