@@ -21,7 +21,7 @@ import butterknife.OnClick;
 
 public class WidgetList extends Fragment {
 
-    MyRecyclerAdapter adapter;
+    WidgetListAdapter adapter;
     @Bind(R.id.widgetList) RecyclerView widgetList;
 
     public WidgetList() {
@@ -30,7 +30,7 @@ public class WidgetList extends Fragment {
         widgets.add(new PlaceHolderWidget());
         widgets.add(new PlaceHolderWidget());
 
-        adapter = new MyRecyclerAdapter(widgets);
+        adapter = new WidgetListAdapter(widgets);
     }
 
     @Override

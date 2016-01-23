@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.WidgetViewHolder> {
+public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetViewHolder> {
 
     public void addWidget(Widget w) {
         widgetList.add(w);
@@ -27,13 +27,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Wi
 
     private List<Widget> widgetList;
 
-    public MyRecyclerAdapter(List<Widget> widgetList) {
+    public WidgetListAdapter(List<Widget> widgetList) {
         this.widgetList = widgetList;
     }
 
     @Override
     public WidgetViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.list_row, null);
+        View view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.list_row, viewGroup, false);
 
         return new WidgetViewHolder(view);
     }
