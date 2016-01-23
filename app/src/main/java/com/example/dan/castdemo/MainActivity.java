@@ -1,6 +1,9 @@
 package com.example.dan.castdemo;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,8 +25,10 @@ import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.support.v7.media.MediaRouter.RouteInfo;
 import android.util.Log;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -47,10 +52,23 @@ public class MainActivity extends AppCompatActivity {
     private boolean mWaitingForReconnect;
     private String mSessionId;
 
+    public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.main_fragment, destinationFrag);
+
+        if (addToBackStack)
+            transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        switchToFragment(new WidgetList(), false);
 
         // Configure Cast device discovery
         mMediaRouter = MediaRouter.getInstance(getApplicationContext());

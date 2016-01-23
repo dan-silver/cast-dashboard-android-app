@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dan.castdemo.widgets.CalendarWidget;
-import com.example.dan.castdemo.widgets.PlaceHolderWidget;
+import com.example.dan.castdemo.widgets.PlaceholderWidget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,16 +21,16 @@ import butterknife.OnClick;
 
 public class WidgetList extends Fragment {
 
+    List<Widget> widgets = new ArrayList<>();
+
+
     WidgetListAdapter adapter;
     @Bind(R.id.widgetList) RecyclerView widgetList;
 
+
     public WidgetList() {
-        List<Widget> widgets = new ArrayList<>();
-
-        widgets.add(new PlaceHolderWidget());
-        widgets.add(new PlaceHolderWidget());
-
-        adapter = new WidgetListAdapter(widgets);
+        widgets.add(new PlaceholderWidget(getContext()));
+        widgets.add(new PlaceholderWidget(getContext()));
     }
 
     @Override
@@ -38,6 +38,7 @@ public class WidgetList extends Fragment {
         View view = inflater.inflate(R.layout.widget_list, container, false);
         ButterKnife.bind(this, view);
 
+        adapter = new WidgetListAdapter(widgets, (MainActivity) getActivity());
         widgetList.setAdapter(adapter);
         widgetList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter.notifyDataSetChanged();
@@ -49,12 +50,12 @@ public class WidgetList extends Fragment {
     public void addWidget() {
         final MainActivity activity = (MainActivity) getActivity();
 
-        final Class[] widgetTypes = new Class[] {PlaceHolderWidget.class, CalendarWidget.class};
+        final Widget[] widgetTypes = new Widget[] {new PlaceholderWidget(getContext()), new CalendarWidget(getContext())};
 
         String[] widgetNames = new String[widgetTypes.length];
 
         for (int i=0; i< widgetTypes.length; i++)
-            widgetNames[i] = widgetTypes[i].getSimpleName();
+            widgetNames[i] = widgetTypes[i].getHumanName();
 
 
         new MaterialDialog.Builder(getContext())
@@ -63,13 +64,13 @@ public class WidgetList extends Fragment {
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        Widget w = Widget.createFromClass(widgetTypes[which]);
+                        Widget widget = widgetTypes[which];
 
-                        adapter.addWidget(w);
+                        adapter.addWidget(widget);
                         adapter.notifyDataSetChanged();
 
-                        activity.sendMessage(widgetTypes[which].getSimpleName() + " created.");
-
+                        activity.sendMessage(widget.getHumanName() + " widget created.");
+//                        activity.switchToFragment(new WidgetSettings(), true);
                         return true;
                     }
                 })
