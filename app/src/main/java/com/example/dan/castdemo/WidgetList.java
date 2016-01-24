@@ -9,14 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.dan.castdemo.widgets.CalendarWidget;
-import com.example.dan.castdemo.widgets.PlaceholderWidget;
-import com.raizlabs.android.dbflow.list.FlowCursorList;
-import com.raizlabs.android.dbflow.list.FlowQueryList;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
-import com.raizlabs.android.dbflow.runtime.transaction.BaseTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
-import com.raizlabs.android.dbflow.runtime.transaction.TransactionListener;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
@@ -33,7 +27,8 @@ public class WidgetList extends Fragment {
 
 
     WidgetListAdapter adapter;
-    @Bind(R.id.widgetList) RecyclerView widgetList;
+    @Bind(R.id.widgetList)
+    RecyclerView widgetList;
 
 
     public WidgetList() {
@@ -46,7 +41,8 @@ public class WidgetList extends Fragment {
                             public void onResultReceived(List<Widget> someObjectList) {
                                 widgets.addAll(someObjectList);
                                 // retrieved here
-                            }}));
+                            }
+                        }));
 //        widgets.addAll(a);
 
     }

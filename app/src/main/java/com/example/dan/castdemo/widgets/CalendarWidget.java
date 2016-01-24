@@ -37,7 +37,6 @@ public class CalendarWidget {
     private static final int PROJECTION_CALENDAR_COLOR = 4;
 
 
-
     private void getCalendars() {
         // Run query
         Cursor cur;
