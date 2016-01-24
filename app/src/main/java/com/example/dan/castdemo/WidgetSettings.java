@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.dan.castdemo.widgetSettingsFragments.CalendarSettings;
-import com.example.dan.castdemo.widgetSettingsFragments.PlaceholderSettings;
+import com.example.dan.castdemo.settingsFragments.CalendarSettings;
+import com.example.dan.castdemo.settingsFragments.PlaceholderSettings;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import butterknife.Bind;

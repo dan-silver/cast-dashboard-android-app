@@ -26,6 +26,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.config.WidgetDatabaseWidgets_Database;
+import com.raizlabs.android.dbflow.sql.language.Delete;
 
 import java.io.IOException;
 
@@ -67,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FlowManager.init(this);
+//        Delete.tables(Widget.class, WidgetOption.class);
+
 
         switchToFragment(new WidgetList(), false);
 

@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static com.example.dan.castdemo.Widget.widgetTypes.CALENDAR;
 
 public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetViewHolder> {
 

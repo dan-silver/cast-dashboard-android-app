@@ -61,9 +61,11 @@ public class WidgetList extends Fragment {
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Widget widget = new Widget();
                         widget.setType(which);
+                        widget.save();
 
-                        widget.insert();
+                        assert widget.exists();
 
+                        widget.initOptions();
                         adapter.addWidget(widget);
                         adapter.notifyDataSetChanged();
 

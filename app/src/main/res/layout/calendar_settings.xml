@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
+
+    <android.support.v7.widget.SwitchCompat
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="calendar specific settings" />
+        android:text="Display events from all calendars"
+        android:id="@+id/display_all_calendars"
+        android:checked="true"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/calendarSelection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:listitem="@layout/calendar_select"/>
+
 </LinearLayout>

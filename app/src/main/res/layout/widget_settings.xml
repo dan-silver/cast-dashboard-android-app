@@ -31,6 +31,7 @@
     <FrameLayout
         android:id="@+id/widget_settings_type_specific"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:layout="@layout/calendar_settings"/>
 
 </LinearLayout>

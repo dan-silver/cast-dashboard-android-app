@@ -1,4 +1,4 @@
-package com.example.dan.castdemo.widgetSettingsFragments;
+package com.example.dan.castdemo.settingsFragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,7 +13,7 @@ import com.raizlabs.android.dbflow.sql.language.Select;
 
 import butterknife.ButterKnife;
 
-public class CalendarSettings extends Fragment {
+public class PlaceholderSettings extends Fragment {
 
     private Widget widget;
 
@@ -33,7 +33,7 @@ public class CalendarSettings extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.calendar_settings, container, false);
+        View view = inflater.inflate(R.layout.placeholder_settings, container, false);
         ButterKnife.bind(this, view);
 
 
