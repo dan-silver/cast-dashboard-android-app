@@ -11,6 +11,14 @@ import android.view.ViewGroup;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
+import com.raizlabs.android.dbflow.list.FlowCursorList;
+import com.raizlabs.android.dbflow.list.FlowQueryList;
+import com.raizlabs.android.dbflow.runtime.TransactionManager;
+import com.raizlabs.android.dbflow.runtime.transaction.BaseTransaction;
+import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
+import com.raizlabs.android.dbflow.runtime.transaction.TransactionListener;
+import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +37,18 @@ public class WidgetList extends Fragment {
 
 
     public WidgetList() {
-        widgets.add(new PlaceholderWidget(getContext()));
-        widgets.add(new PlaceholderWidget(getContext()));
+
+        // async fetch all saved widgets
+        TransactionManager.getInstance().addTransaction(
+                new SelectListTransaction<>(new Select().from(Widget.class),
+                        new TransactionListenerAdapter<List<Widget>>() {
+                            @Override
+                            public void onResultReceived(List<Widget> someObjectList) {
+                                widgets.addAll(someObjectList);
+                                // retrieved here
+                            }}));
+//        widgets.addAll(a);
+
     }
 
     @Override
@@ -50,21 +68,16 @@ public class WidgetList extends Fragment {
     public void addWidget() {
         final MainActivity activity = (MainActivity) getActivity();
 
-        final Widget[] widgetTypes = new Widget[] {new PlaceholderWidget(getContext()), new CalendarWidget(getContext())};
-
-        String[] widgetNames = new String[widgetTypes.length];
-
-        for (int i=0; i< widgetTypes.length; i++)
-            widgetNames[i] = widgetTypes[i].getHumanName();
-
-
         new MaterialDialog.Builder(getContext())
                 .title("Widget Type")
-                .items(widgetNames)
+                .items(Widget.widgetNames)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        Widget widget = widgetTypes[which];
+                        Widget widget = new Widget();
+                        widget.setType(which);
+
+                        widget.insert();
 
                         adapter.addWidget(widget);
                         adapter.notifyDataSetChanged();

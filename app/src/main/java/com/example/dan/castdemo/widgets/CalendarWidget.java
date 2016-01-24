@@ -9,18 +9,14 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 
-import com.example.dan.castdemo.Widget;
+public class CalendarWidget {
 
-public class CalendarWidget extends Widget {
+    public static String HUMAN_NAME = "Calendar";
 
-    @Override
-    public String getHumanName() {
-        return "Calendar";
-    }
+    private final Context context;
 
     public CalendarWidget(Context context) {
-        super(context);
-        this.type = Widget.CALENDAR_TYPE;
+        this.context = context;
     }
 
     // Projection array. Creating indices for this array instead of doing

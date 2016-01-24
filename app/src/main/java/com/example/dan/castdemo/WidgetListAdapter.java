@@ -52,7 +52,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
     public void onBindViewHolder(final WidgetViewHolder customViewHolder, int i) {
         final Widget widget = widgetList.get(i);
 
-        customViewHolder.topHeader.setText(widget.getHumanName());
+        customViewHolder.topHeader.setText("Widget Type: " + widget.type);
         customViewHolder.bottomHeader.setText("Some specific identifying detail");
 
         customViewHolder.editIcon.setOnClickListener(new View.OnClickListener() {
@@ -61,8 +61,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
                 Fragment fragment = new WidgetSettings();
 
                 Bundle bundle = new Bundle();
-                bundle.putInt(Widget.ID, widget.id);
-                bundle.putInt(Widget.TYPE, widget.type);
+                bundle.putLong(Widget.ID, widget.id);
                 fragment.setArguments(bundle);
 
                 mainActivity.switchToFragment(fragment, true);

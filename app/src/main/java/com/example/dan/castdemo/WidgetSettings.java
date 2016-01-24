@@ -7,6 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.raizlabs.android.dbflow.runtime.TransactionManager;
+import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
+import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
+import com.raizlabs.android.dbflow.sql.language.Select;
+
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -14,8 +21,7 @@ public class WidgetSettings extends Fragment {
 
 
     private Widget widget;
-    int widgetId;
-    int widgetType;
+    long widgetId;
 
     @Bind(R.id.widget_settings_title) TextView widgetSettingsTitle;
 
@@ -23,11 +29,12 @@ public class WidgetSettings extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
-        widgetId = bundle.getInt(Widget.ID, -1);
-        widgetType = bundle.getInt(Widget.TYPE, -1);
+        widgetId = bundle.getLong(Widget.ID, -1);
 
         // lookup widget in the database
         // display appropriate settings for that widget type
+        widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
+
 
 
         super.onCreate(savedInstanceState);
@@ -38,7 +45,7 @@ public class WidgetSettings extends Fragment {
         View view = inflater.inflate(R.layout.widget_settings, container, false);
         ButterKnife.bind(this, view);
 
-        widgetSettingsTitle.setText("Widget type: " + widgetType);
+        widgetSettingsTitle.setText("Widget type: " + widget.type);
 
         return view;
     }
