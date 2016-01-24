@@ -33,18 +33,7 @@ public class WidgetList extends Fragment {
 
     public WidgetList() {
 
-        // async fetch all saved widgets
-        TransactionManager.getInstance().addTransaction(
-                new SelectListTransaction<>(new Select().from(Widget.class),
-                        new TransactionListenerAdapter<List<Widget>>() {
-                            @Override
-                            public void onResultReceived(List<Widget> someObjectList) {
-                                widgets.addAll(someObjectList);
-                                // retrieved here
-                            }
-                        }));
-//        widgets.addAll(a);
-
+        refreshList();
     }
 
     @Override
@@ -85,5 +74,28 @@ public class WidgetList extends Fragment {
                 })
                 .positiveText("Add")
                 .show();
+    }
+
+    @Override
+    public void onResume() {
+        refreshList();
+        super.onResume();
+    }
+
+    public void refreshList() {
+        // async fetch all saved widgets
+        TransactionManager.getInstance().addTransaction(
+                new SelectListTransaction<>(new Select().from(Widget.class),
+                        new TransactionListenerAdapter<List<Widget>>() {
+                            @Override
+                            public void onResultReceived(List<Widget> someObjectList) {
+                                widgets.clear();
+                                widgets.addAll(someObjectList);
+
+                                if (adapter != null)
+                                    adapter.notifyDataSetChanged();
+                            }
+                        }));
+
     }
 }
