@@ -14,7 +14,7 @@ public class Widget extends BaseModel {
     // For bundle data passing
     public static String ID = "WIDGET_ID";
 
-    enum widgetTypes {
+    enum types {
         CALENDAR,
         PLACEHOLDER
     }
@@ -27,7 +27,7 @@ public class Widget extends BaseModel {
 
     public int getIconResource() {
         int typeIconResource;
-        Widget.widgetTypes type = getWidgetType();
+        Widget.types type = getWidgetType();
 
         switch (type) {
             case CALENDAR:
@@ -57,11 +57,11 @@ public class Widget extends BaseModel {
 
 
     //@todo clean this up!
-    public widgetTypes getWidgetType() {
+    public types getWidgetType() {
         if (type == 0) {
-            return widgetTypes.CALENDAR;
+            return types.CALENDAR;
         } else {//if (type == 1) {
-            return widgetTypes.PLACEHOLDER;
+            return types.PLACEHOLDER;
         }
     }
 }

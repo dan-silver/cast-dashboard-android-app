@@ -3,14 +3,18 @@ package com.example.dan.castdemo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.dan.castdemo.widgetSettingsFragments.CalendarSettings;
+import com.example.dan.castdemo.widgetSettingsFragments.PlaceholderSettings;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import butterknife.Bind;
@@ -25,6 +29,9 @@ public class WidgetSettings extends Fragment {
 
     @Bind(R.id.widget_settings_title)
     TextView widgetSettingsTitle;
+
+    @Bind(R.id.widget_settings_type_specific)
+    FrameLayout widgetTypeSettings;
 
 
     @Override
@@ -46,6 +53,26 @@ public class WidgetSettings extends Fragment {
         ButterKnife.bind(this, view);
 
         widgetSettingsTitle.setText(widget.getHumanName() + " Widget");
+
+        Fragment typeSettingsFragment;
+
+        if (widget.getWidgetType() == Widget.types.CALENDAR) {
+            typeSettingsFragment = new CalendarSettings();
+        } else {
+            typeSettingsFragment = new PlaceholderSettings();
+        }
+
+
+        Bundle bundle = new Bundle();
+        bundle.putLong(Widget.ID, widget.id);
+        typeSettingsFragment.setArguments(bundle);
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.widget_settings_type_specific, typeSettingsFragment);
+
+        transaction.commit();
+
 
         return view;
     }
