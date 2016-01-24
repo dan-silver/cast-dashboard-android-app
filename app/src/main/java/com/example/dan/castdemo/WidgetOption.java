@@ -29,6 +29,7 @@ public class WidgetOption extends BaseModel {
     @Column
     @ForeignKey(saveForeignKeyModel = false)
     ForeignKeyContainer<Widget> widgetForeignKeyContainer;
+
     public void associateWidget(Widget widget) {
         widgetForeignKeyContainer = FlowManager.getContainerAdapter(Widget.class).toForeignKeyContainer(widget);
     }

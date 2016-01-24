@@ -17,7 +17,6 @@ import com.example.dan.castdemo.Widget_Table;
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -78,8 +77,6 @@ public class CalendarSettings extends Fragment {
         // use a linear layout manager
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         calendarList.setLayoutManager(mLayoutManager);
-
-
 
 
         // specify an adapter (see also next example)

@@ -81,7 +81,6 @@ public class Widget extends BaseModel {
     }
 
 
-
     // needs to be accessible for DELETE
     List<WidgetOption> options;
 

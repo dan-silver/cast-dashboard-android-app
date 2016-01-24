@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalendarWidget extends UIWidget{
+public class CalendarWidget extends UIWidget {
 
     public static String HUMAN_NAME = "Calendar";
 
