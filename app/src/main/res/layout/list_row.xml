@@ -1,28 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/widget_name"
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:text="Foobar"
-            android:textColor="@color/primary_text"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/widget_type"
-            android:layout_width="match_parent"
+            android:src="@drawable/ic_today_24dp"
+            android:id="@+id/widget_type_icon"
+            android:layout_centerVertical="true"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/widget_name"
-            android:text="Foobar" />
+            android:layout_toRightOf="@+id/widget_type_icon"
+            android:layout_toEndOf="@+id/widget_type_icon"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
+            <TextView
+                android:id="@+id/widget_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Foobar"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/widget_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Foobar" />
+
+        </LinearLayout>
 
         <ImageView
             android:layout_width="wrap_content"
@@ -33,5 +44,3 @@
             android:layout_centerVertical="true"/>
 
     </RelativeLayout>
-
-</FrameLayout>

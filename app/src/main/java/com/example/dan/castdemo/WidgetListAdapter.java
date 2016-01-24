@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import static com.example.dan.castdemo.Widget.widgetTypes.CALENDAR;
+
 public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetViewHolder> {
 
     private final MainActivity mainActivity;
@@ -23,12 +25,14 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         protected TextView topHeader;
         protected TextView bottomHeader;
         protected ImageView editIcon;
+        protected ImageView typeIcon;
 
         public WidgetViewHolder(View view) {
             super(view);
             this.topHeader = (TextView) view.findViewById(R.id.widget_name);
             this.bottomHeader = (TextView) view.findViewById(R.id.widget_type);
             this.editIcon = (ImageView) view.findViewById(R.id.editIcon);
+            this.typeIcon = (ImageView) view.findViewById(R.id.widget_type_icon);
         }
     }
 
@@ -53,6 +57,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
         customViewHolder.topHeader.setText(widget.getHumanName());
         customViewHolder.bottomHeader.setText("Some specific identifying detail");
+
+
+        customViewHolder.typeIcon.setImageResource(widget.getIconResource());
 
         customViewHolder.editIcon.setOnClickListener(new View.OnClickListener() {
             @Override
