@@ -85,6 +85,7 @@ public class WidgetList extends Fragment {
     }
 
     public void refreshList() {
+        //@todo implement helper method
         // async fetch all saved widgets
         TransactionManager.getInstance().addTransaction(
                 new SelectListTransaction<>(new Select().from(Widget.class),

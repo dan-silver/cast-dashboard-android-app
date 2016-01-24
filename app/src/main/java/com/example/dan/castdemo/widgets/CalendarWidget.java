@@ -9,14 +9,24 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
 
-public class CalendarWidget {
+import com.example.dan.castdemo.CalendarInfo;
+import com.example.dan.castdemo.Widget;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CalendarWidget extends UIWidget{
 
     public static String HUMAN_NAME = "Calendar";
 
     private final Context context;
 
-    public CalendarWidget(Context context) {
+    public CalendarWidget(Context context, Widget widget) {
         this.context = context;
+        this.widget = widget;
     }
 
     // Projection array. Creating indices for this array instead of doing
@@ -37,7 +47,7 @@ public class CalendarWidget {
     private static final int PROJECTION_CALENDAR_COLOR = 4;
 
 
-    private void getCalendars() {
+    public static List<CalendarInfo> getCalendars(Context context) {
         // Run query
         Cursor cur;
         ContentResolver cr = context.getContentResolver();
@@ -53,13 +63,15 @@ public class CalendarWidget {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return;
+            return null;
         }
         cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
 
         if (cur == null)
-            return;
+            return null;
 
+
+        ArrayList<CalendarInfo> calendars = new ArrayList<>();
         // Use the cursor to step through the returned records
         while (cur.moveToNext()) {
             long calID = 0;
@@ -76,7 +88,46 @@ public class CalendarWidget {
             ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
 
             // Do something with the values...
+            CalendarInfo calendarInfo = new CalendarInfo();
+            calendarInfo.name = displayName;
+            calendarInfo.id = calID;
+
+
+            calendars.add(calendarInfo);
+        }
+        cur.close();
+        return calendars;
+    }
+
+    // return pure JSON for frontend?
+    public static void getCalendarEvents(Context context, List<CalendarInfo> calendars) {
+        long begin = System.currentTimeMillis() % 1000;
+// starting time in milliseconds
+        long end = System.currentTimeMillis() % 1000 + 604800000; // ending time in milliseconds
+        String[] proj =
+                new String[]{
+                        CalendarContract.Instances._ID,
+                        CalendarContract.Instances.BEGIN,
+                        CalendarContract.Instances.END,
+                        CalendarContract.Instances.EVENT_ID,
+                        CalendarContract.Instances.TITLE};
+        Cursor cur =
+                CalendarContract.Instances.query(context.getContentResolver(), proj, begin, end);
+        while (cur.moveToNext()) {
+            String eventID = cur.getString(3);
+            String title = cur.getString(4);
+            String _id = cur.getString(0);
+
 
         }
+    }
+
+
+    @Override
+    public JSONObject getContent() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("testkey0", "testvalue0");
+        json.put("testkey1", "testvalue1");
+        return json;
     }
 }

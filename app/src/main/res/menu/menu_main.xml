@@ -7,4 +7,8 @@
         app:actionProviderClass="android.support.v7.app.MediaRouteActionProvider"
         app:showAsAction="always"/>
 
+    <item
+        android:title="test"
+        android:onClick="test"/>
+
 </menu>

@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.Cast.ApplicationConnectionResult;
@@ -27,9 +28,16 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.config.WidgetDatabaseWidgets_Database;
+import com.raizlabs.android.dbflow.runtime.TransactionManager;
+import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
+import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
 import com.raizlabs.android.dbflow.sql.language.Delete;
+import com.raizlabs.android.dbflow.sql.language.Select;
+
+import org.json.JSONException;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Main activity to send messages to the receiver.
@@ -206,6 +214,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void test(MenuItem item) {
+        getAllWidgets(new FetchAllWidgetsListener() {
+            @Override
+            public void results(List<Widget> widgets) {
+                for (Widget widget : widgets) {
+                    try {
+                        sendWidget(widget);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
     /**
      * Callback for MediaRouter events
      */
@@ -361,6 +384,27 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "onMessageReceived: " + message);
         }
 
+    }
+
+    public void getAllWidgets(final FetchAllWidgetsListener listener) {
+        TransactionManager.getInstance().addTransaction(
+                new SelectListTransaction<>(new Select().from(Widget.class),
+                        new TransactionListenerAdapter<List<Widget>>() {
+                            @Override
+                            public void onResultReceived(List<Widget> someObjectList) {
+                                listener.results(someObjectList);
+                            }
+                        }));
+
+    }
+
+    public void sendWidget(Widget widget) throws JSONException {
+        if (widget.getWidgetType() == Widget.types.CALENDAR) {
+
+            CalendarWidget cw = new CalendarWidget(this, widget);
+            sendMessage(cw.getContent().toString());
+
+        }
     }
 
 }
