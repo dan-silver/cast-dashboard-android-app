@@ -1,8 +1,10 @@
 package com.example.dan.castdemo;
 
 import com.example.dan.castdemo.settingsFragments.CalendarSettings;
+import com.example.dan.castdemo.settingsFragments.MapSettings;
 import com.example.dan.castdemo.settingsFragments.StocksSettings;
 import com.example.dan.castdemo.widgets.CalendarWidget;
+import com.example.dan.castdemo.widgets.MapWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
 import com.raizlabs.android.dbflow.annotation.Column;
@@ -25,7 +27,8 @@ public class Widget extends BaseModel {
     enum types {
         CALENDAR(0, CalendarWidget.HUMAN_NAME, R.drawable.ic_today_24dp),
         PLACEHOLDER(1, PlaceholderWidget.HUMAN_NAME, R.drawable.ic_hourglass_empty_black_24px),
-        STOCKS(2, StocksWidget.HUMAN_NAME, R.drawable.ic_attach_money_24dp);
+        STOCKS(2, StocksWidget.HUMAN_NAME, R.drawable.ic_attach_money_24dp),
+        MAP(3, MapWidget.HUMAN_NAME, R.drawable.ic_map_24dp);
 
         private int value;
         private int icon;
@@ -91,6 +94,8 @@ public class Widget extends BaseModel {
             CalendarSettings.init(this);
         } else if (getWidgetType() == types.STOCKS) {
             StocksSettings.init(this);
+        } else if (getWidgetType() == types.MAP) {
+            MapSettings.init(this);
         }
     }
 
