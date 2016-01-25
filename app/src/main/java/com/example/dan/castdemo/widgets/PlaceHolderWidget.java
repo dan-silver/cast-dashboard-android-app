@@ -19,4 +19,9 @@ public class PlaceholderWidget extends UIWidget {
         json.put("testkey1", "testvalue1");
         return json;
     }
+
+    @Override
+    public String getWidgetPreviewSecondaryHeader() {
+        return "Just a placeholder";
+    }
 }

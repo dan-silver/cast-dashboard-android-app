@@ -94,5 +94,4 @@ public class WidgetSettings extends Fragment {
                 })
                 .show();
     }
-
 }

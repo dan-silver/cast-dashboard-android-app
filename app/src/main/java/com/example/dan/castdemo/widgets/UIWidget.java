@@ -9,4 +9,6 @@ abstract public class UIWidget {
     public Widget widget;
 
     public abstract JSONObject getContent() throws JSONException;
+
+    public abstract String getWidgetPreviewSecondaryHeader();
 }

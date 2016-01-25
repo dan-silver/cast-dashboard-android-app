@@ -9,6 +9,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.dan.castdemo.widgets.CalendarWidget;
+import com.example.dan.castdemo.widgets.PlaceholderWidget;
+import com.example.dan.castdemo.widgets.StocksWidget;
+import com.example.dan.castdemo.widgets.UIWidget;
+
 import java.util.List;
 
 
@@ -53,9 +58,18 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
     @Override
     public void onBindViewHolder(final WidgetViewHolder customViewHolder, int i) {
         final Widget widget = widgetList.get(i);
+        Widget.types widgetType = widget.getWidgetType();
+        UIWidget uiWidget;
+        if (widgetType == Widget.types.CALENDAR) {
+            uiWidget = new CalendarWidget(mainActivity, widget);
+        } else if (widgetType == Widget.types.STOCKS) {
+            uiWidget = new StocksWidget(mainActivity, widget);
+        } else {
+            uiWidget = new PlaceholderWidget(mainActivity);
+        }
 
         customViewHolder.topHeader.setText(widget.getHumanName());
-        customViewHolder.bottomHeader.setText("Some specific identifying detail");
+        customViewHolder.bottomHeader.setText(uiWidget.getWidgetPreviewSecondaryHeader());
 
 
         customViewHolder.typeIcon.setImageResource(widget.getIconResource());

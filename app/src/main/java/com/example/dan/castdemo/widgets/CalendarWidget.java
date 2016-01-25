@@ -159,4 +159,9 @@ public class CalendarWidget extends UIWidget {
         json.put("testkey1", "testvalue1");
         return json;
     }
+
+    @Override
+    public String getWidgetPreviewSecondaryHeader() {
+        return "all the calendars? maybe";
+    }
 }

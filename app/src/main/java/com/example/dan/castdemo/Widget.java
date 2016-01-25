@@ -25,7 +25,7 @@ public class Widget extends BaseModel {
     enum types {
         CALENDAR,
         PLACEHOLDER,
-        STOCKS
+        widgetType, STOCKS
     }
 
     @PrimaryKey(autoincrement = true)
@@ -107,11 +107,11 @@ public class Widget extends BaseModel {
     }
 
     public WidgetOption getOption(String key) {
-        WidgetOption option = SQLite.select()
+        return SQLite.select()
                 .from(WidgetOption.class)
                 .where(WidgetOption_Table.widgetForeignKeyContainer_id.eq(id))
                 .and(WidgetOption_Table.key.eq(key))
                 .querySingle();
-        return option;
     }
+
 }

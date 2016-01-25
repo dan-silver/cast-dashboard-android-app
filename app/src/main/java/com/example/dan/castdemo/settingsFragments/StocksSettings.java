@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.Widget;
+import com.example.dan.castdemo.WidgetSettings;
 import com.example.dan.castdemo.Widget_Table;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
@@ -43,4 +44,5 @@ public class StocksSettings extends Fragment {
     public static void init(Widget widget) {
 
     }
+
 }

@@ -13,6 +13,7 @@ import com.example.dan.castdemo.CalendarInfo;
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.WidgetOption;
+import com.example.dan.castdemo.WidgetSettings;
 import com.example.dan.castdemo.Widget_Table;
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -22,7 +23,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CalendarSettings extends Fragment {
+public class CalendarSettings extends Fragment{
 
     public static String ALL_CALENDARS = "ALL_CALENDARS";
     public static String ALL_CALENDARS_TRUE = "ALL_CALENDARS_TRUE";
