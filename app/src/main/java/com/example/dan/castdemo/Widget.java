@@ -24,19 +24,25 @@ public class Widget extends BaseModel {
 
 
     enum types {
-        CALENDAR(0),
-        PLACEHOLDER(1),
-        STOCKS(2);
+        CALENDAR(0, R.drawable.ic_today_24dp),
+        PLACEHOLDER(1, R.drawable.ic_hourglass_empty_black_24px),
+        STOCKS(2, R.drawable.ic_attach_money_24dp);
 
 
         private int value;
+        private int icon;
 
-        types(int value) {
+        types(int value, int icon) {
             this.value = value;
+            this.icon = icon;
         }
 
         public int getValue() {
             return value;
+        }
+
+        public int getIcon() {
+            return icon;
         }
 
 
@@ -60,20 +66,7 @@ public class Widget extends BaseModel {
     public int type;
 
     public int getIconResource() {
-        int typeIconResource;
-        Widget.types type = getWidgetType();
-
-        switch (type) {
-            case CALENDAR:
-                typeIconResource = R.drawable.ic_today_24dp;
-                break;
-            case STOCKS:
-                typeIconResource = R.drawable.ic_attach_money_24dp;
-                break;
-            default:
-                typeIconResource = R.drawable.ic_hourglass_empty_black_24px;
-        }
-        return typeIconResource;
+        return getWidgetType().getIcon();
     }
 
     final static String[] widgetNames = new String[]{
