@@ -22,19 +22,19 @@ public class Widget extends BaseModel {
     // For bundle data passing
     public static String ID = "WIDGET_ID";
 
-
     enum types {
-        CALENDAR(0, R.drawable.ic_today_24dp),
-        PLACEHOLDER(1, R.drawable.ic_hourglass_empty_black_24px),
-        STOCKS(2, R.drawable.ic_attach_money_24dp);
-
+        CALENDAR(0, CalendarWidget.HUMAN_NAME, R.drawable.ic_today_24dp),
+        PLACEHOLDER(1, PlaceholderWidget.HUMAN_NAME, R.drawable.ic_hourglass_empty_black_24px),
+        STOCKS(2, StocksWidget.HUMAN_NAME, R.drawable.ic_attach_money_24dp);
 
         private int value;
         private int icon;
+        private String humanName;
 
-        types(int value, int icon) {
+        types(int value, String humanName, int icon) {
             this.value = value;
             this.icon = icon;
+            this.humanName = humanName;
         }
 
         public int getValue() {
@@ -45,6 +45,9 @@ public class Widget extends BaseModel {
             return icon;
         }
 
+        public String getHumanName() {
+            return humanName;
+        }
 
         public static types getEnumByValue(int value) {
             for (types e : types.values()) {
@@ -69,14 +72,8 @@ public class Widget extends BaseModel {
         return getWidgetType().getIcon();
     }
 
-    final static String[] widgetNames = new String[]{
-            CalendarWidget.HUMAN_NAME,
-            PlaceholderWidget.HUMAN_NAME,
-            StocksWidget.HUMAN_NAME
-    };
-
     public String getHumanName() {
-        return widgetNames[type];
+        return getWidgetType().getHumanName();
     }
 
     public Widget() {

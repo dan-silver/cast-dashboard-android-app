@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.dan.castdemo.widgets.CalendarWidget;
+import com.example.dan.castdemo.widgets.PlaceholderWidget;
+import com.example.dan.castdemo.widgets.StocksWidget;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
@@ -55,7 +58,7 @@ public class WidgetList extends Fragment {
 
         new MaterialDialog.Builder(getContext())
                 .title("Widget Type")
-                .items(Widget.widgetNames)
+                .items(new String[] {CalendarWidget.HUMAN_NAME, StocksWidget.HUMAN_NAME, PlaceholderWidget.HUMAN_NAME})
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
