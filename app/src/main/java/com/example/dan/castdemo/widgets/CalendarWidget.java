@@ -12,11 +12,14 @@ import android.support.v4.app.ActivityCompat;
 import com.example.dan.castdemo.CalendarInfo;
 import com.example.dan.castdemo.Widget;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 public class CalendarWidget extends UIWidget {
 
@@ -100,33 +103,60 @@ public class CalendarWidget extends UIWidget {
     }
 
     // return pure JSON for frontend?
-    public static void getCalendarEvents(Context context, List<CalendarInfo> calendars) {
-        long begin = System.currentTimeMillis() % 1000;
-// starting time in milliseconds
-        long end = System.currentTimeMillis() % 1000 + 604800000; // ending time in milliseconds
-        String[] proj =
+    public JSONArray getCalendarEvents(Context context, List<CalendarInfo> calendars) throws JSONException {
+        Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
+
+        long begin = cal1.getTimeInMillis();
+        // starting time in milliseconds
+        long end = begin + 604800000; // ending time in milliseconds
+        String[] projection =
                 new String[]{
                         CalendarContract.Instances._ID,
                         CalendarContract.Instances.BEGIN,
                         CalendarContract.Instances.END,
                         CalendarContract.Instances.EVENT_ID,
                         CalendarContract.Instances.TITLE};
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return null;
+        }
         Cursor cur =
-                CalendarContract.Instances.query(context.getContentResolver(), proj, begin, end);
+                CalendarContract.Instances.query(
+                        context.getContentResolver(),
+                        projection,
+                        begin,
+                        end);
+
+        JSONArray events = new JSONArray();
         while (cur.moveToNext()) {
             String eventID = cur.getString(3);
             String title = cur.getString(4);
             String _id = cur.getString(0);
+            JSONObject event = new JSONObject();
+
+            event.put("title", title);
+
+            events.put(event);
 
 
         }
+        cur.close();
+        return events;
     }
 
 
     @Override
     public JSONObject getContent() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("testkey0", "testvalue0");
+        json.put("events", getCalendarEvents(context, null));
         json.put("testkey1", "testvalue1");
         return json;
     }

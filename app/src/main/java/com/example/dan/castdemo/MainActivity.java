@@ -37,9 +37,6 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Main activity to send messages to the receiver.
- */
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
