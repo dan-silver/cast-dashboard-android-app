@@ -27,17 +27,11 @@ import butterknife.OnClick;
 
 public class WidgetList extends Fragment {
 
-    List<Widget> widgets = new ArrayList<>();
-
-
-    WidgetListAdapter adapter;
     @Bind(R.id.widgetList)
     RecyclerView widgetList;
 
-
     public WidgetList() {
-
-        refreshList();
+        refreshList(); //@todo is this double since it's called in onResume()?
     }
 
     @Override
@@ -45,10 +39,8 @@ public class WidgetList extends Fragment {
         View view = inflater.inflate(R.layout.widget_list, container, false);
         ButterKnife.bind(this, view);
 
-        adapter = new WidgetListAdapter(widgets, (MainActivity) getActivity());
-        widgetList.setAdapter(adapter);
         widgetList.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter.notifyDataSetChanged();
+
 
         return view;
     }
@@ -68,8 +60,9 @@ public class WidgetList extends Fragment {
                         widget.save();
 
                         widget.initOptions();
-                        adapter.addWidget(widget);
-                        adapter.notifyDataSetChanged();
+                        refreshList();
+//                        adapter.addWidget(widget);
+//                        adapter.notifyDataSetChanged();
 
                         activity.sendMessage(widget.getHumanName() + " widget created.");
 //                        activity.switchToFragment(new WidgetSettings(), true);
@@ -94,11 +87,8 @@ public class WidgetList extends Fragment {
                         new TransactionListenerAdapter<List<Widget>>() {
                             @Override
                             public void onResultReceived(List<Widget> someObjectList) {
-                                widgets.clear();
-                                widgets.addAll(someObjectList);
-
-                                if (adapter != null)
-                                    adapter.notifyDataSetChanged();
+                                WidgetListAdapter adapter = new WidgetListAdapter(someObjectList, (MainActivity) getActivity());
+                                widgetList.setAdapter(adapter);
                             }
                         }));
 

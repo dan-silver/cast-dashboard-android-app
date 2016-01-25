@@ -22,9 +22,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
     private final MainActivity mainActivity;
 
-    public void addWidget(Widget w) {
-        widgetList.add(w);
-    }
+//    public void addWidget(Widget w) {
+//        widgetList.add(w);
+//    }
 
     public class WidgetViewHolder extends RecyclerView.ViewHolder {
         protected TextView topHeader;
