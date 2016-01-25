@@ -11,6 +11,8 @@ import android.support.v4.app.ActivityCompat;
 
 import com.example.dan.castdemo.CalendarInfo;
 import com.example.dan.castdemo.Widget;
+import com.example.dan.castdemo.WidgetOption;
+import com.example.dan.castdemo.settingsFragments.CalendarSettings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -162,6 +164,11 @@ public class CalendarWidget extends UIWidget {
 
     @Override
     public String getWidgetPreviewSecondaryHeader() {
-        return "all the calendars? maybe";
+        WidgetOption optionAllCalendars = widget.getOption(CalendarSettings.ALL_CALENDARS);
+        if (optionAllCalendars.value.equals(CalendarSettings.ALL_CALENDARS_TRUE)) {
+            return "Displaying all calendars";
+        } else {
+            return "Showing some calendars.";
+        }
     }
 }
