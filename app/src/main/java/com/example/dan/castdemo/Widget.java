@@ -22,11 +22,36 @@ public class Widget extends BaseModel {
     // For bundle data passing
     public static String ID = "WIDGET_ID";
 
+
     enum types {
-        CALENDAR,
-        PLACEHOLDER,
-        widgetType, STOCKS
+        CALENDAR(0),
+        PLACEHOLDER(1),
+        STOCKS(2);
+
+
+        private int value;
+
+        types(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+
+        public static types getEnumByValue(int value) {
+            for (types e : types.values()) {
+                if (value == e.getValue()) return e;
+            }
+            return null;
+        }
     }
+
+    public types getWidgetType() {
+        return types.getEnumByValue(type);
+    }
+
 
     @PrimaryKey(autoincrement = true)
     public long id;
@@ -64,8 +89,8 @@ public class Widget extends BaseModel {
     public Widget() {
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setType(types type) {
+        this.type = type.getValue();
     }
 
     public void initOptions() {
@@ -76,18 +101,6 @@ public class Widget extends BaseModel {
             CalendarSettings.init(this);
         } else if (getWidgetType() == types.STOCKS) {
             StocksSettings.init(this);
-        }
-    }
-
-
-    //@todo clean this up!
-    public types getWidgetType() {
-        if (type == 0) {
-            return types.CALENDAR;
-        } else if (type == 2) {
-            return types.STOCKS;
-        } else {//if (type == 1) {
-            return types.PLACEHOLDER;
         }
     }
 

@@ -15,6 +15,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dan.castdemo.settingsFragments.CalendarSettings;
 import com.example.dan.castdemo.settingsFragments.PlaceholderSettings;
+import com.example.dan.castdemo.settingsFragments.StocksSettings;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import butterknife.Bind;
@@ -58,6 +59,8 @@ public class WidgetSettings extends Fragment {
 
         if (widget.getWidgetType() == Widget.types.CALENDAR) {
             typeSettingsFragment = new CalendarSettings();
+        } else if (widget.getWidgetType() == Widget.types.STOCKS){
+            typeSettingsFragment = new StocksSettings();
         } else {
             typeSettingsFragment = new PlaceholderSettings();
         }

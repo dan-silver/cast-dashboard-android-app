@@ -60,10 +60,8 @@ public class WidgetList extends Fragment {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Widget widget = new Widget();
-                        widget.setType(which);
+                        widget.setType(Widget.types.valueOf(text.toString().toUpperCase()));
                         widget.save();
-
-                        assert widget.exists();
 
                         widget.initOptions();
                         adapter.addWidget(widget);
