@@ -106,7 +106,6 @@ public class CalendarWidget extends UIWidget {
     public JSONArray getCalendarEvents(Context context, List<CalendarInfo> calendars) throws JSONException {
         Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
-
         long begin = cal1.getTimeInMillis();
         // starting time in milliseconds
         long end = begin + 604800000; // ending time in milliseconds

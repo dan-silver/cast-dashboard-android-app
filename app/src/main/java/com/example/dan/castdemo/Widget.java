@@ -1,8 +1,10 @@
 package com.example.dan.castdemo;
 
 import com.example.dan.castdemo.settingsFragments.CalendarSettings;
+import com.example.dan.castdemo.settingsFragments.StocksSettings;
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
+import com.example.dan.castdemo.widgets.StocksWidget;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
@@ -22,7 +24,8 @@ public class Widget extends BaseModel {
 
     enum types {
         CALENDAR,
-        PLACEHOLDER
+        PLACEHOLDER,
+        STOCKS
     }
 
     @PrimaryKey(autoincrement = true)
@@ -39,6 +42,9 @@ public class Widget extends BaseModel {
             case CALENDAR:
                 typeIconResource = R.drawable.ic_today_24dp;
                 break;
+            case STOCKS:
+                typeIconResource = R.drawable.ic_attach_money_24dp;
+                break;
             default:
                 typeIconResource = R.drawable.ic_hourglass_empty_black_24px;
         }
@@ -47,7 +53,8 @@ public class Widget extends BaseModel {
 
     final static String[] widgetNames = new String[]{
             CalendarWidget.HUMAN_NAME,
-            PlaceholderWidget.HUMAN_NAME
+            PlaceholderWidget.HUMAN_NAME,
+            StocksWidget.HUMAN_NAME
     };
 
     public String getHumanName() {
@@ -67,6 +74,8 @@ public class Widget extends BaseModel {
 
         if (getWidgetType() == types.CALENDAR) {
             CalendarSettings.init(this);
+        } else if (getWidgetType() == types.STOCKS) {
+            StocksSettings.init(this);
         }
     }
 
@@ -75,6 +84,8 @@ public class Widget extends BaseModel {
     public types getWidgetType() {
         if (type == 0) {
             return types.CALENDAR;
+        } else if (type == 2) {
+            return types.STOCKS;
         } else {//if (type == 1) {
             return types.PLACEHOLDER;
         }

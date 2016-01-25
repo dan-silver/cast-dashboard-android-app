@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Calendar Name"
         android:layout_centerVertical="true"
-        android:id="@+id/calendar_name"/>
+        android:id="@+id/calendar_name"
+        android:textSize="16sp"/>
 
     <CheckBox
         android:id="@+id/calendar_enabled"
