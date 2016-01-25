@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dan.castdemo.settingsFragments.CalendarSettings;
+import com.example.dan.castdemo.settingsFragments.MapSettings;
 import com.example.dan.castdemo.settingsFragments.PlaceholderSettings;
 import com.example.dan.castdemo.settingsFragments.StocksSettings;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -56,16 +57,20 @@ public class WidgetSettings extends Fragment {
         widgetSettingsTitle.setText(widget.getHumanName() + " Widget");
 
         Fragment typeSettingsFragment;
-
-        if (widget.getWidgetType() == Widget.types.CALENDAR) {
-            typeSettingsFragment = new CalendarSettings();
-        } else if (widget.getWidgetType() == Widget.types.STOCKS){
-            typeSettingsFragment = new StocksSettings();
-        } else {
-            typeSettingsFragment = new PlaceholderSettings();
+        switch (widget.getWidgetType()) {
+            case CALENDAR:
+                typeSettingsFragment = new CalendarSettings();
+                break;
+            case STOCKS:
+                typeSettingsFragment = new StocksSettings();
+                break;
+            case MAP:
+                typeSettingsFragment = new MapSettings();
+                break;
+            default:
+                typeSettingsFragment = new PlaceholderSettings();
         }
-
-
+        
         Bundle bundle = new Bundle();
         bundle.putLong(Widget.ID, widget.id);
         typeSettingsFragment.setArguments(bundle);
