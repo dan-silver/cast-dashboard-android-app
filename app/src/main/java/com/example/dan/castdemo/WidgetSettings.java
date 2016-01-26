@@ -70,7 +70,7 @@ public class WidgetSettings extends Fragment {
             default:
                 typeSettingsFragment = new PlaceholderSettings();
         }
-        
+
         Bundle bundle = new Bundle();
         bundle.putLong(Widget.ID, widget.id);
         typeSettingsFragment.setArguments(bundle);

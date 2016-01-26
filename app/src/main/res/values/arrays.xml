@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="list_of_stocks">
+        <item name="MSFT">Microsoft</item>
+        <item name="T">AT&amp;T</item>
+        <item name="GOOG">Alphabet, Inc.</item>
+    </string-array>
+</resources>

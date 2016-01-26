@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.Widget;
@@ -12,11 +14,15 @@ import com.example.dan.castdemo.WidgetSettings;
 import com.example.dan.castdemo.Widget_Table;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class StocksSettings extends Fragment {
 
     private Widget widget;
+
+    @Bind(R.id.add_stock_textview)
+    AutoCompleteTextView addStock;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,8 +40,13 @@ public class StocksSettings extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.placeholder_settings, container, false);
+        View view = inflater.inflate(R.layout.stocks_settings, container, false);
         ButterKnife.bind(this, view);
+
+
+        String[] countries = getResources().getStringArray(R.array.list_of_stocks);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,countries);
+        addStock.setAdapter(adapter);
 
 
         return view;
