@@ -19,9 +19,9 @@ public class CUSTOMContactsCompletionView extends TokenCompleteTextView<Stock> {
     @Override
     protected View getViewForObject(Stock stock) {
 
-        LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        LinearLayout view = (LinearLayout)l.inflate(R.layout.stock_preview, (ViewGroup)CUSTOMContactsCompletionView.this.getParent(), false);
-        ((TextView)view.findViewById(R.id.stock_name)).setText(stock.name);
+        LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        LinearLayout view = (LinearLayout) l.inflate(R.layout.stock_preview, (ViewGroup) CUSTOMContactsCompletionView.this.getParent(), false);
+        ((TextView) view.findViewById(R.id.stock_name)).setText(stock.name);
 
         return view;
     }

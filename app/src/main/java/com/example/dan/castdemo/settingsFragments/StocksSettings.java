@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import com.example.dan.castdemo.CUSTOMContactsCompletionView;
 import com.example.dan.castdemo.R;
@@ -53,11 +54,29 @@ public class StocksSettings extends Fragment {
                 new Stock("Sony TVs", "SNY")
         };
 
-        ArrayAdapter<Stock> adapter = new FilteredArrayAdapter<Stock>(getContext(), android.R.layout.simple_list_item_1, stocks) {
+        ArrayAdapter<Stock> adapter = new FilteredArrayAdapter<Stock>(getContext(), R.layout.stock_auto_complete_dropdown, stocks) {
             @Override
             protected boolean keepObject(Stock obj, String mask) {
                 mask = mask.toLowerCase();
                 return obj.name.toLowerCase().contains(mask) || obj.ticker.toLowerCase().contains(mask);
+            }
+
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                Stock user = getItem(position);
+
+                if (convertView == null) {
+                    convertView = LayoutInflater.from(getContext()).inflate(R.layout.stock_auto_complete_dropdown, parent, false);
+                }
+
+                TextView companyName = (TextView) convertView.findViewById(R.id.company_name);
+                TextView stockTicker = (TextView) convertView.findViewById(R.id.stock_ticker);
+
+                companyName.setText(user.name);
+                stockTicker.setText(user.ticker);
+
+                return convertView;
             }
         };
 
