@@ -6,13 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 
+import com.example.dan.castdemo.CUSTOMContactsCompletionView;
 import com.example.dan.castdemo.R;
+import com.example.dan.castdemo.Stock;
 import com.example.dan.castdemo.Widget;
-import com.example.dan.castdemo.WidgetSettings;
 import com.example.dan.castdemo.Widget_Table;
 import com.raizlabs.android.dbflow.sql.language.Select;
+import com.tokenautocomplete.FilteredArrayAdapter;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,8 +22,8 @@ public class StocksSettings extends Fragment {
 
     private Widget widget;
 
-    @Bind(R.id.add_stock_textview)
-    AutoCompleteTextView addStock;
+    @Bind(R.id.stock_search_view)
+    CUSTOMContactsCompletionView addStock;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,23 @@ public class StocksSettings extends Fragment {
         ButterKnife.bind(this, view);
 
 
-        String[] countries = getResources().getStringArray(R.array.list_of_stocks);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,countries);
+        Stock[] stocks = new Stock[]{
+                new Stock("Microsoft", "MSFT"),
+                new Stock("Google", "GOOG"),
+                new Stock("Dell Computers", "DELL"),
+                new Stock("AT&T", "T"),
+                new Stock("Sony TVs", "SNY")
+        };
+
+        ArrayAdapter<Stock> adapter = new FilteredArrayAdapter<Stock>(getContext(), android.R.layout.simple_list_item_1, stocks) {
+            @Override
+            protected boolean keepObject(Stock obj, String mask) {
+                mask = mask.toLowerCase();
+                return obj.name.toLowerCase().contains(mask) || obj.ticker.toLowerCase().contains(mask);
+            }
+        };
+
+
         addStock.setAdapter(adapter);
 
 
@@ -55,5 +71,6 @@ public class StocksSettings extends Fragment {
     public static void init(Widget widget) {
 
     }
+
 
 }
