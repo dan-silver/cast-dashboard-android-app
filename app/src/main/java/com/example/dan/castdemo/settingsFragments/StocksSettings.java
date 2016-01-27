@@ -20,6 +20,7 @@ import com.example.dan.castdemo.Stock_Table;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.Widget_Table;
 import com.raizlabs.android.dbflow.list.FlowCursorList;
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
@@ -64,8 +65,9 @@ public class StocksSettings extends Fragment {
 
         adapter.setFilterQueryProvider(new FilterQueryProvider() {
             public Cursor runQuery(CharSequence hint) {
-                //@todo .where.or on ticker column
-                return (new Select().from(Stock.class)).where(Stock_Table.name.like("%" + hint + "%")).query();
+
+                ConditionGroup query = ConditionGroup.clause().orAll(Stock_Table.name.like("%" + hint + "%"), Stock_Table.ticker.like("%" + hint + "%");
+                return (new Select().from(Stock.class)).where(query).query();
             }
         });
 
