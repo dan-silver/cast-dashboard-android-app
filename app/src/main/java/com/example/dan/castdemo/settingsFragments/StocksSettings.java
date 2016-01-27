@@ -12,21 +12,33 @@ import android.widget.SimpleCursorAdapter;
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.Stock;
 import com.example.dan.castdemo.StockCompletionView;
+import com.example.dan.castdemo.StockInfo;
 import com.example.dan.castdemo.Stock_Table;
 import com.example.dan.castdemo.Widget;
+import com.example.dan.castdemo.WidgetOption;
+import com.example.dan.castdemo.WidgetOption_Table;
 import com.example.dan.castdemo.Widget_Table;
+import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.Delete;
+import com.raizlabs.android.dbflow.sql.language.Insert;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
+import com.tokenautocomplete.TokenCompleteTextView;
+
+import java.util.List;
+import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class StocksSettings extends Fragment {
+public class StocksSettings extends Fragment implements TokenCompleteTextView.TokenListener<Object> {
 
     private Widget widget;
 
     @Bind(R.id.select_stock)
     StockCompletionView addStock;
+    static String STOCK_IN_LIST = "STOCK_IN_LIST";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,17 +66,30 @@ public class StocksSettings extends Fragment {
                 new int[]{R.id.company_name, R.id.stock_ticker},
                 0);
 
-
         adapter.setFilterQueryProvider(new FilterQueryProvider() {
             public Cursor runQuery(CharSequence hint) {
 
                 ConditionGroup query = ConditionGroup.clause().orAll(Stock_Table.name.like("%" + hint + "%"), Stock_Table.ticker.like("%" + hint + "%"));
-                return (new Select().from(Stock.class)).where(query).query();
+                return new Select().from(Stock.class).where(query).query();
             }
         });
 
         addStock.setAdapter(adapter);
+        addStock.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
+        addStock.setTokenListener(this);
 
+        // query the db to get the saved stocks
+        ConditionGroup conditions = new ConditionGroup();
+        conditions.orAll(WidgetOption_Table.widgetForeignKeyContainer_id.eq(widget.id), WidgetOption_Table.key.is(STOCK_IN_LIST));
+
+        Cursor cursor = SQLite.select()
+                .from(WidgetOption.class)
+                .where(conditions)
+                .query();
+        while (cursor.moveToNext()) {
+            addStock.addObject(cursor);
+        }
+        cursor.close();
 
         return view;
     }
@@ -73,4 +98,29 @@ public class StocksSettings extends Fragment {
 
     }
 
+    @Override
+    public void onTokenAdded(Object token) {
+        WidgetOption stockDbRecord = new WidgetOption();
+
+        Cursor cursor = (Cursor) token;
+        cursor.moveToFirst();
+
+        stockDbRecord.key = STOCK_IN_LIST;
+        stockDbRecord.value = cursor.getString(cursor.getColumnIndex("ticker"));
+        stockDbRecord.associateWidget(widget);
+        stockDbRecord.save();
+
+        //save to the database
+    }
+
+    @Override
+    public void onTokenRemoved(Object token) {
+        Cursor cursor = (Cursor) token;
+        cursor.moveToFirst();
+
+        String ticker = cursor.getString(cursor.getColumnIndex("ticker"));
+
+        new Delete().from(WidgetOption.class).where(WidgetOption_Table.key.is(ticker)).query();
+        //remove from database
+    }
 }

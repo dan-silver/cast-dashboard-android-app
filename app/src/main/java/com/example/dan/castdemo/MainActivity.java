@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FlowManager.init(this);
-        Delete.tables(Widget.class, WidgetOption.class, Stock.class);
+//        Delete.tables(Widget.class, WidgetOption.class, Stock.class);
 
 
         switchToFragment(new WidgetList(), false);

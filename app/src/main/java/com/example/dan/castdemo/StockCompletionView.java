@@ -20,9 +20,8 @@ public class StockCompletionView extends TokenCompleteTextView<Object> {
     @Override
     protected View getViewForObject(Object stockObj) {
         // manual cast required https://github.com/splitwise/TokenAutoComplete/issues/159
-//        StockInfo stock = (Cursor) stockObj;
-
-        String stockName = ((Cursor) stockObj).getString(((Cursor) stockObj).getColumnIndex("name"));
+        Cursor cursor = (Cursor) stockObj;
+        String stockName = cursor.getString(cursor.getColumnIndex("name"));
 
         LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         LinearLayout view = (LinearLayout) l.inflate(R.layout.stock_preview, (ViewGroup) StockCompletionView.this.getParent(), false);
@@ -43,22 +42,5 @@ public class StockCompletionView extends TokenCompleteTextView<Object> {
             return new StockInfo(completionText.substring(0, index), completionText);
         }
     }
-
-
-//
-//    @Override
-//    protected View getViewForObject(StockInfo person) {
-//
-//        LayoutInflater l = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-//        LinearLayout view = (LinearLayout)l.inflate(R.layout.stock_auto_complete_dropdown, (ViewGroup)StockCompletionView.this.getParent(), false);
-//
-//                TextView companyName = (TextView) view.findViewById(R.id.company_name);
-//                TextView stockTicker = (TextView) view.findViewById(R.id.stock_ticker);
-//
-//                companyName.setText(person.getName());
-//                stockTicker.setText(person.getTicker());
-//
-//        return view;
-//    }
 
 }
