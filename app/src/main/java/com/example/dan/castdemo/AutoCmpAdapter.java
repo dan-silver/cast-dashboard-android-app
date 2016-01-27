@@ -15,10 +15,10 @@ public class AutoCmpAdapter extends ArrayAdapter<String> implements Filterable {
     protected ArrayList<String> items;
     protected ArrayList<String> res;
 
-    String sWds[] = { "SIMPSON", "JONES" };
+    String sWds[] = {"SIMPSON", "JONES"};
 
-    public AutoCmpAdapter(Context context, int textViewResourceId,ArrayList<String> listData) {
-        super(context, textViewResourceId,0,listData);
+    public AutoCmpAdapter(Context context, int textViewResourceId, ArrayList<String> listData) {
+        super(context, textViewResourceId, 0, listData);
 
         filter = new PhysFilter();
         res = new ArrayList<>();

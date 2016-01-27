@@ -21,9 +21,9 @@ public class TokenLayout extends LinearLayout {
 
         TextView v = (TextView) findViewById(R.id.stock_name);
         if (selected) {
-            v.setCompoundDrawablesWithIntrinsicBounds(0,0,R.mipmap.close_x, 0);
+            v.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.close_x, 0);
         } else {
-            v.setCompoundDrawablesWithIntrinsicBounds(0,0,0,0);
+            v.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
     }
 }

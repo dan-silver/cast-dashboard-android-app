@@ -3,28 +3,20 @@ package com.example.dan.castdemo.settingsFragments;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.FilterQueryProvider;
 import android.widget.SimpleCursorAdapter;
 
-import com.example.dan.castdemo.MainActivity;
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.Stock;
 import com.example.dan.castdemo.StockCompletionView;
 import com.example.dan.castdemo.Stock_Table;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.Widget_Table;
-import com.raizlabs.android.dbflow.list.FlowCursorList;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,15 +50,15 @@ public class StocksSettings extends Fragment {
 
 
         SimpleCursorAdapter adapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
-                new String[] {"name", "ticker"},
-                new int[] {R.id.company_name, R.id.stock_ticker},
+                new String[]{"name", "ticker"},
+                new int[]{R.id.company_name, R.id.stock_ticker},
                 0);
 
 
         adapter.setFilterQueryProvider(new FilterQueryProvider() {
             public Cursor runQuery(CharSequence hint) {
 
-                ConditionGroup query = ConditionGroup.clause().orAll(Stock_Table.name.like("%" + hint + "%"), Stock_Table.ticker.like("%" + hint + "%");
+                ConditionGroup query = ConditionGroup.clause().orAll(Stock_Table.name.like("%" + hint + "%"), Stock_Table.ticker.like("%" + hint + "%"));
                 return (new Select().from(Stock.class)).where(query).query();
             }
         });

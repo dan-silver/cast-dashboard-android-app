@@ -10,8 +10,6 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-import java.util.ArrayList;
-
 @ModelContainer
 @Table(database = WidgetDatabase.class)
 

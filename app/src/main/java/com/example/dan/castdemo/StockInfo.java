@@ -23,5 +23,7 @@ public class StockInfo implements Serializable {
     }
 
     @Override
-    public String toString() { return name; }
+    public String toString() {
+        return name;
+    }
 }
