@@ -4,8 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.example.dan.castdemo.CUSTOMContactsCompletionView
-        android:id="@+id/stock_search_view"
+
+    <com.example.dan.castdemo.StockCompletionView
+        android:id="@+id/select_stock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

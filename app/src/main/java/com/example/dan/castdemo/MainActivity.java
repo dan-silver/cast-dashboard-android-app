@@ -30,6 +30,7 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
+import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.json.JSONException;
@@ -39,7 +40,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String TAG = MainActivity.class.getSimpleName();
 
 
     private MediaRouter mMediaRouter;
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FlowManager.init(this);
-//        Delete.tables(Widget.class, WidgetOption.class);
+        Delete.tables(Widget.class, WidgetOption.class, Stock.class);
 
 
         switchToFragment(new WidgetList(), false);
