@@ -46,15 +46,7 @@ public class StocksSettings extends Fragment {
         ButterKnife.bind(this, view);
 
 
-        Stock[] stocks = new Stock[]{
-                new Stock("Microsoft", "MSFT"),
-                new Stock("Google", "GOOG"),
-                new Stock("Dell Computers", "DELL"),
-                new Stock("AT&T", "T"),
-                new Stock("Sony TVs", "SNY")
-        };
-
-        ArrayAdapter<Stock> adapter = new FilteredArrayAdapter<Stock>(getContext(), R.layout.stock_auto_complete_dropdown, stocks) {
+        ArrayAdapter<Stock> adapter = new FilteredArrayAdapter<Stock>(getContext(), R.layout.stock_auto_complete_dropdown, Stock.getAllStocks()) {
             @Override
             protected boolean keepObject(Stock obj, String mask) {
                 mask = mask.toLowerCase();
