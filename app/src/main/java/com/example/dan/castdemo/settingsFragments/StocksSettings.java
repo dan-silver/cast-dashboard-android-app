@@ -1,12 +1,19 @@
 package com.example.dan.castdemo.settingsFragments;
 
+import android.content.ContentResolver;
+import android.database.CharArrayBuffer;
+import android.database.ContentObserver;
 import android.database.Cursor;
+import android.database.DataSetObserver;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.FilterQueryProvider;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.SimpleCursorAdapter;
 
 import com.example.dan.castdemo.R;
@@ -32,12 +39,12 @@ import java.util.Objects;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class StocksSettings extends Fragment implements TokenCompleteTextView.TokenListener<Object> {
+public class StocksSettings extends Fragment {
 
     private Widget widget;
 
     @Bind(R.id.select_stock)
-    StockCompletionView addStock;
+    MultiAutoCompleteTextView addStock;
     static String STOCK_IN_LIST = "STOCK_IN_LIST";
 
     @Override
@@ -61,7 +68,7 @@ public class StocksSettings extends Fragment implements TokenCompleteTextView.To
         ButterKnife.bind(this, view);
 
 
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
+        final SimpleCursorAdapter adapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
                 new String[]{"name", "ticker"},
                 new int[]{R.id.company_name, R.id.stock_ticker},
                 0);
@@ -74,9 +81,28 @@ public class StocksSettings extends Fragment implements TokenCompleteTextView.To
             }
         });
 
+
+        SimpleCursorAdapter.CursorToStringConverter converter = new SimpleCursorAdapter.CursorToStringConverter() {
+            @Override
+            public CharSequence convertToString(Cursor cursor) {
+                int desiredColumn = cursor.getColumnIndex("name");
+                return cursor.getString(desiredColumn);
+            }
+        };
+
+        adapter.setCursorToStringConverter(converter);
+
+        addStock.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+
+        addStock.setThreshold(1);
         addStock.setAdapter(adapter);
-        addStock.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
-        addStock.setTokenListener(this);
+
+        addStock.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            }
+        });
 
         // query the db to get the saved stocks
         ConditionGroup conditions = new ConditionGroup();
@@ -86,9 +112,9 @@ public class StocksSettings extends Fragment implements TokenCompleteTextView.To
                 .from(WidgetOption.class)
                 .where(conditions)
                 .query();
-        while (cursor.moveToNext()) {
-            addStock.addObject(cursor);
-        }
+//        while (cursor.moveToNext()) {
+//            ((SimpleCursorAdapter) addStock.getAdapter()).(cursor);
+//        }
         cursor.close();
 
         return view;
@@ -98,29 +124,29 @@ public class StocksSettings extends Fragment implements TokenCompleteTextView.To
 
     }
 
-    @Override
-    public void onTokenAdded(Object token) {
-        WidgetOption stockDbRecord = new WidgetOption();
+//    @Override
+//    public void onTokenAdded(Object token) {
+//        WidgetOption stockDbRecord = new WidgetOption();
+//
+//        Cursor cursor = (Cursor) token;
+//        cursor.moveToFirst();
+//
+//        stockDbRecord.key = STOCK_IN_LIST;
+//        stockDbRecord.value = cursor.getString(cursor.getColumnIndex("ticker"));
+//        stockDbRecord.associateWidget(widget);
+//        stockDbRecord.save();
+//
+//        //save to the database
+//    }
 
-        Cursor cursor = (Cursor) token;
-        cursor.moveToFirst();
-
-        stockDbRecord.key = STOCK_IN_LIST;
-        stockDbRecord.value = cursor.getString(cursor.getColumnIndex("ticker"));
-        stockDbRecord.associateWidget(widget);
-        stockDbRecord.save();
-
-        //save to the database
-    }
-
-    @Override
-    public void onTokenRemoved(Object token) {
-        Cursor cursor = (Cursor) token;
-        cursor.moveToFirst();
-
-        String ticker = cursor.getString(cursor.getColumnIndex("ticker"));
-
-        new Delete().from(WidgetOption.class).where(WidgetOption_Table.key.is(ticker)).query();
-        //remove from database
-    }
+//    @Override
+//    public void onTokenRemoved(Object token) {
+//        Cursor cursor = (Cursor) token;
+//        cursor.moveToFirst();
+//
+//        String ticker = cursor.getString(cursor.getColumnIndex("ticker"));
+//
+//        new Delete().from(WidgetOption.class).where(WidgetOption_Table.key.is(ticker)).query();
+//        //remove from database
+//    }
 }
