@@ -27,6 +27,7 @@ import com.example.dan.castdemo.WidgetOption;
 import com.example.dan.castdemo.WidgetOption_Table;
 import com.example.dan.castdemo.Widget_Table;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
@@ -39,7 +40,7 @@ import butterknife.ButterKnife;
 public class StocksSettings extends Fragment {
 
     private Widget widget;
-    static String STOCK_IN_LIST = "STOCK_IN_LIST";
+    public static String STOCK_IN_LIST = "STOCK_IN_LIST";
     ArrayList<StockInfo> stocks = new ArrayList<>();
     final StockListAdapter stockListAdapter = new StockListAdapter(stocks);
 
@@ -122,14 +123,22 @@ public class StocksSettings extends Fragment {
         stockList.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, final int position) {
+                final StockInfo stock = stockListAdapter.getStock(position);
                 new MaterialDialog.Builder(getContext())
-                        .title("Remove " + stockListAdapter.getStock(position).getName() + "?")
+                        .title("Remove " + stock.getName() + "?")
                         .positiveText("Remove")
                         .negativeText("Cancel")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(MaterialDialog dialog, DialogAction which) {
                                 stockListAdapter.deleteStock(position);
+
+
+                                ConditionGroup conditions = new ConditionGroup();
+                                conditions.andAll(WidgetOption_Table.widgetForeignKeyContainer_id.eq(widget.id),
+                                        WidgetOption_Table.key.is(STOCK_IN_LIST), WidgetOption_Table.value.is(Long.toString(stock.getId())));
+
+                                new Delete().from(WidgetOption.class).where(conditions).execute();
                             }
                         })
                         .show();
@@ -138,7 +147,7 @@ public class StocksSettings extends Fragment {
 
         // query the db to get the saved stocks
         ConditionGroup conditions = new ConditionGroup();
-        conditions.orAll(WidgetOption_Table.widgetForeignKeyContainer_id.eq(widget.id), WidgetOption_Table.key.is(STOCK_IN_LIST));
+        conditions.andAll(WidgetOption_Table.widgetForeignKeyContainer_id.eq(widget.id), WidgetOption_Table.key.is(STOCK_IN_LIST));
 
         List<WidgetOption> savedStocks =
                 SQLite.select()
