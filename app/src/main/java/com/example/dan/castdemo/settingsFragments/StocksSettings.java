@@ -1,40 +1,35 @@
 package com.example.dan.castdemo.settingsFragments;
 
-import android.content.ContentResolver;
-import android.database.CharArrayBuffer;
-import android.database.ContentObserver;
 import android.database.Cursor;
-import android.database.DataSetObserver;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.FilterQueryProvider;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import com.example.dan.castdemo.R;
+import com.example.dan.castdemo.RecyclerItemClickListener;
 import com.example.dan.castdemo.Stock;
-import com.example.dan.castdemo.StockCompletionView;
 import com.example.dan.castdemo.StockInfo;
 import com.example.dan.castdemo.Stock_Table;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.WidgetOption;
 import com.example.dan.castdemo.WidgetOption_Table;
 import com.example.dan.castdemo.Widget_Table;
-import com.raizlabs.android.dbflow.sql.language.Condition;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.Delete;
-import com.raizlabs.android.dbflow.sql.language.Insert;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
-import com.tokenautocomplete.TokenCompleteTextView;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -42,10 +37,16 @@ import butterknife.ButterKnife;
 public class StocksSettings extends Fragment {
 
     private Widget widget;
+    static String STOCK_IN_LIST = "STOCK_IN_LIST";
+    ArrayList<StockInfo> stocks = new ArrayList<>();
+    final StockListAdapter stockListAdapter = new StockListAdapter(stocks);
+
 
     @Bind(R.id.select_stock)
-    MultiAutoCompleteTextView addStock;
-    static String STOCK_IN_LIST = "STOCK_IN_LIST";
+    AutoCompleteTextView addStock;
+
+    @Bind(R.id.stock_list)
+    RecyclerView stockList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,19 +69,18 @@ public class StocksSettings extends Fragment {
         ButterKnife.bind(this, view);
 
 
-        final SimpleCursorAdapter adapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
+        final SimpleCursorAdapter dropDownMenuAdapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
                 new String[]{"name", "ticker"},
                 new int[]{R.id.company_name, R.id.stock_ticker},
                 0);
 
-        adapter.setFilterQueryProvider(new FilterQueryProvider() {
+        dropDownMenuAdapter.setFilterQueryProvider(new FilterQueryProvider() {
             public Cursor runQuery(CharSequence hint) {
 
                 ConditionGroup query = ConditionGroup.clause().orAll(Stock_Table.name.like("%" + hint + "%"), Stock_Table.ticker.like("%" + hint + "%"));
                 return new Select().from(Stock.class).where(query).query();
             }
         });
-
 
         SimpleCursorAdapter.CursorToStringConverter converter = new SimpleCursorAdapter.CursorToStringConverter() {
             @Override
@@ -90,63 +90,124 @@ public class StocksSettings extends Fragment {
             }
         };
 
-        adapter.setCursorToStringConverter(converter);
+        dropDownMenuAdapter.setCursorToStringConverter(converter);
 
-        addStock.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-
-        addStock.setThreshold(1);
-        addStock.setAdapter(adapter);
+        addStock.setAdapter(dropDownMenuAdapter);
 
         addStock.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Stock selectedStock = new Select().from(Stock.class).where(Stock_Table._id.is(id)).querySingle();
+
+
+                WidgetOption stockDbRecord = new WidgetOption();
+                stockDbRecord.key = STOCK_IN_LIST;
+                stockDbRecord.value = Long.toString(selectedStock.get_id());
+                stockDbRecord.associateWidget(widget);
+                stockDbRecord.save();
+
+                stockListAdapter.addStock(selectedStock);
+                addStock.clearListSelection();
+                addStock.setText("");
+
 
             }
         });
+
+        stockList.setAdapter(stockListAdapter);
+        stockList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        stockList.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                stockListAdapter.deleteStock(position);
+            }
+        }));
 
         // query the db to get the saved stocks
         ConditionGroup conditions = new ConditionGroup();
         conditions.orAll(WidgetOption_Table.widgetForeignKeyContainer_id.eq(widget.id), WidgetOption_Table.key.is(STOCK_IN_LIST));
 
-        Cursor cursor = SQLite.select()
-                .from(WidgetOption.class)
-                .where(conditions)
-                .query();
-//        while (cursor.moveToNext()) {
-//            ((SimpleCursorAdapter) addStock.getAdapter()).(cursor);
-//        }
-        cursor.close();
+        List<WidgetOption> savedStocks =
+                SQLite.select()
+                        .from(WidgetOption.class)
+                        .where(conditions)
+                        .queryList();
+
+        for (WidgetOption option : savedStocks) {
+            long stockId = Long.parseLong(option.value);
+
+            Stock stock = new Select().from(Stock.class).where(Stock_Table._id.is(stockId)).querySingle();
+
+            StockInfo info = new StockInfo(stock.getTicker(), stock.getName(), stock.get_id());
+
+            stockListAdapter.addStock(info);
+        }
+
 
         return view;
+    }
+
+    public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.ViewHolder> {
+        private ArrayList<StockInfo> mDataset;
+
+        public void addStock(Stock selectedStock) {
+            StockInfo stock = new StockInfo(selectedStock.getTicker(), selectedStock.getName(), selectedStock.get_id());
+            addStock(stock);
+        }
+
+        public void addStock(StockInfo stock) {
+            mDataset.add(0, stock);
+            notifyDataSetChanged();
+        }
+
+        public void deleteStock(int position) {
+            mDataset.remove(position);
+            notifyDataSetChanged();
+        }
+
+        // Provide a reference to the views for each data item
+        // Complex data items may need more than one view per item, and
+        // you provide access to all the views for a data item in a view holder
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            // each data item is just a string in this case
+            public TextView mCompanyName;
+            public TextView mStockTicker;
+
+
+            public ViewHolder(View v) {
+                super(v);
+                mStockTicker = (TextView) v.findViewById(R.id.stock_ticker);
+                mCompanyName = (TextView) v.findViewById(R.id.company_name);
+            }
+        }
+
+        public StockListAdapter(ArrayList<StockInfo> myDataset) {
+            mDataset = myDataset;
+        }
+
+        // Create new views (invoked by the layout manager)
+        @Override
+        public StockListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.saved_stocks_list_item, parent, false);
+
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            holder.mStockTicker.setText(mDataset.get(position).getTicker());
+            holder.mCompanyName.setText(mDataset.get(position).getName());
+        }
+
+        @Override
+        public int getItemCount() {
+            return mDataset.size();
+        }
     }
 
     public static void init(Widget widget) {
 
     }
-
-//    @Override
-//    public void onTokenAdded(Object token) {
-//        WidgetOption stockDbRecord = new WidgetOption();
-//
-//        Cursor cursor = (Cursor) token;
-//        cursor.moveToFirst();
-//
-//        stockDbRecord.key = STOCK_IN_LIST;
-//        stockDbRecord.value = cursor.getString(cursor.getColumnIndex("ticker"));
-//        stockDbRecord.associateWidget(widget);
-//        stockDbRecord.save();
-//
-//        //save to the database
-//    }
-
-//    @Override
-//    public void onTokenRemoved(Object token) {
-//        Cursor cursor = (Cursor) token;
-//        cursor.moveToFirst();
-//
-//        String ticker = cursor.getString(cursor.getColumnIndex("ticker"));
-//
-//        new Delete().from(WidgetOption.class).where(WidgetOption_Table.key.is(ticker)).query();
-//        //remove from database
-//    }
 }

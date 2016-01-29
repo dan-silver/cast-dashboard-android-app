@@ -6,4 +6,5 @@
     <string name="namespace">urn:x-cast:com.google.cast.sample.helloworld</string>
     <string name="message_to_cast">Message to Cast&#8230;</string>
     <string name="media_route_menu_title">Play on&#8230;</string>
+    <string name="remove_stock">remove stock</string>
 </resources>
