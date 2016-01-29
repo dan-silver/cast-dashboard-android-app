@@ -10,5 +10,4 @@
     <item
         android:title="test"
         android:onClick="test"/>
-
 </menu>

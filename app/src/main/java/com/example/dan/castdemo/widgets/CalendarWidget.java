@@ -113,11 +113,10 @@ public class CalendarWidget extends UIWidget {
         long end = begin + 604800000; // ending time in milliseconds
         String[] projection =
                 new String[]{
-                        CalendarContract.Instances._ID,
                         CalendarContract.Instances.BEGIN,
                         CalendarContract.Instances.END,
-                        CalendarContract.Instances.EVENT_ID,
-                        CalendarContract.Instances.TITLE};
+                        CalendarContract.Instances.TITLE,
+                        CalendarContract.Instances.DISPLAY_COLOR};
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -138,12 +137,16 @@ public class CalendarWidget extends UIWidget {
 
         JSONArray events = new JSONArray();
         while (cur.moveToNext()) {
-            String eventID = cur.getString(3);
-            String title = cur.getString(4);
-            String _id = cur.getString(0);
-            JSONObject event = new JSONObject();
+            String title = cur.getString(2);
+            String color = cur.getString(3);
+            String startDate = cur.getString(0);
+            String endDate = cur.getString(1);
 
+            JSONObject event = new JSONObject();
             event.put("title", title);
+            event.put("color", Integer.toHexString(Integer.valueOf(color)).substring(3));
+            event.put("start", startDate);
+            event.put("end", endDate);
 
             events.put(event);
 
@@ -153,12 +156,10 @@ public class CalendarWidget extends UIWidget {
         return events;
     }
 
-
     @Override
     public JSONObject getContent() throws JSONException {
         JSONObject json = new JSONObject();
         json.put("events", getCalendarEvents(context, null));
-        json.put("testkey1", "testvalue1");
         return json;
     }
 

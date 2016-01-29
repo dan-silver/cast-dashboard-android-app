@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.dan.castdemo.widgets.CalendarWidget;
+import com.example.dan.castdemo.widgets.StocksWidget;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.Cast;
 import com.google.android.gms.cast.Cast.ApplicationConnectionResult;
@@ -34,6 +35,7 @@ import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -395,12 +397,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendWidget(Widget widget) throws JSONException {
+        JSONObject payload = new JSONObject();
+        payload.put("type", widget.getWidgetType().getHumanName().toLowerCase());
+        payload.put("id", widget.id);
+        payload.put("options", new JSONObject());
+
+
+
         if (widget.getWidgetType() == Widget.types.CALENDAR) {
 
             CalendarWidget cw = new CalendarWidget(this, widget);
-            sendMessage(cw.getContent().toString());
+            payload.put("data", cw.getContent());
 
+        } else if (widget.getWidgetType() == Widget.types.STOCKS) {
+            StocksWidget sw = new StocksWidget(this, widget);
+            payload.put("data", sw.getContent());
         }
+
+        sendMessage(payload.toString());
+
     }
 
 }
