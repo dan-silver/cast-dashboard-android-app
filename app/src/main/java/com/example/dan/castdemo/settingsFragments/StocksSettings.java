@@ -15,6 +15,8 @@ import android.widget.FilterQueryProvider;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.RecyclerItemClickListener;
 import com.example.dan.castdemo.Stock;
@@ -119,8 +121,18 @@ public class StocksSettings extends Fragment {
 
         stockList.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
-            public void onItemClick(View view, int position) {
-                stockListAdapter.deleteStock(position);
+            public void onItemClick(View view, final int position) {
+                new MaterialDialog.Builder(getContext())
+                        .title("Remove " + stockListAdapter.getStock(position).getName() + "?")
+                        .positiveText("Remove")
+                        .negativeText("Cancel")
+                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                            @Override
+                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                                stockListAdapter.deleteStock(position);
+                            }
+                        })
+                        .show();
             }
         }));
 
@@ -164,6 +176,10 @@ public class StocksSettings extends Fragment {
         public void deleteStock(int position) {
             mDataset.remove(position);
             notifyDataSetChanged();
+        }
+
+        public StockInfo getStock(int position) {
+            return mDataset.get(position);
         }
 
         // Provide a reference to the views for each data item
