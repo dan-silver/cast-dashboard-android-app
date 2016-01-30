@@ -328,6 +328,8 @@ public class MainActivity extends AppCompatActivity {
                                                 // on the receiver
                                                 //@todo
                                                 //sendMessage(getString(R.string.instructions));
+                                                test(null);
+
                                             } else {
                                                 Log.e(TAG, "application could not launch");
                                                 teardown(true);

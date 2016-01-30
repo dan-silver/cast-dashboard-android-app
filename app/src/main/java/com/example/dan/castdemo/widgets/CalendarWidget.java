@@ -116,7 +116,8 @@ public class CalendarWidget extends UIWidget {
                         CalendarContract.Instances.BEGIN,
                         CalendarContract.Instances.END,
                         CalendarContract.Instances.TITLE,
-                        CalendarContract.Instances.DISPLAY_COLOR};
+                        CalendarContract.Instances.DISPLAY_COLOR,
+                        CalendarContract.Instances.ALL_DAY};
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -137,16 +138,18 @@ public class CalendarWidget extends UIWidget {
 
         JSONArray events = new JSONArray();
         while (cur.moveToNext()) {
+            long startDate = cur.getLong(0);
+            long endDate = cur.getLong(1);
             String title = cur.getString(2);
-            String color = cur.getString(3);
-            String startDate = cur.getString(0);
-            String endDate = cur.getString(1);
+            int color = cur.getInt(3);
+            int allDay = cur.getInt(4);
 
             JSONObject event = new JSONObject();
             event.put("title", title);
-            event.put("color", Integer.toHexString(Integer.valueOf(color)).substring(3));
+            event.put("color", Integer.toHexString(color).substring(2));
             event.put("start", startDate);
             event.put("end", endDate);
+            event.put("allDay", allDay == 1);
 
             events.put(event);
 
