@@ -170,9 +170,8 @@ public class CalendarWidget extends UIWidget {
                             null);
 
         JSONArray events = new JSONArray();
-        int numEvents = 0;
 
-        while (cur.moveToNext()) {
+        while (cur.moveToNext() && events.length() < 50) {
             long startDate = cur.getLong(0);
             long endDate = cur.getLong(1);
             String title = cur.getString(2);
@@ -189,11 +188,6 @@ public class CalendarWidget extends UIWidget {
             event.put("locationStr", location);
 
             events.put(event);
-
-            numEvents++;
-            if (numEvents > 50) {
-                break;
-            }
 
 
         }
