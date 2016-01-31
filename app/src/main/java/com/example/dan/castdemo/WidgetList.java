@@ -60,11 +60,8 @@ public class WidgetList extends Fragment {
 
                         widget.initOptions();
                         refreshList();
-//                        adapter.addWidget(widget);
-//                        adapter.notifyDataSetChanged();
 
                         activity.sendMessage(widget.getHumanName() + " widget created.");
-//                        activity.switchToFragment(new WidgetSettings(), true);
                         return true;
                     }
                 })

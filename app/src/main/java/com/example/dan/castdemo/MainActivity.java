@@ -31,7 +31,6 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
-import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.json.JSONException;
@@ -208,11 +207,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "Exception while sending message", e);
             }
         } else {
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Error sending message", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void test(MenuItem item) {
+    public void sendAllWidgets(MenuItem item) {
         getAllWidgets(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
@@ -328,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
                                                 // on the receiver
                                                 //@todo
                                                 //sendMessage(getString(R.string.instructions));
-                                                test(null);
+                                                sendAllWidgets(null);
 
                                             } else {
                                                 Log.e(TAG, "application could not launch");

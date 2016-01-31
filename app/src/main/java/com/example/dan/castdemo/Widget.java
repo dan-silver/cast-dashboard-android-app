@@ -122,4 +122,12 @@ public class Widget extends BaseModel {
                 .querySingle();
     }
 
+    public List<WidgetOption> getOptions(String key) {
+        return SQLite.select()
+                .from(WidgetOption.class)
+                .where(WidgetOption_Table.widgetForeignKeyContainer_id.eq(id))
+                .and(WidgetOption_Table.key.eq(key))
+                .queryList();
+    }
+
 }

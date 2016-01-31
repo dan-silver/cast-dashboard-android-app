@@ -34,13 +34,4 @@
                 android:text="Foobar" />
 
         </LinearLayout>
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_edit_24dp"
-            android:id="@+id/editIcon"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"/>
-
     </RelativeLayout>

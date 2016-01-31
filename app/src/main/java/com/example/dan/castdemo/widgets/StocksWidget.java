@@ -3,16 +3,15 @@ package com.example.dan.castdemo.widgets;
 import android.content.Context;
 
 import com.example.dan.castdemo.Stock;
-import com.example.dan.castdemo.StockInfo;
 import com.example.dan.castdemo.Stock_Table;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.WidgetOption;
 import com.example.dan.castdemo.WidgetOption_Table;
 import com.example.dan.castdemo.settingsFragments.StocksSettings;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,9 +29,26 @@ public class StocksWidget extends UIWidget {
 
     @Override
     public JSONObject getContent() throws JSONException {
+
+
+        // get the ids of the stocks
+        List<WidgetOption> a = widget.getOptions(StocksSettings.STOCK_IN_LIST);
+
+        ConditionGroup conditions = new ConditionGroup();
+        for (WidgetOption stockOption : a) {
+            conditions.or(Stock_Table._id.is(Long.parseLong(stockOption.value)));
+        }
+
+        // convert ids to tickers
+
+        List<Stock> selectedStocks = new Select().from(Stock.class).where(conditions).queryList();
+
         JSONObject json = new JSONObject();
-        json.put("stock1", "value1");
-        json.put("stock2", "value2");
+        JSONArray tickers = new JSONArray();
+        for (Stock stock : selectedStocks) {
+            tickers.put(stock.getTicker());
+        }
+        json.put("tickers", tickers);
         return json;
     }
 

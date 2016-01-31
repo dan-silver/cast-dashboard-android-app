@@ -9,5 +9,5 @@
 
     <item
         android:title="test"
-        android:onClick="test"/>
+        android:onClick="sendAllWidgets"/>
 </menu>

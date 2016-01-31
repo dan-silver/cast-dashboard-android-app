@@ -22,22 +22,18 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
     private final MainActivity mainActivity;
 
-//    public void addWidget(Widget w) {
-//        widgetList.add(w);
-//    }
-
     public class WidgetViewHolder extends RecyclerView.ViewHolder {
         protected TextView topHeader;
         protected TextView bottomHeader;
-        protected ImageView editIcon;
         protected ImageView typeIcon;
+        protected View listItemView;
 
         public WidgetViewHolder(View view) {
             super(view);
             this.topHeader = (TextView) view.findViewById(R.id.widget_name);
             this.bottomHeader = (TextView) view.findViewById(R.id.widget_type);
-            this.editIcon = (ImageView) view.findViewById(R.id.editIcon);
             this.typeIcon = (ImageView) view.findViewById(R.id.widget_type_icon);
+            this.listItemView = view;
         }
     }
 
@@ -77,7 +73,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
         customViewHolder.typeIcon.setImageResource(widget.getIconResource());
 
-        customViewHolder.editIcon.setOnClickListener(new View.OnClickListener() {
+        customViewHolder.listItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Fragment fragment = new WidgetSettings();

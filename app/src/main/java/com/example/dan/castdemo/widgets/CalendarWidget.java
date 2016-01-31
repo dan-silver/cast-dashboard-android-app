@@ -117,7 +117,6 @@ public class CalendarWidget extends UIWidget {
         return calendars;
     }
 
-    // return pure JSON for frontend?
     public JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars) throws JSONException {
 
         Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
