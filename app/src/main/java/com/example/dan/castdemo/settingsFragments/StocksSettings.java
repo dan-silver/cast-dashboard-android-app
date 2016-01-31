@@ -27,7 +27,6 @@ import com.example.dan.castdemo.WidgetOption_Table;
 import com.example.dan.castdemo.Widget_Table;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.Delete;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import java.util.ArrayList;
@@ -112,7 +111,6 @@ public class StocksSettings extends Fragment {
                 addStock.clearListSelection();
                 addStock.setText("");
 
-
             }
         });
 
@@ -145,14 +143,7 @@ public class StocksSettings extends Fragment {
         }));
 
         // query the db to get the saved stocks
-        ConditionGroup conditions = new ConditionGroup();
-        conditions.andAll(WidgetOption_Table.widgetForeignKeyContainer_id.eq(widget.id), WidgetOption_Table.key.is(STOCK_IN_LIST));
-
-        List<WidgetOption> savedStocks =
-                SQLite.select()
-                        .from(WidgetOption.class)
-                        .where(conditions)
-                        .queryList();
+        List<WidgetOption> savedStocks = widget.getOptions(STOCK_IN_LIST);
 
         for (WidgetOption option : savedStocks) {
             long stockId = Long.parseLong(option.value);

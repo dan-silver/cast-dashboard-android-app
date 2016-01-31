@@ -6,7 +6,6 @@ import com.example.dan.castdemo.Stock;
 import com.example.dan.castdemo.Stock_Table;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.WidgetOption;
-import com.example.dan.castdemo.WidgetOption_Table;
 import com.example.dan.castdemo.settingsFragments.StocksSettings;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -54,11 +53,7 @@ public class StocksWidget extends UIWidget {
 
     @Override
     public String getWidgetPreviewSecondaryHeader() {
-        ConditionGroup conditions = new ConditionGroup();
-        conditions.andAll(WidgetOption_Table.widgetForeignKeyContainer_id.eq(widget.id),
-                WidgetOption_Table.key.is(StocksSettings.STOCK_IN_LIST));
-
-        List<WidgetOption> savedStocks = new Select().from(WidgetOption.class).where(conditions).queryList();
+        List<WidgetOption> savedStocks = widget.getOptions(StocksSettings.STOCK_IN_LIST);
         if (savedStocks.size() == 0) {
             return "Click to add stocks!";
         }
