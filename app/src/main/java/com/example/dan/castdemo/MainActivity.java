@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         switchToFragment(new WidgetList(), false);
 
         // Configure Cast device discovery
-        mMediaRouter = MediaRouter.getInstance(getApplicationContext());
+        mMediaRouter = MediaRouter.getInstance(getApplicationContext()  );
         mMediaRouteSelector = new MediaRouteSelector.Builder()
                 .addControlCategory(CastMediaControlIntent.categoryForCast(getResources()
                         .getString(R.string.app_id))).build();

@@ -12,10 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import com.example.dan.castdemo.CalendarInfo;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.WidgetOption;
-import com.example.dan.castdemo.WidgetOption_Table;
 import com.example.dan.castdemo.settingsFragments.CalendarSettings;
-import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
-
-import static android.content.ContentUris.withAppendedId;
 
 public class CalendarWidget extends UIWidget {
 
@@ -62,8 +57,6 @@ public class CalendarWidget extends UIWidget {
         Cursor cur;
         ContentResolver cr = context.getContentResolver();
         Uri uri = CalendarContract.Calendars.CONTENT_URI;
-        String selection = "((" + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?))";
-        String[] selectionArgs = new String[]{"com.google"};
         // Submit the query and get a Cursor object back.
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -75,7 +68,7 @@ public class CalendarWidget extends UIWidget {
             // for ActivityCompat#requestPermissions for more details.
             return new ArrayList<>();
         }
-        cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
+        cur = cr.query(uri, EVENT_PROJECTION, null, null, null);
 
         if (cur == null)
             return new ArrayList<>();
@@ -98,7 +91,8 @@ public class CalendarWidget extends UIWidget {
             // Do something with the values...
             CalendarInfo calendarInfo = new CalendarInfo();
             calendarInfo.name = displayName;
-            calendarInfo.id = withAppendedId(uri, calID).toString();
+//            calendarInfo.id = withAppendedId(uri, calID).toString();
+            calendarInfo.id = Long.toString(calID);
 
 
             calendars.add(calendarInfo);
@@ -124,12 +118,17 @@ public class CalendarWidget extends UIWidget {
     }
 
     // return pure JSON for frontend?
-    public JSONArray getCalendarEvents(Context context, List<CalendarInfo> calendars) throws JSONException {
+    public JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars) throws JSONException {
+
         Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
-        long begin = cal1.getTimeInMillis();
         // starting time in milliseconds
-        long end = begin + 604800000*3; // ending time in milliseconds
+        long begin = cal1.getTimeInMillis();
+
+        // end time
+        cal1.add(Calendar.MONTH, 2);
+        long end = cal1.getTimeInMillis(); // ending time in milliseconds
+
         String[] projection =
                 new String[]{
                         CalendarContract.Instances.BEGIN,
@@ -149,14 +148,30 @@ public class CalendarWidget extends UIWidget {
             // for ActivityCompat#requestPermissions for more details.
             return null;
         }
+
+
+        List<String> selection = new ArrayList<>();
+        List<String> selectionArgs = new ArrayList<>();
+        String selectionStr = "";
+        if (!allCalendars) {
+            for (String calendarId : calendarIds) {
+                selection.add("(" + CalendarContract.Instances.CALENDAR_ID + " = ?)");
+                selectionArgs.add(calendarId);
+            }
+            selectionStr = "(" + android.text.TextUtils.join(" OR ", selection) + ")";
+        }
+
         Cursor cur =
-                CalendarContract.Instances.query(
-                        context.getContentResolver(),
-                        projection,
-                        begin,
-                        end);
+                    context.getContentResolver().query(
+                            Uri.parse(CalendarContract.Instances.CONTENT_URI + "/" + begin + "/" + end),
+                            projection,
+                            selectionStr,
+                            selectionArgs.toArray(new String[selectionArgs.size()]),
+                            null);
 
         JSONArray events = new JSONArray();
+        int numEvents = 0;
+
         while (cur.moveToNext()) {
             long startDate = cur.getLong(0);
             long endDate = cur.getLong(1);
@@ -175,6 +190,11 @@ public class CalendarWidget extends UIWidget {
 
             events.put(event);
 
+            numEvents++;
+            if (numEvents > 50) {
+                break;
+            }
+
 
         }
         cur.close();
@@ -184,7 +204,22 @@ public class CalendarWidget extends UIWidget {
     @Override
     public JSONObject getContent() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("events", getCalendarEvents(context, null));
+
+
+        List<String> calendarIds = new ArrayList<>();
+
+        WidgetOption optionAllCalendars = widget.getOption(CalendarSettings.ALL_CALENDARS);
+        boolean showAllCalendars = optionAllCalendars.value.equals(CalendarSettings.ALL_CALENDARS_TRUE);
+
+        if (!showAllCalendars) {
+            for (WidgetOption a : CalendarSettings.getEnabledCalendars(widget)) {
+                calendarIds.add(a.value);
+            }
+        }
+
+
+
+        json.put("events", getCalendarEvents(context, calendarIds, showAllCalendars));
         return json;
     }
 
