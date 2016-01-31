@@ -13,10 +13,8 @@ import com.example.dan.castdemo.CalendarInfo;
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.WidgetOption;
-import com.example.dan.castdemo.WidgetOption_Table;
 import com.example.dan.castdemo.Widget_Table;
 import com.example.dan.castdemo.widgets.CalendarWidget;
-import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import java.util.List;
@@ -112,15 +110,6 @@ public class CalendarSettings extends Fragment {
     }
 
     public static List<WidgetOption> getEnabledCalendars(Widget widget) {
-
-        ConditionGroup conditions = new ConditionGroup();
-        conditions.andAll(
-                WidgetOption_Table.widgetForeignKeyContainer_id.is(widget.id),
-                WidgetOption_Table.key.is(CalendarSettings.CALENDAR_ENABLED));
-
-        return new Select()
-                .from(WidgetOption.class)
-                .where(conditions)
-                .queryList();
+        return widget.getOptions(CalendarSettings.CALENDAR_ENABLED);
     }
 }

@@ -223,7 +223,12 @@ public class CalendarWidget extends UIWidget {
             return "Displaying all calendars";
         } else {
             //@todo optimize this section
+
+            // contains ids
             List<WidgetOption> enabledCalendars = CalendarSettings.getEnabledCalendars(widget);
+
+
+            // contains title, id
             List<CalendarInfo> calendars = getCalendars(context, widget);
 
 
@@ -231,33 +236,33 @@ public class CalendarWidget extends UIWidget {
 
             if (numCalendars == 0) {
                 return "No calendars selected";
-            } else {
-                ArrayList<String> previewCalendars = new ArrayList<>();
-                int charCount = 0;
-                for (CalendarInfo calendarInfo : calendars) {
-                    for (WidgetOption option : enabledCalendars) {
-                        if (calendarInfo.id.equals(option.value)) {
-                            previewCalendars.add(calendarInfo.name);
-                            charCount += calendarInfo.name.length();
-                            break;
-
-                        }
-                    }
-                    if (charCount > 20) {
-                        break;
-                    }
-                }
-
-                int notShownCalendars = numCalendars - previewCalendars.size();
-
-                // all calendar names previewed
-                if (notShownCalendars == 0) {
-                    return android.text.TextUtils.join(", ", previewCalendars);
-                }
-
-                // overflow case
-                return android.text.TextUtils.join(", ", previewCalendars) + " and " + notShownCalendars + " more";
             }
+
+            ArrayList<String> previewCalendars = new ArrayList<>();
+            int charCount = 0;
+            for (CalendarInfo calendarInfo : calendars) {
+                for (WidgetOption option : enabledCalendars) {
+                    if (calendarInfo.id.equals(option.value)) {
+                        previewCalendars.add(calendarInfo.name);
+                        charCount += calendarInfo.name.length();
+                        break;
+
+                    }
+                }
+                if (charCount > 20) {
+                    break;
+                }
+            }
+
+            int notShownCalendars = numCalendars - previewCalendars.size();
+
+            // all calendar names previewed
+            if (notShownCalendars == 0) {
+                return android.text.TextUtils.join(", ", previewCalendars);
+            }
+
+            // overflow case
+            return android.text.TextUtils.join(", ", previewCalendars) + " and " + notShownCalendars + " more";
         }
     }
 }
