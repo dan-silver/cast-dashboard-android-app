@@ -12,7 +12,10 @@ import android.support.v4.app.ActivityCompat;
 import com.example.dan.castdemo.CalendarInfo;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.WidgetOption;
+import com.example.dan.castdemo.WidgetOption_Table;
 import com.example.dan.castdemo.settingsFragments.CalendarSettings;
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
+
+import static android.content.ContentUris.withAppendedId;
 
 public class CalendarWidget extends UIWidget {
 
@@ -34,8 +39,9 @@ public class CalendarWidget extends UIWidget {
         this.widget = widget;
     }
 
+
     // Projection array. Creating indices for this array instead of doing
-// dynamic lookups improves performance.
+
     public static final String[] EVENT_PROJECTION = new String[]{
             CalendarContract.Calendars._ID,                           // 0
             CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
@@ -49,10 +55,9 @@ public class CalendarWidget extends UIWidget {
     private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
     private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
     private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
-    private static final int PROJECTION_CALENDAR_COLOR = 4;
 
 
-    public static List<CalendarInfo> getCalendars(Context context) {
+    public static List<CalendarInfo> getCalendars(Context context, Widget widget) {
         // Run query
         Cursor cur;
         ContentResolver cr = context.getContentResolver();
@@ -68,39 +73,53 @@ public class CalendarWidget extends UIWidget {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return null;
+            return new ArrayList<>();
         }
         cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
 
         if (cur == null)
-            return null;
+            return new ArrayList<>();
 
 
         ArrayList<CalendarInfo> calendars = new ArrayList<>();
         // Use the cursor to step through the returned records
         while (cur.moveToNext()) {
-            long calID = 0;
+            long calID;
             String displayName = null;
             String accountName = null;
             String ownerName = null;
-            int color;
 
             // Get the field values
             calID = cur.getLong(PROJECTION_ID_INDEX);
             displayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
             accountName = cur.getString(PROJECTION_ACCOUNT_NAME_INDEX);
-            color = cur.getInt(PROJECTION_CALENDAR_COLOR);
             ownerName = cur.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
 
             // Do something with the values...
             CalendarInfo calendarInfo = new CalendarInfo();
             calendarInfo.name = displayName;
-            calendarInfo.id = calID;
+            calendarInfo.id = withAppendedId(uri, calID).toString();
 
 
             calendars.add(calendarInfo);
         }
         cur.close();
+
+        // figure out which of the calendars are enabled
+
+        List<WidgetOption> enabled_calendars = CalendarSettings.getEnabledCalendars(widget);
+
+
+        for (CalendarInfo calendar : calendars) {
+            calendar.enabled = false;
+            for (WidgetOption enabledCalendar: enabled_calendars) {
+                if (calendar.id.equals(enabledCalendar.value)) {
+                    calendar.enabled = true;
+                    break;
+                }
+            }
+        }
+
         return calendars;
     }
 
@@ -110,14 +129,15 @@ public class CalendarWidget extends UIWidget {
 
         long begin = cal1.getTimeInMillis();
         // starting time in milliseconds
-        long end = begin + 604800000; // ending time in milliseconds
+        long end = begin + 604800000*3; // ending time in milliseconds
         String[] projection =
                 new String[]{
                         CalendarContract.Instances.BEGIN,
                         CalendarContract.Instances.END,
                         CalendarContract.Instances.TITLE,
                         CalendarContract.Instances.DISPLAY_COLOR,
-                        CalendarContract.Instances.ALL_DAY};
+                        CalendarContract.Instances.ALL_DAY,
+                        CalendarContract.Instances.EVENT_LOCATION};
 
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -142,14 +162,16 @@ public class CalendarWidget extends UIWidget {
             long endDate = cur.getLong(1);
             String title = cur.getString(2);
             int color = cur.getInt(3);
-            int allDay = cur.getInt(4);
+            boolean allDay = cur.getInt(4) == 1;
+            String location = cur.getString(5);
 
             JSONObject event = new JSONObject();
             event.put("title", title);
             event.put("color", Integer.toHexString(color).substring(2));
             event.put("start", startDate);
             event.put("end", endDate);
-            event.put("allDay", allDay == 1);
+            event.put("allDay", allDay);
+            event.put("locationStr", location);
 
             events.put(event);
 
@@ -172,7 +194,42 @@ public class CalendarWidget extends UIWidget {
         if (optionAllCalendars.value.equals(CalendarSettings.ALL_CALENDARS_TRUE)) {
             return "Displaying all calendars";
         } else {
-            return "Showing some calendars.";
+            //@todo optimize this section
+            List<WidgetOption> enabledCalendars = CalendarSettings.getEnabledCalendars(widget);
+            List<CalendarInfo> calendars = getCalendars(context, widget);
+
+
+            int numCalendars = enabledCalendars.size();
+
+            if (numCalendars == 0) {
+                return "No calendars selected";
+            } else {
+                ArrayList<String> previewCalendars = new ArrayList<>();
+                int charCount = 0;
+                for (CalendarInfo calendarInfo : calendars) {
+                    for (WidgetOption option : enabledCalendars) {
+                        if (calendarInfo.id.equals(option.value)) {
+                            previewCalendars.add(calendarInfo.name);
+                            charCount += calendarInfo.name.length();
+                            break;
+
+                        }
+                    }
+                    if (charCount > 20) {
+                        break;
+                    }
+                }
+
+                int notShownCalendars = numCalendars - previewCalendars.size();
+
+                // all calendar names previewed
+                if (notShownCalendars == 0) {
+                    return android.text.TextUtils.join(", ", previewCalendars);
+                }
+
+                // overflow case
+                return android.text.TextUtils.join(", ", previewCalendars) + " and " + notShownCalendars + " more";
+            }
         }
     }
 }

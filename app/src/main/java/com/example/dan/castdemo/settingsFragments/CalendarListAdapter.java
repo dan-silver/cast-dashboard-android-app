@@ -5,15 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.dan.castdemo.CalendarInfo;
 import com.example.dan.castdemo.R;
+import com.example.dan.castdemo.Widget;
+import com.example.dan.castdemo.WidgetOption;
+import com.example.dan.castdemo.WidgetOption_Table;
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.Delete;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapter.CalendarViewHolder> {
+    private final Widget widget;
     private List<CalendarInfo> calendars = new ArrayList<>();
 
     public static class CalendarViewHolder extends RecyclerView.ViewHolder {
@@ -27,8 +34,9 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
         }
     }
 
-    public CalendarListAdapter(List<CalendarInfo> myDataset) {
+    public CalendarListAdapter(List<CalendarInfo> myDataset, Widget widget) {
         calendars.addAll(myDataset);
+        this.widget = widget;
     }
 
     @Override
@@ -41,8 +49,43 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
 
 
     @Override
-    public void onBindViewHolder(CalendarViewHolder holder, int position) {
-        holder.calendarName.setText(calendars.get(position).name);
+    public void onBindViewHolder(final CalendarViewHolder holder, int position) {
+        final CalendarInfo calendar = calendars.get(position);
+
+        holder.calendarName.setText(calendar.name);
+        holder.calendarEnabled.setOnCheckedChangeListener(null);
+        holder.calendarEnabled.setChecked(calendar.enabled);
+
+        holder.calendarEnabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                calendar.enabled = isChecked;
+                if (isChecked) {
+
+                    // add a CALENDAR_ENABLED entry
+                    WidgetOption calendarEnabled = new WidgetOption();
+                    calendarEnabled.key = CalendarSettings.CALENDAR_ENABLED;
+                    calendarEnabled.value = calendar.id;
+                    calendarEnabled.associateWidget(widget);
+                    calendarEnabled.save();
+
+                } else {
+                    // remove the CALENDAR_ENABLED entry
+                    ConditionGroup conditions = new ConditionGroup();
+                    conditions.andAll(
+                        WidgetOption_Table.widgetForeignKeyContainer_id.is(widget.id),
+                        WidgetOption_Table.key.is(CalendarSettings.CALENDAR_ENABLED),
+                        WidgetOption_Table.value.is(calendar.id));
+
+                    new Delete()
+                        .from(WidgetOption.class)
+                        .where(conditions)
+                        .execute();
+
+                }
+            }
+        });
+
 
     }
 
