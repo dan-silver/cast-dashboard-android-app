@@ -64,7 +64,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         } else if (widgetType == Widget.types.MAP) {
             uiWidget = new MapWidget(mainActivity, widget);
         } else {
-            uiWidget = new PlaceholderWidget(mainActivity);
+            uiWidget = new PlaceholderWidget(mainActivity, widget);
         }
 
         customViewHolder.topHeader.setText(widget.getHumanName());

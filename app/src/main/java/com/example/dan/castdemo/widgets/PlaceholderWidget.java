@@ -2,6 +2,8 @@ package com.example.dan.castdemo.widgets;
 
 import android.content.Context;
 
+import com.example.dan.castdemo.Widget;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -9,8 +11,10 @@ import org.json.JSONObject;
 public class PlaceholderWidget extends UIWidget {
     public static String HUMAN_NAME = "Placeholder";
 
-    public PlaceholderWidget(Context context) {
+    public PlaceholderWidget(Context context, Widget widget) {
+        super(context, widget);
     }
+
 
     @Override
     public JSONObject getContent() throws JSONException {

@@ -27,13 +27,6 @@ public class CalendarWidget extends UIWidget {
 
     public static String HUMAN_NAME = "Calendar";
 
-    private final Context context;
-
-    public CalendarWidget(Context context, Widget widget) {
-        this.context = context;
-        this.widget = widget;
-    }
-
 
     // Projection array. Creating indices for this array instead of doing
 
@@ -50,6 +43,10 @@ public class CalendarWidget extends UIWidget {
     private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
     private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
     private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
+
+    public CalendarWidget(Context context, Widget widget) {
+        super(context, widget);
+    }
 
 
     public static List<CalendarInfo> getCalendars(Context context, Widget widget) {

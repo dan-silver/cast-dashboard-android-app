@@ -20,10 +20,9 @@ import java.util.List;
 
 public class StocksWidget extends UIWidget {
     public static String HUMAN_NAME = "Stocks";
-    Widget widget;
 
     public StocksWidget(Context context, Widget widget) {
-        this.widget = widget;
+        super(context, widget);
     }
 
     @Override

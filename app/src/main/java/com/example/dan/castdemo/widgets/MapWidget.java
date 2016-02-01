@@ -10,10 +10,9 @@ import org.json.JSONObject;
 
 public class MapWidget extends UIWidget {
     public static String HUMAN_NAME = "Map";
-    Widget widget;
 
     public MapWidget(Context context, Widget widget) {
-        this.widget = widget;
+        super(context, widget);
     }
 
     @Override
