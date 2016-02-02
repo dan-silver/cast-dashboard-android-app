@@ -1,13 +1,17 @@
 package com.example.dan.castdemo;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -23,38 +27,36 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WidgetSettings extends Fragment {
-
+public class WidgetSettingsActivity extends AppCompatActivity {
 
     private Widget widget;
-    long widgetId;
-
-    @Bind(R.id.widget_settings_title)
-    TextView widgetSettingsTitle;
 
     @Bind(R.id.widget_settings_type_specific)
     FrameLayout widgetTypeSettings;
 
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Bundle bundle = this.getArguments();
-        widgetId = bundle.getLong(Widget.ID, -1);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_widget_settings);
+        ButterKnife.bind(this);
+
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+        Bundle b = getIntent().getExtras();
+        long widgetId = b.getLong(Widget.ID);
+
 
         // lookup widget in the database
         // display appropriate settings for that widget type
         widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
 
-
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.widget_settings, container, false);
-        ButterKnife.bind(this, view);
-
-        widgetSettingsTitle.setText(widget.getHumanName() + " Widget");
+        setTitle(widget.getHumanName() + " Widget");
 
         Fragment typeSettingsFragment;
         switch (widget.getWidgetType()) {
@@ -75,20 +77,17 @@ public class WidgetSettings extends Fragment {
         bundle.putLong(Widget.ID, widget.id);
         typeSettingsFragment.setArguments(bundle);
 
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.widget_settings_type_specific, typeSettingsFragment);
 
         transaction.commit();
-
-
-        return view;
     }
 
     @OnClick(R.id.widget_settings_delete_button)
     void deleteWidget() {
 
-        new MaterialDialog.Builder(getContext())
+        new MaterialDialog.Builder(this)
                 .title("Delete " + widget.getHumanName())
                 .content("Are you sure you want to remove this widget?")
                 .positiveText("Yes")
@@ -97,9 +96,10 @@ public class WidgetSettings extends Fragment {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         widget.delete();
-                        getActivity().onBackPressed();
+                        onBackPressed();
                     }
                 })
                 .show();
     }
+
 }

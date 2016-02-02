@@ -39,7 +39,6 @@ dependencies {
     compile 'net.sf.opencsv:opencsv:2.3'
 
 
-
 }
 
 apply plugin: 'com.neenbedankt.android-apt'
@@ -55,4 +54,7 @@ dependencies {
     // sql-cipher database encyrption (optional)
     compile "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:${dbflow_version}"
 
+}
+dependencies {
+    compile 'com.android.support:support-v4:23.+'
 }

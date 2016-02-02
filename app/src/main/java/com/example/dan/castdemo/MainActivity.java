@@ -1,18 +1,28 @@
 package com.example.dan.castdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.MediaRouteActionProvider;
 import android.support.v7.media.MediaRouteSelector;
 import android.support.v7.media.MediaRouter;
 import android.support.v7.media.MediaRouter.RouteInfo;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.dan.castdemo.widgets.CalendarWidget;
@@ -39,9 +49,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    private static final int NAV_VIEW_WIDGETS_ITEM = 1;
+    private static final int NAV_VIEW_OPTIONS_ITEM = 2;
 
 
     private MediaRouter mMediaRouter;
@@ -57,6 +72,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean mWaitingForReconnect;
     private String mSessionId;
 
+
+    //drawer
+
+    @Bind(R.id.nvView) NavigationView navView;
+    @Bind(R.id.drawer_layout) DrawerLayout mDrawer;
+    @Bind(R.id.top_toolbar) Toolbar top_toolbar;
+
     public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
@@ -71,7 +93,44 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.drawer_layout);
+        ButterKnife.bind(this);
+
+
+
+
+        // Set the adapter for the list view
+        Menu menu = navView.getMenu();
+        menu.add(0, NAV_VIEW_WIDGETS_ITEM, 0, "Widgets");
+        menu.add(0, NAV_VIEW_OPTIONS_ITEM, 0, "Settings");
+
+
+        // Set a Toolbar to replace the ActionBar.
+        setSupportActionBar(top_toolbar);
+
+        // Set the menu icon instead of the launcher icon.
+        ActionBar ab = getSupportActionBar();
+        assert ab != null;
+
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
+                this,  mDrawer, top_toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        );
+        mDrawer.setDrawerListener(mDrawerToggle);
+        ab.setDisplayHomeAsUpEnabled(true);
+//        ab.setDisplayShowTitleEnabled(false);
+        mDrawerToggle.syncState();
+
+
+
+        navView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        selectDrawerItem(menuItem);
+                        return true;
+                    }
+                });
 
         FlowManager.init(this);
 //        Delete.tables(Widget.class, WidgetOption.class, Stock.class);
@@ -85,6 +144,20 @@ public class MainActivity extends AppCompatActivity {
                 .addControlCategory(CastMediaControlIntent.categoryForCast(getResources()
                         .getString(R.string.app_id))).build();
         mMediaRouterCallback = new MyMediaRouterCallback();
+    }
+
+    private void selectDrawerItem(MenuItem menuItem) {
+        int selected = menuItem.getItemId();
+
+        if (selected == NAV_VIEW_OPTIONS_ITEM) {
+            switchToFragment(new AppSettings(), true);
+
+        } else if (selected == NAV_VIEW_WIDGETS_ITEM) {
+            switchToFragment(new WidgetList(), false);
+        }
+
+        mDrawer.closeDrawer(GravityCompat.START);
+
     }
 
 
@@ -211,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void sendAllWidgets(MenuItem item) {
+    public void sendAllWidgets() {
         getAllWidgets(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
@@ -224,6 +297,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void sendAllWidgets(MenuItem item) {
+        sendAllWidgets();
     }
 
     /**
@@ -327,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
                                                 // on the receiver
                                                 //@todo
                                                 //sendMessage(getString(R.string.instructions));
-                                                sendAllWidgets(null);
+                                                sendAllWidgets();
 
                                             } else {
                                                 Log.e(TAG, "application could not launch");
@@ -417,6 +494,12 @@ public class MainActivity extends AppCompatActivity {
 
         sendMessage(payload.toString());
 
+    }
+    @Override
+    public void onBackPressed()
+    {
+        mDrawer.closeDrawer(GravityCompat.START);
+        super.onBackPressed();
     }
 
 }

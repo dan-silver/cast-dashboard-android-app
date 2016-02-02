@@ -1,5 +1,6 @@
 package com.example.dan.castdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
@@ -76,13 +77,10 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         customViewHolder.listItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new WidgetSettings();
+            Intent intent = new Intent(mainActivity, WidgetSettingsActivity.class);
+            intent.putExtra(Widget.ID, widget.id);
 
-                Bundle bundle = new Bundle();
-                bundle.putLong(Widget.ID, widget.id);
-                fragment.setArguments(bundle);
-
-                mainActivity.switchToFragment(fragment, true);
+            mainActivity.startActivity(intent);
             }
         });
     }

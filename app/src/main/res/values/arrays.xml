@@ -5,4 +5,8 @@
         <item name="T">AT&amp;T</item>
         <item name="GOOG">Alphabet, Inc.</item>
     </string-array>
+    <string-array name="drawer_menu_items">
+        <item>Widgets</item>
+        <item>Settings</item>
+    </string-array>>
 </resources>
