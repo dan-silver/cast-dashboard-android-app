@@ -47,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -55,8 +56,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    private static final int NAV_VIEW_WIDGETS_ITEM = 1;
-    private static final int NAV_VIEW_OPTIONS_ITEM = 2;
+    public static final int NAV_VIEW_WIDGETS_ITEM = 0;
+    public static final int NAV_VIEW_OPTIONS_ITEM = 1;
 
 
     private MediaRouter mMediaRouter;
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.nvView) NavigationView navView;
     @Bind(R.id.drawer_layout) DrawerLayout mDrawer;
     @Bind(R.id.top_toolbar) Toolbar top_toolbar;
+    private ArrayList<MenuItem> menuItems = new ArrayList<>();
 
     public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
         FragmentManager fm = getSupportFragmentManager();
@@ -101,8 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the adapter for the list view
         Menu menu = navView.getMenu();
-        menu.add(0, NAV_VIEW_WIDGETS_ITEM, 0, "Widgets");
-        menu.add(0, NAV_VIEW_OPTIONS_ITEM, 0, "Settings");
+
+        menuItems.add(menu.add(0, NAV_VIEW_WIDGETS_ITEM, 0, "Widgets"));
+        menuItems.add(menu.add(0, NAV_VIEW_OPTIONS_ITEM, 1, "Settings"));
+
 
 
         // Set a Toolbar to replace the ActionBar.
@@ -148,15 +152,33 @@ public class MainActivity extends AppCompatActivity {
 
     private void selectDrawerItem(MenuItem menuItem) {
         int selected = menuItem.getItemId();
+        Fragment destination = null;
+        boolean backStack = false;
 
         if (selected == NAV_VIEW_OPTIONS_ITEM) {
-            switchToFragment(new AppSettings(), true);
+            destination = new AppSettings();
+            backStack = true;
 
         } else if (selected == NAV_VIEW_WIDGETS_ITEM) {
-            switchToFragment(new WidgetList(), false);
+            destination = new WidgetList();
+            backStack = false;
+        }
+
+
+        if (!menuItem.isChecked()) {
+            switchToFragment(destination, backStack);
+            uncheckAllMenuItems();
         }
 
         mDrawer.closeDrawer(GravityCompat.START);
+
+    }
+
+    private void uncheckAllMenuItems() {
+        // uncheck all the items
+        for (MenuItem item : menuItems) {
+            item.setChecked(false);
+        }
 
     }
 
@@ -301,6 +323,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendAllWidgets(MenuItem item) {
         sendAllWidgets();
+    }
+
+    public void setDrawerItemChecked(int menuItem) {
+        navView.getMenu().getItem(menuItem).setChecked(true);
     }
 
     /**
@@ -496,9 +522,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         mDrawer.closeDrawer(GravityCompat.START);
+        uncheckAllMenuItems();
         super.onBackPressed();
     }
 

@@ -34,5 +34,11 @@ public class AppSettings extends Fragment {
     public void onButtonPressed(Uri uri) {
 
     }
+    @Override
+    public void onResume() {
+        final MainActivity activity = (MainActivity) getActivity();
 
+        activity.setDrawerItemChecked(MainActivity.NAV_VIEW_OPTIONS_ITEM);
+        super.onResume();
+    }
 }

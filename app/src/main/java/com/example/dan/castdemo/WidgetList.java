@@ -30,7 +30,7 @@ public class WidgetList extends Fragment {
     RecyclerView widgetList;
 
     public WidgetList() {
-        refreshList(); //@todo is this double since it's called in onResume()?
+
     }
 
     @Override
@@ -72,6 +72,9 @@ public class WidgetList extends Fragment {
     @Override
     public void onResume() {
         refreshList();
+        final MainActivity activity = (MainActivity) getActivity();
+
+        activity.setDrawerItemChecked(MainActivity.NAV_VIEW_WIDGETS_ITEM);
         super.onResume();
     }
 
