@@ -14,11 +14,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/widget_type_icon"
-            android:layout_toEndOf="@+id/widget_type_icon"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:orientation="vertical"
-            android:layout_centerVertical="true">
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/widget_handle"
+            android:layout_toStartOf="@+id/widget_handle">
             <TextView
                 android:id="@+id/widget_name"
                 android:layout_width="match_parent"
@@ -33,5 +34,15 @@
                 android:layout_height="wrap_content"
                 android:text="Foobar" />
 
+
         </LinearLayout>
+    <ImageView
+        android:id="@+id/widget_handle"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_reorder_24dp" />
     </RelativeLayout>
