@@ -53,7 +53,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnSettingChanged {
 
     public static final String TAG = MainActivity.class.getSimpleName();
     public static final int NAV_VIEW_WIDGETS_ITEM = 0;
@@ -329,6 +329,17 @@ public class MainActivity extends AppCompatActivity {
         navView.getMenu().getItem(menuItem).setChecked(true);
     }
 
+    @Override
+    public void onSettingChanged(String setting, String value) {
+        JSONObject options = new JSONObject();
+        try {
+            options.put(setting, value);
+            sendJSONToClient("options", options);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Callback for MediaRouter events
      */
@@ -500,6 +511,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void sendJSONToClient(String key, JSONObject payload) throws JSONException {
+        JSONObject container = new JSONObject();
+
+        container.put(key, payload);
+
+        sendMessage(container.toString());
+
+    }
+
     public void sendWidget(Widget widget) throws JSONException {
         JSONObject payload = new JSONObject();
         payload.put("type", widget.getWidgetType().getHumanName().toLowerCase());
@@ -518,7 +538,7 @@ public class MainActivity extends AppCompatActivity {
             payload.put("data", sw.getContent());
         }
 
-        sendMessage(payload.toString());
+        sendJSONToClient("widget", payload);
 
     }
     @Override

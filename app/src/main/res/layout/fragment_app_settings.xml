@@ -25,5 +25,5 @@
         android:layout_height="wrap_content"
         android:id="@+id/seekBar"
         android:progress="1"
-        android:max="7" />
+        android:max="6" />
 </LinearLayout>
