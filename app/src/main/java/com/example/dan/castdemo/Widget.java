@@ -1,9 +1,11 @@
 package com.example.dan.castdemo;
 
 import com.example.dan.castdemo.settingsFragments.CalendarSettings;
+import com.example.dan.castdemo.settingsFragments.ClockSettings;
 import com.example.dan.castdemo.settingsFragments.MapSettings;
 import com.example.dan.castdemo.settingsFragments.StocksSettings;
 import com.example.dan.castdemo.widgets.CalendarWidget;
+import com.example.dan.castdemo.widgets.ClockWidget;
 import com.example.dan.castdemo.widgets.MapWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
@@ -28,7 +30,8 @@ public class Widget extends BaseModel {
         CALENDAR(0, CalendarWidget.HUMAN_NAME, R.drawable.ic_today_24dp),
         PLACEHOLDER(1, PlaceholderWidget.HUMAN_NAME, R.drawable.ic_hourglass_empty_black_24px),
         STOCKS(2, StocksWidget.HUMAN_NAME, R.drawable.ic_attach_money_24dp),
-        MAP(3, MapWidget.HUMAN_NAME, R.drawable.ic_map_24dp);
+        MAP(3, MapWidget.HUMAN_NAME, R.drawable.ic_map_24dp),
+        CLOCK(4, ClockWidget.HUMAN_NAME, R.drawable.ic_access_time_24dp);
 
         private int value;
         private int icon;
@@ -96,6 +99,8 @@ public class Widget extends BaseModel {
             StocksSettings.init(this);
         } else if (getWidgetType() == types.MAP) {
             MapSettings.init(this);
+        } else if (getWidgetType() == types.CLOCK) {
+            ClockSettings.init(this);
         }
     }
 

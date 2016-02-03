@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.dan.castdemo.widgets.CalendarWidget;
+import com.example.dan.castdemo.widgets.ClockWidget;
 import com.example.dan.castdemo.widgets.MapWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
@@ -64,6 +65,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
             uiWidget = new StocksWidget(mainActivity, widget);
         } else if (widgetType == Widget.types.MAP) {
             uiWidget = new MapWidget(mainActivity, widget);
+        } else if (widgetType == Widget.types.CLOCK) {
+            uiWidget = new ClockWidget(mainActivity, widget);
         } else {
             uiWidget = new PlaceholderWidget(mainActivity, widget);
         }

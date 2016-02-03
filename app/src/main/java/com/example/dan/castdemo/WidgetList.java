@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dan.castdemo.widgets.CalendarWidget;
+import com.example.dan.castdemo.widgets.ClockWidget;
 import com.example.dan.castdemo.widgets.MapWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
@@ -50,7 +51,7 @@ public class WidgetList extends Fragment {
 
         new MaterialDialog.Builder(getContext())
                 .title("Widget Type")
-                .items(new String[]{CalendarWidget.HUMAN_NAME, StocksWidget.HUMAN_NAME, MapWidget.HUMAN_NAME, PlaceholderWidget.HUMAN_NAME})
+                .items(new String[]{CalendarWidget.HUMAN_NAME, StocksWidget.HUMAN_NAME, MapWidget.HUMAN_NAME, PlaceholderWidget.HUMAN_NAME, ClockWidget.HUMAN_NAME})
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
