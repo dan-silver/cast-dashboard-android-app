@@ -1,14 +1,18 @@
 package com.example.dan.castdemo;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.dan.castdemo.widgetList.OnStartDragListener;
+import com.example.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.example.dan.castdemo.widgets.ClockWidget;
 import com.example.dan.castdemo.widgets.MapWidget;
@@ -25,7 +29,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WidgetList extends Fragment {
+public class WidgetList extends Fragment implements OnStartDragListener {
 
     @Bind(R.id.widgetList)
     RecyclerView widgetList;
@@ -34,15 +38,25 @@ public class WidgetList extends Fragment {
 
     }
 
+    private ItemTouchHelper mItemTouchHelper;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.widget_list, container, false);
         ButterKnife.bind(this, view);
 
-        widgetList.setLayoutManager(new LinearLayoutManager(getContext()));
 
 
         return view;
+    }
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+        widgetList.setLayoutManager(new LinearLayoutManager(getContext()));
+
     }
 
     @OnClick(R.id.fab)
@@ -80,6 +94,7 @@ public class WidgetList extends Fragment {
     }
 
     public void refreshList() {
+        final WidgetList ctx = this;
         //@todo implement helper method
         // async fetch all saved widgets
         TransactionManager.getInstance().addTransaction(
@@ -87,10 +102,22 @@ public class WidgetList extends Fragment {
                         new TransactionListenerAdapter<List<Widget>>() {
                             @Override
                             public void onResultReceived(List<Widget> someObjectList) {
-                                WidgetListAdapter adapter = new WidgetListAdapter(someObjectList, (MainActivity) getActivity());
+
+                                WidgetListAdapter adapter = new WidgetListAdapter(someObjectList, (MainActivity) getActivity(), ctx);
+
                                 widgetList.setAdapter(adapter);
+
+                                ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+                                mItemTouchHelper = new ItemTouchHelper(callback);
+                                mItemTouchHelper.attachToRecyclerView(widgetList);
+
                             }
                         }));
 
+    }
+
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        mItemTouchHelper.startDrag(viewHolder);
     }
 }
