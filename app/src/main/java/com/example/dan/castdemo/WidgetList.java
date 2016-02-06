@@ -61,8 +61,6 @@ public class WidgetList extends Fragment implements OnStartDragListener {
 
     @OnClick(R.id.fab)
     public void addWidget() {
-        final MainActivity activity = (MainActivity) getActivity();
-
         new MaterialDialog.Builder(getContext())
                 .title("Widget Type")
                 .items(new String[]{CalendarWidget.HUMAN_NAME, StocksWidget.HUMAN_NAME, MapWidget.HUMAN_NAME, PlaceholderWidget.HUMAN_NAME, ClockWidget.HUMAN_NAME})
@@ -71,12 +69,14 @@ public class WidgetList extends Fragment implements OnStartDragListener {
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Widget widget = new Widget();
                         widget.setType(Widget.types.valueOf(text.toString().toUpperCase()));
+
+                        widget.position = widgetList.getAdapter().getItemCount();
+
                         widget.save();
 
                         widget.initOptions();
                         refreshList();
 
-                        activity.sendMessage(widget.getHumanName() + " widget created.");
                         return true;
                     }
                 })
@@ -98,7 +98,7 @@ public class WidgetList extends Fragment implements OnStartDragListener {
         //@todo implement helper method
         // async fetch all saved widgets
         TransactionManager.getInstance().addTransaction(
-                new SelectListTransaction<>(new Select().from(Widget.class),
+                new SelectListTransaction<>(new Select().from(Widget.class).orderBy(Widget_Table.position, true),
                         new TransactionListenerAdapter<List<Widget>>() {
                             @Override
                             public void onResultReceived(List<Widget> someObjectList) {

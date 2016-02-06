@@ -41,6 +41,7 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
+import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.json.JSONException;
@@ -137,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
                 });
 
         FlowManager.init(this);
-//        Delete.tables(Widget.class, WidgetOption.class, Stock.class);
+        //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
 
 
         switchToFragment(new WidgetList(), false);
@@ -340,6 +341,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         }
     }
 
+    public void onItemMoved(JSONObject widgetsOrder) {
+        try {
+            sendJSONToClient("order", widgetsOrder);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Callback for MediaRouter events
      */
@@ -525,6 +534,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         payload.put("type", widget.getWidgetType().getHumanName().toLowerCase());
         payload.put("id", widget.id);
         payload.put("options", new JSONObject());
+        payload.put("position", widget.position);
 
 
 

@@ -22,6 +22,9 @@ import com.example.dan.castdemo.widgets.PlaceholderWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
 import com.example.dan.castdemo.widgets.UIWidget;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -38,11 +41,28 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         widgetList.add(toPosition, widget);
 
         notifyItemMoved(fromPosition, toPosition);
+        mainActivity.onItemMoved(getWidgetsOrder());
     }
 
     @Override
     public void onItemDismiss(int position) {
 
+    }
+
+    public JSONObject getWidgetsOrder() {
+        JSONObject widgetOrder = new JSONObject();
+        int i = 0;
+        try {
+            for (Widget widget : widgetList) {
+                    widget.position = i;
+                    widget.save();
+                    widgetOrder.put(String.valueOf(widget.id), widget.position);
+                i++;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return widgetOrder;
     }
 
     public class WidgetViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {

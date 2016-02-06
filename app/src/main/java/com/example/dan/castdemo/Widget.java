@@ -74,6 +74,9 @@ public class Widget extends BaseModel {
     @Column
     public int type;
 
+    @Column
+    public int position;
+
     public int getIconResource() {
         return getWidgetType().getIcon();
     }
