@@ -1,8 +1,7 @@
 package com.example.dan.castdemo;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +13,7 @@ import android.widget.TextView;
 
 import com.example.dan.castdemo.widgetList.ItemTouchHelperAdapter;
 import com.example.dan.castdemo.widgetList.ItemTouchHelperViewHolder;
-import com.example.dan.castdemo.widgetList.OnStartDragListener;
+import com.example.dan.castdemo.widgetList.OnDragListener;
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.example.dan.castdemo.widgets.ClockWidget;
 import com.example.dan.castdemo.widgets.MapWidget;
@@ -33,14 +32,14 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
     private final MainActivity mainActivity;
     private List<Widget> widgetList;
-    private final OnStartDragListener mDragStartListener;
+    private final OnDragListener mDragStartListener;
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        Widget widget = widgetList.remove(fromPosition);
-        widgetList.add(toPosition, widget);
 
+        Collections.swap(widgetList, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
+
         mainActivity.onItemMoved(getWidgetsOrder());
     }
 
@@ -54,9 +53,9 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         int i = 0;
         try {
             for (Widget widget : widgetList) {
-                    widget.position = i;
-                    widget.save();
-                    widgetOrder.put(String.valueOf(widget.id), widget.position);
+                widget.position = i;
+                widget.save();
+                widgetOrder.put(String.valueOf(widget.id), widget.position);
                 i++;
             }
         } catch (JSONException e) {
@@ -84,17 +83,18 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
         @Override
         public void onItemSelected() {
-
+            int color = ContextCompat.getColor(listItemView.getContext(), R.color.list_item_drag_highlight);
+            itemView.setBackgroundColor(color);
         }
 
         @Override
         public void onItemClear() {
-
+            itemView.setBackgroundColor(0);
         }
     }
 
 
-    public WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnStartDragListener dragStartListener) {
+    public WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener) {
         this.widgetList = widgetList;
         this.mainActivity = activity;
         mDragStartListener = dragStartListener;
@@ -145,16 +145,23 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         customViewHolder.handleView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    mDragStartListener.onStartDrag(customViewHolder);
+                switch (MotionEventCompat.getActionMasked(event)) {
+                    case (MotionEvent.ACTION_DOWN):
+                        mDragStartListener.onStartDrag(customViewHolder);
+                        break;
                 }
+
                 return false;
             }
+
+
         });
+
+
     }
 
     @Override
-    public int getItemCount() {
+    public int getItemCount () {
         return (null != widgetList ? widgetList.size() : 0);
     }
 }

@@ -2,6 +2,7 @@ package com.example.dan.castdemo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -303,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
                 Log.e(TAG, "Exception while sending message", e);
             }
         } else {
-            Toast.makeText(MainActivity.this, "Error sending message", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity.this, "Error sending message", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -342,11 +343,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     }
 
     public void onItemMoved(JSONObject widgetsOrder) {
-        try {
-            sendJSONToClient("order", widgetsOrder);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        sendJSONToClient("order", widgetsOrder);
     }
 
     /**
@@ -520,12 +517,24 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
 
     }
 
-    private void sendJSONToClient(String key, JSONObject payload) throws JSONException {
-        JSONObject container = new JSONObject();
+    private void sendJSONToClient(final String key, final JSONObject payload) {
 
-        container.put(key, payload);
+        final Runnable r = new Runnable() {
+            public void run() {
+                JSONObject container = new JSONObject();
 
-        sendMessage(container.toString());
+                try {
+                    container.put(key, payload);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                sendMessage(container.toString());
+
+            }
+        };
+        r.run();
+
 
     }
 

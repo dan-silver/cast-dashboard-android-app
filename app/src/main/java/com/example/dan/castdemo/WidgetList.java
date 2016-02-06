@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.example.dan.castdemo.widgetList.OnStartDragListener;
+import com.example.dan.castdemo.widgetList.OnDragListener;
 import com.example.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.example.dan.castdemo.widgets.ClockWidget;
@@ -29,7 +29,9 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WidgetList extends Fragment implements OnStartDragListener {
+public class WidgetList extends Fragment implements OnDragListener {
+
+    MainActivity activity;
 
     @Bind(R.id.widgetList)
     RecyclerView widgetList;
@@ -87,7 +89,7 @@ public class WidgetList extends Fragment implements OnStartDragListener {
     @Override
     public void onResume() {
         refreshList();
-        final MainActivity activity = (MainActivity) getActivity();
+        activity = (MainActivity) getActivity();
 
         activity.setDrawerItemChecked(MainActivity.NAV_VIEW_WIDGETS_ITEM);
         super.onResume();

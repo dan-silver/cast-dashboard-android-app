@@ -2,7 +2,8 @@ package com.example.dan.castdemo.widgetList;
 
 import android.support.v7.widget.RecyclerView;
 
-public interface OnStartDragListener {
+
+public interface OnDragListener {
 
     /**
      * Called when a view is requesting a start of a drag.
