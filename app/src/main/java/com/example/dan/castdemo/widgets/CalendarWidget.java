@@ -103,7 +103,7 @@ public class CalendarWidget extends UIWidget {
 
         for (CalendarInfo calendar : calendars) {
             calendar.enabled = false;
-            for (WidgetOption enabledCalendar: enabled_calendars) {
+            for (WidgetOption enabledCalendar : enabled_calendars) {
                 if (calendar.id.equals(enabledCalendar.value)) {
                     calendar.enabled = true;
                     break;
@@ -158,12 +158,12 @@ public class CalendarWidget extends UIWidget {
         }
 
         Cursor cur =
-                    context.getContentResolver().query(
-                            Uri.parse(CalendarContract.Instances.CONTENT_URI + "/" + begin + "/" + end),
-                            projection,
-                            selectionStr,
-                            selectionArgs.toArray(new String[selectionArgs.size()]),
-                            null);
+                context.getContentResolver().query(
+                        Uri.parse(CalendarContract.Instances.CONTENT_URI + "/" + begin + "/" + end),
+                        projection,
+                        selectionStr,
+                        selectionArgs.toArray(new String[selectionArgs.size()]),
+                        null);
 
         JSONArray events = new JSONArray();
 
@@ -206,7 +206,6 @@ public class CalendarWidget extends UIWidget {
                 calendarIds.add(a.value);
             }
         }
-
 
 
         json.put("events", getCalendarEvents(context, calendarIds, showAllCalendars));

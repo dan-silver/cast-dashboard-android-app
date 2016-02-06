@@ -73,14 +73,14 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
                     // remove the CALENDAR_ENABLED entry
                     ConditionGroup conditions = new ConditionGroup();
                     conditions.andAll(
-                        WidgetOption_Table.widgetForeignKeyContainer_id.is(widget.id),
-                        WidgetOption_Table.key.is(CalendarSettings.CALENDAR_ENABLED),
-                        WidgetOption_Table.value.is(calendar.id));
+                            WidgetOption_Table.widgetForeignKeyContainer_id.is(widget.id),
+                            WidgetOption_Table.key.is(CalendarSettings.CALENDAR_ENABLED),
+                            WidgetOption_Table.value.is(calendar.id));
 
                     new Delete()
-                        .from(WidgetOption.class)
-                        .where(conditions)
-                        .execute();
+                            .from(WidgetOption.class)
+                            .where(conditions)
+                            .execute();
 
                 }
             }

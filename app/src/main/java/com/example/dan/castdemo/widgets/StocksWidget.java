@@ -63,7 +63,6 @@ public class StocksWidget extends UIWidget {
         ArrayList<String> stocksString = new ArrayList<>();
 
 
-
         for (WidgetOption option : savedStocks) {
             Stock stock = new Select().from(Stock.class).where(Stock_Table._id.is(Long.parseLong(option.value))).querySingle();
 

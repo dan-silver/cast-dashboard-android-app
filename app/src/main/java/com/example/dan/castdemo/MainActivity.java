@@ -1,8 +1,6 @@
 package com.example.dan.castdemo;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,10 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
@@ -42,7 +36,6 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
-import com.raizlabs.android.dbflow.sql.language.Delete;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.json.JSONException;
@@ -78,9 +71,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
 
     //drawer
 
-    @Bind(R.id.nvView) NavigationView navView;
-    @Bind(R.id.drawer_layout) DrawerLayout mDrawer;
-    @Bind(R.id.top_toolbar) Toolbar top_toolbar;
+    @Bind(R.id.nvView)
+    NavigationView navView;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawer;
+    @Bind(R.id.top_toolbar)
+    Toolbar top_toolbar;
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
 
     public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
@@ -101,14 +97,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         ButterKnife.bind(this);
 
 
-
-
         // Set the adapter for the list view
         Menu menu = navView.getMenu();
 
         menuItems.add(menu.add(0, NAV_VIEW_WIDGETS_ITEM, 0, "Widgets"));
         menuItems.add(menu.add(0, NAV_VIEW_OPTIONS_ITEM, 1, "Settings"));
-
 
 
         // Set a Toolbar to replace the ActionBar.
@@ -119,14 +112,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         assert ab != null;
 
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
-                this,  mDrawer, top_toolbar,
+                this, mDrawer, top_toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close
         );
         mDrawer.setDrawerListener(mDrawerToggle);
         ab.setDisplayHomeAsUpEnabled(true);
 //        ab.setDisplayShowTitleEnabled(false);
         mDrawerToggle.syncState();
-
 
 
         navView.setNavigationItemSelectedListener(
@@ -145,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         switchToFragment(new WidgetList(), false);
 
         // Configure Cast device discovery
-        mMediaRouter = MediaRouter.getInstance(getApplicationContext()  );
+        mMediaRouter = MediaRouter.getInstance(getApplicationContext());
         mMediaRouteSelector = new MediaRouteSelector.Builder()
                 .addControlCategory(CastMediaControlIntent.categoryForCast(getResources()
                         .getString(R.string.app_id))).build();
@@ -546,7 +538,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         payload.put("position", widget.position);
 
 
-
         if (widget.getWidgetType() == Widget.types.CALENDAR) {
 
             CalendarWidget cw = new CalendarWidget(this, widget);
@@ -560,6 +551,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         sendJSONToClient("widget", payload);
 
     }
+
     @Override
     public void onBackPressed() {
         mDrawer.closeDrawer(GravityCompat.START);

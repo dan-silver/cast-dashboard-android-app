@@ -49,9 +49,9 @@ public class WidgetList extends Fragment implements OnDragListener {
         ButterKnife.bind(this, view);
 
 
-
         return view;
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

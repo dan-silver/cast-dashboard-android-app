@@ -161,7 +161,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
     }
 
     @Override
-    public int getItemCount () {
+    public int getItemCount() {
         return (null != widgetList ? widgetList.size() : 0);
     }
 }
