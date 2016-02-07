@@ -26,6 +26,7 @@
         </activity>
         <activity
             android:name=".WidgetSettingsActivity"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/title_activity_widget_settings"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
