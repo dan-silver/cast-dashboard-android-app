@@ -1,12 +1,16 @@
 package com.example.dan.castdemo;
 
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+
+import com.larswerkman.lobsterpicker.LobsterPicker;
+import com.larswerkman.lobsterpicker.OnColorListener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,12 +34,7 @@ public class AppSettings extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
+
         try {
             mCallback = (OnSettingChanged) getActivity();
         } catch (ClassCastException e) {

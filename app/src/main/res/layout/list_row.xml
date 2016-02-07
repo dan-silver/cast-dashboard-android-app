@@ -48,5 +48,6 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_reorder_24dp" />
+        android:src="@drawable/ic_reorder_24dp"
+        android:contentDescription="Drag to reorder widgets" />
     </RelativeLayout>

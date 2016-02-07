@@ -31,7 +31,10 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             tools:layout="@layout/map_settings"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:paddingTop="15dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"/>
         <TextView
             android:id="@+id/widget_settings_delete_button"
             android:layout_width="match_parent"

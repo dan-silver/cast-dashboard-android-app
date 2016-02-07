@@ -64,8 +64,8 @@ public class WidgetList extends Fragment implements OnDragListener {
     @OnClick(R.id.fab)
     public void addWidget() {
         new MaterialDialog.Builder(getContext())
-                .title("Widget Type")
-                .items(new String[]{CalendarWidget.HUMAN_NAME, StocksWidget.HUMAN_NAME, MapWidget.HUMAN_NAME, PlaceholderWidget.HUMAN_NAME, ClockWidget.HUMAN_NAME})
+                .title("New Widget")
+                .items(new String[]{CalendarWidget.HUMAN_NAME, StocksWidget.HUMAN_NAME, MapWidget.HUMAN_NAME, ClockWidget.HUMAN_NAME})
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
