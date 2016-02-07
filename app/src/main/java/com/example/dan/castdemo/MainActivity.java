@@ -1,20 +1,18 @@
 package com.example.dan.castdemo;
 
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.MediaRouteActionProvider;
-import android.support.v7.media.MediaRouteSelector;
-import android.support.v7.media.MediaRouter;
-import android.support.v7.media.MediaRouter.RouteInfo;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -23,15 +21,12 @@ import android.view.MenuItem;
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
 import com.google.android.gms.cast.ApplicationMetadata;
-import com.google.android.gms.cast.Cast;
-import com.google.android.gms.cast.Cast.ApplicationConnectionResult;
-import com.google.android.gms.cast.Cast.MessageReceivedCallback;
-import com.google.android.gms.cast.CastDevice;
-import com.google.android.gms.cast.CastMediaControlIntent;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.cast.companionlibrary.cast.BaseCastManager;
+import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
+import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
+import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumer;
+import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
+import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
@@ -51,22 +46,10 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements OnSettingChanged {
 
     public static final String TAG = MainActivity.class.getSimpleName();
+    private boolean mIsHoneyCombOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
     public static final int NAV_VIEW_WIDGETS_ITEM = 0;
     public static final int NAV_VIEW_OPTIONS_ITEM = 1;
 
-
-    private MediaRouter mMediaRouter;
-    private MediaRouteSelector mMediaRouteSelector;
-    private MediaRouter.Callback mMediaRouterCallback;
-    private CastDevice mSelectedDevice;
-    private GoogleApiClient mApiClient;
-    private Cast.Listener mCastListener;
-    private ConnectionCallbacks mConnectionCallbacks;
-    private ConnectionFailedListener mConnectionFailedListener;
-    private HelloWorldChannel mHelloWorldChannel;
-    private boolean mApplicationStarted;
-    private boolean mWaitingForReconnect;
-    private String mSessionId;
 
 
     //drawer
@@ -78,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     @Bind(R.id.top_toolbar)
     Toolbar top_toolbar;
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
+    private DataCastManager mCastManager;
+    private DataCastConsumer mCastConsumer;
+    private MenuItem mediaRouteMenuItem;
 
     public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
         FragmentManager fm = getSupportFragmentManager();
@@ -88,6 +74,22 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
             transaction.addToBackStack(null);
 
         transaction.commit();
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void showFtu() {
+        IntroductoryOverlay overlay = new IntroductoryOverlay.Builder(this)
+                .setMenuItem(mediaRouteMenuItem)
+                .setTitleText(R.string.intro_overlay_text)
+                .setSingleTime()
+                .setOnDismissed(new IntroductoryOverlay.OnOverlayDismissedListener() {
+                    @Override
+                    public void onOverlayDismissed() {
+                        Log.d(TAG, "overlay is dismissed");
+                    }
+                })
+                .build();
+        overlay.show();
     }
 
     @Override
@@ -115,9 +117,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
                 this, mDrawer, top_toolbar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close
         );
+
         mDrawer.setDrawerListener(mDrawerToggle);
         ab.setDisplayHomeAsUpEnabled(true);
-//        ab.setDisplayShowTitleEnabled(false);
+
         mDrawerToggle.syncState();
 
 
@@ -136,12 +139,48 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
 
         switchToFragment(new WidgetList(), false);
 
-        // Configure Cast device discovery
-        mMediaRouter = MediaRouter.getInstance(getApplicationContext());
-        mMediaRouteSelector = new MediaRouteSelector.Builder()
-                .addControlCategory(CastMediaControlIntent.categoryForCast(getResources()
-                        .getString(R.string.app_id))).build();
-        mMediaRouterCallback = new MyMediaRouterCallback();
+        BaseCastManager.checkGooglePlayServices(this);
+        CastConfiguration options = new CastConfiguration.Builder(getResources().getString(R.string.app_id))
+                .enableAutoReconnect()
+                .enableWifiReconnection()
+                .enableDebug()
+                .addNamespace(getResources().getString(R.string.namespace))
+                .build();
+        DataCastManager.initialize(this, options);
+
+        mCastManager = DataCastManager.getInstance();
+        mCastManager.reconnectSessionIfPossible();
+        mCastConsumer = new DataCastConsumerImpl() {
+            @Override
+            public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus,
+                                               String sessionId, boolean wasLaunched) {
+                sendAllWidgets();
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onDisconnected() {
+                invalidateOptionsMenu();
+            }
+
+            @Override
+            public void onCastAvailabilityChanged(boolean castPresent) {
+                if (castPresent && mIsHoneyCombOrAbove) {
+
+                    new Handler().postDelayed(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            if (mediaRouteMenuItem.isVisible()) {
+                                showFtu();
+                            }
+                        }
+                    }, 1000);
+                }
+            }
+        };
+
+
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -169,33 +208,15 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     }
 
     private void uncheckAllMenuItems() {
-        // uncheck all the items
         for (MenuItem item : menuItems) {
             item.setChecked(false);
         }
 
     }
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Start media router discovery
-        mMediaRouter.addCallback(mMediaRouteSelector, mMediaRouterCallback,
-                MediaRouter.CALLBACK_FLAG_REQUEST_DISCOVERY);
-    }
-
-    @Override
-    protected void onStop() {
-        // End media router discovery
-        mMediaRouter.removeCallback(mMediaRouterCallback);
-        super.onStop();
-    }
-
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy");
-        teardown(true);
         super.onDestroy();
     }
 
@@ -203,102 +224,18 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        MenuItem mediaRouteMenuItem = menu.findItem(R.id.media_route_menu_item);
-        MediaRouteActionProvider mediaRouteActionProvider
-                = (MediaRouteActionProvider) MenuItemCompat
-                .getActionProvider(mediaRouteMenuItem);
-        // Set the MediaRouteActionProvider selector for device discovery.
-        mediaRouteActionProvider.setRouteSelector(mMediaRouteSelector);
+
+        mediaRouteMenuItem = mCastManager.
+                addMediaRouterButton(menu, R.id.media_route_menu_item);
+
         return true;
     }
 
-    /**
-     * Start the receiver app
-     */
-    private void launchReceiver() {
-        try {
-            mCastListener = new Cast.Listener() {
-
-                @Override
-                public void onApplicationDisconnected(int errorCode) {
-                    Log.d(TAG, "application has stopped");
-                    teardown(true);
-                }
-
-            };
-            // Connect to Google Play services
-            mConnectionCallbacks = new ConnectionCallbacks();
-            mConnectionFailedListener = new ConnectionFailedListener();
-            Cast.CastOptions.Builder apiOptionsBuilder = Cast.CastOptions
-                    .builder(mSelectedDevice, mCastListener);
-            mApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(Cast.API, apiOptionsBuilder.build())
-                    .addConnectionCallbacks(mConnectionCallbacks)
-                    .addOnConnectionFailedListener(mConnectionFailedListener)
-                    .build();
-
-            mApiClient.connect();
-        } catch (Exception e) {
-            Log.e(TAG, "Failed launchReceiver", e);
-        }
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 
-    /**
-     * Tear down the connection to the receiver
-     */
-    private void teardown(boolean selectDefaultRoute) {
-        Log.d(TAG, "teardown");
-        if (mApiClient != null) {
-            if (mApplicationStarted) {
-                if (mApiClient.isConnected() || mApiClient.isConnecting()) {
-                    try {
-                        Cast.CastApi.stopApplication(mApiClient, mSessionId);
-                        if (mHelloWorldChannel != null) {
-                            Cast.CastApi.removeMessageReceivedCallbacks(
-                                    mApiClient,
-                                    mHelloWorldChannel.getNamespace());
-                            mHelloWorldChannel = null;
-                        }
-                    } catch (IOException e) {
-                        Log.e(TAG, "Exception while removing channel", e);
-                    }
-                    mApiClient.disconnect();
-                }
-                mApplicationStarted = false;
-            }
-            mApiClient = null;
-        }
-        if (selectDefaultRoute) {
-            mMediaRouter.selectRoute(mMediaRouter.getDefaultRoute());
-        }
-        mSelectedDevice = null;
-        mWaitingForReconnect = false;
-        mSessionId = null;
-    }
-
-    /**
-     * Send a text message to the receiver
-     */
-    public void sendMessage(String message) {
-        if (mApiClient != null && mHelloWorldChannel != null) {
-            try {
-                Cast.CastApi.sendMessage(mApiClient,
-                        mHelloWorldChannel.getNamespace(), message).setResultCallback(
-                        new ResultCallback<Status>() {
-                            @Override
-                            public void onResult(Status result) {
-                                if (!result.isSuccess()) {
-                                    Log.e(TAG, "Sending message failed");
-                                }
-                            }
-                        });
-            } catch (Exception e) {
-                Log.e(TAG, "Exception while sending message", e);
-            }
-        } else {
-//            Toast.makeText(MainActivity.this, "Error sending message", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     public void sendAllWidgets() {
         getAllWidgets(new FetchAllWidgetsListener() {
@@ -313,10 +250,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
                 }
             }
         });
-    }
-
-    public void sendAllWidgets(MenuItem item) {
-        sendAllWidgets();
     }
 
     public void setDrawerItemChecked(int menuItem) {
@@ -338,164 +271,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         sendJSONToClient("order", widgetsOrder);
     }
 
-    /**
-     * Callback for MediaRouter events
-     */
-    private class MyMediaRouterCallback extends MediaRouter.Callback {
-
-        @Override
-        public void onRouteSelected(MediaRouter router, RouteInfo info) {
-            Log.d(TAG, "onRouteSelected");
-            // Handle the user route selection.
-            mSelectedDevice = CastDevice.getFromBundle(info.getExtras());
-
-            launchReceiver();
-        }
-
-        @Override
-        public void onRouteUnselected(MediaRouter router, RouteInfo info) {
-            Log.d(TAG, "onRouteUnselected: info=" + info);
-            teardown(false);
-            mSelectedDevice = null;
-        }
-    }
-
-    /**
-     * Google Play services callbacks
-     */
-    private class ConnectionCallbacks implements
-            GoogleApiClient.ConnectionCallbacks {
-
-        @Override
-        public void onConnected(Bundle connectionHint) {
-            Log.d(TAG, "onConnected");
-
-            if (mApiClient == null) {
-                // We got disconnected while this runnable was pending
-                // execution.
-                return;
-            }
-
-            try {
-                if (mWaitingForReconnect) {
-                    mWaitingForReconnect = false;
-
-                    // Check if the receiver app is still running
-                    if ((connectionHint != null)
-                            && connectionHint.getBoolean(Cast.EXTRA_APP_NO_LONGER_RUNNING)) {
-                        Log.d(TAG, "App  is no longer running");
-                        teardown(true);
-                    } else {
-                        // Re-create the custom message channel
-                        try {
-                            Cast.CastApi.setMessageReceivedCallbacks(
-                                    mApiClient,
-                                    mHelloWorldChannel.getNamespace(),
-                                    mHelloWorldChannel);
-                        } catch (IOException e) {
-                            Log.e(TAG, "Exception while creating channel", e);
-                        }
-                    }
-                } else {
-                    // Launch the receiver app
-                    Cast.CastApi.launchApplication(mApiClient, getString(R.string.app_id), false)
-                            .setResultCallback(
-                                    new ResultCallback<Cast.ApplicationConnectionResult>() {
-                                        @Override
-                                        public void onResult(
-                                                ApplicationConnectionResult result) {
-                                            Status status = result.getStatus();
-                                            Log.d(TAG,
-                                                    "ApplicationConnectionResultCallback.onResult:"
-                                                            + status.getStatusCode());
-                                            if (status.isSuccess()) {
-                                                ApplicationMetadata applicationMetadata = result
-                                                        .getApplicationMetadata();
-                                                mSessionId = result.getSessionId();
-                                                String applicationStatus = result
-                                                        .getApplicationStatus();
-                                                boolean wasLaunched = result.getWasLaunched();
-                                                Log.d(TAG, "application name: "
-                                                        + applicationMetadata.getName()
-                                                        + ", status: " + applicationStatus
-                                                        + ", sessionId: " + mSessionId
-                                                        + ", wasLaunched: " + wasLaunched);
-                                                mApplicationStarted = true;
-
-                                                // Create the custom message
-                                                // channel
-                                                mHelloWorldChannel = new HelloWorldChannel();
-                                                try {
-                                                    Cast.CastApi.setMessageReceivedCallbacks(
-                                                            mApiClient,
-                                                            mHelloWorldChannel.getNamespace(),
-                                                            mHelloWorldChannel);
-                                                } catch (IOException e) {
-                                                    Log.e(TAG, "Exception while creating channel",
-                                                            e);
-                                                }
-
-                                                // set the initial instructions
-                                                // on the receiver
-                                                //@todo
-                                                //sendMessage(getString(R.string.instructions));
-                                                sendAllWidgets();
-
-                                            } else {
-                                                Log.e(TAG, "application could not launch");
-                                                teardown(true);
-                                            }
-                                        }
-                                    });
-                }
-            } catch (Exception e) {
-                Log.e(TAG, "Failed to launch application", e);
-            }
-        }
-
-        @Override
-        public void onConnectionSuspended(int cause) {
-            Log.d(TAG, "onConnectionSuspended");
-            mWaitingForReconnect = true;
-        }
-    }
-
-    /**
-     * Google Play services callbacks
-     */
-    private class ConnectionFailedListener implements
-            GoogleApiClient.OnConnectionFailedListener {
-
-        @Override
-        public void onConnectionFailed(ConnectionResult result) {
-            Log.e(TAG, "onConnectionFailed ");
-
-            teardown(false);
-        }
-    }
-
-    /**
-     * Custom message channel
-     */
-    class HelloWorldChannel implements MessageReceivedCallback {
-
-        /**
-         * @return custom namespace
-         */
-        public String getNamespace() {
-            return getString(R.string.namespace);
-        }
-
-        /*
-         * Receive message from the receiver app
-         */
-        @Override
-        public void onMessageReceived(CastDevice castDevice, String namespace,
-                                      String message) {
-            Log.d(TAG, "onMessageReceived: " + message);
-        }
-
-    }
 
     public void getAllWidgets(final FetchAllWidgetsListener listener) {
         TransactionManager.getInstance().addTransaction(
@@ -521,13 +296,39 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
                     e.printStackTrace();
                 }
 
-                sendMessage(container.toString());
+                try {
+                    mCastManager.sendDataMessage(container.toString(), getResources().getString(R.string.namespace));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             }
         };
         r.run();
 
 
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume() was called");
+        mCastManager = DataCastManager.getInstance();
+        if (mCastManager != null) {
+            mCastManager.addDataCastConsumer(mCastConsumer);
+            mCastManager.incrementUiCounter();
+        }
+
+        super.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        mCastManager.decrementUiCounter();
+        mCastManager.removeDataCastConsumer(mCastConsumer);
+        super.onPause();
     }
 
     public void sendWidget(Widget widget) throws JSONException {

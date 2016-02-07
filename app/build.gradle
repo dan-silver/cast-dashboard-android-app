@@ -37,6 +37,7 @@ dependencies {
     }
     compile "com.splitwise:tokenautocomplete:2.0.2@aar"
     compile 'net.sf.opencsv:opencsv:2.3'
+    compile project(':CastCompanionLibrary')
 
 
 }
@@ -56,5 +57,5 @@ dependencies {
 
 }
 dependencies {
-    compile 'com.android.support:support-v4:23.+'
+    compile 'com.android.support:support-v4:23.1.1'
 }
