@@ -2,30 +2,26 @@ package com.example.dan.castdemo;
 
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
-import android.databinding.ViewDataBinding;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.example.dan.castdemo.databinding.FragmentAppSettingsBinding;
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import butterknife.OnTouch;
 
 public class AppSettings extends Fragment {
 
@@ -36,12 +32,6 @@ public class AppSettings extends Fragment {
 
     @Bind(R.id.seekBar)
     SeekBar columnCount;
-
-    @Bind(R.id.num_columns_label)
-    TextView numColumnsLabel;
-
-    @Bind(R.id.widget_background_color)
-    FrameLayout widget_background_color;
 
     @Bind(R.id.background_type_spinner)
     Spinner backgroundTypeSpinner;
@@ -76,9 +66,8 @@ public class AppSettings extends Fragment {
         columnCount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progress++; //UI is indexed off 1 (no zero column count allowed)
-                mCallback.onSettingChanged(COLUMN_COUNT, String.valueOf(progress));
-                numColumnsLabel.setText("Number of Columns: " + progress);
+                viewModel.setNumberOfColumns(progress);
+                mCallback.onSettingChanged(COLUMN_COUNT, String.valueOf(progress+1));
             }
 
             @Override
@@ -112,28 +101,27 @@ public class AppSettings extends Fragment {
             }
         });
 
-        widget_background_color.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ColorPickerDialogBuilder
-                        .with(getContext())
-                        .setTitle("Choose color")
-                        .initialColor(viewModel.getWidgetBackgroundColor())
-                        .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
-                        .density(5)
-                        .setPositiveButton("ok", new ColorPickerClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                                viewModel.setWidgetBackgroundColor(selectedColor);
-                            }
-                        })
-                        .build()
-                        .show();
-                return false;
-            }
-        });
         return view;
     }
+
+    @OnClick(R.id.widget_background_color)
+    public void openWidgetBackgroundColorDialog() {
+        ColorPickerDialogBuilder
+                .with(getContext())
+                .setTitle("Choose color")
+                .initialColor(viewModel.getWidgetBackgroundColor())
+                .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
+                .density(5)
+                .setPositiveButton("ok", new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                        viewModel.setWidgetBackgroundColor(selectedColor);
+                    }
+                })
+                .build()
+                .show();
+    }
+
 
     @Override
     public void onResume() {

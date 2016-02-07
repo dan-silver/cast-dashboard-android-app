@@ -21,12 +21,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/num_columns_label"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:text="Number of Columns: 3"/>
+            android:text="@{settings.getNumberOfColumnsStr}"/>
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/seekBar"
-            android:progress="1"
+            android:progress="@{settings.numberOfColumns}"
             android:max="6" />
 
         <Spinner
