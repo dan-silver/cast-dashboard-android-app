@@ -9,4 +9,8 @@
         <item>Widgets</item>
         <item>Settings</item>
     </string-array>>
+    <string-array name="background_types">
+        <item>Default Slideshow</item>
+        <item>Solid Color</item>
+    </string-array>>
 </resources>

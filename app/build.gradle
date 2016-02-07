@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    dataBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -40,6 +43,7 @@ dependencies {
     compile project(':CastCompanionLibrary')
 
     compile 'com.larswerkman:lobsterpicker:1.0.1'
+    compile 'com.github.QuadFlask:colorpicker:0.0.9'
 
 }
 
