@@ -33,6 +33,7 @@ import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -238,16 +239,20 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
 
 
     public void sendAllWidgets() {
-        getAllWidgets(new FetchAllWidgetsListener() {
+        MainActivity.getAllWidgets(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
+                JSONArray widgetsArr = new JSONArray();
                 for (Widget widget : widgets) {
                     try {
-                        sendWidget(widget);
+                        widgetsArr.put(getWidgetJSON(widget));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+
+                sendJSONToClient("widgets", widgetsArr);
+
             }
         });
     }
@@ -267,12 +272,17 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         }
     }
 
+    @Override
+    public void onSettingChanged(String setting, int value) {
+        onSettingChanged(setting, String.valueOf(value));
+    }
+
     public void onItemMoved(JSONObject widgetsOrder) {
         sendJSONToClient("order", widgetsOrder);
     }
 
 
-    public void getAllWidgets(final FetchAllWidgetsListener listener) {
+    public static void getAllWidgets(final FetchAllWidgetsListener listener) {
         TransactionManager.getInstance().addTransaction(
                 new SelectListTransaction<>(new Select().from(Widget.class),
                         new TransactionListenerAdapter<List<Widget>>() {
@@ -285,17 +295,19 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     }
 
     private void sendJSONToClient(final String key, final JSONObject payload) {
+        JSONObject container = new JSONObject();
 
+        try {
+            container.put(key, payload);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        sendJSONContainerToClient(container);
+    }
+
+    private void sendJSONContainerToClient(final JSONObject container) {
         final Runnable r = new Runnable() {
             public void run() {
-                JSONObject container = new JSONObject();
-
-                try {
-                    container.put(key, payload);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
                 try {
                     mCastManager.sendDataMessage(container.toString(), getResources().getString(R.string.namespace));
                 } catch (IOException e) {
@@ -305,8 +317,18 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
             }
         };
         r.run();
+    }
 
+    private void sendJSONToClient(final String key, final JSONArray payload) {
 
+        JSONObject container = new JSONObject();
+
+        try {
+            container.put(key, payload);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        sendJSONContainerToClient(container);
     }
 
 
@@ -331,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         super.onPause();
     }
 
-    public void sendWidget(Widget widget) throws JSONException {
+    public JSONObject getWidgetJSON(Widget widget) throws JSONException {
         JSONObject payload = new JSONObject();
         payload.put("type", widget.getWidgetType().getHumanName().toLowerCase());
         payload.put("id", widget.id);
@@ -349,8 +371,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
             payload.put("data", sw.getContent());
         }
 
-        sendJSONToClient("widget", payload);
-
+        return payload;
     }
 
     @Override
@@ -360,4 +381,22 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         super.onBackPressed();
     }
 
+    public void sendWidget(Widget widget) {
+        try {
+            sendJSONToClient("widget", getWidgetJSON(widget));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteWidget(Widget widget) {
+        try {
+            JSONObject info = new JSONObject();
+            info.put("id", widget.id);
+            sendJSONToClient("deleteWidget", info);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

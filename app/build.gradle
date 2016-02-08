@@ -42,7 +42,6 @@ dependencies {
     compile 'net.sf.opencsv:opencsv:2.3'
     compile project(':CastCompanionLibrary')
 
-    compile 'com.larswerkman:lobsterpicker:1.0.1'
     compile 'com.github.QuadFlask:colorpicker:0.0.9'
 
 }

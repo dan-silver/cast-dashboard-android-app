@@ -2,6 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="settings" type="com.example.dan.castdemo.AppSettingsBindings"/>
+        <import type="com.example.dan.castdemo.Settings.BackgroundType"/>
+        <import type="android.view.View"/>
     </data>
     <LinearLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -21,29 +23,48 @@
             android:layout_height="wrap_content"
             android:id="@+id/num_columns_label"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:text="@{settings.getNumberOfColumnsStr}"/>
+            android:text='@{"Number of columns: " + (settings.numberOfColumns+1)}'/>
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/seekBar"
             android:progress="@{settings.numberOfColumns}"
-            android:max="6" />
-
-        <Spinner
-            android:id="@+id/background_type_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:max="6"
+            android:layout_marginBottom="@dimen/app_settings_padding"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:text="Widget Background Color"/>
+            android:text="Dashboard Background"/>
 
-        <FrameLayout
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/widget_background_color"
-            android:background="@{settings.widgetBackgroundColor}"/>
+        <Spinner
+            android:id="@+id/background_type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/app_settings_padding" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{settings.backgroundType == BackgroundType.SOLID_COLOR ? View.VISIBLE : View.GONE}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:text="Widget Background Color"
+                android:layout_centerVertical="true"/>
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/widget_background_color"
+                android:background="@{settings.widgetBackgroundColor}"
+                android:layout_marginBottom="@dimen/app_settings_padding"/>
+        </RelativeLayout>
     </LinearLayout>
 </layout>

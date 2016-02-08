@@ -78,6 +78,7 @@ public class WidgetList extends Fragment implements OnDragListener {
 
                         widget.initOptions();
                         refreshList();
+                        activity.sendWidget(widget);
 
                         return true;
                     }
@@ -88,34 +89,29 @@ public class WidgetList extends Fragment implements OnDragListener {
 
     @Override
     public void onResume() {
-        refreshList();
         activity = (MainActivity) getActivity();
-
         activity.setDrawerItemChecked(MainActivity.NAV_VIEW_WIDGETS_ITEM);
+
+        refreshList();
         super.onResume();
     }
 
     public void refreshList() {
         final WidgetList ctx = this;
-        //@todo implement helper method
+
         // async fetch all saved widgets
-        TransactionManager.getInstance().addTransaction(
-                new SelectListTransaction<>(new Select().from(Widget.class).orderBy(Widget_Table.position, true),
-                        new TransactionListenerAdapter<List<Widget>>() {
-                            @Override
-                            public void onResultReceived(List<Widget> someObjectList) {
+        MainActivity.getAllWidgets(new FetchAllWidgetsListener() {
+            @Override
+            public void results(List<Widget> widgets) {
+                WidgetListAdapter adapter = new WidgetListAdapter(widgets, activity, ctx);
 
-                                WidgetListAdapter adapter = new WidgetListAdapter(someObjectList, (MainActivity) getActivity(), ctx);
+                widgetList.setAdapter(adapter);
 
-                                widgetList.setAdapter(adapter);
-
-                                ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
-                                mItemTouchHelper = new ItemTouchHelper(callback);
-                                mItemTouchHelper.attachToRecyclerView(widgetList);
-
-                            }
-                        }));
-
+                ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+                mItemTouchHelper = new ItemTouchHelper(callback);
+                mItemTouchHelper.attachToRecyclerView(widgetList);
+            }
+        });
     }
 
     @Override

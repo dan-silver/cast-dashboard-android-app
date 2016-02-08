@@ -5,7 +5,6 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,22 +12,21 @@ import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
+import com.example.dan.castdemo.Settings.BackgroundType;
 import com.example.dan.castdemo.databinding.FragmentAppSettingsBinding;
 import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 public class AppSettings extends Fragment {
 
     OnSettingChanged mCallback;
     AppSettingsBindings viewModel;
-
-    static String COLUMN_COUNT = "COLUMN_COUNT";
 
     @Bind(R.id.seekBar)
     SeekBar columnCount;
@@ -39,6 +37,8 @@ public class AppSettings extends Fragment {
     public AppSettings() {
         // Required empty public constructor
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,6 @@ public class AppSettings extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 viewModel.setNumberOfColumns(progress);
-                mCallback.onSettingChanged(COLUMN_COUNT, String.valueOf(progress+1));
             }
 
             @Override
@@ -81,9 +80,8 @@ public class AppSettings extends Fragment {
             }
         });
 
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.background_types, android.R.layout.simple_spinner_item);
+        final ArrayAdapter<BackgroundType> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, BackgroundType.values());
+
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
@@ -92,7 +90,7 @@ public class AppSettings extends Fragment {
         backgroundTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+                viewModel.setBackgroundType(adapter.getItem(position));
             }
 
             @Override
@@ -112,9 +110,15 @@ public class AppSettings extends Fragment {
                 .initialColor(viewModel.getWidgetBackgroundColor())
                 .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                 .density(5)
-                .setPositiveButton("ok", new ColorPickerClickListener() {
+                .setOnColorSelectedListener(new OnColorSelectedListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                    public void onColorSelected(int selectedColor) {
+                        viewModel.setWidgetBackgroundColor(selectedColor);
+                    }
+                })
+                .setPositiveButton("Done", new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
                         viewModel.setWidgetBackgroundColor(selectedColor);
                     }
                 })
