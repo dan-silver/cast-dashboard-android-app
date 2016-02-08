@@ -12,4 +12,5 @@
 
     <string name="title_activity_widget_settings">WidgetSettingsActivity</string>
     <string name="intro_overlay_text">Find your cast device in the top menu</string>
+    <string name="SHARED_PREFS_OPTIONS">OPTIONS</string>
 </resources>

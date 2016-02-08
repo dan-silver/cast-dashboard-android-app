@@ -360,12 +360,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         payload.put("options", new JSONObject());
         payload.put("position", widget.position);
 
-
         if (widget.getWidgetType() == Widget.types.CALENDAR) {
-
             CalendarWidget cw = new CalendarWidget(this, widget);
             payload.put("data", cw.getContent());
-
         } else if (widget.getWidgetType() == Widget.types.STOCKS) {
             StocksWidget sw = new StocksWidget(this, widget);
             payload.put("data", sw.getContent());

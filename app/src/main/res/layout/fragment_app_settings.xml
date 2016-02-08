@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:text="Widget Background Color"
+                android:text="Background Color"
                 android:layout_centerVertical="true"/>
 
             <FrameLayout
@@ -64,7 +64,8 @@
                 android:layout_alignParentEnd="true"
                 android:id="@+id/widget_background_color"
                 android:background="@{settings.widgetBackgroundColor}"
-                android:layout_marginBottom="@dimen/app_settings_padding"/>
+                android:layout_marginBottom="@dimen/app_settings_padding"
+                android:layout_centerVertical="true"/>
         </RelativeLayout>
     </LinearLayout>
 </layout>

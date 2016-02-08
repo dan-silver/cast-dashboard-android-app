@@ -26,13 +26,14 @@ import butterknife.OnClick;
 public class AppSettings extends Fragment {
 
     OnSettingChanged mCallback;
-    AppSettingsBindings viewModel;
+    FragmentAppSettingsBinding viewModel;
 
     @Bind(R.id.seekBar)
     SeekBar columnCount;
 
     @Bind(R.id.background_type_spinner)
     Spinner backgroundTypeSpinner;
+    private AppSettingsBindings bindings;
 
     public AppSettings() {
         // Required empty public constructor
@@ -57,16 +58,18 @@ public class AppSettings extends Fragment {
         View view = inflater.inflate(R.layout.fragment_app_settings, container, false);
         ButterKnife.bind(this, view);
 
-        viewModel = new AppSettingsBindings();
-        viewModel.init(this);
 
-        FragmentAppSettingsBinding binding = DataBindingUtil.bind(view);
-        binding.setSettings(viewModel);
+
+        viewModel = FragmentAppSettingsBinding.bind(view);
+        bindings = new AppSettingsBindings();
+        bindings.init(this);
+        viewModel.setSettings(bindings);
 
         columnCount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                viewModel.setNumberOfColumns(progress);
+                if (fromUser)
+                    bindings.setNumberOfColumns(progress);
             }
 
             @Override
@@ -86,40 +89,46 @@ public class AppSettings extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         backgroundTypeSpinner.setAdapter(adapter);
+        backgroundTypeSpinner.setSelection(bindings.getBackgroundType().getValue());
 
-        backgroundTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                viewModel.setBackgroundType(adapter.getItem(position));
-            }
+        backgroundTypeSpinner.post(new Runnable() {
+            public void run() {
+                backgroundTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        bindings.setBackgroundType(adapter.getItem(position));
+                    }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
 
+                    }
+                });
             }
         });
 
-        return view;
-    }
 
-    @OnClick(R.id.widget_background_color)
+            return view;
+        }
+
+        @OnClick(R.id.widget_background_color)
     public void openWidgetBackgroundColorDialog() {
         ColorPickerDialogBuilder
                 .with(getContext())
                 .setTitle("Choose color")
-                .initialColor(viewModel.getWidgetBackgroundColor())
+                .initialColor(bindings.getWidgetBackgroundColor())
                 .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                 .density(5)
                 .setOnColorSelectedListener(new OnColorSelectedListener() {
                     @Override
                     public void onColorSelected(int selectedColor) {
-                        viewModel.setWidgetBackgroundColor(selectedColor);
+                        bindings.setWidgetBackgroundColor(selectedColor);
                     }
                 })
                 .setPositiveButton("Done", new ColorPickerClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
-                        viewModel.setWidgetBackgroundColor(selectedColor);
+                        bindings.setWidgetBackgroundColor(selectedColor);
                     }
                 })
                 .build()
