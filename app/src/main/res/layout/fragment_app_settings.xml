@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/num_columns_label"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:text='@{(settings.numberOfColumns+1)}'/>
+                android:text='@{""+(settings.numberOfColumns+1)}'/>
 
         </LinearLayout>
         <SeekBar

@@ -34,13 +34,17 @@ public class AppSettingsBindings extends BaseObservable {
     public void init(AppSettings appSettings) {
         this.appSettings = appSettings;
 
-        loadAllSettings();
+        loadAllSettings(appSettings.getContext());
     }
 
     public void setWidgetBackgroundColor(int widgetBackgroundColor) {
         this.widgetBackgroundColor = widgetBackgroundColor;
         notifyPropertyChanged(BR.widgetBackgroundColor);
-        appSettings.mCallback.onSettingChanged(BACKGROUND_COLOR, Integer.toHexString(widgetBackgroundColor).substring(2));
+        appSettings.mCallback.onSettingChanged(BACKGROUND_COLOR, getBackgroundColorHexStr());
+    }
+
+    public String getBackgroundColorHexStr() {
+        return Integer.toHexString(widgetBackgroundColor).substring(2);
     }
 
     @Bindable
@@ -53,22 +57,30 @@ public class AppSettingsBindings extends BaseObservable {
         return this.numberOfColumns;
     }
 
+    public int getNumberOfColumnsUI() {
+        return this.numberOfColumns + 1;
+    }
+
 
     @Bindable
     public BackgroundType getBackgroundType() {
         return this.backgroundType;
     }
 
+    public String getBackgroundTypeUI() {
+        return this.backgroundType.name();
+    }
+
     public void setNumberOfColumns(int numberOfColumns) {
         this.numberOfColumns = numberOfColumns;
         notifyPropertyChanged(BR.numberOfColumns);
-        appSettings.mCallback.onSettingChanged(COLUMN_COUNT, numberOfColumns + 1);
+        appSettings.mCallback.onSettingChanged(COLUMN_COUNT, getNumberOfColumnsUI());
     }
 
     public void setBackgroundType(BackgroundType type) {
         this.backgroundType = type;
         notifyPropertyChanged(BR.backgroundType);
-        appSettings.mCallback.onSettingChanged(BACKGROUND_TYPE, type.name());
+        appSettings.mCallback.onSettingChanged(BACKGROUND_TYPE, getBackgroundTypeUI());
     }
 
     public void saveAllSettings() {
@@ -81,17 +93,12 @@ public class AppSettingsBindings extends BaseObservable {
         edit.apply();
     }
 
-    public void loadAllSettings() {
-        SharedPreferences settings = appSettings.getContext().getSharedPreferences(SHARED_PREFS_OPTIONS, 0);
+    public void loadAllSettings(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(SHARED_PREFS_OPTIONS, 0);
 
         // Don't use setters here because we don't want to trigger a sendMessage() to TV
         numberOfColumns = settings.getInt(COLUMN_COUNT, 3);
-
-        if (settings.contains(BACKGROUND_COLOR)) {
-            widgetBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(appSettings.getContext(), R.color.accent));
-        } else {
-            widgetBackgroundColor = ContextCompat.getColor(appSettings.getContext(), R.color.accent);
-        }
+        widgetBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.accent));
 
         backgroundType = BackgroundType.values()[settings.getInt(BACKGROUND_TYPE, 0)];
     }

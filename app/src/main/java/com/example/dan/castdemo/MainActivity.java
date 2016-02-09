@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus,
                                                String sessionId, boolean wasLaunched) {
+                sendAllOptions();
                 sendAllWidgets();
                 invalidateOptionsMenu();
             }
@@ -257,6 +258,24 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         });
     }
 
+
+    private void sendAllOptions() {
+        AppSettingsBindings settings = new AppSettingsBindings();
+        settings.loadAllSettings(this);
+
+        JSONObject options = new JSONObject();
+        try {
+            options.put(AppSettingsBindings.COLUMN_COUNT, settings.getNumberOfColumnsUI());
+            options.put(AppSettingsBindings.BACKGROUND_COLOR, settings.getBackgroundColorHexStr());
+            options.put(AppSettingsBindings.BACKGROUND_TYPE, settings.getBackgroundTypeUI());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        sendJSONToClient("options", options);
+    }
+
+
     public void setDrawerItemChecked(int menuItem) {
         navView.getMenu().getItem(menuItem).setChecked(true);
     }
@@ -306,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     }
 
     private void sendJSONContainerToClient(final JSONObject container) {
-        final Runnable r = new Runnable() {
+        new Runnable() {
             public void run() {
                 try {
                     mCastManager.sendDataMessage(container.toString(), getResources().getString(R.string.namespace));
@@ -315,12 +334,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
                 }
 
             }
-        };
-        r.run();
+        }.run();
     }
 
     private void sendJSONToClient(final String key, final JSONArray payload) {
-
         JSONObject container = new JSONObject();
 
         try {
