@@ -89,7 +89,7 @@ public class AppSettings extends Fragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         backgroundTypeSpinner.setAdapter(adapter);
-        backgroundTypeSpinner.setSelection(bindings.getBackgroundType().getValue());
+        backgroundTypeSpinner.setSelection(bindings.backgroundType.getValue());
 
         backgroundTypeSpinner.post(new Runnable() {
             public void run() {
@@ -116,7 +116,7 @@ public class AppSettings extends Fragment {
         ColorPickerDialogBuilder
                 .with(getContext())
                 .setTitle("Choose color")
-                .initialColor(bindings.getWidgetBackgroundColor())
+                .initialColor(bindings.widgetBackgroundColor)
                 .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                 .density(5)
                 .setOnColorSelectedListener(new OnColorSelectedListener() {

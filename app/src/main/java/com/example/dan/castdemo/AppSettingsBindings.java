@@ -10,8 +10,13 @@ import android.support.v4.content.ContextCompat;
 import com.example.dan.castdemo.Settings.BackgroundType;
 
 public class AppSettingsBindings extends BaseObservable {
+    @Bindable
     public Integer widgetBackgroundColor;
+
+    @Bindable
     public Integer numberOfColumns;
+
+    @Bindable
     public BackgroundType backgroundType;
 
     private AppSettings appSettings;
@@ -47,25 +52,11 @@ public class AppSettingsBindings extends BaseObservable {
         return Integer.toHexString(widgetBackgroundColor).substring(2);
     }
 
-    @Bindable
-    public int getWidgetBackgroundColor() {
-        return this.widgetBackgroundColor;
-    }
-
-    @Bindable
-    public int getNumberOfColumns() {
-        return this.numberOfColumns;
-    }
 
     public int getNumberOfColumnsUI() {
         return this.numberOfColumns + 1;
     }
 
-
-    @Bindable
-    public BackgroundType getBackgroundType() {
-        return this.backgroundType;
-    }
 
     public String getBackgroundTypeUI() {
         return this.backgroundType.name();
@@ -87,9 +78,9 @@ public class AppSettingsBindings extends BaseObservable {
         SharedPreferences preferences = appSettings.getContext().getSharedPreferences(SHARED_PREFS_OPTIONS, 0);
         SharedPreferences.Editor edit= preferences.edit();
 
-        edit.putInt(COLUMN_COUNT, getNumberOfColumns());
-        edit.putInt(BACKGROUND_COLOR, getWidgetBackgroundColor());
-        edit.putInt(BACKGROUND_TYPE, getBackgroundType().getValue());
+        edit.putInt(COLUMN_COUNT, numberOfColumns);
+        edit.putInt(BACKGROUND_COLOR, widgetBackgroundColor);
+        edit.putInt(BACKGROUND_TYPE, backgroundType.getValue());
         edit.apply();
     }
 
