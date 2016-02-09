@@ -18,12 +18,24 @@
         tools:context="com.example.dan.castdemo.SettingsActivity"
         android:orientation="vertical">
 
-        <TextView
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/num_columns_label"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:text='@{"Number of columns: " + (settings.numberOfColumns+1)}'/>
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:text="Number of columns: "/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/num_columns_label"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:text='@{(settings.numberOfColumns+1)}'/>
+
+        </LinearLayout>
         <SeekBar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
