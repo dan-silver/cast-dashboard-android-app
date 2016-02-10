@@ -79,5 +79,19 @@
                 android:layout_marginBottom="@dimen/app_settings_padding"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:text="Widget Transparency"/>
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/widget_transparency"
+            android:progress="@{settings.widgetTransparency}"
+            android:max="25"
+            android:layout_marginBottom="@dimen/app_settings_padding"/>
+
     </LinearLayout>
 </layout>

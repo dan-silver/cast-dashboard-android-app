@@ -19,11 +19,15 @@ public class AppSettingsBindings extends BaseObservable {
     @Bindable
     public BackgroundType backgroundType;
 
+    @Bindable
+    public int widgetTransparency;
+
     private AppSettings appSettings;
 
     static String COLUMN_COUNT = "COLUMN_COUNT";
     static String BACKGROUND_TYPE = "BACKGROUND_TYPE";
     static String BACKGROUND_COLOR = "BACKGROUND_COLOR";
+    static String WIDGET_TRANSPARENCY = "WIDGET_TRANSPARENCY";
 
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
@@ -81,6 +85,7 @@ public class AppSettingsBindings extends BaseObservable {
         edit.putInt(COLUMN_COUNT, numberOfColumns);
         edit.putInt(BACKGROUND_COLOR, widgetBackgroundColor);
         edit.putInt(BACKGROUND_TYPE, backgroundType.getValue());
+        edit.putInt(WIDGET_TRANSPARENCY, widgetTransparency);
         edit.apply();
     }
 
@@ -92,5 +97,16 @@ public class AppSettingsBindings extends BaseObservable {
         widgetBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.accent));
 
         backgroundType = BackgroundType.values()[settings.getInt(BACKGROUND_TYPE, 0)];
+        widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 80);
+    }
+
+    public int getWidgetTransparencyUI() {
+        return widgetTransparency * 4;
+    }
+
+    public void setWidgetTransparency(int widgetTransparency) {
+        this.widgetTransparency = widgetTransparency;
+        notifyPropertyChanged(BR.widgetTransparency);
+        appSettings.mCallback.onSettingChanged(WIDGET_TRANSPARENCY, getWidgetTransparencyUI());
     }
 }

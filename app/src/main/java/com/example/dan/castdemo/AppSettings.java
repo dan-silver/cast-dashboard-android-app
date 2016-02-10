@@ -33,6 +33,11 @@ public class AppSettings extends Fragment {
 
     @Bind(R.id.background_type_spinner)
     Spinner backgroundTypeSpinner;
+
+
+    @Bind(R.id.widget_transparency)
+    SeekBar widgetTransparency;
+
     private AppSettingsBindings bindings;
 
     public AppSettings() {
@@ -70,6 +75,24 @@ public class AppSettings extends Fragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser)
                     bindings.setNumberOfColumns(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        widgetTransparency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser)
+                    bindings.setWidgetTransparency(progress);
             }
 
             @Override
