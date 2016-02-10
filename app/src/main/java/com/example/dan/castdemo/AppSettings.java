@@ -34,7 +34,6 @@ public class AppSettings extends Fragment {
     @Bind(R.id.background_type_spinner)
     Spinner backgroundTypeSpinner;
 
-
     @Bind(R.id.widget_transparency)
     SeekBar widgetTransparency;
 
@@ -142,12 +141,6 @@ public class AppSettings extends Fragment {
                 .initialColor(bindings.widgetBackgroundColor)
                 .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                 .density(5)
-                .setOnColorSelectedListener(new OnColorSelectedListener() {
-                    @Override
-                    public void onColorSelected(int selectedColor) {
-                        bindings.setWidgetBackgroundColor(selectedColor);
-                    }
-                })
                 .setPositiveButton("Done", new ColorPickerClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
@@ -158,6 +151,24 @@ public class AppSettings extends Fragment {
                 .show();
     }
 
+
+    @OnClick(R.id.widget_color)
+    public void openWidgetColorDialog() {
+        ColorPickerDialogBuilder
+                .with(getContext())
+                .setTitle("Choose color")
+                .initialColor(bindings.widgetColor)
+                .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
+                .density(5)
+                .setPositiveButton("Done", new ColorPickerClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
+                        bindings.setWidgetColor(selectedColor);
+                    }
+                })
+                .build()
+                .show();
+    }
 
     @Override
     public void onResume() {

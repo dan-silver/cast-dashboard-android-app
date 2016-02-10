@@ -267,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         try {
             options.put(AppSettingsBindings.COLUMN_COUNT, settings.getNumberOfColumnsUI());
             options.put(AppSettingsBindings.BACKGROUND_COLOR, settings.getBackgroundColorHexStr());
+            options.put(AppSettingsBindings.WIDGET_COLOR, settings.getWidgetColorHexStr());
             options.put(AppSettingsBindings.BACKGROUND_TYPE, settings.getBackgroundTypeUI());
             options.put(AppSettingsBindings.WIDGET_TRANSPARENCY, settings.getWidgetTransparencyUI());
         } catch (JSONException e) {

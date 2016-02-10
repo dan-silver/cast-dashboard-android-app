@@ -60,7 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="@{settings.backgroundType == BackgroundType.SOLID_COLOR ? View.VISIBLE : View.GONE}">
+            android:visibility="@{settings.backgroundType == BackgroundType.SOLID_COLOR ? View.VISIBLE : View.GONE}"
+            android:layout_marginBottom="@dimen/app_settings_padding">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -76,7 +77,6 @@
                 android:layout_alignParentEnd="true"
                 android:id="@+id/widget_background_color"
                 android:background="@{settings.widgetBackgroundColor}"
-                android:layout_marginBottom="@dimen/app_settings_padding"
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
 
@@ -93,5 +93,27 @@
             android:max="25"
             android:layout_marginBottom="@dimen/app_settings_padding"/>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/app_settings_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:text="Widget Color"
+                android:layout_centerVertical="true"/>
+
+            <FrameLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/widget_color"
+                android:background="@{settings.widgetColor}"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
     </LinearLayout>
 </layout>
