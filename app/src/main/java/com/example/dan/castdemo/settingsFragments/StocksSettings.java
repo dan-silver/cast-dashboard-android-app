@@ -131,7 +131,7 @@ public class StocksSettings extends Fragment {
                                 stockListAdapter.deleteStock(position);
 
 
-                                ConditionGroup conditions = new ConditionGroup();
+                                ConditionGroup conditions = ConditionGroup.clause();
                                 conditions.andAll(WidgetOption_Table.widgetForeignKeyContainer_id.eq(widget.id),
                                         WidgetOption_Table.key.is(STOCK_IN_LIST), WidgetOption_Table.value.is(Long.toString(stock.getId())));
 

@@ -33,13 +33,12 @@ public class StocksWidget extends UIWidget {
         // get the ids of the stocks
         List<WidgetOption> a = widget.getOptions(StocksSettings.STOCK_IN_LIST);
 
-        ConditionGroup conditions = new ConditionGroup();
+        ConditionGroup conditions = ConditionGroup.clause();
         for (WidgetOption stockOption : a) {
             conditions.or(Stock_Table._id.is(Long.parseLong(stockOption.value)));
         }
 
         // convert ids to tickers
-
         List<Stock> selectedStocks = new Select().from(Stock.class).where(conditions).queryList();
 
         JSONObject json = new JSONObject();

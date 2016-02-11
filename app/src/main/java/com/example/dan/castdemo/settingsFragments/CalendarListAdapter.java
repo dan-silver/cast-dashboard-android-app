@@ -71,7 +71,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
 
                 } else {
                     // remove the CALENDAR_ENABLED entry
-                    ConditionGroup conditions = new ConditionGroup();
+                    ConditionGroup conditions = ConditionGroup.clause();
                     conditions.andAll(
                             WidgetOption_Table.widgetForeignKeyContainer_id.is(widget.id),
                             WidgetOption_Table.key.is(CalendarSettings.CALENDAR_ENABLED),

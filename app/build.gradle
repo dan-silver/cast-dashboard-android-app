@@ -50,7 +50,7 @@ dependencies {
 
 apply plugin: 'com.neenbedankt.android-apt'
 
-def dbflow_version = "3.0.0-beta2"
+def dbflow_version = "3.0.0-beta3"
 // or dbflow_version = "develop-SNAPSHOT" for grabbing latest dependency in your project on the develop branch
 
 dependencies {
