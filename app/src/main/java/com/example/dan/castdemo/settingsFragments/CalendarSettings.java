@@ -29,28 +29,13 @@ public class CalendarSettings extends WidgetSettingsFragment {
     public static String ALL_CALENDARS_FALSE = "ALL_CALENDARS_FALSE";
     public static String CALENDAR_ENABLED = "CALENDAR_ENABLED";
 
-    private Widget widget;
     WidgetOption optionAllCalendars;
-
 
     @Bind(R.id.display_all_calendars)
     android.support.v7.widget.SwitchCompat allCalendars;
 
     @Bind(R.id.calendar_list)
     RecyclerView calendarList;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        Bundle bundle = this.getArguments();
-        long widgetId = bundle.getLong(Widget.ID, -1);
-
-        // lookup widget in the database
-        // display appropriate settings for that widget type
-        widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
-
-        super.onCreate(savedInstanceState);
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,26 +47,21 @@ public class CalendarSettings extends WidgetSettingsFragment {
         optionAllCalendars = widget.getOption(CalendarSettings.ALL_CALENDARS);
         allCalendars.setChecked(optionAllCalendars.value.equals(ALL_CALENDARS_TRUE));
 
-
         allCalendars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                                     @Override
                                                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                                        optionAllCalendars.value = isChecked ? ALL_CALENDARS_TRUE : ALL_CALENDARS_FALSE;
-                                                        displayCalendarList();
-                                                        optionAllCalendars.save();
-                                                        refreshWidget();
+                optionAllCalendars.value = isChecked ? ALL_CALENDARS_TRUE : ALL_CALENDARS_FALSE;
+                displayCalendarList();
+                optionAllCalendars.save();
+                refreshWidget();
 
-                                                    }
-                                                }
+            }
+        }
         );
 
-
-        // use a linear layout manager
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         calendarList.setLayoutManager(mLayoutManager);
 
-
-        // specify an adapter (see also next example)
         displayCalendarList();
         return view;
     }
@@ -101,7 +81,6 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
     public static void init(Widget widget) {
         WidgetOption allCalendars = new WidgetOption();
-
 
         allCalendars.key = ALL_CALENDARS;
         allCalendars.value = ALL_CALENDARS_TRUE;

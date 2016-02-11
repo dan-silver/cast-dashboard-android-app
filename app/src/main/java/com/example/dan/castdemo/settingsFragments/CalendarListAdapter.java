@@ -9,6 +9,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.dan.castdemo.CalendarInfo;
+import com.example.dan.castdemo.CastCommunicator;
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.Widget;
 import com.example.dan.castdemo.WidgetOption;
@@ -83,6 +84,8 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
                             .execute();
 
                 }
+                CastCommunicator.sendWidget(widget);
+
             }
         });
 

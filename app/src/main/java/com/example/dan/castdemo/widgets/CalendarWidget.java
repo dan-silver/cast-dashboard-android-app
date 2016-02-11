@@ -207,6 +207,8 @@ public class CalendarWidget extends UIWidget {
             }
         }
 
+        if (calendarIds.size() == 0)
+            showAllCalendars = true;
 
         json.put("events", getCalendarEvents(context, calendarIds, showAllCalendars));
         return json;

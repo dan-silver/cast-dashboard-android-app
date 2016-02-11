@@ -63,7 +63,6 @@ public class CastCommunicator {
         }
     }
 
-
     public static void deleteWidget(Widget widget) {
         try {
             JSONObject info = new JSONObject();

@@ -51,13 +51,6 @@ public class StocksSettings extends WidgetSettingsFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Bundle bundle = this.getArguments();
-        long widgetId = bundle.getLong(Widget.ID, -1);
-
-        // lookup widget in the database
-        // display appropriate settings for that widget type
-        widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
-
         Stock.insertAllStocks(getContext());
 
         super.onCreate(savedInstanceState);
