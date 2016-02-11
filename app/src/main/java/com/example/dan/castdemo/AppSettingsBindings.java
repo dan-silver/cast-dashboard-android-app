@@ -117,8 +117,8 @@ public class AppSettingsBindings extends BaseObservable {
 
     }
 
-    public int getWidgetTransparencyUI() {
-        return widgetTransparency * 4;
+    public int getWidgetTransparencyUI() { // must return %/100
+        return 2 * widgetTransparency + 50;
     }
 
     public void setWidgetTransparency(int widgetTransparency) {

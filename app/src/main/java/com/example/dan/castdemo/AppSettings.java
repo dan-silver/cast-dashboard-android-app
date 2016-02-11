@@ -15,7 +15,6 @@ import android.widget.Spinner;
 import com.example.dan.castdemo.Settings.BackgroundType;
 import com.example.dan.castdemo.databinding.FragmentAppSettingsBinding;
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
