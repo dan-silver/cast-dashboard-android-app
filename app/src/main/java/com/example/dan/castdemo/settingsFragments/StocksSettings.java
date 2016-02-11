@@ -2,6 +2,7 @@ package com.example.dan.castdemo.settingsFragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,9 +36,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class StocksSettings extends Fragment {
+public class StocksSettings extends WidgetSettingsFragment {
 
-    private Widget widget;
     public static String STOCK_IN_LIST = "STOCK_IN_LIST";
     ArrayList<StockInfo> stocks = new ArrayList<>();
     final StockListAdapter stockListAdapter = new StockListAdapter(stocks);
@@ -111,6 +111,7 @@ public class StocksSettings extends Fragment {
                 addStock.clearListSelection();
                 addStock.setText("");
 
+                refreshWidget();
             }
         });
 
@@ -127,7 +128,7 @@ public class StocksSettings extends Fragment {
                         .negativeText("Cancel")
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
-                            public void onClick(MaterialDialog dialog, DialogAction which) {
+                            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                                 stockListAdapter.deleteStock(position);
 
 
@@ -136,6 +137,7 @@ public class StocksSettings extends Fragment {
                                         WidgetOption_Table.key.is(STOCK_IN_LIST), WidgetOption_Table.value.is(Long.toString(stock.getId())));
 
                                 new Delete().from(WidgetOption.class).where(conditions).execute();
+                                refreshWidget();
                             }
                         })
                         .show();

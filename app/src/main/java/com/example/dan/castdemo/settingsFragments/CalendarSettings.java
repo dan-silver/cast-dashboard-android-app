@@ -22,7 +22,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class CalendarSettings extends Fragment {
+public class CalendarSettings extends WidgetSettingsFragment {
 
     public static String ALL_CALENDARS = "ALL_CALENDARS";
     public static String ALL_CALENDARS_TRUE = "ALL_CALENDARS_TRUE";
@@ -69,6 +69,7 @@ public class CalendarSettings extends Fragment {
                                                         optionAllCalendars.value = isChecked ? ALL_CALENDARS_TRUE : ALL_CALENDARS_FALSE;
                                                         displayCalendarList();
                                                         optionAllCalendars.save();
+                                                        refreshWidget();
 
                                                     }
                                                 }

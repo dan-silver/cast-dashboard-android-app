@@ -89,6 +89,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        CastCommunicator.deleteWidget(widget);
                         widget.delete();
                         onBackPressed();
                     }

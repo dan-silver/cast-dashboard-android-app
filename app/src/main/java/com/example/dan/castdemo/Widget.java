@@ -1,5 +1,7 @@
 package com.example.dan.castdemo;
 
+import android.content.Context;
+
 import com.example.dan.castdemo.settingsFragments.CalendarSettings;
 import com.example.dan.castdemo.settingsFragments.ClockSettings;
 import com.example.dan.castdemo.settingsFragments.MapSettings;
@@ -20,6 +22,9 @@ import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapte
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -153,4 +158,24 @@ public class Widget extends BaseModel {
                         }));
 
     }
+
+
+    public JSONObject getJSONContent(Context applicationContext) throws JSONException {
+        JSONObject payload = new JSONObject();
+        payload.put("type", getWidgetType().getHumanName().toLowerCase());
+        payload.put("id", this.id);
+        payload.put("options", new JSONObject());
+        payload.put("position", position);
+
+        if (getWidgetType() == Widget.types.CALENDAR) {
+            CalendarWidget cw = new CalendarWidget(applicationContext, this);
+            payload.put("data", cw.getContent());
+        } else if (getWidgetType() == Widget.types.STOCKS) {
+            StocksWidget sw = new StocksWidget(applicationContext, this);
+            payload.put("data", sw.getContent());
+        }
+
+        return payload;
+    }
+
 }

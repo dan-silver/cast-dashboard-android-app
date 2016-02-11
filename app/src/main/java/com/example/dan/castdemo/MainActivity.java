@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
                 JSONArray widgetsArr = new JSONArray();
                 for (Widget widget : widgets) {
                     try {
-                        widgetsArr.put(MainActivity.getWidgetJSON(getApplicationContext(), widget));
+                        widgetsArr.put(widget.getJSONContent(getApplicationContext()));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -323,39 +323,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         super.onPause();
     }
 
-    public static JSONObject getWidgetJSON(Context context, Widget widget) throws JSONException {
-        JSONObject payload = new JSONObject();
-        payload.put("type", widget.getWidgetType().getHumanName().toLowerCase());
-        payload.put("id", widget.id);
-        payload.put("options", new JSONObject());
-        payload.put("position", widget.position);
-
-        if (widget.getWidgetType() == Widget.types.CALENDAR) {
-            CalendarWidget cw = new CalendarWidget(context, widget);
-            payload.put("data", cw.getContent());
-        } else if (widget.getWidgetType() == Widget.types.STOCKS) {
-            StocksWidget sw = new StocksWidget(context, widget);
-            payload.put("data", sw.getContent());
-        }
-
-        return payload;
-    }
-
     @Override
     public void onBackPressed() {
         mDrawer.closeDrawer(GravityCompat.START);
         uncheckAllMenuItems();
         super.onBackPressed();
-    }
-
-    public void deleteWidget(Widget widget) {
-        try {
-            JSONObject info = new JSONObject();
-            info.put("id", widget.id);
-            CastCommunicator.sendJSON("deleteWidget", info);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
     }
 }

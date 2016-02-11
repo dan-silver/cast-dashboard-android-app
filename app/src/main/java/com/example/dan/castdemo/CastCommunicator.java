@@ -57,9 +57,21 @@ public class CastCommunicator {
 
     public static void sendWidget(Widget widget) {
         try {
-            CastCommunicator.sendJSON("widget", MainActivity.getWidgetJSON(context, widget));
+            CastCommunicator.sendJSON("widget", widget.getJSONContent(context));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public static void deleteWidget(Widget widget) {
+        try {
+            JSONObject info = new JSONObject();
+            info.put("id", widget.id);
+            CastCommunicator.sendJSON("deleteWidget", info);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 }
