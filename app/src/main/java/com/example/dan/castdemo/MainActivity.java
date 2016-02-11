@@ -1,6 +1,7 @@
 package com.example.dan.castdemo;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,16 +29,11 @@ import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCas
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.runtime.TransactionManager;
-import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
-import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
-import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     @Bind(R.id.top_toolbar)
     Toolbar top_toolbar;
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
-    private DataCastManager mCastManager;
+    private static DataCastManager mCastManager;
     private DataCastConsumer mCastConsumer;
     private MenuItem mediaRouteMenuItem;
 
@@ -98,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
         ButterKnife.bind(this);
+
+
 
 
         // Set the adapter for the list view
@@ -151,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
 
         mCastManager = DataCastManager.getInstance();
         mCastManager.reconnectSessionIfPossible();
+        CastCommunicator.init(this, mCastManager);
         mCastConsumer = new DataCastConsumerImpl() {
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus,
@@ -240,19 +239,19 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
 
 
     public void sendAllWidgets() {
-        MainActivity.getAllWidgets(new FetchAllWidgetsListener() {
+        Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
                 JSONArray widgetsArr = new JSONArray();
                 for (Widget widget : widgets) {
                     try {
-                        widgetsArr.put(getWidgetJSON(widget));
+                        widgetsArr.put(MainActivity.getWidgetJSON(getApplicationContext(), widget));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
 
-                sendJSONToClient("widgets", widgetsArr);
+                CastCommunicator.sendJSON("widgets", widgetsArr);
 
             }
         });
@@ -274,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
             e.printStackTrace();
         }
 
-        sendJSONToClient("options", options);
+        CastCommunicator.sendJSON("options", options);
     }
 
 
@@ -287,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         JSONObject options = new JSONObject();
         try {
             options.put(setting, value);
-            sendJSONToClient("options", options);
+            CastCommunicator.sendJSON("options", options);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -299,55 +298,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     }
 
     public void onItemMoved(JSONObject widgetsOrder) {
-        sendJSONToClient("order", widgetsOrder);
-    }
-
-
-    public static void getAllWidgets(final FetchAllWidgetsListener listener) {
-        TransactionManager.getInstance().addTransaction(
-                new SelectListTransaction<>(new Select().from(Widget.class),
-                        new TransactionListenerAdapter<List<Widget>>() {
-                            @Override
-                            public void onResultReceived(List<Widget> someObjectList) {
-                                listener.results(someObjectList);
-                            }
-                        }));
-
-    }
-
-    private void sendJSONToClient(final String key, final JSONObject payload) {
-        JSONObject container = new JSONObject();
-
-        try {
-            container.put(key, payload);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        sendJSONContainerToClient(container);
-    }
-
-    private void sendJSONContainerToClient(final JSONObject container) {
-        new Runnable() {
-            public void run() {
-                try {
-                    mCastManager.sendDataMessage(container.toString(), getResources().getString(R.string.namespace));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }.run();
-    }
-
-    private void sendJSONToClient(final String key, final JSONArray payload) {
-        JSONObject container = new JSONObject();
-
-        try {
-            container.put(key, payload);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        sendJSONContainerToClient(container);
+        CastCommunicator.sendJSON("order", widgetsOrder);
     }
 
 
@@ -372,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         super.onPause();
     }
 
-    public JSONObject getWidgetJSON(Widget widget) throws JSONException {
+    public static JSONObject getWidgetJSON(Context context, Widget widget) throws JSONException {
         JSONObject payload = new JSONObject();
         payload.put("type", widget.getWidgetType().getHumanName().toLowerCase());
         payload.put("id", widget.id);
@@ -380,10 +331,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         payload.put("position", widget.position);
 
         if (widget.getWidgetType() == Widget.types.CALENDAR) {
-            CalendarWidget cw = new CalendarWidget(this, widget);
+            CalendarWidget cw = new CalendarWidget(context, widget);
             payload.put("data", cw.getContent());
         } else if (widget.getWidgetType() == Widget.types.STOCKS) {
-            StocksWidget sw = new StocksWidget(this, widget);
+            StocksWidget sw = new StocksWidget(context, widget);
             payload.put("data", sw.getContent());
         }
 
@@ -397,19 +348,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         super.onBackPressed();
     }
 
-    public void sendWidget(Widget widget) {
-        try {
-            sendJSONToClient("widget", getWidgetJSON(widget));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void deleteWidget(Widget widget) {
         try {
             JSONObject info = new JSONObject();
             info.put("id", widget.id);
-            sendJSONToClient("deleteWidget", info);
+            CastCommunicator.sendJSON("deleteWidget", info);
         } catch (JSONException e) {
             e.printStackTrace();
         }

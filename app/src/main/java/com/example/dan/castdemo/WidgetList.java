@@ -78,7 +78,7 @@ public class WidgetList extends Fragment implements OnDragListener {
 
                         widget.initOptions();
                         refreshList();
-                        activity.sendWidget(widget);
+                        CastCommunicator.sendWidget(widget);
 
                         return true;
                     }
@@ -100,7 +100,7 @@ public class WidgetList extends Fragment implements OnDragListener {
         final WidgetList ctx = this;
 
         // async fetch all saved widgets
-        MainActivity.getAllWidgets(new FetchAllWidgetsListener() {
+        Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
                 WidgetListAdapter adapter = new WidgetListAdapter(widgets, activity, ctx);

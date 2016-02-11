@@ -14,7 +14,11 @@ import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.runtime.TransactionManager;
+import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
+import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.util.List;
@@ -138,4 +142,15 @@ public class Widget extends BaseModel {
                 .queryList();
     }
 
+    public static void fetchAll(final FetchAllWidgetsListener listener) {
+        TransactionManager.getInstance().addTransaction(
+                new SelectListTransaction<>(new Select().from(Widget.class),
+                        new TransactionListenerAdapter<List<Widget>>() {
+                            @Override
+                            public void onResultReceived(List<Widget> someObjectList) {
+                                listener.results(someObjectList);
+                            }
+                        }));
+
+    }
 }
