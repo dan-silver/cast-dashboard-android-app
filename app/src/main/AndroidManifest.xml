@@ -34,6 +34,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.dan.castdemo.MainActivity" />
         </activity>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDh-9CX8mskZm9HoewXhxiSq3qOdlua6Og"/>
     </application>
 
 </manifest>

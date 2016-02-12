@@ -5,4 +5,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="setting_text_size">16sp</dimen>
     <dimen name="app_settings_padding">20dp</dimen>
+    <dimen name="setting_text_secondary">14sp</dimen>
 </resources>
