@@ -36,6 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -144,10 +145,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
                 .enableWifiReconnection()
                 .enableDebug()
                 .addNamespace(getResources().getString(R.string.namespace))
+                .setLaunchOptions(false, Locale.getDefault())
                 .build();
         DataCastManager.initialize(this, options);
 
         mCastManager = DataCastManager.getInstance();
+        mCastManager.setStopOnDisconnect(false);
+
         mCastManager.reconnectSessionIfPossible();
         CastCommunicator.init(this, mCastManager);
         mCastConsumer = new DataCastConsumerImpl() {
@@ -214,13 +218,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         }
 
     }
-
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "onDestroy");
-        super.onDestroy();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -316,12 +313,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     }
 
 
-    @Override
-    protected void onPause() {
-        mCastManager.decrementUiCounter();
-        mCastManager.removeDataCastConsumer(mCastConsumer);
-        super.onPause();
-    }
+//    @Override
+//    protected void onPause() {
+////        mCastManager.decrementUiCounter();
+////        mCastManager.removeDataCastConsumer(mCastConsumer);
+//        super.onPause();
+//    }
 
     @Override
     public void onBackPressed() {
