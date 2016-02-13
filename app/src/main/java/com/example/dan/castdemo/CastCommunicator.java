@@ -63,6 +63,18 @@ public class CastCommunicator {
         }
     }
 
+    public static void sendWidgetProperty(long widgetId, String property, Object value) {
+        try {
+            JSONObject propertyValue = new JSONObject();
+            propertyValue.put("widgetId", widgetId);
+            propertyValue.put("property", property);
+            propertyValue.put("value", value);
+            CastCommunicator.sendJSON("widgetProperty", propertyValue);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void deleteWidget(Widget widget) {
         try {
             JSONObject info = new JSONObject();

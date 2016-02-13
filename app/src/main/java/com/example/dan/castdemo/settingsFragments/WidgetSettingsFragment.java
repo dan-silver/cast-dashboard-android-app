@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 
 import com.example.dan.castdemo.CastCommunicator;
 import com.example.dan.castdemo.Widget;
+import com.example.dan.castdemo.WidgetOption;
 import com.example.dan.castdemo.Widget_Table;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
@@ -27,6 +28,8 @@ public class WidgetSettingsFragment extends Fragment {
 
         super.onCreate(savedInstanceState);
     }
+
+
 }
 
 

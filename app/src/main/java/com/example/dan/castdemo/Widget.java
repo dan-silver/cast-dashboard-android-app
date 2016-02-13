@@ -20,6 +20,8 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
+import com.raizlabs.android.dbflow.sql.language.Condition;
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
@@ -163,6 +165,21 @@ public class Widget extends BaseModel {
     }
 
 
+    public static void fetchByType(types type, final FetchAllWidgetsListener listener) {
+        TransactionManager.getInstance().addTransaction(
+
+                new SelectListTransaction<>(
+                        new Select().from(Widget.class)
+                            .where(ConditionGroup.clause().and(Widget_Table.type.is(type.getValue()))),
+                        new TransactionListenerAdapter<List<Widget>>() {
+                            @Override
+                            public void onResultReceived(List<Widget> someObjectList) {
+                                listener.results(someObjectList);
+                            }
+                        }));
+
+    }
+
     public JSONObject getJSONContent(Context applicationContext) throws JSONException {
         JSONObject payload = new JSONObject();
         payload.put("type", getWidgetType().getHumanName().toLowerCase());
@@ -189,6 +206,15 @@ public class Widget extends BaseModel {
         payload.put("data", widget.getContent());
 
         return payload;
+    }
+
+
+    public void initOption(String key, String defaultValue) {
+        WidgetOption option = new WidgetOption();
+        option.key = key;
+        option.value = defaultValue;
+        option.associateWidget(this);
+        option.save();
     }
 
 }

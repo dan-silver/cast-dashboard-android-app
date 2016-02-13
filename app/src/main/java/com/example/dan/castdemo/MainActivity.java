@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -284,6 +285,19 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         try {
             options.put(setting, value);
             CastCommunicator.sendJSON("options", options);
+
+            // @todo cleanup, move to client/angular
+            // when the column count changes, force refresh all maps
+            if (setting.equals(AppSettingsBindings.COLUMN_COUNT)) {
+                Widget.fetchByType(Widget.types.MAP, new FetchAllWidgetsListener() {
+                    @Override
+                    public void results(List<Widget> widgets) {
+                        for (Widget widget : widgets) {
+                            CastCommunicator.sendWidget(widget);
+                        }
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -311,14 +325,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
 
         super.onResume();
     }
-
-
-//    @Override
-//    protected void onPause() {
-////        mCastManager.decrementUiCounter();
-////        mCastManager.removeDataCastConsumer(mCastConsumer);
-//        super.onPause();
-//    }
 
     @Override
     public void onBackPressed() {

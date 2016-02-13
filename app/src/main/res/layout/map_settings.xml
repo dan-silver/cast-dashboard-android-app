@@ -26,21 +26,25 @@
         android:id="@+id/get_map_location"
         android:text="Change Map Location"/>
 
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <RadioButton android:id="@+id/standard_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Standard"/>
-        <RadioButton android:id="@+id/radio_pirates"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Directions"/>
-        <RadioButton android:id="@+id/radio_ninjas"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Weather"/>
-    </RadioGroup>
+        android:textColor="@color/primary_text"
+        android:textSize="@dimen/setting_text_size"
+        android:text="Zoom" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_zoom"
+        android:layout_gravity="center_horizontal"
+        android:max="14"/>
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Show Traffic"
+        android:id="@+id/switch1"
+        android:layout_gravity="center_horizontal"
+        android:checked="false" />
 </LinearLayout>

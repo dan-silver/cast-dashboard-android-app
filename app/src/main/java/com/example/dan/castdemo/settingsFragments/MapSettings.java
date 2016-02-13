@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.dan.castdemo.CastCommunicator;
 import com.example.dan.castdemo.MainActivity;
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.Widget;
@@ -32,6 +34,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     public static String LOCATION_LONG = "LOCATION_LONG";
     public static String LOCATION_NAME = "LOCATION_NAME";
     public static String LOCATION_ADDRESS = "LOCATION_ADDRESS";
+    public static String MAP_ZOOM = "MAP_ZOOM";
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -39,12 +42,16 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     WidgetOption locationLong;
     WidgetOption locationNameOption;
     WidgetOption locationAddrOption;
+    WidgetOption mapZoomOption;
 
     @Bind(R.id.location_name)
     TextView locationName;
 
     @Bind(R.id.location_addr)
     TextView locationAddr;
+
+    @Bind(R.id.map_zoom)
+    SeekBar mapZoom;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,8 +67,32 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         locationLong = widget.getOption(MapSettings.LOCATION_LONG);
         locationNameOption = widget.getOption(MapSettings.LOCATION_NAME);
         locationAddrOption = widget.getOption(MapSettings.LOCATION_ADDRESS);
+        mapZoomOption = widget.getOption(MapSettings.MAP_ZOOM);
 
         updateLocationText();
+
+
+        mapZoom.setProgress(Integer.parseInt(mapZoomOption.value)-1);
+        mapZoom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (!fromUser) return;
+                mapZoomOption.value = String.valueOf(progress+1);
+//                refreshWidget();
+                mapZoomOption.save();
+                CastCommunicator.sendWidgetProperty(widget.id, "zoom", mapZoomOption.value);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         return view;
     }
@@ -72,32 +103,11 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     }
 
     public static void init(Widget widget) {
-        WidgetOption locationLat = new WidgetOption();
-        WidgetOption locationLng = new WidgetOption();
-        WidgetOption locationLine1 = new WidgetOption();
-        WidgetOption locationLine2 = new WidgetOption();
-
-        locationLat.key = LOCATION_LAT;
-        locationLat.value = "47.6166143";
-        locationLat.associateWidget(widget);
-        locationLat.save();
-
-        locationLng.key = LOCATION_LONG;
-        locationLng.value = "-122.6558899";
-        locationLng.associateWidget(widget);
-        locationLng.save();
-
-
-        locationLine1.key = LOCATION_NAME;
-        locationLine1.value = "Somewhere I forgot l1";
-        locationLine1.associateWidget(widget);
-        locationLine1.save();
-
-
-        locationLine2.key = LOCATION_ADDRESS;
-        locationLine2.value = "line 2";
-        locationLine2.associateWidget(widget);
-        locationLine2.save();
+        widget.initOption(LOCATION_LAT, "47.6166143");
+        widget.initOption(LOCATION_LONG, "-122.6558899");
+        widget.initOption(LOCATION_NAME, "Somewhere I forgot"); //@todo
+        widget.initOption(LOCATION_ADDRESS, "line 2"); //@todo
+        widget.initOption(MAP_ZOOM, "5");
     }
 
     @OnClick(R.id.get_map_location)
@@ -129,6 +139,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                 locationLong.save();
                 locationNameOption.save();
                 locationAddrOption.save();
+                refreshWidget();
             }
         }
     }
