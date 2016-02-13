@@ -78,9 +78,8 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!fromUser) return;
                 mapZoomOption.value = String.valueOf(progress+1);
-//                refreshWidget();
                 mapZoomOption.save();
-                CastCommunicator.sendWidgetProperty(widget.id, "zoom", mapZoomOption.value);
+                CastCommunicator.sendWidgetProperty(widget, "zoom", mapZoomOption.value);
             }
 
             @Override
