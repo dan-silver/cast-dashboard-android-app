@@ -11,6 +11,7 @@ import com.example.dan.castdemo.widgets.ClockWidget;
 import com.example.dan.castdemo.widgets.MapWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
+import com.example.dan.castdemo.widgets.UIWidget;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
@@ -27,6 +28,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+
+import static com.example.dan.castdemo.Widget.types.STOCKS;
 
 @ModelContainer
 @Table(database = WidgetDatabase.class)
@@ -107,7 +110,7 @@ public class Widget extends BaseModel {
 
         if (getWidgetType() == types.CALENDAR) {
             CalendarSettings.init(this);
-        } else if (getWidgetType() == types.STOCKS) {
+        } else if (getWidgetType() == STOCKS) {
             StocksSettings.init(this);
         } else if (getWidgetType() == types.MAP) {
             MapSettings.init(this);
@@ -167,13 +170,23 @@ public class Widget extends BaseModel {
         payload.put("options", new JSONObject());
         payload.put("position", position);
 
-        if (getWidgetType() == Widget.types.CALENDAR) {
-            CalendarWidget cw = new CalendarWidget(applicationContext, this);
-            payload.put("data", cw.getContent());
-        } else if (getWidgetType() == Widget.types.STOCKS) {
-            StocksWidget sw = new StocksWidget(applicationContext, this);
-            payload.put("data", sw.getContent());
+        UIWidget widget;
+        switch (getWidgetType()) {
+            case STOCKS:
+                widget = new StocksWidget(applicationContext, this);
+                break;
+            case CALENDAR:
+                widget = new CalendarWidget(applicationContext, this);
+                break;
+            case MAP:
+                widget = new MapWidget(applicationContext, this);
+                break;
+            default:
+                widget = new PlaceholderWidget(applicationContext, this);
+                break;
         }
+
+        payload.put("data", widget.getContent());
 
         return payload;
     }

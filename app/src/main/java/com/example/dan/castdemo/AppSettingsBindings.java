@@ -56,7 +56,6 @@ public class AppSettingsBindings extends BaseObservable {
         appSettings.mCallback.onSettingChanged(BACKGROUND_COLOR, getBackgroundColorHexStr());
     }
 
-
     public void setWidgetColor(int widgetColor) {
         this.widgetColor = widgetColor;
         notifyPropertyChanged(BR.widgetColor);

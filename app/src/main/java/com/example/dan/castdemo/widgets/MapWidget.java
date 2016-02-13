@@ -19,8 +19,8 @@ public class MapWidget extends UIWidget {
     @Override
     public JSONObject getContent() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("lat", widget.getOption(MapSettings.LOCATION_LAT));
-        json.put("lng", widget.getOption(MapSettings.LOCATION_LONG));
+        json.put("lat", widget.getOption(MapSettings.LOCATION_LAT).value);
+        json.put("lng", widget.getOption(MapSettings.LOCATION_LONG).value);
         return json;
     }
 
