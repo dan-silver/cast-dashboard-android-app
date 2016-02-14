@@ -55,10 +55,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
 
     @Bind(R.id.nvView)
     NavigationView navView;
+
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
+
     @Bind(R.id.top_toolbar)
     Toolbar top_toolbar;
+
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
     private static DataCastManager mCastManager;
     private DataCastConsumer mCastConsumer;

@@ -36,11 +36,18 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-
         Collections.swap(widgetList, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
 
         mainActivity.onItemMoved(getWidgetsOrder());
+    }
+
+    public WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener) {
+        this.widgetList = widgetList;
+        this.mainActivity = activity;
+        mDragStartListener = dragStartListener;
+
+        syncWidgetPositions();
     }
 
     @Override
@@ -62,6 +69,18 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
             e.printStackTrace();
         }
         return widgetOrder;
+    }
+
+
+    // should only be necessary on widget delete, so there's not a gap in the orders
+    // important since current widget position for new ones is the length of the list
+    public void syncWidgetPositions() {
+        int i = 0;
+        for (Widget widget : widgetList) {
+            widget.position = i;
+            widget.save();
+            i++;
+        }
     }
 
     public class WidgetViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
@@ -91,14 +110,6 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         public void onItemClear() {
             itemView.setBackgroundColor(0);
         }
-    }
-
-
-    public WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener) {
-        this.widgetList = widgetList;
-        this.mainActivity = activity;
-        mDragStartListener = dragStartListener;
-
     }
 
     @Override

@@ -154,7 +154,7 @@ public class Widget extends BaseModel {
 
     public static void fetchAll(final FetchAllWidgetsListener listener) {
         TransactionManager.getInstance().addTransaction(
-                new SelectListTransaction<>(new Select().from(Widget.class),
+                new SelectListTransaction<>(new Select().from(Widget.class).orderBy(Widget_Table.position, true),
                         new TransactionListenerAdapter<List<Widget>>() {
                             @Override
                             public void onResultReceived(List<Widget> someObjectList) {

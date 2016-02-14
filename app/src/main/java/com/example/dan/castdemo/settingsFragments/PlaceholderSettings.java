@@ -13,9 +13,7 @@ import com.raizlabs.android.dbflow.sql.language.Select;
 
 import butterknife.ButterKnife;
 
-public class PlaceholderSettings extends Fragment {
-
-    private Widget widget;
+public class PlaceholderSettings extends WidgetSettingsFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

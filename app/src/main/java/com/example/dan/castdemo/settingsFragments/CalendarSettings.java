@@ -80,13 +80,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     }
 
     public static void init(Widget widget) {
-        WidgetOption allCalendars = new WidgetOption();
-
-        allCalendars.key = ALL_CALENDARS;
-        allCalendars.value = ALL_CALENDARS_TRUE;
-        allCalendars.associateWidget(widget);
-        allCalendars.save();
-
+        widget.initOption(ALL_CALENDARS, ALL_CALENDARS_TRUE);
     }
 
     public static List<WidgetOption> getEnabledCalendars(Widget widget) {
