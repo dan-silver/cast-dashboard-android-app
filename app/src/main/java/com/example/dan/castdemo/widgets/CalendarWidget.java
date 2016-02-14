@@ -199,7 +199,7 @@ public class CalendarWidget extends UIWidget {
         List<String> calendarIds = new ArrayList<>();
 
         WidgetOption optionAllCalendars = widget.getOption(CalendarSettings.ALL_CALENDARS);
-        boolean showAllCalendars = optionAllCalendars.value.equals(CalendarSettings.ALL_CALENDARS_TRUE);
+        boolean showAllCalendars = optionAllCalendars.getBooleanValue();
 
         if (!showAllCalendars) {
             for (WidgetOption a : CalendarSettings.getEnabledCalendars(widget)) {
@@ -217,7 +217,7 @@ public class CalendarWidget extends UIWidget {
     @Override
     public String getWidgetPreviewSecondaryHeader() {
         WidgetOption optionAllCalendars = widget.getOption(CalendarSettings.ALL_CALENDARS);
-        if (optionAllCalendars.value.equals(CalendarSettings.ALL_CALENDARS_TRUE)) {
+        if (optionAllCalendars.getBooleanValue()) {
             return "Displaying all calendars";
         } else {
             //@todo optimize this section

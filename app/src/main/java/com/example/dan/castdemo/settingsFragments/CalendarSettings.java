@@ -25,8 +25,6 @@ import butterknife.ButterKnife;
 public class CalendarSettings extends WidgetSettingsFragment {
 
     public static String ALL_CALENDARS = "ALL_CALENDARS";
-    public static String ALL_CALENDARS_TRUE = "ALL_CALENDARS_TRUE";
-    public static String ALL_CALENDARS_FALSE = "ALL_CALENDARS_FALSE";
     public static String CALENDAR_ENABLED = "CALENDAR_ENABLED";
 
     WidgetOption optionAllCalendars;
@@ -45,12 +43,12 @@ public class CalendarSettings extends WidgetSettingsFragment {
         // restore saved options into GUI
 
         optionAllCalendars = widget.getOption(CalendarSettings.ALL_CALENDARS);
-        allCalendars.setChecked(optionAllCalendars.value.equals(ALL_CALENDARS_TRUE));
+        allCalendars.setChecked(optionAllCalendars.getBooleanValue());
 
         allCalendars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                                     @Override
                                                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                optionAllCalendars.value = isChecked ? ALL_CALENDARS_TRUE : ALL_CALENDARS_FALSE;
+                optionAllCalendars.setBooleanValue(isChecked);
                 displayCalendarList();
                 optionAllCalendars.save();
                 refreshWidget();
@@ -67,7 +65,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     }
 
     public void displayCalendarList() {
-        if (optionAllCalendars.value.equals(ALL_CALENDARS_TRUE)) {
+        if (optionAllCalendars.getBooleanValue()) {
             calendarList.setVisibility(View.INVISIBLE);
         } else {
             calendarList.setVisibility(View.VISIBLE);
@@ -80,7 +78,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     }
 
     public static void init(Widget widget) {
-        widget.initOption(ALL_CALENDARS, ALL_CALENDARS_TRUE);
+        widget.initOption(ALL_CALENDARS, true);
     }
 
     public static List<WidgetOption> getEnabledCalendars(Widget widget) {
