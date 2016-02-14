@@ -63,11 +63,6 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     Switch mapTraffic;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_settings, container, false);
         ButterKnife.bind(this, view);
