@@ -19,31 +19,6 @@
         android:orientation="vertical">
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:text="Number of columns: "/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/num_columns_label"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:text='@{""+(settings.numberOfColumns+1)}'/>
-
-        </LinearLayout>
-        <SeekBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/seekBar"
-            android:progress="@{settings.numberOfColumns}"
-            android:max="6"
-            android:layout_marginBottom="@dimen/app_settings_padding"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

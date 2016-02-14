@@ -1,7 +1,6 @@
 package com.example.dan.castdemo;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,8 +18,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.dan.castdemo.widgets.CalendarWidget;
-import com.example.dan.castdemo.widgets.StocksWidget;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.libraries.cast.companionlibrary.cast.BaseCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
@@ -37,7 +34,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -47,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
     public static final String TAG = MainActivity.class.getSimpleName();
     private boolean mIsHoneyCombOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
     public static final int NAV_VIEW_WIDGETS_ITEM = 0;
-    public static final int NAV_VIEW_OPTIONS_ITEM = 1;
+    public static final int NAV_VIEW_OPTIONS_LAYOUT_ITEM = 1;
+    public static final int NAV_VIEW_OPTIONS_THEME_ITEM = 2;
 
 
 
@@ -107,7 +104,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         Menu menu = navView.getMenu();
 
         menuItems.add(menu.add(0, NAV_VIEW_WIDGETS_ITEM, 0, "Widgets"));
-        menuItems.add(menu.add(0, NAV_VIEW_OPTIONS_ITEM, 1, "Settings"));
+        menuItems.add(menu.add(0, NAV_VIEW_OPTIONS_LAYOUT_ITEM, 1, "Layout"));
+        menuItems.add(menu.add(0, NAV_VIEW_OPTIONS_THEME_ITEM, 2, "Theme"));
 
 
         // Set a Toolbar to replace the ActionBar.
@@ -197,13 +195,16 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         Fragment destination = null;
         boolean backStack = false;
 
-        if (selected == NAV_VIEW_OPTIONS_ITEM) {
-            destination = new AppSettings();
+        if (selected == NAV_VIEW_OPTIONS_LAYOUT_ITEM) {
+            destination = new AppSettingsLayout();
             backStack = true;
 
         } else if (selected == NAV_VIEW_WIDGETS_ITEM) {
             destination = new WidgetList();
             backStack = false;
+        } else if (selected == NAV_VIEW_OPTIONS_THEME_ITEM) {
+            destination = new AppSettingsTheme();
+            backStack = true;
         }
 
 

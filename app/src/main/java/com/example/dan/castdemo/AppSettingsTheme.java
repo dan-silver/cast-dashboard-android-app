@@ -1,9 +1,7 @@
 package com.example.dan.castdemo;
 
 import android.content.DialogInterface;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.example.dan.castdemo.Settings.BackgroundType;
-import com.example.dan.castdemo.databinding.FragmentAppSettingsBinding;
+import com.example.dan.castdemo.databinding.FragmentAppSettingsThemeBinding;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
@@ -22,13 +20,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AppSettings extends Fragment {
-
-    OnSettingChanged mCallback;
-    FragmentAppSettingsBinding viewModel;
-
-    @Bind(R.id.seekBar)
-    SeekBar columnCount;
+public class AppSettingsTheme extends AppSettingsHelperFragment {
 
     @Bind(R.id.background_type_spinner)
     Spinner backgroundTypeSpinner;
@@ -36,55 +28,20 @@ public class AppSettings extends Fragment {
     @Bind(R.id.widget_transparency)
     SeekBar widgetTransparency;
 
-    private AppSettingsBindings bindings;
-
-    public AppSettings() {
+    public AppSettingsTheme() {
         // Required empty public constructor
     }
 
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        try {
-            mCallback = (OnSettingChanged) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException(getActivity().toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_app_settings, container, false);
+        View view = inflater.inflate(R.layout.fragment_app_settings_theme, container, false);
         ButterKnife.bind(this, view);
 
-
-
-        viewModel = FragmentAppSettingsBinding.bind(view);
+        viewModel = FragmentAppSettingsThemeBinding.bind(view);
         bindings = new AppSettingsBindings();
         bindings.init(this);
-        viewModel.setSettings(bindings);
-
-        columnCount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser)
-                    bindings.setNumberOfColumns(progress);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
+        ((FragmentAppSettingsThemeBinding) viewModel).setSettings(bindings);
 
         widgetTransparency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -173,7 +130,7 @@ public class AppSettings extends Fragment {
     public void onResume() {
         final MainActivity activity = (MainActivity) getActivity();
 
-        activity.setDrawerItemChecked(MainActivity.NAV_VIEW_OPTIONS_ITEM);
+        activity.setDrawerItemChecked(MainActivity.NAV_VIEW_OPTIONS_THEME_ITEM);
         super.onResume();
     }
 }

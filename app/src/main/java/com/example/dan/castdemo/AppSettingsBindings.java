@@ -25,7 +25,7 @@ public class AppSettingsBindings extends BaseObservable {
     @Bindable
     public int widgetColor;
 
-    private AppSettings appSettings;
+    private AppSettingsHelperFragment appSettings;
 
     static String COLUMN_COUNT = "COLUMN_COUNT";
     static String BACKGROUND_TYPE = "BACKGROUND_TYPE";
@@ -44,7 +44,7 @@ public class AppSettingsBindings extends BaseObservable {
         });
     }
 
-    public void init(AppSettings appSettings) {
+    public void init(AppSettingsHelperFragment appSettings) {
         this.appSettings = appSettings;
 
         loadAllSettings(appSettings.getContext());
