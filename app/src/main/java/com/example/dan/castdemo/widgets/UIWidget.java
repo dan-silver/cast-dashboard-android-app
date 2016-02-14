@@ -20,10 +20,4 @@ abstract public class UIWidget {
         this.widget = widget;
         this.context = context;
     }
-
-    public JSONObject getProperty(String key, String value) throws JSONException {
-        JSONObject json = new JSONObject();
-        json.put(key, value);
-        return json;
-    }
 }
