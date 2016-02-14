@@ -28,11 +28,6 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
     @Bind(R.id.widget_transparency)
     SeekBar widgetTransparency;
 
-    public AppSettingsTheme() {
-        // Required empty public constructor
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_app_settings_theme, container, false);
@@ -89,14 +84,14 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
             return view;
         }
 
-        @OnClick(R.id.widget_background_color)
+    @OnClick(R.id.widget_background_color)
     public void openWidgetBackgroundColorDialog() {
-            createColorPickerDialog(bindings.widgetBackgroundColor, new ColorPickerClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
-                    bindings.setWidgetBackgroundColor(selectedColor);
-                }
-            });
+        createColorPickerDialog(bindings.widgetBackgroundColor, new ColorPickerClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
+                bindings.setWidgetBackgroundColor(selectedColor);
+            }
+        });
     }
 
 

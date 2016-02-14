@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.dan.castdemo.settingsFragments.CalendarSettings;
+import com.example.dan.castdemo.settingsFragments.ClockSettings;
 import com.example.dan.castdemo.settingsFragments.MapSettings;
 import com.example.dan.castdemo.settingsFragments.PlaceholderSettings;
 import com.example.dan.castdemo.settingsFragments.StocksSettings;
@@ -62,6 +63,9 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                 break;
             case MAP:
                 typeSettingsFragment = new MapSettings();
+                break;
+            case CLOCK:
+                typeSettingsFragment = new ClockSettings();
                 break;
             default:
                 typeSettingsFragment = new PlaceholderSettings();

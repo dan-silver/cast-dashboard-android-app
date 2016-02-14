@@ -3,6 +3,7 @@ package com.example.dan.castdemo.widgets;
 import android.content.Context;
 
 import com.example.dan.castdemo.Widget;
+import com.example.dan.castdemo.settingsFragments.ClockSettings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +19,9 @@ public class ClockWidget extends UIWidget {
 
     @Override
     public JSONObject getContent() throws JSONException {
-        return new JSONObject();
+        JSONObject options = new JSONObject();
+        options.put("show_seconds", widget.getOption(ClockSettings.SHOW_SECONDS).getBooleanValue());
+        return options;
     }
 
     @Override

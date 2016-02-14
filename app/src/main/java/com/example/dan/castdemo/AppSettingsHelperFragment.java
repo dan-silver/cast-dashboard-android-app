@@ -1,6 +1,5 @@
 package com.example.dan.castdemo;
 
-import android.databinding.tool.Binding;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 

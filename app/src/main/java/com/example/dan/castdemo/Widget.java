@@ -198,6 +198,9 @@ public class Widget extends BaseModel {
             case MAP:
                 widget = new MapWidget(applicationContext, this);
                 break;
+            case CLOCK:
+                widget = new ClockWidget(applicationContext, this);
+                break;
             default:
                 widget = new PlaceholderWidget(applicationContext, this);
                 break;
