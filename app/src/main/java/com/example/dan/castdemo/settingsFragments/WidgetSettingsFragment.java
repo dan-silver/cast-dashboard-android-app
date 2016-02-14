@@ -16,6 +16,10 @@ public class WidgetSettingsFragment extends Fragment {
         CastCommunicator.sendWidget(widget);
     }
 
+    protected void updateWidgetProperty(String property, Object value) {
+        CastCommunicator.sendWidgetProperty(widget, property, value);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();

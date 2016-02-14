@@ -13,7 +13,6 @@ import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.example.dan.castdemo.CastCommunicator;
 import com.example.dan.castdemo.MainActivity;
 import com.example.dan.castdemo.R;
 import com.example.dan.castdemo.Widget;
@@ -84,7 +83,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                 if (!fromUser) return;
                 mapZoomOption.value = String.valueOf(progress + 1);
                 mapZoomOption.save();
-                CastCommunicator.sendWidgetProperty(widget, "zoom", mapZoomOption.value);
+                updateWidgetProperty("zoom", mapZoomOption.value);
             }
 
             @Override
@@ -104,7 +103,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mapShowTraffic.setBooleanValue(isChecked);
                 mapShowTraffic.save();
-                CastCommunicator.sendWidgetProperty(widget, "traffic", mapShowTraffic.getBooleanValue());
+                updateWidgetProperty("traffic", mapShowTraffic.getBooleanValue());
             }
         });
 

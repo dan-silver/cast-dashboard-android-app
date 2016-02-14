@@ -54,7 +54,7 @@ public class StocksWidget extends UIWidget {
     public String getWidgetPreviewSecondaryHeader() {
         List<WidgetOption> savedStocks = widget.getOptions(StocksSettings.STOCK_IN_LIST);
         if (savedStocks.size() == 0) {
-            return "Click to add stocks!";
+            return "No stocks selected";
         }
 
 
