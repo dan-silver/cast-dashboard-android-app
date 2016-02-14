@@ -16,6 +16,7 @@ import com.example.dan.castdemo.settingsFragments.ClockSettings;
 import com.example.dan.castdemo.settingsFragments.MapSettings;
 import com.example.dan.castdemo.settingsFragments.PlaceholderSettings;
 import com.example.dan.castdemo.settingsFragments.StocksSettings;
+import com.example.dan.castdemo.settingsFragments.WeatherSettings;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
 import butterknife.Bind;
@@ -66,6 +67,9 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                 break;
             case CLOCK:
                 typeSettingsFragment = new ClockSettings();
+                break;
+            case WEATHER:
+                typeSettingsFragment = new WeatherSettings();
                 break;
             default:
                 typeSettingsFragment = new PlaceholderSettings();

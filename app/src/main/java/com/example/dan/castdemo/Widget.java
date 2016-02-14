@@ -6,12 +6,14 @@ import com.example.dan.castdemo.settingsFragments.CalendarSettings;
 import com.example.dan.castdemo.settingsFragments.ClockSettings;
 import com.example.dan.castdemo.settingsFragments.MapSettings;
 import com.example.dan.castdemo.settingsFragments.StocksSettings;
+import com.example.dan.castdemo.settingsFragments.WeatherSettings;
 import com.example.dan.castdemo.widgets.CalendarWidget;
 import com.example.dan.castdemo.widgets.ClockWidget;
 import com.example.dan.castdemo.widgets.MapWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
 import com.example.dan.castdemo.widgets.UIWidget;
+import com.example.dan.castdemo.widgets.WeatherWidget;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
@@ -45,7 +47,8 @@ public class Widget extends BaseModel {
         PLACEHOLDER(1, PlaceholderWidget.HUMAN_NAME, R.drawable.ic_hourglass_empty_black_24px),
         STOCKS(2, StocksWidget.HUMAN_NAME, R.drawable.ic_attach_money_24dp),
         MAP(3, MapWidget.HUMAN_NAME, R.drawable.ic_map_24dp),
-        CLOCK(4, ClockWidget.HUMAN_NAME, R.drawable.ic_access_time_24dp);
+        CLOCK(4, ClockWidget.HUMAN_NAME, R.drawable.ic_access_time_24dp),
+        WEATHER(5, WeatherWidget.HUMAN_NAME, R.drawable.ic_wb_sunny_24dp);
 
         private int value;
         private int icon;
@@ -118,6 +121,8 @@ public class Widget extends BaseModel {
             MapSettings.init(this);
         } else if (getWidgetType() == types.CLOCK) {
             ClockSettings.init(this);
+        } else if (getWidgetType() == types.WEATHER) {
+            WeatherSettings.init(this);
         }
     }
 
@@ -200,6 +205,9 @@ public class Widget extends BaseModel {
                 break;
             case CLOCK:
                 widget = new ClockWidget(applicationContext, this);
+                break;
+            case WEATHER:
+                widget = new WeatherWidget(applicationContext, this);
                 break;
             default:
                 widget = new PlaceholderWidget(applicationContext, this);

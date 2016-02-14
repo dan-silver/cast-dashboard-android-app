@@ -18,6 +18,7 @@ import com.example.dan.castdemo.widgets.ClockWidget;
 import com.example.dan.castdemo.widgets.MapWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
+import com.example.dan.castdemo.widgets.WeatherWidget;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
 import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
@@ -65,7 +66,7 @@ public class WidgetList extends Fragment implements OnDragListener {
     public void addWidget() {
         new MaterialDialog.Builder(getContext())
                 .title("New Widget")
-                .items(new String[]{CalendarWidget.HUMAN_NAME, StocksWidget.HUMAN_NAME, MapWidget.HUMAN_NAME, ClockWidget.HUMAN_NAME})
+                .items(new String[]{CalendarWidget.HUMAN_NAME, StocksWidget.HUMAN_NAME, MapWidget.HUMAN_NAME, ClockWidget.HUMAN_NAME, WeatherWidget.HUMAN_NAME})
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {

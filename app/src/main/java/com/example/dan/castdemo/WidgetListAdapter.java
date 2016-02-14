@@ -20,6 +20,7 @@ import com.example.dan.castdemo.widgets.MapWidget;
 import com.example.dan.castdemo.widgets.PlaceholderWidget;
 import com.example.dan.castdemo.widgets.StocksWidget;
 import com.example.dan.castdemo.widgets.UIWidget;
+import com.example.dan.castdemo.widgets.WeatherWidget;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -133,6 +134,8 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
             uiWidget = new MapWidget(mainActivity, widget);
         } else if (widgetType == Widget.types.CLOCK) {
             uiWidget = new ClockWidget(mainActivity, widget);
+        } else if (widgetType == Widget.types.WEATHER) {
+            uiWidget = new WeatherWidget(mainActivity, widget);
         } else {
             uiWidget = new PlaceholderWidget(mainActivity, widget);
         }
