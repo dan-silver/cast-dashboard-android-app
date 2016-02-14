@@ -217,4 +217,9 @@ public class Widget extends BaseModel {
         option.save();
     }
 
+    public void initOption(String key, boolean defaultValue) {
+        initOption(key, defaultValue ? "1" : "0");
+    }
+
+
 }

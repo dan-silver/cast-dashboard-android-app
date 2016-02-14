@@ -8,7 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.dan.castdemo.CastCommunicator;
@@ -30,11 +32,14 @@ import butterknife.OnClick;
 
 public class MapSettings extends WidgetSettingsFragment implements GoogleApiClient.OnConnectionFailedListener {
 
+
     public static String LOCATION_LAT = "LOCATION_LAT";
     public static String LOCATION_LONG = "LOCATION_LONG";
     public static String LOCATION_NAME = "LOCATION_NAME";
     public static String LOCATION_ADDRESS = "LOCATION_ADDRESS";
     public static String MAP_ZOOM = "MAP_ZOOM";
+    public static String SHOW_TRAFFIC = "SHOW_TRAFFIC";
+
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -43,6 +48,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     WidgetOption locationNameOption;
     WidgetOption locationAddrOption;
     WidgetOption mapZoomOption;
+    WidgetOption mapShowTraffic;
 
     @Bind(R.id.location_name)
     TextView locationName;
@@ -52,6 +58,9 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
     @Bind(R.id.map_zoom)
     SeekBar mapZoom;
+
+    @Bind(R.id.map_traffic)
+    Switch mapTraffic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,16 +77,17 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         locationNameOption = widget.getOption(MapSettings.LOCATION_NAME);
         locationAddrOption = widget.getOption(MapSettings.LOCATION_ADDRESS);
         mapZoomOption = widget.getOption(MapSettings.MAP_ZOOM);
+        mapShowTraffic = widget.getOption(MapSettings.SHOW_TRAFFIC);
 
         updateLocationText();
 
 
-        mapZoom.setProgress(Integer.parseInt(mapZoomOption.value)-1);
+        mapZoom.setProgress(Integer.parseInt(mapZoomOption.value) - 1);
         mapZoom.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (!fromUser) return;
-                mapZoomOption.value = String.valueOf(progress+1);
+                mapZoomOption.value = String.valueOf(progress + 1);
                 mapZoomOption.save();
                 CastCommunicator.sendWidgetProperty(widget, "zoom", mapZoomOption.value);
             }
@@ -90,6 +100,16 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+
+        mapTraffic.setChecked(mapShowTraffic.getBooleanValue());
+        mapTraffic.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mapShowTraffic.setBooleanValue(isChecked);
+                mapShowTraffic.save();
+                CastCommunicator.sendWidgetProperty(widget, "traffic", mapShowTraffic.getBooleanValue());
             }
         });
 
@@ -108,6 +128,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         widget.initOption(LOCATION_NAME, "Seattle, Washington");
         widget.initOption(LOCATION_ADDRESS, "Seattle, Washington");
         widget.initOption(MAP_ZOOM, "10");
+        widget.initOption(SHOW_TRAFFIC, false);
     }
 
     @OnClick(R.id.get_map_location)

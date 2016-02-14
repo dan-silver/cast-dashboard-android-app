@@ -34,4 +34,11 @@ public class WidgetOption extends BaseModel {
         widgetForeignKeyContainer = FlowManager.getContainerAdapter(Widget.class).toForeignKeyContainer(widget);
     }
 
+    public boolean getBooleanValue() {
+        return value.equals("1");
+    }
+
+    public void setBooleanValue(boolean booleanValue) {
+        this.value = booleanValue ? "1" : "0";
+    }
 }
