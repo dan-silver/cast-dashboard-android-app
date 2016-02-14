@@ -91,39 +91,37 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
 
         @OnClick(R.id.widget_background_color)
     public void openWidgetBackgroundColorDialog() {
-        ColorPickerDialogBuilder
-                .with(getContext())
-                .setTitle("Choose color")
-                .initialColor(bindings.widgetBackgroundColor)
-                .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
-                .density(5)
-                .setPositiveButton("Done", new ColorPickerClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
-                        bindings.setWidgetBackgroundColor(selectedColor);
-                    }
-                })
-                .build()
-                .show();
+            createColorPickerDialog(bindings.widgetBackgroundColor, new ColorPickerClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
+                    bindings.setWidgetBackgroundColor(selectedColor);
+                }
+            });
     }
 
 
     @OnClick(R.id.widget_color)
     public void openWidgetColorDialog() {
+        createColorPickerDialog(bindings.widgetColor, new ColorPickerClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
+                bindings.setWidgetColor(selectedColor);
+            }
+        });
+    }
+
+    public void createColorPickerDialog(int initialColor, ColorPickerClickListener onResult) {
         ColorPickerDialogBuilder
                 .with(getContext())
                 .setTitle("Choose color")
-                .initialColor(bindings.widgetColor)
+                .initialColor(initialColor)
+                .showAlphaSlider(false)
                 .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
                 .density(5)
-                .setPositiveButton("Done", new ColorPickerClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
-                        bindings.setWidgetColor(selectedColor);
-                    }
-                })
+                .setPositiveButton("Done", onResult)
                 .build()
                 .show();
+
     }
 
     @Override
