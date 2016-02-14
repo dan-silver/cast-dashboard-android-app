@@ -3,6 +3,7 @@ package com.example.dan.castdemo.widgets;
 import android.content.Context;
 
 import com.example.dan.castdemo.Widget;
+import com.example.dan.castdemo.settingsFragments.WeatherSettings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +27,6 @@ public class WeatherWidget extends UIWidget {
 
     @Override
     public String getWidgetPreviewSecondaryHeader() {
-        return "Just a placeholder";
+        return widget.getOption(WeatherSettings.WEATHER_CITY).value;
     }
 }
