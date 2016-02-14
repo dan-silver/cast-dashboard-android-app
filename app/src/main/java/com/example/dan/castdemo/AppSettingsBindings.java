@@ -107,12 +107,12 @@ public class AppSettingsBindings extends BaseObservable {
         SharedPreferences settings = context.getSharedPreferences(SHARED_PREFS_OPTIONS, 0);
 
         // Don't use setters here because we don't want to trigger a sendMessage() to TV
-        numberOfColumns = settings.getInt(COLUMN_COUNT, 3);
+        numberOfColumns = settings.getInt(COLUMN_COUNT, 2);
         widgetBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.accent));
         widgetColor = settings.getInt(WIDGET_COLOR, ContextCompat.getColor(context, R.color.md_material_blue_800));
 
         backgroundType = BackgroundType.values()[settings.getInt(BACKGROUND_TYPE, 0)];
-        widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 80);
+        widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 15); //15% x 2 + 50 = 80/100
 
     }
 
