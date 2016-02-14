@@ -1,6 +1,7 @@
 package com.example.dan.castdemo;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.dan.castdemo.util.StockUtils;
 import com.raizlabs.android.dbflow.annotation.Column;
@@ -39,7 +40,11 @@ public class Stock extends BaseModel {
 
         // stocks table already populated
         if (stock == null) {
+            long startTime = System.currentTimeMillis();
             StockUtils.insertFromCSV(context);
+            long endTime = System.currentTimeMillis();
+            Log.v(MainActivity.TAG, "time to insert stocks: " + (endTime - startTime) + " ms");
+
         }
     }
 
