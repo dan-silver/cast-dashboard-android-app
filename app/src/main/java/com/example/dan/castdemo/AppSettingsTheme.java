@@ -95,6 +95,17 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
     }
 
 
+
+    @OnClick(R.id.text_color)
+    public void openTextColorDialog() {
+        createColorPickerDialog(bindings.textColor, new ColorPickerClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
+                bindings.setTextColor(selectedColor);
+            }
+        });
+    }
+
     @OnClick(R.id.widget_color)
     public void openWidgetColorDialog() {
         createColorPickerDialog(bindings.widgetColor, new ColorPickerClickListener() {

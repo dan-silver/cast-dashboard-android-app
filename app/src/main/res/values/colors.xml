@@ -11,4 +11,7 @@
     <color name="divider">#B6B6B6</color>
     <color name="list_item_drag_highlight">#EAEAEA</color>
 
+
+    <!-- TV defaults -->
+    <color name="tv_text_light">#fff</color>
 </resources>

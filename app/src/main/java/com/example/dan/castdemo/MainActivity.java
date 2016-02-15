@@ -271,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
             options.put(AppSettingsBindings.WIDGET_COLOR, settings.getWidgetColorHexStr());
             options.put(AppSettingsBindings.BACKGROUND_TYPE, settings.getBackgroundTypeUI());
             options.put(AppSettingsBindings.WIDGET_TRANSPARENCY, settings.getWidgetTransparencyUI());
+            options.put(AppSettingsBindings.TEXT_COLOR, settings.getTextColorHextStr());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -335,5 +336,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         mDrawer.closeDrawer(GravityCompat.START);
         uncheckAllMenuItems();
         super.onBackPressed();
+    }
+
+    @Override
+    public void onPause() {
+        mCastManager.decrementUiCounter();
+        super.onPause();
     }
 }

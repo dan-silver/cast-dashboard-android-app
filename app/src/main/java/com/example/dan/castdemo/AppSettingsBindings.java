@@ -25,6 +25,9 @@ public class AppSettingsBindings extends BaseObservable {
     @Bindable
     public int widgetColor;
 
+    @Bindable
+    public int textColor;
+
     private AppSettingsHelperFragment appSettings;
 
     static String COLUMN_COUNT = "COLUMN_COUNT";
@@ -32,6 +35,7 @@ public class AppSettingsBindings extends BaseObservable {
     static String BACKGROUND_COLOR = "BACKGROUND_COLOR";
     static String WIDGET_TRANSPARENCY = "WIDGET_TRANSPARENCY";
     static String WIDGET_COLOR = "WIDGET_COLOR";
+    static String TEXT_COLOR = "TEXT_COLOR";
 
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
@@ -60,6 +64,17 @@ public class AppSettingsBindings extends BaseObservable {
         this.widgetColor = widgetColor;
         notifyPropertyChanged(BR.widgetColor);
         appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
+    }
+
+
+    public void setTextColor(int textColor) {
+        this.textColor = textColor;
+        notifyPropertyChanged(BR.textColor);
+        appSettings.mCallback.onSettingChanged(TEXT_COLOR, getTextColorHextStr());
+    }
+
+    public String getTextColorHextStr() {
+        return Integer.toHexString(textColor).substring(2);
     }
 
     public String getBackgroundColorHexStr() {
@@ -100,6 +115,7 @@ public class AppSettingsBindings extends BaseObservable {
         edit.putInt(BACKGROUND_TYPE, backgroundType.getValue());
         edit.putInt(WIDGET_TRANSPARENCY, widgetTransparency);
         edit.putInt(WIDGET_COLOR, widgetColor);
+        edit.putInt(TEXT_COLOR, textColor);
         edit.apply();
     }
 
@@ -110,9 +126,11 @@ public class AppSettingsBindings extends BaseObservable {
         numberOfColumns = settings.getInt(COLUMN_COUNT, 2);
         widgetBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.accent));
         widgetColor = settings.getInt(WIDGET_COLOR, ContextCompat.getColor(context, R.color.md_material_blue_800));
+        textColor = settings.getInt(TEXT_COLOR, ContextCompat.getColor(context, R.color.tv_text_light));
 
         backgroundType = BackgroundType.values()[settings.getInt(BACKGROUND_TYPE, 0)];
         widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 15); //15% x 2 + 50 = 80/100
+
 
     }
 
