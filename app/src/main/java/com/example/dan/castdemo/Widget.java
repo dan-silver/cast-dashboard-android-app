@@ -48,7 +48,7 @@ public class Widget extends BaseModel {
         STOCKS(2, StocksWidget.HUMAN_NAME, R.drawable.ic_attach_money_24dp),
         MAP(3, MapWidget.HUMAN_NAME, R.drawable.ic_map_24dp),
         CLOCK(4, ClockWidget.HUMAN_NAME, R.drawable.ic_access_time_24dp),
-        WEATHER(5, WeatherWidget.HUMAN_NAME, R.drawable.ic_wb_sunny_24dp);
+        WEATHER(5, WeatherWidget.HUMAN_NAME, R.drawable.ic_cloud_queue_24dp);
 
         private int value;
         private int icon;

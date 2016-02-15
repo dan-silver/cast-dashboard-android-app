@@ -1,7 +1,10 @@
 package com.example.dan.castdemo.settingsFragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +28,10 @@ import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,6 +41,8 @@ public class WeatherSettings extends WidgetSettingsFragment {
     public static String WEATHER_LAT = "WEATHER_LAT";
     public static String WEATHER_LNG = "WEATHER_LNG";
     public static String WEATHER_CITY = "WEATHER_CITY";
+
+    // @todo shouldn't need to store WEATHER_CITY anymore
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
@@ -55,7 +64,7 @@ public class WeatherSettings extends WidgetSettingsFragment {
         weatherCity = widget.getOption(WEATHER_CITY);
 
 
-        tvWeatherCity.setText(weatherCity.value);
+        tvWeatherCity.setText(getNameFromCoordinates(getContext(), widget));
 
         return view;
     }
@@ -96,13 +105,11 @@ public class WeatherSettings extends WidgetSettingsFragment {
                 weatherLng.value = String.valueOf(place.getLatLng().longitude);
                 weatherCity.value = place.getName().toString();
 
-
                 weatherLat.save();
                 weatherLng.save();
                 weatherCity.save();
 
-
-                tvWeatherCity.setText(weatherCity.value);
+                tvWeatherCity.setText(getNameFromCoordinates(getContext(), widget));
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(getContext(), data);
@@ -111,5 +118,26 @@ public class WeatherSettings extends WidgetSettingsFragment {
 
             }
         }
+    }
+
+    public static String getNameFromCoordinates(Context context, Widget widget) {
+//        double lat = Double.parseDouble(widget.getOption(WEATHER_LAT).value);
+//        double lng = Double.parseDouble(widget.getOption(WEATHER_LNG).value);
+//
+//        Geocoder gcd = new Geocoder(context, Locale.getDefault());
+//        List<Address> addresses = null;
+//        try {
+//            addresses = gcd.getFromLocation(lat, lng, 1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if (addresses != null && addresses.size() > 0) {
+//            Address addr = addresses.get(0);
+//            return addr.getAddressLine(addr.getMaxAddressLineIndex()-1);
+//        }
+
+        //fall back to the city name from the Places API
+        return widget.getOption(WeatherSettings.WEATHER_CITY).value;
     }
 }
