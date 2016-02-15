@@ -9,7 +9,8 @@
         android:id="@+id/select_stock"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Add a stock by company or symbol"/>
+        android:hint="Add a stock by company or symbol"
+        android:singleLine="true"/>
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
