@@ -31,7 +31,6 @@ import butterknife.OnClick;
 
 public class MapSettings extends WidgetSettingsFragment implements GoogleApiClient.OnConnectionFailedListener {
 
-
     public static String LOCATION_LAT = "LOCATION_LAT";
     public static String LOCATION_LONG = "LOCATION_LONG";
     public static String LOCATION_NAME = "LOCATION_NAME";
@@ -125,10 +124,10 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         widget.initOption(SHOW_TRAFFIC, false);
     }
 
-    @OnClick(R.id.get_map_location)
+    @OnClick({R.id.get_map_location, R.id.map_location_info})
     public void getLocation() {
         try {
-            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(getActivity());
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).build(getActivity());
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             // TODO: Handle the error.
