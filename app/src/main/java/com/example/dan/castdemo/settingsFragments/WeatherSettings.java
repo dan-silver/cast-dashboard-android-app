@@ -110,6 +110,7 @@ public class WeatherSettings extends WidgetSettingsFragment {
                 weatherCity.save();
 
                 tvWeatherCity.setText(getNameFromCoordinates(getContext(), widget));
+                refreshWidget();
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(getContext(), data);
