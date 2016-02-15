@@ -16,6 +16,9 @@ public class AppSettingsLayout extends AppSettingsHelperFragment {
     @Bind(R.id.seekBar)
     SeekBar columnCount;
 
+    @Bind(R.id.screen_padding)
+    SeekBar screenPadding;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_app_settings_layout, container, false);
@@ -31,6 +34,23 @@ public class AppSettingsLayout extends AppSettingsHelperFragment {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser)
                     bindings.setNumberOfColumns(progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+        screenPadding.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser)
+                    bindings.setScreenPadding(progress);
             }
 
             @Override

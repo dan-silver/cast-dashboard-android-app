@@ -272,6 +272,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
             options.put(AppSettingsBindings.BACKGROUND_TYPE, settings.getBackgroundTypeUI());
             options.put(AppSettingsBindings.WIDGET_TRANSPARENCY, settings.getWidgetTransparencyUI());
             options.put(AppSettingsBindings.TEXT_COLOR, settings.getTextColorHextStr());
+            options.put(AppSettingsBindings.SCREEN_PADDING, settings.getScreenPaddingUI());
         } catch (JSONException e) {
             e.printStackTrace();
         }

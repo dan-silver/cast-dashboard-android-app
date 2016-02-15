@@ -28,6 +28,10 @@ public class AppSettingsBindings extends BaseObservable {
     @Bindable
     public int textColor;
 
+    @Bindable
+    public int screenPadding;
+
+
     private AppSettingsHelperFragment appSettings;
 
     static String COLUMN_COUNT = "COLUMN_COUNT";
@@ -36,6 +40,7 @@ public class AppSettingsBindings extends BaseObservable {
     static String WIDGET_TRANSPARENCY = "WIDGET_TRANSPARENCY";
     static String WIDGET_COLOR = "WIDGET_COLOR";
     static String TEXT_COLOR = "TEXT_COLOR";
+    static String SCREEN_PADDING = "SCREEN_PADDING";
 
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
@@ -100,6 +105,13 @@ public class AppSettingsBindings extends BaseObservable {
         appSettings.mCallback.onSettingChanged(COLUMN_COUNT, getNumberOfColumnsUI());
     }
 
+
+    public void setScreenPadding(int screenPadding) {
+        this.screenPadding = screenPadding;
+        notifyPropertyChanged(BR.screenPadding);
+        appSettings.mCallback.onSettingChanged(SCREEN_PADDING, getScreenPaddingUI());
+    }
+
     public void setBackgroundType(BackgroundType type) {
         this.backgroundType = type;
         notifyPropertyChanged(BR.backgroundType);
@@ -116,6 +128,7 @@ public class AppSettingsBindings extends BaseObservable {
         edit.putInt(WIDGET_TRANSPARENCY, widgetTransparency);
         edit.putInt(WIDGET_COLOR, widgetColor);
         edit.putInt(TEXT_COLOR, textColor);
+        edit.putInt(SCREEN_PADDING, screenPadding);
         edit.apply();
     }
 
@@ -130,7 +143,7 @@ public class AppSettingsBindings extends BaseObservable {
 
         backgroundType = BackgroundType.values()[settings.getInt(BACKGROUND_TYPE, 0)];
         widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 15); //15% x 2 + 50 = 80/100
-
+        screenPadding = settings.getInt(SCREEN_PADDING, 15);
 
     }
 
@@ -142,5 +155,9 @@ public class AppSettingsBindings extends BaseObservable {
         this.widgetTransparency = widgetTransparency;
         notifyPropertyChanged(BR.widgetTransparency);
         appSettings.mCallback.onSettingChanged(WIDGET_TRANSPARENCY, getWidgetTransparencyUI());
+    }
+
+    public int getScreenPaddingUI() {
+        return screenPadding;
     }
 }

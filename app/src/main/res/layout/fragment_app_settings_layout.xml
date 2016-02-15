@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:text="Number of columns: "/>
+                android:text="Number of Columns: "/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -43,6 +43,18 @@
             android:max="6"
             android:layout_marginBottom="@dimen/app_settings_padding"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:text="Screen Padding"/>
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/screen_padding"
+            android:progress="@{settings.screenPadding}"
+            android:max="30"
+            android:layout_marginBottom="@dimen/app_settings_padding"/>
 
     </LinearLayout>
 </layout>
