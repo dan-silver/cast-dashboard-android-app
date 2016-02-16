@@ -1,4 +1,4 @@
-package com.silver.dan.castdemo;
+package com.silvr.dan.castdemo;
 
 import org.junit.Test;
 
