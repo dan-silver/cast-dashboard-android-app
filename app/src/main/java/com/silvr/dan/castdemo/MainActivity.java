@@ -142,15 +142,16 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged 
         switchToFragment(new WidgetList(), false);
 
         BaseCastManager.checkGooglePlayServices(this);
-        CastConfiguration options = new CastConfiguration.Builder(getResources().getString(R.string.app_id))
+        CastConfiguration.Builder options = new CastConfiguration.Builder(getResources().getString(R.string.app_id))
                 .enableAutoReconnect()
                 .enableWifiReconnection()
-//                .enableDebug()
                 .addNamespace(getResources().getString(R.string.namespace))
-                .setLaunchOptions(false, Locale.getDefault())
-                .build();
+                .setLaunchOptions(false, Locale.getDefault());
 
-        DataCastManager.initialize(this, options);
+        if (BuildConfig.DEBUG)
+            options.enableDebug();
+
+        DataCastManager.initialize(this, options.build());
 
         mCastManager = DataCastManager.getInstance();
         mCastManager.setStopOnDisconnect(false);

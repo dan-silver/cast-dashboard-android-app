@@ -19,7 +19,6 @@ public class ClockSettings extends WidgetSettingsFragment {
     @Bind(R.id.clock_show_seconds)
     Switch showSeconds;
 
-
     WidgetOption showSecondsOption;
 
     public static String SHOW_SECONDS = "SHOW_SECONDS";
