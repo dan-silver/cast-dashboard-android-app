@@ -9,23 +9,29 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <Switch
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Display events from all calendars"
-            android:id="@+id/display_all_calendars"
-            android:checked="true"
-            android:textColor="@color/primary_text"
-            android:textSize="@dimen/setting_text_size"/>
+            android:layout_marginBottom="@dimen/app_settings_padding"
+            android:orientation="vertical">
+            <Switch
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Display events from all calendars"
+                android:id="@+id/display_all_calendars"
+                android:checked="true"
+                android:textColor="@color/primary_text"
+                android:textSize="@dimen/setting_text_size"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/calendar_list"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            xmlns:tools="http://schemas.android.com/tools"
-            tools:listitem="@layout/calendar_select"
-            android:layout_marginBottom="@dimen/app_settings_padding"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/calendar_list"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                xmlns:tools="http://schemas.android.com/tools"
+                tools:listitem="@layout/calendar_select"
+                android:layout_marginBottom="@dimen/app_settings_padding"/>
+
+        </LinearLayout>
         <Switch
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
