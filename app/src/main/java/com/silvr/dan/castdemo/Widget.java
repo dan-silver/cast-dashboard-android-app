@@ -228,7 +228,8 @@ public class Widget extends BaseModel {
     }
 
     public void initOption(String key, boolean defaultValue) {
-        initOption(key, defaultValue ? "1" : "0");
+        if (this.getOption(key) == null)
+            initOption(key, defaultValue ? "1" : "0");
     }
 
 

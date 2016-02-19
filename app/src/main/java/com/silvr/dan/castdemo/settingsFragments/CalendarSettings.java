@@ -3,12 +3,14 @@ package com.silvr.dan.castdemo.settingsFragments;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
 import com.silvr.dan.castdemo.CalendarInfo;
+import com.silvr.dan.castdemo.MainActivity;
 import com.silvr.dan.castdemo.R;
 import com.silvr.dan.castdemo.Widget;
 import com.silvr.dan.castdemo.WidgetOption;
@@ -39,7 +41,8 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
         // restore saved options into GUI
 
-        optionAllCalendars = widget.getOption(CalendarSettings.ALL_CALENDARS);
+        optionAllCalendars = loadOption(CalendarSettings.ALL_CALENDARS);
+
         allCalendars.setChecked(optionAllCalendars.getBooleanValue());
 
         allCalendars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -74,6 +77,8 @@ public class CalendarSettings extends WidgetSettingsFragment {
         }
     }
 
+    //NOT destructive - doesn't override existing saved options
+    //useful for upgrade scenario - adding options in new versions
     public static void init(Widget widget) {
         widget.initOption(ALL_CALENDARS, true);
     }
