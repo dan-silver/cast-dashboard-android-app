@@ -162,4 +162,6 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
 }

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.silvr.dan.castdemo.R;
+import com.silvr.dan.castdemo.Widget;
 
 import butterknife.ButterKnife;
 
@@ -18,4 +19,5 @@ public class PlaceholderSettings extends WidgetSettingsFragment {
 
         return view;
     }
-}
+
+    }

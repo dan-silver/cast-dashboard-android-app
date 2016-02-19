@@ -11,7 +11,7 @@ import com.silvr.dan.castdemo.WidgetOption;
 import com.silvr.dan.castdemo.Widget_Table;
 import com.raizlabs.android.dbflow.sql.language.Select;
 
-public class WidgetSettingsFragment extends Fragment {
+public abstract class WidgetSettingsFragment extends Fragment {
     protected Widget widget;
 
     protected void refreshWidget() {
@@ -33,28 +33,6 @@ public class WidgetSettingsFragment extends Fragment {
 
 
         super.onCreate(savedInstanceState);
-    }
-
-
-    protected WidgetOption loadOption(String optionKey) {
-        WidgetOption option = widget.getOption(optionKey);
-
-        if (option != null) {
-            return option;
-        }
-
-        // this might be a new version of the app that doesn't have this option yet
-        // that's fine, pretend like we're creating this widget for the first time (non-destructive for existing saved options)
-
-        init(this.widget);
-
-        option = widget.getOption(optionKey);
-        if (option == null) {
-            Log.e(MainActivity.TAG, "Trying to access option that doesn't exist!" + optionKey);
-        }
-
-        return option;
-
     }
 
 }

@@ -130,4 +130,6 @@ public class WeatherSettings extends WidgetSettingsFragment {
         //fall back to the city name from the Places API
         return widget.getOption(WeatherSettings.WEATHER_CITY).value;
     }
+
+
 }

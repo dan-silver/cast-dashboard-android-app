@@ -1,24 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-
-    <android.support.v7.widget.SwitchCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Display events from all calendars"
-        android:id="@+id/display_all_calendars"
-        android:checked="true"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/setting_text_size"/>
+        android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/calendar_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:listitem="@layout/calendar_select"/>
 
-</LinearLayout>
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Display events from all calendars"
+            android:id="@+id/display_all_calendars"
+            android:checked="true"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/setting_text_size"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/calendar_list"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            xmlns:tools="http://schemas.android.com/tools"
+            tools:listitem="@layout/calendar_select"/>
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Display event locations"
+            android:textSize="@dimen/setting_text_size"
+            android:id="@+id/display_event_locations"/>
+    </LinearLayout>
+</ScrollView>

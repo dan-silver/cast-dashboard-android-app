@@ -1,6 +1,7 @@
 package com.silvr.dan.castdemo;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.silvr.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silvr.dan.castdemo.settingsFragments.ClockSettings;
@@ -232,5 +233,42 @@ public class Widget extends BaseModel {
             initOption(key, defaultValue ? "1" : "0");
     }
 
+    public WidgetOption loadOrInitOption(String optionKey) {
+        WidgetOption option = getOption(optionKey);
+
+        if (option != null) {
+            return option;
+        }
+
+        // this might be a new version of the app that doesn't have this option yet
+        // that's fine, pretend like we're creating this widget for the first time (non-destructive for existing saved options)
+
+        switch (getWidgetType()) {
+            case CALENDAR:
+                CalendarSettings.init(this);
+                break;
+            case STOCKS:
+                StocksSettings.init(this);
+                break;
+            case WEATHER:
+                WeatherSettings.init(this);
+                break;
+            case MAP:
+                MapSettings.init(this);
+                break;
+            case CLOCK:
+                ClockSettings.init(this);
+                break;
+        }
+
+
+        option = getOption(optionKey);
+        if (option == null) {
+            Log.e(MainActivity.TAG, "Trying to access option that doesn't exist!" + optionKey);
+        }
+
+        return option;
+
+    }
 
 }

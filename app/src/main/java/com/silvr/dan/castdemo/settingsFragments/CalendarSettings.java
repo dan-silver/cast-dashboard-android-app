@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.silvr.dan.castdemo.CalendarInfo;
 import com.silvr.dan.castdemo.MainActivity;
@@ -25,14 +26,20 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
     public static String ALL_CALENDARS = "ALL_CALENDARS";
     public static String CALENDAR_ENABLED = "CALENDAR_ENABLED";
+    public static String SHOW_EVENT_LOCATIONS = "SHOW_EVENT_LOCATIONS";
 
     WidgetOption optionAllCalendars;
+    WidgetOption optionShowEventLocations;
 
     @Bind(R.id.display_all_calendars)
-    android.support.v7.widget.SwitchCompat allCalendars;
+    Switch allCalendars;
 
     @Bind(R.id.calendar_list)
     RecyclerView calendarList;
+
+
+    @Bind(R.id.display_event_locations)
+    Switch eventLocations;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,21 +48,31 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
         // restore saved options into GUI
 
-        optionAllCalendars = loadOption(CalendarSettings.ALL_CALENDARS);
+        optionAllCalendars = widget.loadOrInitOption(CalendarSettings.ALL_CALENDARS);
+        optionShowEventLocations = widget.loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
 
         allCalendars.setChecked(optionAllCalendars.getBooleanValue());
 
         allCalendars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                                    @Override
-                                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 optionAllCalendars.setBooleanValue(isChecked);
                 displayCalendarList();
                 optionAllCalendars.save();
                 refreshWidget();
 
             }
-        }
-        );
+        });
+
+        eventLocations.setChecked(optionShowEventLocations.getBooleanValue());
+        eventLocations.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                optionShowEventLocations.setBooleanValue(isChecked);
+                optionShowEventLocations.save();
+                refreshWidget();
+            }
+        });
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         calendarList.setLayoutManager(mLayoutManager);
@@ -66,7 +83,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
     public void displayCalendarList() {
         if (optionAllCalendars.getBooleanValue()) {
-            calendarList.setVisibility(View.INVISIBLE);
+            calendarList.setVisibility(View.GONE);
         } else {
             calendarList.setVisibility(View.VISIBLE);
 
@@ -81,6 +98,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     //useful for upgrade scenario - adding options in new versions
     public static void init(Widget widget) {
         widget.initOption(ALL_CALENDARS, true);
+        widget.initOption(SHOW_EVENT_LOCATIONS, true);
     }
 
     public static List<WidgetOption> getEnabledCalendars(Widget widget) {

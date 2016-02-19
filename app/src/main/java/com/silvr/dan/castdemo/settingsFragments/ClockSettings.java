@@ -46,4 +46,6 @@ public class ClockSettings extends WidgetSettingsFragment {
     public static void init(Widget widget) {
         widget.initOption(SHOW_SECONDS, false);
     }
+
+
 }

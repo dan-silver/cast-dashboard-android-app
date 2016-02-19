@@ -114,7 +114,7 @@ public class CalendarWidget extends UIWidget {
         return calendars;
     }
 
-    public JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars) throws JSONException {
+    public JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars, boolean showEventLocations) throws JSONException {
 
         Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
@@ -181,8 +181,9 @@ public class CalendarWidget extends UIWidget {
             event.put("start", startDate);
             event.put("end", endDate);
             event.put("allDay", allDay);
-            event.put("locationStr", location);
-
+            if (showEventLocations) {
+                event.put("locationStr", location);
+            }
             events.put(event);
 
 
@@ -198,8 +199,11 @@ public class CalendarWidget extends UIWidget {
 
         List<String> calendarIds = new ArrayList<>();
 
-        WidgetOption optionAllCalendars = widget.getOption(CalendarSettings.ALL_CALENDARS);
+        WidgetOption optionAllCalendars = widget.loadOrInitOption(CalendarSettings.ALL_CALENDARS);
+        WidgetOption optionShowEventLocations = widget.loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
+
         boolean showAllCalendars = optionAllCalendars.getBooleanValue();
+        boolean showEventLocations = optionShowEventLocations.getBooleanValue();
 
         if (!showAllCalendars) {
             for (WidgetOption a : CalendarSettings.getEnabledCalendars(widget)) {
@@ -210,7 +214,7 @@ public class CalendarWidget extends UIWidget {
         if (calendarIds.size() == 0)
             showAllCalendars = true;
 
-        json.put("events", getCalendarEvents(context, calendarIds, showAllCalendars));
+        json.put("events", getCalendarEvents(context, calendarIds, showAllCalendars, showEventLocations));
         return json;
     }
 
