@@ -24,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             xmlns:tools="http://schemas.android.com/tools"
-            tools:listitem="@layout/calendar_select"/>
+            tools:listitem="@layout/calendar_select"
+            android:layout_marginBottom="@dimen/app_settings_padding"/>
         <Switch
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
