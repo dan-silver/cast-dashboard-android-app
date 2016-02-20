@@ -16,6 +16,14 @@ public class WeatherWidget extends UIWidget {
         super(context, widget);
     }
 
+    @Override
+    public void init() {
+
+        widget.initOption(WeatherSettings.WEATHER_LAT, "47.6025269");
+        widget.initOption(WeatherSettings.WEATHER_LNG, "-122.3411561");
+        widget.initOption(WeatherSettings.WEATHER_CITY, "Seattle, WA");
+    }
+
 
     @Override
     public JSONObject getContent() throws JSONException {

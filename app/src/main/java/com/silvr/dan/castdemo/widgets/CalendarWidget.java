@@ -48,6 +48,12 @@ public class CalendarWidget extends UIWidget {
         super(context, widget);
     }
 
+    @Override
+    public void init() {
+        widget.initOption(CalendarSettings.ALL_CALENDARS, true);
+        widget.initOption(CalendarSettings.SHOW_EVENT_LOCATIONS, true);
+    }
+
 
     public static List<CalendarInfo> getCalendars(Context context, Widget widget) {
         // Run query
@@ -199,8 +205,8 @@ public class CalendarWidget extends UIWidget {
 
         List<String> calendarIds = new ArrayList<>();
 
-        WidgetOption optionAllCalendars = widget.loadOrInitOption(CalendarSettings.ALL_CALENDARS);
-        WidgetOption optionShowEventLocations = widget.loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
+        WidgetOption optionAllCalendars = widget.loadOrInitOption(CalendarSettings.ALL_CALENDARS, context);
+        WidgetOption optionShowEventLocations = widget.loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS, context);
 
         boolean showAllCalendars = optionAllCalendars.getBooleanValue();
         boolean showEventLocations = optionShowEventLocations.getBooleanValue();

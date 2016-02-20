@@ -16,6 +16,11 @@ public class ClockWidget extends UIWidget {
         super(context, widget);
     }
 
+    @Override
+    public void init() {
+        widget.initOption(ClockSettings.SHOW_SECONDS, false);
+    }
+
 
     @Override
     public JSONObject getContent() throws JSONException {

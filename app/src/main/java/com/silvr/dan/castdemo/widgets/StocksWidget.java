@@ -25,6 +25,11 @@ public class StocksWidget extends UIWidget {
         super(context, widget);
     }
 
+    @Override
+    public void init() {
+
+    }
+
 
     @Override
     public JSONObject getContent() throws JSONException {

@@ -184,7 +184,7 @@ public class Widget extends BaseModel {
 
                 new SelectListTransaction<>(
                         new Select().from(Widget.class)
-                            .where(ConditionGroup.clause().and(Widget_Table.type.is(type.getValue()))),
+                                .where(ConditionGroup.clause().and(Widget_Table.type.is(type.getValue()))),
                         new TransactionListenerAdapter<List<Widget>>() {
                             @Override
                             public void onResultReceived(List<Widget> someObjectList) {
@@ -220,7 +220,7 @@ public class Widget extends BaseModel {
             initOption(key, defaultValue ? "1" : "0");
     }
 
-    public WidgetOption loadOrInitOption(String optionKey) {
+    public WidgetOption loadOrInitOption(String optionKey, Context context) {
         WidgetOption option = getOption(optionKey);
 
         if (option != null) {
@@ -230,7 +230,7 @@ public class Widget extends BaseModel {
         // this might be a new version of the app that doesn't have this option yet
         // that's fine, pretend like we're creating this widget for the first time (non-destructive for existing saved options)
 
-        initWidgetSettings();
+        initWidgetSettings(context);
 
 
         option = getOption(optionKey);
@@ -242,26 +242,7 @@ public class Widget extends BaseModel {
 
     }
 
-    public void initWidgetSettings() {
-        switch (getWidgetType()) {
-            case CALENDAR:
-                CalendarSettings.init(this);
-                break;
-            case STOCKS:
-                StocksSettings.init(this);
-                break;
-            case WEATHER:
-                WeatherSettings.init(this);
-                break;
-            case MAP:
-                MapSettings.init(this);
-                break;
-            case CLOCK:
-                ClockSettings.init(this);
-                break;
-            default:
-                PlaceholderSettings.init(this);
-                break;
-        }
+    public void initWidgetSettings(Context context) {
+        getUIWidget(context).init();
     }
 }

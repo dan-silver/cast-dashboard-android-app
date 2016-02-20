@@ -48,8 +48,8 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
         // restore saved options into GUI
 
-        optionAllCalendars = widget.loadOrInitOption(CalendarSettings.ALL_CALENDARS);
-        optionShowEventLocations = widget.loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
+        optionAllCalendars = widget.loadOrInitOption(CalendarSettings.ALL_CALENDARS, getContext());
+        optionShowEventLocations = widget.loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS, getContext());
 
         allCalendars.setChecked(optionAllCalendars.getBooleanValue());
 
@@ -92,13 +92,6 @@ public class CalendarSettings extends WidgetSettingsFragment {
             CalendarListAdapter mAdapter = new CalendarListAdapter(calendars, widget);
             calendarList.setAdapter(mAdapter);
         }
-    }
-
-    //NOT destructive - doesn't override existing saved options
-    //useful for upgrade scenario - adding options in new versions
-    public static void init(Widget widget) {
-        widget.initOption(ALL_CALENDARS, true);
-        widget.initOption(SHOW_EVENT_LOCATIONS, true);
     }
 
     public static List<WidgetOption> getEnabledCalendars(Widget widget) {

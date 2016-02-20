@@ -19,4 +19,6 @@ abstract public class UIWidget {
         this.widget = widget;
         this.context = context;
     }
+
+    public abstract void init();
 }

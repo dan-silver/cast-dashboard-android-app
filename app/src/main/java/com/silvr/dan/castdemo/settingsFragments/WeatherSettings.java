@@ -76,12 +76,6 @@ public class WeatherSettings extends WidgetSettingsFragment {
         }
     }
 
-    public static void init(Widget widget) {
-        widget.initOption(WEATHER_LAT, "47.6025269");
-        widget.initOption(WEATHER_LNG, "-122.3411561");
-        widget.initOption(WEATHER_CITY, "Seattle, WA");
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {

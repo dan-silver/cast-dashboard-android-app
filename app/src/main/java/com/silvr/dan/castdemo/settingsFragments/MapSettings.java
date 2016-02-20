@@ -114,16 +114,6 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         locationAddr.setText(locationAddrOption.value);
     }
 
-    public static void init(Widget widget) {
-        //https://www.google.com/maps/@47.6061734,-122.3310611,16.04z
-        widget.initOption(LOCATION_LAT, "47.6061734");
-        widget.initOption(LOCATION_LONG, "-122.3310611");
-        widget.initOption(LOCATION_NAME, "Seattle, Washington");
-        widget.initOption(LOCATION_ADDRESS, "Seattle, Washington");
-        widget.initOption(MAP_ZOOM, "10");
-        widget.initOption(SHOW_TRAFFIC, false);
-    }
-
     @OnClick({R.id.get_map_location, R.id.map_location_info})
     public void getLocation() {
         try {

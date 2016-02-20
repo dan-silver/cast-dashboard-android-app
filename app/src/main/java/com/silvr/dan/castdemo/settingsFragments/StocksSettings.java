@@ -215,8 +215,4 @@ public class StocksSettings extends WidgetSettingsFragment {
             return mDataset.size();
         }
     }
-
-    public static void init(Widget widget) {
-
-    }
 }
