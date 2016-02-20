@@ -48,9 +48,9 @@ public class WeatherSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.weather_settings, container, false);
         ButterKnife.bind(this, view);
 
-        weatherLng = widget.getOption(WEATHER_LNG);
-        weatherLat = widget.getOption(WEATHER_LAT);
-        weatherCity = widget.getOption(WEATHER_CITY);
+        weatherLng = loadOrInitOption(WEATHER_LNG);
+        weatherLat = loadOrInitOption(WEATHER_LAT);
+        weatherCity = loadOrInitOption(WEATHER_CITY);
 
 
         tvWeatherCity.setText(getNameFromCoordinates(getContext(), widget));

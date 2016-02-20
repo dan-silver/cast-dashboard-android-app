@@ -48,8 +48,8 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
         // restore saved options into GUI
 
-        optionAllCalendars = widget.loadOrInitOption(CalendarSettings.ALL_CALENDARS, getContext());
-        optionShowEventLocations = widget.loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS, getContext());
+        optionAllCalendars = loadOrInitOption(CalendarSettings.ALL_CALENDARS);
+        optionShowEventLocations = loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
 
         allCalendars.setChecked(optionAllCalendars.getBooleanValue());
 

@@ -65,12 +65,12 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         View view = inflater.inflate(R.layout.map_settings, container, false);
         ButterKnife.bind(this, view);
 
-        locationLat = widget.getOption(MapSettings.LOCATION_LAT);
-        locationLong = widget.getOption(MapSettings.LOCATION_LONG);
-        locationNameOption = widget.getOption(MapSettings.LOCATION_NAME);
-        locationAddrOption = widget.getOption(MapSettings.LOCATION_ADDRESS);
-        mapZoomOption = widget.getOption(MapSettings.MAP_ZOOM);
-        mapShowTraffic = widget.getOption(MapSettings.SHOW_TRAFFIC);
+        locationLat = loadOrInitOption(MapSettings.LOCATION_LAT);
+        locationLong = loadOrInitOption(MapSettings.LOCATION_LONG);
+        locationNameOption = loadOrInitOption(MapSettings.LOCATION_NAME);
+        locationAddrOption = loadOrInitOption(MapSettings.LOCATION_ADDRESS);
+        mapZoomOption = loadOrInitOption(MapSettings.MAP_ZOOM);
+        mapShowTraffic = loadOrInitOption(MapSettings.SHOW_TRAFFIC);
 
         updateLocationText();
 

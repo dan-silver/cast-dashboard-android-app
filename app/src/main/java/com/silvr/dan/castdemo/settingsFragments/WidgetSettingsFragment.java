@@ -22,6 +22,11 @@ public abstract class WidgetSettingsFragment extends Fragment {
         CastCommunicator.sendWidgetProperty(widget, property, value);
     }
 
+    protected WidgetOption loadOrInitOption(String showSeconds) {
+        return widget.loadOrInitOption(showSeconds, getContext());
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();

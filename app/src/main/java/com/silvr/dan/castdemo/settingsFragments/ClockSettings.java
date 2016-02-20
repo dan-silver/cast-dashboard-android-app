@@ -27,7 +27,7 @@ public class ClockSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.clock_settings, container, false);
         ButterKnife.bind(this, view);
 
-        showSecondsOption = widget.getOption(ClockSettings.SHOW_SECONDS);
+        showSecondsOption = loadOrInitOption(ClockSettings.SHOW_SECONDS);
 
         showSeconds.setChecked(showSecondsOption.getBooleanValue());
         showSeconds.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -42,5 +42,6 @@ public class ClockSettings extends WidgetSettingsFragment {
 
         return view;
     }
+
 
 }

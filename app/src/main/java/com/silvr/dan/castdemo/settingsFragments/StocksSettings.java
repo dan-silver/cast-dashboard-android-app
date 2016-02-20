@@ -60,8 +60,7 @@ public class StocksSettings extends WidgetSettingsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.stocks_settings, container, false);
         ButterKnife.bind(this, view);
-
-
+        
         final SimpleCursorAdapter dropDownMenuAdapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
                 new String[]{"name", "ticker"},
                 new int[]{R.id.company_name, R.id.stock_ticker},
