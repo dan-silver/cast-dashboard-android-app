@@ -19,5 +19,4 @@ public class PlaceholderSettings extends WidgetSettingsFragment {
 
         return view;
     }
-
-    }
+}

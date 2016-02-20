@@ -35,6 +35,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    public static void init(Widget widget) {}
 }
 
 

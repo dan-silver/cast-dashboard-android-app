@@ -72,7 +72,7 @@ public class WidgetList extends Fragment implements OnDragListener {
 
                         widget.save();
 
-                        widget.initOptions();
+                        widget.initWidgetSettings();
                         refreshList();
                         CastCommunicator.sendWidget(widget);
 

@@ -6,8 +6,10 @@ import android.util.Log;
 import com.silvr.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silvr.dan.castdemo.settingsFragments.ClockSettings;
 import com.silvr.dan.castdemo.settingsFragments.MapSettings;
+import com.silvr.dan.castdemo.settingsFragments.PlaceholderSettings;
 import com.silvr.dan.castdemo.settingsFragments.StocksSettings;
 import com.silvr.dan.castdemo.settingsFragments.WeatherSettings;
+import com.silvr.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 import com.silvr.dan.castdemo.widgets.CalendarWidget;
 import com.silvr.dan.castdemo.widgets.ClockWidget;
 import com.silvr.dan.castdemo.widgets.MapWidget;
@@ -108,24 +110,6 @@ public class Widget extends BaseModel {
     public void setType(types type) {
         this.type = type.getValue();
     }
-
-    public void initOptions() {
-
-        //initialize the options for this type
-
-        if (getWidgetType() == types.CALENDAR) {
-            CalendarSettings.init(this);
-        } else if (getWidgetType() == STOCKS) {
-            StocksSettings.init(this);
-        } else if (getWidgetType() == types.MAP) {
-            MapSettings.init(this);
-        } else if (getWidgetType() == types.CLOCK) {
-            ClockSettings.init(this);
-        } else if (getWidgetType() == types.WEATHER) {
-            WeatherSettings.init(this);
-        }
-    }
-
 
     // needs to be accessible for DELETE
     List<WidgetOption> options;
@@ -243,6 +227,19 @@ public class Widget extends BaseModel {
         // this might be a new version of the app that doesn't have this option yet
         // that's fine, pretend like we're creating this widget for the first time (non-destructive for existing saved options)
 
+        initWidgetSettings();
+
+
+        option = getOption(optionKey);
+        if (option == null) {
+            Log.e(MainActivity.TAG, "Trying to access option that doesn't exist!" + optionKey);
+        }
+
+        return option;
+
+    }
+
+    public void initWidgetSettings() {
         switch (getWidgetType()) {
             case CALENDAR:
                 CalendarSettings.init(this);
@@ -259,16 +256,9 @@ public class Widget extends BaseModel {
             case CLOCK:
                 ClockSettings.init(this);
                 break;
+            default:
+                PlaceholderSettings.init(this);
+                break;
         }
-
-
-        option = getOption(optionKey);
-        if (option == null) {
-            Log.e(MainActivity.TAG, "Trying to access option that doesn't exist!" + optionKey);
-        }
-
-        return option;
-
     }
-
 }
