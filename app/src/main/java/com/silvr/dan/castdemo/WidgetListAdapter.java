@@ -124,21 +124,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
     @Override
     public void onBindViewHolder(final WidgetViewHolder customViewHolder, int i) {
         final Widget widget = widgetList.get(i);
-        Widget.types widgetType = widget.getWidgetType();
-        UIWidget uiWidget;
-        if (widgetType == Widget.types.CALENDAR) {
-            uiWidget = new CalendarWidget(mainActivity, widget);
-        } else if (widgetType == Widget.types.STOCKS) {
-            uiWidget = new StocksWidget(mainActivity, widget);
-        } else if (widgetType == Widget.types.MAP) {
-            uiWidget = new MapWidget(mainActivity, widget);
-        } else if (widgetType == Widget.types.CLOCK) {
-            uiWidget = new ClockWidget(mainActivity, widget);
-        } else if (widgetType == Widget.types.WEATHER) {
-            uiWidget = new WeatherWidget(mainActivity, widget);
-        } else {
-            uiWidget = new PlaceholderWidget(mainActivity, widget);
-        }
+        UIWidget uiWidget = widget.getUIWidget(mainActivity);
 
         customViewHolder.topHeader.setText(widget.getHumanName());
         customViewHolder.bottomHeader.setText(uiWidget.getWidgetPreviewSecondaryHeader());

@@ -44,6 +44,31 @@ public class Widget extends BaseModel {
     // For bundle data passing
     public static String ID = "WIDGET_ID";
 
+    public UIWidget getUIWidget(Context context) {
+        UIWidget widget;
+        switch (getWidgetType()) {
+            case STOCKS:
+                widget = new StocksWidget(context, this);
+                break;
+            case CALENDAR:
+                widget = new CalendarWidget(context, this);
+                break;
+            case MAP:
+                widget = new MapWidget(context, this);
+                break;
+            case CLOCK:
+                widget = new ClockWidget(context, this);
+                break;
+            case WEATHER:
+                widget = new WeatherWidget(context, this);
+                break;
+            default:
+                widget = new PlaceholderWidget(context, this);
+                break;
+        }
+        return widget;
+    }
+
     enum types {
         CALENDAR(0, CalendarWidget.HUMAN_NAME, R.drawable.ic_today_24dp),
         PLACEHOLDER(1, PlaceholderWidget.HUMAN_NAME, R.drawable.ic_hourglass_empty_black_24px),
@@ -176,29 +201,7 @@ public class Widget extends BaseModel {
         payload.put("options", new JSONObject());
         payload.put("position", position);
 
-        UIWidget widget;
-        switch (getWidgetType()) {
-            case STOCKS:
-                widget = new StocksWidget(applicationContext, this);
-                break;
-            case CALENDAR:
-                widget = new CalendarWidget(applicationContext, this);
-                break;
-            case MAP:
-                widget = new MapWidget(applicationContext, this);
-                break;
-            case CLOCK:
-                widget = new ClockWidget(applicationContext, this);
-                break;
-            case WEATHER:
-                widget = new WeatherWidget(applicationContext, this);
-                break;
-            default:
-                widget = new PlaceholderWidget(applicationContext, this);
-                break;
-        }
-
-        payload.put("data", widget.getContent());
+        payload.put("data", getUIWidget(applicationContext).getContent());
 
         return payload;
     }
