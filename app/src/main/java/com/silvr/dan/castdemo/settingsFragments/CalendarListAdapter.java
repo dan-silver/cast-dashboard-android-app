@@ -1,11 +1,14 @@
 package com.silvr.dan.castdemo.settingsFragments;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.silvr.dan.castdemo.CalendarInfo;
@@ -27,11 +30,13 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
     public static class CalendarViewHolder extends RecyclerView.ViewHolder {
         protected TextView calendarName;
         protected CheckBox calendarEnabled;
+        protected View calendarColor;
 
         public CalendarViewHolder(View v) {
             super(v);
             this.calendarName = (TextView) v.findViewById(R.id.calendar_name);
             this.calendarEnabled = (CheckBox) v.findViewById(R.id.calendar_enabled);
+            this.calendarColor = (View) v.findViewById(R.id.calendar_color);
         }
     }
 
@@ -54,6 +59,7 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
         final CalendarInfo calendar = calendars.get(position);
 
         holder.calendarName.setText(calendar.name);
+        holder.calendarColor.setBackgroundColor(Color.parseColor("#" + calendar.hexColor));
         holder.calendarEnabled.setOnCheckedChangeListener(null);
         holder.calendarEnabled.setChecked(calendar.enabled);
 

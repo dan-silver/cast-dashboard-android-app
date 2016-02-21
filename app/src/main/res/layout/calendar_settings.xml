@@ -37,6 +37,27 @@
             android:layout_height="wrap_content"
             android:text="Display event locations"
             android:textSize="@dimen/setting_text_size"
-            android:id="@+id/display_event_locations"/>
+            android:id="@+id/display_event_locations"
+            android:layout_marginBottom="@dimen/app_settings_padding"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/setting_text_size"
+                android:textColor="@color/primary_text"
+                android:text="Show events for"/>
+            <android.support.v7.widget.AppCompatSpinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/show_events_until"/>
+
+        </RelativeLayout>
+
     </LinearLayout>
 </ScrollView>

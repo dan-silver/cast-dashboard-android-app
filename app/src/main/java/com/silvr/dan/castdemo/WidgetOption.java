@@ -41,4 +41,12 @@ public class WidgetOption extends BaseModel {
     public void setBooleanValue(boolean booleanValue) {
         this.value = booleanValue ? "1" : "0";
     }
+
+    public void setIntValue(int value) {
+        this.value = String.valueOf(value);
+    }
+
+    public int getIntValue() {
+        return Integer.valueOf(value);
+    }
 }
