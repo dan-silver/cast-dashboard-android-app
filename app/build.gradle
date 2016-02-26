@@ -5,12 +5,15 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.silvr.dan.castdemo"
+        applicationId "com.silver.dan.castdemo"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 7
+        versionName "1.0.6"
+        vectorDrawables.useSupportLibrary = true
+
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -28,26 +31,26 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:support-v4:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:support-v4:23.2.0'
+    compile 'com.android.support:design:23.2.0'
 
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:mediarouter-v7:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:mediarouter-v7:23.2.0'
     compile 'com.google.android.gms:play-services-cast:8.4.0'
     compile 'com.google.android.gms:play-services-maps:8.4.0'
     compile 'com.google.android.gms:play-services-location:8.4.0'
 
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
+    compile 'com.android.support:recyclerview-v7:23.2.0'
     compile 'com.balysv:material-ripple:1.0.2'
 
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.4@aar') {
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.5@aar') {
         transitive = true
     }
 
     compile 'net.sf.opencsv:opencsv:2.3'
-    compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.8.0'
+    compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.8.2'
 
 
     compile 'com.github.QuadFlask:colorpicker:0.0.9'
