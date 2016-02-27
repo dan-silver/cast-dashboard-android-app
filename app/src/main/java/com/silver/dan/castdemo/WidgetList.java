@@ -79,7 +79,6 @@ public class WidgetList extends Fragment implements OnDragListener {
                         return true;
                     }
                 })
-                .positiveText("Add")
                 .show();
     }
 

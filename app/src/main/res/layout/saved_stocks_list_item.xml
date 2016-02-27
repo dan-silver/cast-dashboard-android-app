@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.balysv.materialripple.MaterialRippleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:mrl_rippleColor="@color/primary">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="5dp">
+    android:orientation="vertical"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:layout_marginBottom="5dp">
 
-            <TextView
-                android:id="@+id/company_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Microsoft"
-                android:textColor="@color/primary_text"
-                android:textSize="18sp" />
+    <TextView
+        android:id="@+id/company_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Microsoft"
+        android:textColor="@color/primary_text"
+        android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/stock_ticker"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MSFT"
-                android:textSize="14sp"
-                android:textColor="@color/secondary_text" />
+    <TextView
+        android:id="@+id/stock_ticker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MSFT"
+        android:textSize="14sp"
+        android:textColor="@color/secondary_text" />
 
-        </LinearLayout>
-</com.balysv.materialripple.MaterialRippleLayout>
+</LinearLayout>

@@ -6,4 +6,6 @@
     <dimen name="setting_text_size">15sp</dimen>
     <dimen name="app_settings_padding">25dp</dimen>
     <dimen name="setting_text_secondary">14sp</dimen>
+    <dimen name="app_settings_padding_half">12dp</dimen>
+    <dimen name="app_settings_padding_side">15dp</dimen>
 </resources>

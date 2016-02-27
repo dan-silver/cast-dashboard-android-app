@@ -9,18 +9,23 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.silver.dan.castdemo.CalendarInfo;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.widgets.CalendarWidget;
 
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class CalendarSettings extends WidgetSettingsFragment {
 
@@ -30,7 +35,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     public static String SHOW_EVENTS_UNTIL= "SHOW_EVENTS_UNTIL";
 
     String numDaysDisplayStr[] = new String[]{"3 Days", "1 Week", "2 Weeks", "1 Month", "3 Months"};
-    int numDaysDisplayValues[] = new int[]{3,7,14,30,90};
+    Integer numDaysDisplayValues[] = new Integer[]{3,7,14,30,90};
 
 
     WidgetOption optionAllCalendars;
@@ -48,7 +53,10 @@ public class CalendarSettings extends WidgetSettingsFragment {
     Switch eventLocations;
 
     @Bind(R.id.show_events_until)
-    android.support.v7.widget.AppCompatSpinner showEventsUntil;
+    com.silver.dan.castdemo.settingsFragments.SettingItem showEventsUntil;
+
+    @Bind(R.id.calendar_duration_text)
+    TextView calendarDurationText;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -89,35 +97,30 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
         displayCalendarList();
 
-        ArrayAdapter<String> optionAdapter = new ArrayAdapter<>(getContext(), R.layout.spinner_item, numDaysDisplayStr);
-        showEventsUntil.setAdapter(optionAdapter);
-
-        int position = 0;
-        for (int n : numDaysDisplayValues) {
-            if (n == Integer.valueOf(optionShowEventsUntil.value)) {
-                break;
-            }
-            position++;
-        }
-
-        showEventsUntil.setSelection(position);
-        showEventsUntil.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                optionShowEventsUntil.setIntValue(numDaysDisplayValues[position]);
-                optionShowEventsUntil.save();
-                refreshWidget();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-
+        updateCalendarUntilTextView();
 
         return view;
+    }
+
+    @OnClick(R.id.show_events_until)
+    public void showEventsUntilCallback() {
+        new MaterialDialog.Builder(getContext())
+                .title("Calendar Duration")
+                .items(numDaysDisplayStr)
+                .itemsCallbackSingleChoice(getSelectedCalendarOptionIndex(), new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        optionShowEventsUntil.setIntValue(numDaysDisplayValues[which]);
+                        updateCalendarUntilTextView();
+                        refreshWidget();
+                        return true;
+                    }
+                })
+                .show();
+    }
+
+    private void updateCalendarUntilTextView() {
+        calendarDurationText.setText(numDaysDisplayStr[getSelectedCalendarOptionIndex()]);
     }
 
     public void displayCalendarList() {
@@ -131,6 +134,10 @@ public class CalendarSettings extends WidgetSettingsFragment {
             CalendarListAdapter mAdapter = new CalendarListAdapter(calendars, widget);
             calendarList.setAdapter(mAdapter);
         }
+    }
+
+    private int getSelectedCalendarOptionIndex() {
+        return Arrays.asList(numDaysDisplayValues).indexOf(optionShowEventsUntil.getIntValue());
     }
 
     public static List<WidgetOption> getEnabledCalendars(Widget widget) {
