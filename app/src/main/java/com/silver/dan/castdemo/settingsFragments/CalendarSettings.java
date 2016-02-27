@@ -111,6 +111,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         optionShowEventsUntil.setIntValue(numDaysDisplayValues[which]);
+                        optionShowEventsUntil.save();
                         updateCalendarUntilTextView();
                         refreshWidget();
                         return true;

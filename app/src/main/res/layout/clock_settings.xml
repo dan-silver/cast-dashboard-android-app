@@ -3,11 +3,15 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Switch
+    <com.silver.dan.castdemo.settingsFragments.SettingItem
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Show Seconds"
-        android:id="@+id/clock_show_seconds"
-        android:textSize="@dimen/setting_text_size"
-        android:textColor="@color/primary_text"/>
+        android:layout_height="wrap_content">
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show Seconds"
+            android:id="@+id/clock_show_seconds"
+            android:textSize="@dimen/setting_text_size"
+            android:textColor="@color/primary_text"/>
+    </com.silver.dan.castdemo.settingsFragments.SettingItem>
 </LinearLayout>

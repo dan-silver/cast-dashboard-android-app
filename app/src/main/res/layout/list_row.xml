@@ -16,6 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/widget_type_icon"
+            android:layout_toEndOf="@+id/widget_type_icon"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:orientation="vertical"
