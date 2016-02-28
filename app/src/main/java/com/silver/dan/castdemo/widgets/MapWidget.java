@@ -24,7 +24,7 @@ public class MapWidget extends UIWidget {
         widget.initOption(MapSettings.LOCATION_LONG, "-122.3310611");
         widget.initOption(MapSettings.LOCATION_NAME, "Seattle, Washington");
         widget.initOption(MapSettings.LOCATION_ADDRESS, "Seattle, Washington");
-        widget.initOption(MapSettings.MAP_ZOOM, "10");
+        widget.initOption(MapSettings.MAP_ZOOM, 10);
         widget.initOption(MapSettings.SHOW_TRAFFIC, false);
     }
 

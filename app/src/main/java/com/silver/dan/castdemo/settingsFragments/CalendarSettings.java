@@ -6,12 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.silver.dan.castdemo.CalendarInfo;
@@ -35,8 +31,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     public static String SHOW_EVENTS_UNTIL= "SHOW_EVENTS_UNTIL";
 
     String numDaysDisplayStr[] = new String[]{"3 Days", "1 Week", "2 Weeks", "1 Month", "3 Months"};
-    Integer numDaysDisplayValues[] = new Integer[]{3,7,14,30,90};
-
+    Integer numDaysDisplayValues[] = new Integer[]{3, 7, 14, 30, 90};
 
     WidgetOption optionAllCalendars;
     WidgetOption optionShowEventLocations;
@@ -48,15 +43,11 @@ public class CalendarSettings extends WidgetSettingsFragment {
     @Bind(R.id.calendar_list)
     RecyclerView calendarList;
 
-
     @Bind(R.id.display_event_locations)
     Switch eventLocations;
 
     @Bind(R.id.show_events_until)
-    com.silver.dan.castdemo.settingsFragments.SettingItem showEventsUntil;
-
-    @Bind(R.id.calendar_duration_text)
-    TextView calendarDurationText;
+    com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem showEventsUntil;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,7 +112,8 @@ public class CalendarSettings extends WidgetSettingsFragment {
     }
 
     private void updateCalendarUntilTextView() {
-        calendarDurationText.setText(numDaysDisplayStr[getSelectedCalendarOptionIndex()]);
+        showEventsUntil.setHeaderText("Calendar Duration");
+        showEventsUntil.setSubHeaderText(numDaysDisplayStr[getSelectedCalendarOptionIndex()]);
     }
 
     public void displayCalendarList() {

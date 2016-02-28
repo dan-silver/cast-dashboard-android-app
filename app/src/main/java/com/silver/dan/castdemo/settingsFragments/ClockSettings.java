@@ -6,12 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.WidgetOption;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ClockSettings extends WidgetSettingsFragment {
 
@@ -21,6 +32,7 @@ public class ClockSettings extends WidgetSettingsFragment {
     WidgetOption showSecondsOption;
 
     public static String SHOW_SECONDS = "SHOW_SECONDS";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.clock_settings, container, false);
@@ -37,10 +49,6 @@ public class ClockSettings extends WidgetSettingsFragment {
                 refreshWidget();
             }
         });
-
-
         return view;
     }
-
-
 }

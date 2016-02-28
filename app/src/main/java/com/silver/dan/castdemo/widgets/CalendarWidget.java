@@ -54,9 +54,8 @@ public class CalendarWidget extends UIWidget {
     public void init() {
         widget.initOption(CalendarSettings.ALL_CALENDARS, true);
         widget.initOption(CalendarSettings.SHOW_EVENT_LOCATIONS, true);
-        widget.initOption(CalendarSettings.SHOW_EVENTS_UNTIL, "30");
+        widget.initOption(CalendarSettings.SHOW_EVENTS_UNTIL, 30);
     }
-
 
     public static List<CalendarInfo> getCalendars(Context context, Widget widget) {
         // Run query

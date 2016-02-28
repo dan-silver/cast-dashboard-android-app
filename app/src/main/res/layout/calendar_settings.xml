@@ -49,29 +49,9 @@
         </com.silver.dan.castdemo.settingsFragments.SettingItem>
 
         <include layout="@layout/setting_line_break"/>
-        <com.silver.dan.castdemo.settingsFragments.SettingItem
+        <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/show_events_until">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/setting_text_size"
-                    android:textColor="@color/primary_text"
-                    android:text="Calendar Duration"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="@dimen/setting_text_secondary"
-                    android:text="3 months"
-                    android:id="@+id/calendar_duration_text"/>
-            </LinearLayout>
-        </com.silver.dan.castdemo.settingsFragments.SettingItem>
-
+            android:id="@+id/show_events_until"/>
     </LinearLayout>
 </ScrollView>

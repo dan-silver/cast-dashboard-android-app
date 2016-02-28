@@ -53,6 +53,7 @@ dependencies {
 
 
     compile 'com.github.QuadFlask:colorpicker:0.0.9'
+    compile 'com.wdullaer:materialdatetimepicker:2.2.0'
 
 }
 
