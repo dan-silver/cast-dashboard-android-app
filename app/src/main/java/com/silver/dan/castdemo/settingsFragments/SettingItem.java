@@ -6,12 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.silver.dan.castdemo.R;
 
 
 public class SettingItem extends FrameLayout {
-    private FrameLayout mContentView;
+    private LinearLayout mContentView;
 
     public SettingItem(Context context) {
         this(context, null);
@@ -30,7 +31,7 @@ public class SettingItem extends FrameLayout {
         inflater.inflate(R.layout.setting_item_layout, this, true);
 
         //Get a reference to the layout where you want children to be placed
-        mContentView = (FrameLayout) findViewById(R.id.content);
+        mContentView = (LinearLayout) findViewById(R.id.content);
 
         //Do any more custom init you would like to access children and do setup
 

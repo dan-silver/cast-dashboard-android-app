@@ -22,7 +22,7 @@ public class MapWidget extends UIWidget {
         //https://www.google.com/maps/@47.6061734,-122.3310611,16.04z
         widget.initOption(MapSettings.LOCATION_LAT, "47.6061734");
         widget.initOption(MapSettings.LOCATION_LONG, "-122.3310611");
-        widget.initOption(MapSettings.LOCATION_NAME, "Seattle, Washington");
+//        widget.initOption(MapSettings.LOCATION_NAME, "Seattle, Washington");
         widget.initOption(MapSettings.LOCATION_ADDRESS, "Seattle, Washington");
         widget.initOption(MapSettings.MAP_ZOOM, 10);
         widget.initOption(MapSettings.SHOW_TRAFFIC, false);
@@ -40,16 +40,11 @@ public class MapWidget extends UIWidget {
 
     @Override
     public String getWidgetPreviewSecondaryHeader() {
-        WidgetOption locationName = widget.getOption(MapSettings.LOCATION_NAME);
-        if (locationName != null) {
-            return widget.getOption(MapSettings.LOCATION_NAME).value;
-        }
-
-        WidgetOption locationAddress = widget.getOption(MapSettings.LOCATION_NAME);
+        WidgetOption locationAddress = widget.getOption(MapSettings.LOCATION_ADDRESS);
         if (locationAddress != null) {
             return widget.getOption(MapSettings.LOCATION_ADDRESS).value;
         }
 
-        return "Unknown Location";
+        return "Location not set";
     }
 }

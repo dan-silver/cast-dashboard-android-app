@@ -2,75 +2,47 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/app_settings_padding"
-    android:paddingRight="@dimen/app_settings_padding">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/app_settings_padding">
-<LinearLayout
-    android:id="@+id/map_location_info"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_centerVertical="true"
-    android:layout_toLeftOf="@+id/get_map_location"
-    android:layout_toStartOf="@+id/get_map_location"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/setting_text_size"
-        android:text="Location Name"
-        android:textColor="@color/primary_text"
-        android:id="@+id/location_name"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/secondary_text"
-        android:textSize="@dimen/setting_text_secondary"
-        android:text="Location Address"
-        android:id="@+id/location_addr"/>
-</LinearLayout>
-    <ImageButton
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/get_map_location"
-        android:layout_centerVertical="true"
-        android:src="@drawable/ic_search_24dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Map Location"
-        android:layout_gravity="right" />
-
-</RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/primary_text"
-        android:textSize="@dimen/setting_text_size"
-        android:text="Zoom" />
-
-    <SeekBar
+    android:orientation="vertical">
+    <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/map_zoom"
-        android:layout_gravity="center_horizontal"
-        android:max="14"
-        android:layout_marginBottom="@dimen/app_settings_padding"/>
+        android:id="@+id/map_location" />
 
-    <Switch
+
+    <include layout="@layout/setting_line_break"/>
+
+    <com.silver.dan.castdemo.settingsFragments.SettingItem
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Show Traffic"
-        android:id="@+id/map_traffic"
-        android:layout_gravity="center_horizontal"
-        android:checked="false"
-        android:textSize="@dimen/setting_text_size"
-        android:textColor="@color/primary_text"/>
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/setting_text_size"
+            android:text="Zoom" />
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/map_zoom"
+            android:layout_gravity="center_horizontal"
+            android:max="14"/>
+
+    </com.silver.dan.castdemo.settingsFragments.SettingItem>
+
+    <include layout="@layout/setting_line_break"/>
+
+
+    <com.silver.dan.castdemo.settingsFragments.SettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show Traffic"
+            android:id="@+id/map_traffic"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="@dimen/setting_text_size"
+            android:textColor="@color/primary_text"/>
+    </com.silver.dan.castdemo.settingsFragments.SettingItem>
 </LinearLayout>

@@ -32,7 +32,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
     public static String LOCATION_LAT = "LOCATION_LAT";
     public static String LOCATION_LONG = "LOCATION_LONG";
-    public static String LOCATION_NAME = "LOCATION_NAME";
+//    public static String LOCATION_NAME = "LOCATION_NAME";
     public static String LOCATION_ADDRESS = "LOCATION_ADDRESS";
     public static String MAP_ZOOM = "MAP_ZOOM";
     public static String SHOW_TRAFFIC = "SHOW_TRAFFIC";
@@ -42,16 +42,13 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
     WidgetOption locationLat;
     WidgetOption locationLong;
-    WidgetOption locationNameOption;
+//    WidgetOption locationNameOption;
     WidgetOption locationAddrOption;
     WidgetOption mapZoomOption;
     WidgetOption mapShowTraffic;
 
-    @Bind(R.id.location_name)
-    TextView locationName;
-
-    @Bind(R.id.location_addr)
-    TextView locationAddr;
+    @Bind(R.id.map_location)
+    TwoLineSettingItem mapLocation;
 
     @Bind(R.id.map_zoom)
     SeekBar mapZoom;
@@ -66,11 +63,12 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
         locationLat = loadOrInitOption(MapSettings.LOCATION_LAT);
         locationLong = loadOrInitOption(MapSettings.LOCATION_LONG);
-        locationNameOption = loadOrInitOption(MapSettings.LOCATION_NAME);
+//        locationNameOption = loadOrInitOption(MapSettings.LOCATION_NAME);
         locationAddrOption = loadOrInitOption(MapSettings.LOCATION_ADDRESS);
         mapZoomOption = loadOrInitOption(MapSettings.MAP_ZOOM);
         mapShowTraffic = loadOrInitOption(MapSettings.SHOW_TRAFFIC);
 
+        mapLocation.setHeaderText("Location");
         updateLocationText();
 
 
@@ -109,11 +107,10 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     }
 
     public void updateLocationText() {
-        locationName.setText(locationNameOption.value);
-        locationAddr.setText(locationAddrOption.value);
+        mapLocation.setSubHeaderText(locationAddrOption.value);
     }
 
-    @OnClick({R.id.get_map_location, R.id.map_location_info})
+    @OnClick(R.id.map_location)
     public void getLocation() {
         try {
             Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).build(getActivity());
@@ -133,14 +130,14 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
                 locationLat.value = Double.toString(location.latitude);
                 locationLong.value = Double.toString(location.longitude);
-                locationNameOption.value = place.getName().toString();
+//                locationNameOption.value = place.getName().toString();
                 locationAddrOption.value = place.getAddress().toString();
 
                 updateLocationText();
 
                 locationLat.save();
                 locationLong.save();
-                locationNameOption.save();
+//                locationNameOption.save();
                 locationAddrOption.save();
                 refreshWidget();
             }
