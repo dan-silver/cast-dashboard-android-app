@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
@@ -30,32 +31,63 @@ public class WeatherSettings extends WidgetSettingsFragment {
     public static String WEATHER_LAT = "WEATHER_LAT";
     public static String WEATHER_LNG = "WEATHER_LNG";
     public static String WEATHER_CITY = "WEATHER_CITY";
+    public static String WEATHER_UNITS = "WEATHER_UNITS";
 
-    // @todo shouldn't need to store WEATHER_CITY anymore
+    // @todo remove WEATHER_CITY and calculate it from lat/lng
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
 
     WidgetOption weatherLat;
     WidgetOption weatherLng;
-
     WidgetOption weatherCity;
+    WidgetOption weatherTempUnits;
 
     @Bind(R.id.weather_city)
     EditText tvWeatherCity;
+
+    @Bind(R.id.weather_degrees_unit)
+    TwoLineSettingItem tempUnits;
+
+    String weatherUnitsText[] = new String[]{"Fahrenheit", "Celsius"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weather_settings, container, false);
         ButterKnife.bind(this, view);
 
-        weatherLng = loadOrInitOption(WEATHER_LNG);
-        weatherLat = loadOrInitOption(WEATHER_LAT);
-        weatherCity = loadOrInitOption(WEATHER_CITY);
-
+        weatherLng         = loadOrInitOption(WEATHER_LNG);
+        weatherLat         = loadOrInitOption(WEATHER_LAT);
+        weatherCity        = loadOrInitOption(WEATHER_CITY);
+        weatherTempUnits   = loadOrInitOption(WEATHER_UNITS);
 
         tvWeatherCity.setText(getNameFromCoordinates(getContext(), widget));
 
+        tempUnits.setHeaderText("Temperature Units");
+        updateWeatherUnitsTextView();
+
         return view;
+    }
+
+    @OnClick(R.id.weather_degrees_unit)
+    public void showEventsUntilCallback() {
+        new MaterialDialog.Builder(getContext())
+                .title("Calendar Duration")
+                .items(weatherUnitsText)
+                .itemsCallbackSingleChoice(weatherTempUnits.getIntValue(), new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        weatherTempUnits.setIntValue(which);
+                        weatherTempUnits.save();
+                        updateWeatherUnitsTextView();
+                        refreshWidget();
+                        return true;
+                    }
+                })
+                .show();
+    }
+
+    private void updateWeatherUnitsTextView() {
+        tempUnits.setSubHeaderText(weatherUnitsText[weatherTempUnits.getIntValue()]);
     }
 
     @OnClick(R.id.weather_city)

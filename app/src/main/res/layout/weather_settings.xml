@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/app_settings_padding"
-    android:paddingRight="@dimen/app_settings_padding">
-
-    <EditText
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.silver.dan.castdemo.settingsFragments.SettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/weather_city"
+            android:text="Seattle"
+            android:drawableEnd="@drawable/ic_search_24dp"
+            android:drawableRight="@drawable/ic_search_24dp"
+            android:editable="false"
+            android:drawablePadding="10dp"
+            android:padding="5dp" />
+    </com.silver.dan.castdemo.settingsFragments.SettingItem>
+    <include layout="@layout/setting_line_break"/>
+    <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/weather_city"
-        android:text="Seattle"
-        android:drawableEnd="@drawable/ic_search_24dp"
-        android:drawableRight="@drawable/ic_search_24dp"
-        android:editable="false"
-        android:drawablePadding="10dp"
-        android:padding="5dp" />
+        android:id="@+id/weather_degrees_unit"/>
 </LinearLayout>
