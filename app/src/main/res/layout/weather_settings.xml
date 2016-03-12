@@ -3,20 +3,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.silver.dan.castdemo.settingsFragments.SettingItem
+
+    <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/weather_city"
-            android:text="Seattle"
-            android:drawableEnd="@drawable/ic_search_24dp"
-            android:drawableRight="@drawable/ic_search_24dp"
-            android:editable="false"
-            android:drawablePadding="10dp"
-            android:padding="5dp" />
-    </com.silver.dan.castdemo.settingsFragments.SettingItem>
+        android:layout_height="wrap_content"
+        android:id="@+id/weather_city"/>
     <include layout="@layout/setting_line_break"/>
     <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
         android:layout_width="match_parent"

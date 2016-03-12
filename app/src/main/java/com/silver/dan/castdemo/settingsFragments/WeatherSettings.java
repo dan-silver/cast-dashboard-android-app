@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.silver.dan.castdemo.MainActivity;
@@ -43,7 +42,7 @@ public class WeatherSettings extends WidgetSettingsFragment {
     WidgetOption weatherTempUnits;
 
     @Bind(R.id.weather_city)
-    EditText tvWeatherCity;
+    TwoLineSettingItem sWeatherCity;
 
     @Bind(R.id.weather_degrees_unit)
     TwoLineSettingItem tempUnits;
@@ -60,7 +59,8 @@ public class WeatherSettings extends WidgetSettingsFragment {
         weatherCity        = loadOrInitOption(WEATHER_CITY);
         weatherTempUnits   = loadOrInitOption(WEATHER_UNITS);
 
-        tvWeatherCity.setText(getNameFromCoordinates(getContext(), widget));
+        sWeatherCity.setHeaderText("Weather Location");
+        sWeatherCity.setSubHeaderText(getNameFromCoordinates(getContext(), widget));
 
         tempUnits.setHeaderText("Temperature Units");
         updateWeatherUnitsTextView();
@@ -124,7 +124,7 @@ public class WeatherSettings extends WidgetSettingsFragment {
                 weatherLng.save();
                 weatherCity.save();
 
-                tvWeatherCity.setText(getNameFromCoordinates(getContext(), widget));
+                sWeatherCity.setSubHeaderText(getNameFromCoordinates(getContext(), widget));
                 refreshWidget();
 
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
