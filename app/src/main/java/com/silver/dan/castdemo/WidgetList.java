@@ -66,7 +66,7 @@ public class WidgetList extends Fragment implements OnDragListener {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Widget widget = new Widget();
-                        widget.setType(Widget.types.valueOf(text.toString().toUpperCase()));
+                        widget.setType(Widget.WidgetType.valueOf(text.toString().toUpperCase()));
 
                         widget.position = widgetList.getAdapter().getItemCount();
 

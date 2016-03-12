@@ -60,7 +60,7 @@ public class Widget extends BaseModel {
         return widget;
     }
 
-    enum types {
+    enum WidgetType {
         CALENDAR(0, CalendarWidget.HUMAN_NAME, R.drawable.ic_today_24dp),
         PLACEHOLDER(1, PlaceholderWidget.HUMAN_NAME, R.drawable.ic_hourglass_empty_black_24px),
         STOCKS(2, StocksWidget.HUMAN_NAME, R.drawable.ic_attach_money_24dp),
@@ -72,7 +72,7 @@ public class Widget extends BaseModel {
         private int icon;
         private String humanName;
 
-        types(int value, String humanName, int icon) {
+        WidgetType(int value, String humanName, int icon) {
             this.value = value;
             this.icon = icon;
             this.humanName = humanName;
@@ -90,16 +90,16 @@ public class Widget extends BaseModel {
             return humanName;
         }
 
-        public static types getEnumByValue(int value) {
-            for (types e : types.values()) {
+        public static WidgetType getEnumByValue(int value) {
+            for (WidgetType e : WidgetType.values()) {
                 if (value == e.getValue()) return e;
             }
             return null;
         }
     }
 
-    public types getWidgetType() {
-        return types.getEnumByValue(type);
+    public WidgetType getWidgetType() {
+        return WidgetType.getEnumByValue(type);
     }
 
 
@@ -123,7 +123,7 @@ public class Widget extends BaseModel {
     public Widget() {
     }
 
-    public void setType(types type) {
+    public void setType(WidgetType type) {
         this.type = type.getValue();
     }
 
@@ -170,7 +170,7 @@ public class Widget extends BaseModel {
     }
 
 
-    public static void fetchByType(types type, final FetchAllWidgetsListener listener) {
+    public static void fetchByType(WidgetType type, final FetchAllWidgetsListener listener) {
         TransactionManager.getInstance().addTransaction(
 
                 new SelectListTransaction<>(
