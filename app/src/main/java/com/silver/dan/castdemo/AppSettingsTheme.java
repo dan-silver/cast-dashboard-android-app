@@ -10,11 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
-import com.silver.dan.castdemo.Settings.BackgroundType;
-import com.silver.dan.castdemo.databinding.FragmentAppSettingsThemeBinding;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.silver.dan.castdemo.Settings.BackgroundType;
+import com.silver.dan.castdemo.databinding.FragmentAppSettingsThemeBinding;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

@@ -3,13 +3,6 @@ package com.silver.dan.castdemo;
 import android.content.Context;
 import android.util.Log;
 
-import com.silver.dan.castdemo.widgets.CalendarWidget;
-import com.silver.dan.castdemo.widgets.ClockWidget;
-import com.silver.dan.castdemo.widgets.MapWidget;
-import com.silver.dan.castdemo.widgets.PlaceholderWidget;
-import com.silver.dan.castdemo.widgets.StocksWidget;
-import com.silver.dan.castdemo.widgets.UIWidget;
-import com.silver.dan.castdemo.widgets.WeatherWidget;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
@@ -22,6 +15,13 @@ import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+import com.silver.dan.castdemo.widgets.CalendarWidget;
+import com.silver.dan.castdemo.widgets.ClockWidget;
+import com.silver.dan.castdemo.widgets.MapWidget;
+import com.silver.dan.castdemo.widgets.PlaceholderWidget;
+import com.silver.dan.castdemo.widgets.StocksWidget;
+import com.silver.dan.castdemo.widgets.UIWidget;
+import com.silver.dan.castdemo.widgets.WeatherWidget;
 
 import org.json.JSONException;
 import org.json.JSONObject;

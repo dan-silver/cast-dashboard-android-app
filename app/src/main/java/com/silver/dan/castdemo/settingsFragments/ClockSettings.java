@@ -6,9 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.WidgetOption;
-
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

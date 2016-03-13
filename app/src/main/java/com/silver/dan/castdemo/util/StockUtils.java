@@ -2,11 +2,11 @@ package com.silver.dan.castdemo.util;
 
 import android.content.Context;
 
-import com.silver.dan.castdemo.Stock;
 import com.raizlabs.android.dbflow.runtime.FlowContentObserver;
 import com.raizlabs.android.dbflow.runtime.TransactionManager;
 import com.raizlabs.android.dbflow.runtime.transaction.process.ProcessModelInfo;
 import com.raizlabs.android.dbflow.runtime.transaction.process.SaveModelTransaction;
+import com.silver.dan.castdemo.Stock;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

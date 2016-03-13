@@ -11,11 +11,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
-import android.widget.TextView;
 
-import com.silver.dan.castdemo.MainActivity;
-import com.silver.dan.castdemo.R;
-import com.silver.dan.castdemo.WidgetOption;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -23,6 +19,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
+import com.silver.dan.castdemo.MainActivity;
+import com.silver.dan.castdemo.R;
+import com.silver.dan.castdemo.WidgetOption;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

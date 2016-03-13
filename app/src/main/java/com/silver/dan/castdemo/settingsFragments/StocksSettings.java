@@ -16,6 +16,9 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.Delete;
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.RecyclerItemClickListener;
 import com.silver.dan.castdemo.Stock;
@@ -23,9 +26,6 @@ import com.silver.dan.castdemo.StockInfo;
 import com.silver.dan.castdemo.Stock_Table;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.WidgetOption_Table;
-import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.Delete;
-import com.raizlabs.android.dbflow.sql.language.Select;
 
 import java.util.ArrayList;
 import java.util.List;

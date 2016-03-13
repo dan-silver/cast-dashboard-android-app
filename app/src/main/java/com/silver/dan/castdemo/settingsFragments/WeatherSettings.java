@@ -10,16 +10,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.silver.dan.castdemo.MainActivity;
-import com.silver.dan.castdemo.R;
-import com.silver.dan.castdemo.Widget;
-import com.silver.dan.castdemo.WidgetOption;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.silver.dan.castdemo.MainActivity;
+import com.silver.dan.castdemo.R;
+import com.silver.dan.castdemo.Widget;
+import com.silver.dan.castdemo.WidgetOption;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

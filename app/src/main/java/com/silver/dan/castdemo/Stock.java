@@ -3,13 +3,13 @@ package com.silver.dan.castdemo;
 import android.content.Context;
 import android.util.Log;
 
-import com.silver.dan.castdemo.util.StockUtils;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+import com.silver.dan.castdemo.util.StockUtils;
 
 @ModelContainer
 @Table(database = WidgetDatabase.class)

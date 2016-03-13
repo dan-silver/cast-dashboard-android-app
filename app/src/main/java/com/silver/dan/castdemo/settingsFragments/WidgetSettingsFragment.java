@@ -3,11 +3,11 @@ package com.silver.dan.castdemo.settingsFragments;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.CastCommunicator;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.Widget_Table;
-import com.raizlabs.android.dbflow.sql.language.Select;
 
 public abstract class WidgetSettingsFragment extends Fragment {
     protected Widget widget;

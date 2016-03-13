@@ -3,8 +3,6 @@ package com.silver.dan.castdemo.widgets;
 import android.content.Context;
 
 import com.silver.dan.castdemo.Widget;
-import com.silver.dan.castdemo.WidgetOption;
-import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.WeatherSettings;
 
 import org.json.JSONException;

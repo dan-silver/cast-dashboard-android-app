@@ -2,13 +2,13 @@ package com.silver.dan.castdemo.widgets;
 
 import android.content.Context;
 
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.Stock;
 import com.silver.dan.castdemo.Stock_Table;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
-import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.Select;
 
 import org.json.JSONArray;
 import org.json.JSONException;

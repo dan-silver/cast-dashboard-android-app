@@ -11,13 +11,13 @@ import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.ClockSettings;
 import com.silver.dan.castdemo.settingsFragments.MapSettings;
 import com.silver.dan.castdemo.settingsFragments.PlaceholderSettings;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
 import com.silver.dan.castdemo.settingsFragments.WeatherSettings;
-import com.raizlabs.android.dbflow.sql.language.Select;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
