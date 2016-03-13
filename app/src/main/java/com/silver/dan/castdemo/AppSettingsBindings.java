@@ -120,7 +120,7 @@ public class AppSettingsBindings extends BaseObservable {
 
     public void saveAllSettings() {
         SharedPreferences preferences = appSettings.getContext().getSharedPreferences(SHARED_PREFS_OPTIONS, 0);
-        SharedPreferences.Editor edit= preferences.edit();
+        SharedPreferences.Editor edit = preferences.edit();
 
         edit.putInt(COLUMN_COUNT, numberOfColumns);
         edit.putInt(BACKGROUND_COLOR, widgetBackgroundColor);

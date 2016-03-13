@@ -40,7 +40,7 @@ public class SettingItem extends FrameLayout {
 
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
-        if(mContentView == null){
+        if (mContentView == null) {
             super.addView(child, index, params);
         } else {
             //Forward these calls to the content view

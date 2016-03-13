@@ -102,8 +102,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged,
         ButterKnife.bind(this);
 
 
-
-
         // Set the adapter for the list view
         Menu menu = navView.getMenu();
 
@@ -236,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged,
         }
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -330,7 +329,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged,
     public void onItemMoved(JSONObject widgetsOrder) {
         CastCommunicator.sendJSON("order", widgetsOrder);
     }
-
 
 
     @Override

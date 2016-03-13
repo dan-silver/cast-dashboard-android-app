@@ -54,10 +54,10 @@ public class WeatherSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.weather_settings, container, false);
         ButterKnife.bind(this, view);
 
-        weatherLng         = loadOrInitOption(WEATHER_LNG);
-        weatherLat         = loadOrInitOption(WEATHER_LAT);
-        weatherCity        = loadOrInitOption(WEATHER_CITY);
-        weatherTempUnits   = loadOrInitOption(WEATHER_UNITS);
+        weatherLng = loadOrInitOption(WEATHER_LNG);
+        weatherLat = loadOrInitOption(WEATHER_LAT);
+        weatherCity = loadOrInitOption(WEATHER_CITY);
+        weatherTempUnits = loadOrInitOption(WEATHER_UNITS);
 
         sWeatherCity.setHeaderText("Location");
         sWeatherCity.setSubHeaderText(getNameFromCoordinates(getContext(), widget));

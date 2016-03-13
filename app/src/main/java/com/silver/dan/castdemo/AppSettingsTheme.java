@@ -81,8 +81,8 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         });
 
 
-            return view;
-        }
+        return view;
+    }
 
     @OnClick(R.id.widget_background_color)
     public void openWidgetBackgroundColorDialog() {
@@ -93,7 +93,6 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
             }
         });
     }
-
 
 
     @OnClick(R.id.text_color)

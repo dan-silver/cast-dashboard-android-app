@@ -31,7 +31,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
     public static String LOCATION_LAT = "LOCATION_LAT";
     public static String LOCATION_LONG = "LOCATION_LONG";
-//    public static String LOCATION_NAME = "LOCATION_NAME";
+    //    public static String LOCATION_NAME = "LOCATION_NAME";
     public static String LOCATION_ADDRESS = "LOCATION_ADDRESS";
     public static String MAP_ZOOM = "MAP_ZOOM";
     public static String SHOW_TRAFFIC = "SHOW_TRAFFIC";
@@ -41,7 +41,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
     WidgetOption locationLat;
     WidgetOption locationLong;
-//    WidgetOption locationNameOption;
+    //    WidgetOption locationNameOption;
     WidgetOption locationAddrOption;
     WidgetOption mapZoomOption;
     WidgetOption mapShowTraffic;

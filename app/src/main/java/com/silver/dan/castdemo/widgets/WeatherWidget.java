@@ -28,8 +28,8 @@ public class WeatherWidget extends UIWidget {
     @Override
     public JSONObject getContent() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("lat",   widget.getOption(WeatherSettings.WEATHER_LAT).value);
-        json.put("lng",   widget.getOption(WeatherSettings.WEATHER_LNG).value);
+        json.put("lat", widget.getOption(WeatherSettings.WEATHER_LAT).value);
+        json.put("lng", widget.getOption(WeatherSettings.WEATHER_LNG).value);
         json.put("units", widget.loadOrInitOption(WeatherSettings.WEATHER_UNITS, context).value);
         return json;
     }

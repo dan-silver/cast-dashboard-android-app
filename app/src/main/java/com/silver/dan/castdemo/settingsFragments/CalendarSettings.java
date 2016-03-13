@@ -28,7 +28,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     public static String ALL_CALENDARS = "ALL_CALENDARS";
     public static String CALENDAR_ENABLED = "CALENDAR_ENABLED";
     public static String SHOW_EVENT_LOCATIONS = "SHOW_EVENT_LOCATIONS";
-    public static String SHOW_EVENTS_UNTIL= "SHOW_EVENTS_UNTIL";
+    public static String SHOW_EVENTS_UNTIL = "SHOW_EVENTS_UNTIL";
 
     String numDaysDisplayStr[] = new String[]{"3 Days", "1 Week", "2 Weeks", "1 Month", "3 Months"};
     Integer numDaysDisplayValues[] = new Integer[]{3, 7, 14, 30, 90};

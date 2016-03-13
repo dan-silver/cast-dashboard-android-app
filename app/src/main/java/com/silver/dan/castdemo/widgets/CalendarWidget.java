@@ -134,7 +134,7 @@ public class CalendarWidget extends UIWidget {
         long begin = cal1.getTimeInMillis();
 
         // end time
-        cal1.add(Calendar.DATE, showEventsUntil-1);
+        cal1.add(Calendar.DATE, showEventsUntil - 1);
         long end = cal1.getTimeInMillis(); // ending time in milliseconds
 
         String[] projection =
@@ -159,8 +159,8 @@ public class CalendarWidget extends UIWidget {
 
         List<String> selection = new ArrayList<>();
         List<String> selectionArgs = new ArrayList<>();
-        String selectionStr = "("+CalendarContract.Instances.SELF_ATTENDEE_STATUS
-                + "!="	+ CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED
+        String selectionStr = "(" + CalendarContract.Instances.SELF_ATTENDEE_STATUS
+                + "!=" + CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED
                 + " AND " + CalendarContract.Instances.STATUS + "!="
                 + CalendarContract.Instances.STATUS_CANCELED + " AND "
                 + CalendarContract.Instances.VISIBLE + "!=0) AND (";
@@ -181,7 +181,7 @@ public class CalendarWidget extends UIWidget {
         ContentUris.appendId(builder, end);
 
         // Submit the query
-        Cursor cur =  context.getContentResolver().query(builder.build(),
+        Cursor cur = context.getContentResolver().query(builder.build(),
                 projection,
                 selectionStr,
                 selectionArgs.toArray(new String[selectionArgs.size()]),
