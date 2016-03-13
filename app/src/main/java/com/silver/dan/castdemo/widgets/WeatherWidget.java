@@ -3,6 +3,8 @@ package com.silver.dan.castdemo.widgets;
 import android.content.Context;
 
 import com.silver.dan.castdemo.Widget;
+import com.silver.dan.castdemo.WidgetOption;
+import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.WeatherSettings;
 
 import org.json.JSONException;
@@ -30,7 +32,7 @@ public class WeatherWidget extends UIWidget {
         JSONObject json = new JSONObject();
         json.put("lat",   widget.getOption(WeatherSettings.WEATHER_LAT).value);
         json.put("lng",   widget.getOption(WeatherSettings.WEATHER_LNG).value);
-        json.put("units", widget.getOption(WeatherSettings.WEATHER_UNITS).value);
+        json.put("units", widget.loadOrInitOption(WeatherSettings.WEATHER_UNITS, context).value);
         return json;
     }
 

@@ -59,7 +59,7 @@ public class WeatherSettings extends WidgetSettingsFragment {
         weatherCity        = loadOrInitOption(WEATHER_CITY);
         weatherTempUnits   = loadOrInitOption(WEATHER_UNITS);
 
-        sWeatherCity.setHeaderText("Weather Location");
+        sWeatherCity.setHeaderText("Location");
         sWeatherCity.setSubHeaderText(getNameFromCoordinates(getContext(), widget));
 
         tempUnits.setHeaderText("Temperature Units");
@@ -69,7 +69,7 @@ public class WeatherSettings extends WidgetSettingsFragment {
     }
 
     @OnClick(R.id.weather_degrees_unit)
-    public void showEventsUntilCallback() {
+    public void showTemperatureUnitsCallback() {
         new MaterialDialog.Builder(getContext())
                 .title("Calendar Duration")
                 .items(weatherUnitsText)
@@ -79,7 +79,7 @@ public class WeatherSettings extends WidgetSettingsFragment {
                         weatherTempUnits.setIntValue(which);
                         weatherTempUnits.save();
                         updateWeatherUnitsTextView();
-                        refreshWidget();
+                        updateWidgetProperty("units", weatherTempUnits.getIntValue());
                         return true;
                     }
                 })

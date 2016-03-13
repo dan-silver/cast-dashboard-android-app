@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged,
 
 
     //drawer
-
     @Bind(R.id.nvView)
     NavigationView navView;
 
