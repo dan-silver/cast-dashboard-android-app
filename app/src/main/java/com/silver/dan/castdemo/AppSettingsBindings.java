@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 
 import com.silver.dan.castdemo.Settings.BackgroundType;
 
+import java.util.Locale;
+
 public class AppSettingsBindings extends BaseObservable {
     @Bindable
     public Integer widgetBackgroundColor;
@@ -41,6 +43,7 @@ public class AppSettingsBindings extends BaseObservable {
     static String WIDGET_COLOR = "WIDGET_COLOR";
     static String TEXT_COLOR = "TEXT_COLOR";
     static String SCREEN_PADDING = "SCREEN_PADDING";
+    static String LOCALE = "LOCALE";
 
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
@@ -159,5 +162,10 @@ public class AppSettingsBindings extends BaseObservable {
 
     public int getScreenPaddingUI() {
         return screenPadding;
+    }
+
+    public String getLocale(Context context) {
+        Locale current = context.getResources().getConfiguration().locale;
+        return current.getLanguage();
     }
 }
