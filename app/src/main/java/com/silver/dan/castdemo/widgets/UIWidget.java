@@ -21,4 +21,8 @@ abstract public class UIWidget {
     }
 
     public abstract void init();
+
+    public int getNameRes() {
+        return widget.getHumanNameRes();
+    }
 }

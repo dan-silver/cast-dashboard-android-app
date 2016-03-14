@@ -40,7 +40,7 @@
             android:textColor="@android:color/white"
             android:textSize="@dimen/md_title_textsize"
             android:gravity="center"
-            android:text="Delete" />
+            android:text="@string/delete" />
     </LinearLayout>
 
 </LinearLayout>

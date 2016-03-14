@@ -113,8 +113,8 @@ public class StocksSettings extends WidgetSettingsFragment {
                 final StockInfo stock = stockListAdapter.getStock(position);
                 new MaterialDialog.Builder(getContext())
                         .title("Remove " + stock.getName() + "?")
-                        .positiveText("Remove")
-                        .negativeText("Cancel")
+                        .positiveText(R.string.remove)
+                        .negativeText(R.string.cancel)
                         .onPositive(new MaterialDialog.SingleButtonCallback() {
                             @Override
                             public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

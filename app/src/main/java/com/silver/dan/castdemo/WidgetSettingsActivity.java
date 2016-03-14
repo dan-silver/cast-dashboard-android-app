@@ -52,7 +52,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
         // display appropriate settings for that widget type
         widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
 
-        setTitle(widget.getHumanName() + " Widget");
+        setTitle(getApplicationContext().getString(widget.getHumanNameRes()) + " Widget");
 
         Fragment typeSettingsFragment;
         switch (widget.getWidgetType()) {
@@ -90,10 +90,10 @@ public class WidgetSettingsActivity extends AppCompatActivity {
     void deleteWidget() {
 
         new MaterialDialog.Builder(this)
-                .title("Delete " + widget.getHumanName())
+                .title("Delete Widget")
                 .content("Are you sure you want to remove this widget?")
-                .positiveText("Yes")
-                .negativeText("Cancel")
+                .positiveText(R.string.delete)
+                .negativeText(R.string.cancel)
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

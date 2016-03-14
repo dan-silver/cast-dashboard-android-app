@@ -19,7 +19,6 @@ import java.util.List;
 
 
 public class StocksWidget extends UIWidget {
-    public static String HUMAN_NAME = "Stocks";
 
     public StocksWidget(Context context, Widget widget) {
         super(context, widget);

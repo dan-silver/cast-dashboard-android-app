@@ -120,7 +120,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         final Widget widget = widgetList.get(i);
         UIWidget uiWidget = widget.getUIWidget(mainActivity);
 
-        customViewHolder.topHeader.setText(widget.getHumanName());
+        customViewHolder.topHeader.setText(mainActivity.getApplicationContext().getString(widget.getHumanNameRes()));
         customViewHolder.bottomHeader.setText(uiWidget.getWidgetPreviewSecondaryHeader());
 
 

@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 
 public class ClockWidget extends UIWidget {
-    public static String HUMAN_NAME = "Clock";
 
     public ClockWidget(Context context, Widget widget) {
         super(context, widget);

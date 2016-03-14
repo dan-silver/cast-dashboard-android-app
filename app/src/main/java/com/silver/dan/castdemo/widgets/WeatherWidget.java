@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 
 public class WeatherWidget extends UIWidget {
-    public static String HUMAN_NAME = "Weather";
 
     public WeatherWidget(Context context, Widget widget) {
         super(context, widget);

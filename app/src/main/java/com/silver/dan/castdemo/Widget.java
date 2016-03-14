@@ -61,21 +61,21 @@ public class Widget extends BaseModel {
     }
 
     enum WidgetType {
-        CALENDAR(0, CalendarWidget.HUMAN_NAME, R.drawable.ic_today_24dp),
-        PLACEHOLDER(1, PlaceholderWidget.HUMAN_NAME, R.drawable.ic_hourglass_empty_black_24px),
-        STOCKS(2, StocksWidget.HUMAN_NAME, R.drawable.ic_attach_money_24dp),
-        MAP(3, MapWidget.HUMAN_NAME, R.drawable.ic_map_24dp),
-        CLOCK(4, ClockWidget.HUMAN_NAME, R.drawable.ic_access_time_24dp),
-        WEATHER(5, WeatherWidget.HUMAN_NAME, R.drawable.ic_cloud_queue_24dp);
+        CALENDAR(0, R.string.calendar, R.drawable.ic_today_24dp),
+        PLACEHOLDER(1, R.string.placeholder, R.drawable.ic_hourglass_empty_black_24px),
+        STOCKS(2, R.string.stocks, R.drawable.ic_attach_money_24dp),
+        MAP(3, R.string.map, R.drawable.ic_map_24dp),
+        CLOCK(4, R.string.clock, R.drawable.ic_access_time_24dp),
+        WEATHER(5, R.string.weather, R.drawable.ic_cloud_queue_24dp);
 
         private int value;
         private int icon;
-        private String humanName;
+        private int humanNameRes;
 
-        WidgetType(int value, String humanName, int icon) {
+        WidgetType(int value, int humanNameRes, int icon) {
             this.value = value;
             this.icon = icon;
-            this.humanName = humanName;
+            this.humanNameRes = humanNameRes;
         }
 
         public int getValue() {
@@ -86,8 +86,8 @@ public class Widget extends BaseModel {
             return icon;
         }
 
-        public String getHumanName() {
-            return humanName;
+        public int getHumanNameRes() {
+            return humanNameRes;
         }
 
         public static WidgetType getEnumByValue(int value) {
@@ -116,8 +116,8 @@ public class Widget extends BaseModel {
         return getWidgetType().getIcon();
     }
 
-    public String getHumanName() {
-        return getWidgetType().getHumanName();
+    public int getHumanNameRes() {
+        return getWidgetType().getHumanNameRes();
     }
 
     public Widget() {
@@ -187,8 +187,8 @@ public class Widget extends BaseModel {
 
     public JSONObject getJSONContent(Context applicationContext) throws JSONException {
         JSONObject payload = new JSONObject();
-        payload.put("type", getWidgetType().getHumanName().toLowerCase());
-        payload.put("id", this.id);
+        payload.put("type", type);
+        payload.put("id", id);
         payload.put("options", new JSONObject());
         payload.put("position", position);
 

@@ -10,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MapWidget extends UIWidget {
-    public static String HUMAN_NAME = "Map";
 
     public MapWidget(Context context, Widget widget) {
         super(context, widget);

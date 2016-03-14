@@ -13,12 +13,8 @@ import android.view.ViewGroup;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.silver.dan.castdemo.widgetList.OnDragListener;
 import com.silver.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
-import com.silver.dan.castdemo.widgets.CalendarWidget;
-import com.silver.dan.castdemo.widgets.ClockWidget;
-import com.silver.dan.castdemo.widgets.MapWidget;
-import com.silver.dan.castdemo.widgets.StocksWidget;
-import com.silver.dan.castdemo.widgets.WeatherWidget;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -57,17 +53,27 @@ public class WidgetList extends Fragment implements OnDragListener {
 
     }
 
+
+
     @OnClick(R.id.fab)
     public void addWidget() {
+        final ArrayList<Widget.WidgetType> widgetTypes = new ArrayList<Widget.WidgetType>(){{
+            add(Widget.WidgetType.CALENDAR);
+            add(Widget.WidgetType.MAP);
+            add(Widget.WidgetType.CLOCK);
+            add(Widget.WidgetType.WEATHER);
+            add(Widget.WidgetType.STOCKS);
+        }};
+
         new MaterialDialog.Builder(getContext())
                 .title("New Widget")
-                .items(new String[]{CalendarWidget.HUMAN_NAME, StocksWidget.HUMAN_NAME, MapWidget.HUMAN_NAME, ClockWidget.HUMAN_NAME, WeatherWidget.HUMAN_NAME})
+                .items(R.array.newWidgetDialogList)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         Widget widget = new Widget();
-                        widget.setType(Widget.WidgetType.valueOf(text.toString().toUpperCase()));
 
+                        widget.setType(widgetTypes.get(which));
                         widget.position = widgetList.getAdapter().getItemCount();
 
                         widget.save();

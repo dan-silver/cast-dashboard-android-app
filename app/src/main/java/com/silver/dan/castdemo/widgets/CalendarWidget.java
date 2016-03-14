@@ -26,9 +26,6 @@ import java.util.TimeZone;
 
 public class CalendarWidget extends UIWidget {
 
-    public static String HUMAN_NAME = "Calendar";
-
-
     // Projection array. Creating indices for this array instead of doing
 
     public static final String[] EVENT_PROJECTION = new String[]{

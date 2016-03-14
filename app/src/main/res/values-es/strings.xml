@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="weather">Clima</string>
+    <string name="stocks">Acciones</string>
+    <string name="clock">Reloj</string>
+    <string name="calendar">Calendario</string>
+    <string name="map">Mapa</string>
+
+    <string name="delete">Elimine</string>
+    <string name="cancel">Cancele</string>
+    <string name="remove">Elimine</string>
+</resources>

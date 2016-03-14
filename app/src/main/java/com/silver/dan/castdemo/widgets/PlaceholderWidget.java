@@ -9,7 +9,6 @@ import org.json.JSONObject;
 
 
 public class PlaceholderWidget extends UIWidget {
-    public static String HUMAN_NAME = "Placeholder";
 
     public PlaceholderWidget(Context context, Widget widget) {
         super(context, widget);

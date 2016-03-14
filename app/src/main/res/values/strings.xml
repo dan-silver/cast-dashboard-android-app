@@ -13,4 +13,19 @@
     <string name="title_activity_widget_settings">WidgetSettingsActivity</string>
     <string name="intro_overlay_text">Find your cast device in the top menu</string>
     <string name="SHARED_PREFS_OPTIONS">OPTIONS</string>
+
+
+
+    <!--Widget Types-->
+    <string name="calendar">Calendar</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="stocks">Stocks</string>
+    <string name="map">Map</string>
+    <string name="clock">Clock</string>
+    <string name="weather">Weather</string>
+
+    <!--Actions-->
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="remove">Remove</string>
 </resources>
