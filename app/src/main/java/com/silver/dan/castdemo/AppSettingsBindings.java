@@ -164,8 +164,4 @@ public class AppSettingsBindings extends BaseObservable {
         return screenPadding;
     }
 
-    public String getLocale(Context context) {
-        Locale current = context.getResources().getConfiguration().locale;
-        return current.getLanguage();
-    }
 }
