@@ -9,7 +9,7 @@
         <Switch
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Show Seconds"
+            android:text="@string/show_seconds"
             android:id="@+id/clock_show_seconds"
             android:textSize="@dimen/setting_text_size"
             android:textColor="@color/primary_text"/>

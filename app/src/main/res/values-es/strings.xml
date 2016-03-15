@@ -13,4 +13,5 @@
     <string name="Fahrenheit">Fahrenheit</string>
     <string name="temperature_units">Unidades de Temperatura</string>
     <string name="location">Ubicación</string>
+    <string name="show_seconds">Visualización Segundos</string>
 </resources>
