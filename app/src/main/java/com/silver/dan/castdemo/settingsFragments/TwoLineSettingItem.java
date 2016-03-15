@@ -37,4 +37,7 @@ public class TwoLineSettingItem extends SettingItem {
         subHeader.setText(text);
     }
 
+    public void setHeaderText(int resId) {
+        setHeaderText(getResources().getString(resId));
+    }
 }

@@ -9,4 +9,8 @@
     <string name="delete">Elimine</string>
     <string name="cancel">Cancele</string>
     <string name="remove">Elimine</string>
+    <string name="Celsius">Centígrado</string>
+    <string name="Fahrenheit">Fahrenheit</string>
+    <string name="temperature_units">Unidades de Temperatura</string>
+    <string name="location">Ubicación</string>
 </resources>

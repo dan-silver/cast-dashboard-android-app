@@ -28,4 +28,8 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="remove">Remove</string>
+    <string name="Celsius">Celsius</string>
+    <string name="Fahrenheit">Fahrenheit</string>
+    <string name="temperature_units">Temperature Units</string>
+    <string name="location">Location</string>
 </resources>

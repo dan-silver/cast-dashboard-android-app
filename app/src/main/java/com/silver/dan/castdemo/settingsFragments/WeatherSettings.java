@@ -47,8 +47,6 @@ public class WeatherSettings extends WidgetSettingsFragment {
     @Bind(R.id.weather_degrees_unit)
     TwoLineSettingItem tempUnits;
 
-    String weatherUnitsText[] = new String[]{"Fahrenheit", "Celsius"};
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.weather_settings, container, false);
@@ -59,10 +57,10 @@ public class WeatherSettings extends WidgetSettingsFragment {
         weatherCity = loadOrInitOption(WEATHER_CITY);
         weatherTempUnits = loadOrInitOption(WEATHER_UNITS);
 
-        sWeatherCity.setHeaderText("Location");
+        sWeatherCity.setHeaderText(R.string.location);
         sWeatherCity.setSubHeaderText(getNameFromCoordinates(getContext(), widget));
 
-        tempUnits.setHeaderText("Temperature Units");
+        tempUnits.setHeaderText(R.string.temperature_units);
         updateWeatherUnitsTextView();
 
         return view;
@@ -71,8 +69,8 @@ public class WeatherSettings extends WidgetSettingsFragment {
     @OnClick(R.id.weather_degrees_unit)
     public void showTemperatureUnitsCallback() {
         new MaterialDialog.Builder(getContext())
-                .title("Calendar Duration")
-                .items(weatherUnitsText)
+                .title(R.string.temperature_units)
+                .items(R.array.temperature_units_list)
                 .itemsCallbackSingleChoice(weatherTempUnits.getIntValue(), new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
@@ -87,7 +85,7 @@ public class WeatherSettings extends WidgetSettingsFragment {
     }
 
     private void updateWeatherUnitsTextView() {
-        tempUnits.setSubHeaderText(weatherUnitsText[weatherTempUnits.getIntValue()]);
+        tempUnits.setSubHeaderText(getResources().getStringArray(R.array.temperature_units_list)[weatherTempUnits.getIntValue()]);
     }
 
     @OnClick(R.id.weather_city)

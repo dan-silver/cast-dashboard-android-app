@@ -20,5 +20,10 @@
         <item>@string/weather</item>
         <item>@string/stocks</item>
     </string-array>
+    <string-array name="temperature_units_list">
+        <item>@string/Fahrenheit</item>
+        <item>@string/Celsius</item>
+    </string-array>
+
 
 </resources>
