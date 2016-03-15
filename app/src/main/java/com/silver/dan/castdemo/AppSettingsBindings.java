@@ -102,6 +102,10 @@ public class AppSettingsBindings extends BaseObservable {
         return this.backgroundType.name();
     }
 
+    public int getBackgroundTypeStrRes() {
+        return this.backgroundType.getHumanNameRes();
+    }
+
     public void setNumberOfColumns(int numberOfColumns) {
         this.numberOfColumns = numberOfColumns;
         notifyPropertyChanged(BR.numberOfColumns);
@@ -164,4 +168,7 @@ public class AppSettingsBindings extends BaseObservable {
         return screenPadding;
     }
 
+    public BackgroundType getBackgroundType() {
+        return this.backgroundType;
+    }
 }

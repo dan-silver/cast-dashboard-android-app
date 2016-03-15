@@ -13,8 +13,8 @@ android {
         applicationId "com.silver.dan.castdemo"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 12
-        versionName "1.0.12"
+        versionCode 13
+        versionName "1.0.13"
 //        vectorDrawables.useSupportLibrary = true
 
     }
@@ -45,7 +45,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:recyclerview-v7:23.2.1'
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.6@aar') {
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.7@aar') {
         transitive = true
     }
     compile 'net.sf.opencsv:opencsv:2.3'

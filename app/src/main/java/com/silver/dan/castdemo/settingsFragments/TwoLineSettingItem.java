@@ -40,4 +40,8 @@ public class TwoLineSettingItem extends SettingItem {
     public void setHeaderText(int resId) {
         setHeaderText(getResources().getString(resId));
     }
+    public void setSubHeaderText(int resId) {
+        setSubHeaderText(getResources().getString(resId));
+    }
+
 }

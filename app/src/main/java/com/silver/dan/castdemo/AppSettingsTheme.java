@@ -8,13 +8,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.silver.dan.castdemo.Settings.BackgroundType;
 import com.silver.dan.castdemo.databinding.FragmentAppSettingsThemeBinding;
+import com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,8 +25,8 @@ import butterknife.OnClick;
 
 public class AppSettingsTheme extends AppSettingsHelperFragment {
 
-    @Bind(R.id.background_type_spinner)
-    Spinner backgroundTypeSpinner;
+    @Bind(R.id.background_type)
+    TwoLineSettingItem backgroundType;
 
     @Bind(R.id.widget_transparency)
     SeekBar widgetTransparency;
@@ -37,6 +40,8 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         bindings = new AppSettingsBindings();
         bindings.init(this);
         ((FragmentAppSettingsThemeBinding) viewModel).setSettings(bindings);
+        backgroundType.setHeaderText("Background");
+        updateBackgroundTypeText();
 
         widgetTransparency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -56,32 +61,33 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
             }
         });
 
-        final ArrayAdapter<BackgroundType> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, BackgroundType.values());
-
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        backgroundTypeSpinner.setAdapter(adapter);
-        backgroundTypeSpinner.setSelection(bindings.backgroundType.getValue());
-
-        backgroundTypeSpinner.post(new Runnable() {
-            public void run() {
-                backgroundTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        bindings.setBackgroundType(adapter.getItem(position));
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-
-                    }
-                });
-            }
-        });
-
-
         return view;
+    }
+
+    public void updateBackgroundTypeText() {
+        backgroundType.setSubHeaderText(bindings.getBackgroundTypeStrRes());
+    }
+
+    @OnClick(R.id.background_type)
+    public void setBackgroundType() {
+        // it should be safe to rearrange and add items to this list
+        final ArrayList<BackgroundType> backgroundTypes = new ArrayList<BackgroundType>(){{
+            add(BackgroundType.SLIDESHOW);
+            add(BackgroundType.SOLID_COLOR);
+        }};
+
+        new MaterialDialog.Builder(getContext())
+                .title("Background Type")
+                .items(R.array.backgroundTypeList)
+                .itemsCallbackSingleChoice(backgroundTypes.indexOf(bindings.getBackgroundType()), new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        bindings.setBackgroundType(backgroundTypes.get(which));
+                        updateBackgroundTypeText();
+                        return true;
+                    }
+                })
+                .show();
     }
 
     @OnClick(R.id.widget_background_color)
