@@ -35,4 +35,6 @@
     <string name="slideshow">Slideshow</string>
     <string name="solid_color">Solid Color</string>
     <string name="background_color">Background Color</string>
+    <string name="background">Background</string>
+    <string name="done">Done</string>
 </resources>

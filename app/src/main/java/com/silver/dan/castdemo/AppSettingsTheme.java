@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -40,7 +38,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         bindings = new AppSettingsBindings();
         bindings.init(this);
         ((FragmentAppSettingsThemeBinding) viewModel).setSettings(bindings);
-        backgroundType.setHeaderText("Background");
+        backgroundType.setHeaderText(R.string.background);
         updateBackgroundTypeText();
 
         widgetTransparency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -77,7 +75,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         }};
 
         new MaterialDialog.Builder(getContext())
-                .title("Background Type")
+                .title(R.string.background)
                 .items(R.array.backgroundTypeList)
                 .itemsCallbackSingleChoice(backgroundTypes.indexOf(bindings.getBackgroundType()), new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
@@ -101,7 +99,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
     }
 
 
-    @OnClick(R.id.text_color)
+    @OnClick(R.id.text_color_setting_item)
     public void openTextColorDialog() {
         createColorPickerDialog(bindings.textColor, new ColorPickerClickListener() {
             @Override
@@ -111,7 +109,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         });
     }
 
-    @OnClick(R.id.widget_color)
+    @OnClick(R.id.widget_color_setting_item)
     public void openWidgetColorDialog() {
         createColorPickerDialog(bindings.widgetColor, new ColorPickerClickListener() {
             @Override
@@ -121,19 +119,6 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         });
     }
 
-    public void createColorPickerDialog(int initialColor, ColorPickerClickListener onResult) {
-        ColorPickerDialogBuilder
-                .with(getContext())
-                .setTitle("Choose color")
-                .initialColor(initialColor)
-                .showAlphaSlider(false)
-                .wheelType(ColorPickerView.WHEEL_TYPE.CIRCLE)
-                .density(5)
-                .setPositiveButton("Done", onResult)
-                .build()
-                .show();
-
-    }
 
     @Override
     public void onResume() {

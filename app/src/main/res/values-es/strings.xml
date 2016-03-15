@@ -15,4 +15,8 @@
     <string name="location">Ubicación</string>
     <string name="show_seconds">Visualización Segundos</string>
     <string name="background_color">Color de Fondo</string>
+    <string name="slideshow">Presentaciones Fotográficas</string>
+    <string name="solid_color">Color Sólido</string>
+    <string name="background">Fondo</string>
+    <string name="done">Listo</string>
 </resources>
