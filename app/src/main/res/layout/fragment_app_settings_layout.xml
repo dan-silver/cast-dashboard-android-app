@@ -14,12 +14,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
             android:orientation="vertical">
 
+            <com.silver.dan.castdemo.settingsFragments.SettingItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -28,36 +27,47 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textSize="@dimen/setting_text_size"
                     android:text="Number of Columns: "/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/num_columns_label"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textSize="@dimen/setting_text_size"
                     android:text='@{""+(settings.numberOfColumns+1)}'/>
 
             </LinearLayout>
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/seekBar"
-                android:progress="@{settings.numberOfColumns}"
-                android:max="6"
-                android:layout_marginBottom="@dimen/app_settings_padding"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:text="Screen Padding"/>
-            <SeekBar
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seekBar"
+                    android:progress="@{settings.numberOfColumns}"
+                    android:max="6"
+                    android:layout_marginBottom="@dimen/app_settings_padding"/>
+            </com.silver.dan.castdemo.settingsFragments.SettingItem>
+
+            <include layout="@layout/setting_line_break"/>
+
+            <com.silver.dan.castdemo.settingsFragments.SettingItem
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/screen_padding"
-                android:progress="@{settings.screenPadding}"
-                android:max="30"
-                android:layout_marginBottom="@dimen/app_settings_padding"/>
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/setting_text_size"
+                    android:text="Screen Padding"/>
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/screen_padding"
+                    android:progress="@{settings.screenPadding}"
+                    android:max="30"
+                    android:layout_marginBottom="@dimen/app_settings_padding"/>
+            </com.silver.dan.castdemo.settingsFragments.SettingItem>
+            <include layout="@layout/setting_line_break"/>
 
         </LinearLayout>
     </ScrollView>
