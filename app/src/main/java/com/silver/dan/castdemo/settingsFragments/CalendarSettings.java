@@ -112,7 +112,6 @@ public class CalendarSettings extends WidgetSettingsFragment {
     }
 
     private void updateCalendarUntilTextView() {
-        showEventsUntil.setHeaderText("Calendar Duration");
         showEventsUntil.setSubHeaderText(numDaysDisplayStr[getSelectedCalendarOptionIndex()]);
     }
 

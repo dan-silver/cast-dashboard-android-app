@@ -2,11 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
     <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/map_location" />
+        android:id="@+id/map_location"
+        app:headerText="@string/location"/>
 
 
     <include layout="@layout/setting_line_break"/>

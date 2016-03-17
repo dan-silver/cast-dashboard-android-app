@@ -38,8 +38,6 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         bindings = new AppSettingsBindings();
         bindings.init(this);
         ((FragmentAppSettingsThemeBinding) viewModel).setSettings(bindings);
-        backgroundType.setHeaderText(R.string.background);
-        updateBackgroundTypeText();
 
         widgetTransparency.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -62,10 +60,6 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         return view;
     }
 
-    public void updateBackgroundTypeText() {
-        backgroundType.setSubHeaderText(bindings.getBackgroundTypeStrRes());
-    }
-
     @OnClick(R.id.background_type)
     public void setBackgroundType() {
         // it should be safe to rearrange and add items to this list
@@ -81,7 +75,6 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         bindings.setBackgroundType(backgroundTypes.get(which));
-                        updateBackgroundTypeText();
                         return true;
                     }
                 })

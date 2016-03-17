@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -7,10 +8,12 @@
     <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/weather_city"/>
+        android:id="@+id/weather_city"
+        app:headerText="@string/location"/>
     <include layout="@layout/setting_line_break"/>
     <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/weather_degrees_unit"/>
+        android:id="@+id/weather_degrees_unit"
+        app:headerText="@string/temperature_units"/>
 </LinearLayout>

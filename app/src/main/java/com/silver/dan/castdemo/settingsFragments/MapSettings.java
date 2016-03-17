@@ -67,7 +67,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         mapZoomOption = loadOrInitOption(MapSettings.MAP_ZOOM);
         mapShowTraffic = loadOrInitOption(MapSettings.SHOW_TRAFFIC);
 
-        mapLocation.setHeaderText(R.string.location);
+
         updateLocationText();
 
 

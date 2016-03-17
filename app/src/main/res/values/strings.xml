@@ -37,4 +37,8 @@
     <string name="background_color">Background Color</string>
     <string name="background">Background</string>
     <string name="done">Done</string>
+    <string name="text_color">Text Color</string>
+    <string name="number_of_columns">Number of Columns</string>
+    <string name="screen_padding">Screen Padding</string>
+    <string name="calendar_duration">Calendar Duration</string>
 </resources>

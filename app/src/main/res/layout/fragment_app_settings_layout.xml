@@ -28,13 +28,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/setting_text_size"
-                    android:text="Number of Columns: "/>
+                    android:text="@string/number_of_columns"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/num_columns_label"
                     android:textSize="@dimen/setting_text_size"
-                    android:text='@{""+(settings.numberOfColumns+1)}'/>
+                    android:text='@{": "+(settings.numberOfColumns+1)}'/>
 
             </LinearLayout>
 
@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/setting_text_size"
-                    android:text="Screen Padding"/>
+                    android:text="@string/screen_padding"/>
                 <SeekBar
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -19,4 +19,7 @@
     <string name="solid_color">Color Sólido</string>
     <string name="background">Fondo</string>
     <string name="done">Listo</string>
+    <string name="text_color">Color de Texto</string>
+    <string name="number_of_columns">Número de columnas</string>
+    <string name="screen_padding">Relleno de pantalla</string>
 </resources>

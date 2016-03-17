@@ -57,10 +57,9 @@ public class WeatherSettings extends WidgetSettingsFragment {
         weatherCity = loadOrInitOption(WEATHER_CITY);
         weatherTempUnits = loadOrInitOption(WEATHER_UNITS);
 
-        sWeatherCity.setHeaderText(R.string.location);
+
         sWeatherCity.setSubHeaderText(getNameFromCoordinates(getContext(), widget));
 
-        tempUnits.setHeaderText(R.string.temperature_units);
         updateWeatherUnitsTextView();
 
         return view;

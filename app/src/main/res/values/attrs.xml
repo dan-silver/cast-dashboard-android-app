@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <declare-styleable name="TwoLineSettingItem">
+        <!--<attr name="android:textColor"/>-->
+        <attr name="headerText" format="string" />
+        <attr name="subHeaderText" format="string" />
+    </declare-styleable>
 </resources>

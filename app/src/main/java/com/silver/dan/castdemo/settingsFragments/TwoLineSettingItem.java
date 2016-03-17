@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo.settingsFragments;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.TextView;
@@ -21,12 +22,23 @@ public class TwoLineSettingItem extends SettingItem {
         super(context, attrs, defStyle);
     }
 
+    private void init(AttributeSet attrs) {
+        TypedArray a=getContext().obtainStyledAttributes(attrs, R.styleable.TwoLineSettingItem);
+
+
+        header.setText(a.getString(R.styleable.TwoLineSettingItem_headerText));
+        subHeader.setText(a.getString(R.styleable.TwoLineSettingItem_subHeaderText));
+
+        a.recycle();
+    }
+
     public TwoLineSettingItem(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.two_line_settings_item, this, true);
         ButterKnife.bind(this);
+        init(attrs);
     }
 
     public void setHeaderText(String text) {
