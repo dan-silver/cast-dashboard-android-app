@@ -52,7 +52,7 @@ public class CastCommunicator {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        sendJSONContainer(container);
+        CastCommunicator.sendJSONContainer(container);
     }
 
     public static void sendWidget(Widget widget) {
