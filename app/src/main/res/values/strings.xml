@@ -41,4 +41,7 @@
     <string name="number_of_columns">Number of Columns</string>
     <string name="screen_padding">Screen Padding</string>
     <string name="calendar_duration">Calendar Duration</string>
+    <string name="rss_feed">RSS Feed</string>
+    <string name="feed_url">Feed URL</string>
+    <string name="no_rss_feed_url_set">No RSS feed URL set</string>
 </resources>

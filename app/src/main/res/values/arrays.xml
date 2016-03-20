@@ -5,6 +5,7 @@
         <item>@string/map</item>
         <item>@string/clock</item>
         <item>@string/weather</item>
+        <item>@string/rss_feed</item>
         <item>@string/stocks</item>
     </string-array>
     <string-array name="backgroundTypeList">

@@ -41,6 +41,7 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import hotchemi.android.rate.AppRate;
 
 public class MainActivity extends AppCompatActivity implements OnSettingChanged, GoogleApiClient.OnConnectionFailedListener {
 
@@ -160,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged,
 
         mCastManager.reconnectSessionIfPossible();
         CastCommunicator.init(this, mCastManager);
+
         mCastConsumer = new DataCastConsumerImpl() {
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus,
@@ -197,6 +199,26 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged,
                 .addApi(Places.PLACE_DETECTION_API)
                 .enableAutoManage(this, this)
                 .build();
+
+
+        AppRate.with(this)
+                .setInstallDays(10) // default 10, 0 means install day.
+                .setLaunchTimes(5) // default 10
+                .setRemindInterval(2)
+                .setEventsTimes(3)
+                .setShowLaterButton(true) // default true
+                .setDebug(false) // default false
+                .monitor();
+
+
+        final Handler handler = new Handler();
+        final MainActivity thisHolder = this;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                AppRate.showRateDialogIfMeetsConditions(thisHolder);
+            }
+        }, 1000 * 10);
 
 
     }

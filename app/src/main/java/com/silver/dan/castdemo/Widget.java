@@ -1,6 +1,6 @@
 package com.silver.dan.castdemo;
 
-import android.app.Application;
+
 import android.content.Context;
 import android.util.Log;
 
@@ -20,6 +20,7 @@ import com.silver.dan.castdemo.widgets.CalendarWidget;
 import com.silver.dan.castdemo.widgets.ClockWidget;
 import com.silver.dan.castdemo.widgets.MapWidget;
 import com.silver.dan.castdemo.widgets.PlaceholderWidget;
+import com.silver.dan.castdemo.widgets.RSSWidget;
 import com.silver.dan.castdemo.widgets.StocksWidget;
 import com.silver.dan.castdemo.widgets.UIWidget;
 import com.silver.dan.castdemo.widgets.WeatherWidget;
@@ -54,6 +55,9 @@ public class Widget extends BaseModel {
             case WEATHER:
                 widget = new WeatherWidget(context, this);
                 break;
+            case RSS:
+                widget = new RSSWidget(context, this);
+                break;
             default:
                 widget = new PlaceholderWidget(context, this);
                 break;
@@ -67,7 +71,8 @@ public class Widget extends BaseModel {
         STOCKS(2, R.string.stocks, R.drawable.ic_attach_money_24dp),
         MAP(3, R.string.map, R.drawable.ic_map_24dp),
         CLOCK(4, R.string.clock, R.drawable.ic_access_time_24dp),
-        WEATHER(5, R.string.weather, R.drawable.ic_cloud_queue_24dp);
+        WEATHER(5, R.string.weather, R.drawable.ic_cloud_queue_24dp),
+        RSS(6, R.string.rss_feed, R.drawable.ic_rss_feed_black_24px);
 
         private int value;
         private int icon;
@@ -200,6 +205,10 @@ public class Widget extends BaseModel {
 
 
     public void initOption(String key, String defaultValue) {
+        if (this.getOption(key) != null) {
+            return;
+        }
+
         WidgetOption option = new WidgetOption();
         option.key = key;
         option.value = defaultValue;
@@ -208,13 +217,11 @@ public class Widget extends BaseModel {
     }
 
     public void initOption(String key, boolean defaultValue) {
-        if (this.getOption(key) == null)
-            initOption(key, defaultValue ? 1 : 0);
+        initOption(key, defaultValue ? 1 : 0);
     }
 
     public void initOption(String key, int defaultValue) {
-        initOption(key, String.valueOf(defaultValue)
-        );
+        initOption(key, String.valueOf(defaultValue));
     }
 
     public WidgetOption loadOrInitOption(String optionKey, Context context) {

@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import hotchemi.android.rate.AppRate;
+
 public class CastCommunicator {
 
     static Context context;
@@ -18,41 +20,6 @@ public class CastCommunicator {
     public static void init(Context ctx, DataCastManager mCastManager) {
         CastCommunicator.context = ctx;
         CastCommunicator.mCastManager = mCastManager;
-    }
-
-    public static void sendJSON(final String key, final JSONObject payload) {
-        JSONObject container = new JSONObject();
-
-        try {
-            container.put(key, payload);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        sendJSONContainer(container);
-    }
-
-    public static void sendJSONContainer(final JSONObject container) {
-        new Runnable() {
-            public void run() {
-                try {
-                    mCastManager.sendDataMessage(container.toString(), context.getResources().getString(R.string.namespace));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }.run();
-    }
-
-    public static void sendJSON(final String key, final JSONArray payload) {
-        JSONObject container = new JSONObject();
-
-        try {
-            container.put(key, payload);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        CastCommunicator.sendJSONContainer(container);
     }
 
     public static void sendWidget(Widget widget) {
@@ -84,5 +51,41 @@ public class CastCommunicator {
             e.printStackTrace();
         }
 
+    }
+
+    public static void sendJSON(final String key, final JSONObject payload) {
+        JSONObject container = new JSONObject();
+
+        try {
+            container.put(key, payload);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        sendJSONContainer(container);
+    }
+
+    public static void sendJSON(final String key, final JSONArray payload) {
+        JSONObject container = new JSONObject();
+
+        try {
+            container.put(key, payload);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        CastCommunicator.sendJSONContainer(container);
+    }
+
+    public static void sendJSONContainer(final JSONObject container) {
+        new Runnable() {
+            public void run() {
+                try {
+                    mCastManager.sendDataMessage(container.toString(), context.getResources().getString(R.string.namespace));
+                    AppRate.passSignificantEvent((MainActivity) context);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.run();
     }
 }

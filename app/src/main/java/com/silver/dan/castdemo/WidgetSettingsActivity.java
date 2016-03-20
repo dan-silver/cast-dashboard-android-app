@@ -16,6 +16,7 @@ import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.ClockSettings;
 import com.silver.dan.castdemo.settingsFragments.MapSettings;
 import com.silver.dan.castdemo.settingsFragments.PlaceholderSettings;
+import com.silver.dan.castdemo.settingsFragments.RSSSettings;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
 import com.silver.dan.castdemo.settingsFragments.WeatherSettings;
 
@@ -70,6 +71,9 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                 break;
             case WEATHER:
                 typeSettingsFragment = new WeatherSettings();
+                break;
+            case RSS:
+                typeSettingsFragment = new RSSSettings();
                 break;
             default:
                 typeSettingsFragment = new PlaceholderSettings();
