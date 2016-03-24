@@ -9,4 +9,17 @@
         android:layout_height="wrap_content"
         app:headerText="Feed URL"
         android:id="@+id/feed_url"/>
+
+    <include layout="@layout/setting_line_break"/>
+
+    <com.silver.dan.castdemo.settingsFragments.SettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show dates"
+            android:textSize="@dimen/setting_text_size"
+            android:id="@+id/display_rss_dates"/>
+    </com.silver.dan.castdemo.settingsFragments.SettingItem>
 </LinearLayout>

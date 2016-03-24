@@ -22,9 +22,13 @@ public class RSSSettings extends WidgetSettingsFragment {
     @Bind(R.id.feed_url)
     TwoLineSettingItem feedUrl;
 
-    WidgetOption feedUrlOption;
+    @Bind(R.id.display_rss_dates)
+    Switch displayDates;
+
+    WidgetOption feedUrlOption, showDatesOption;
 
     public static String FEED_URL = "FEED_URL";
+    public static String SHOW_DATES = "SHOW_DATES";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,7 +36,20 @@ public class RSSSettings extends WidgetSettingsFragment {
         ButterKnife.bind(this, view);
 
         feedUrlOption = loadOrInitOption(RSSSettings.FEED_URL);
+        showDatesOption = loadOrInitOption(RSSSettings.SHOW_DATES);
+
         updateFeedURLText();
+
+        displayDates.setChecked(showDatesOption.getBooleanValue());
+        displayDates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                showDatesOption.setBooleanValue(isChecked);
+                showDatesOption.save();
+                refreshWidget();
+            }
+        });
+
         return view;
     }
 

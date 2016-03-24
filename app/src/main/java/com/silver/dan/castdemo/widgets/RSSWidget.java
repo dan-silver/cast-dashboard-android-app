@@ -20,6 +20,7 @@ public class RSSWidget extends UIWidget {
     @Override
     public void init() {
         widget.initOption(RSSSettings.FEED_URL, "http://rss.nytimes.com/services/xml/rss/nyt/InternationalHome.xml");
+        widget.initOption(RSSSettings.SHOW_DATES, true);
     }
 
 
@@ -27,6 +28,7 @@ public class RSSWidget extends UIWidget {
     public JSONObject getContent() throws JSONException {
         JSONObject json = new JSONObject();
         json.put("feed_url", widget.loadOrInitOption(RSSSettings.FEED_URL, context).value);
+        json.put(RSSSettings.SHOW_DATES, widget.loadOrInitOption(RSSSettings.SHOW_DATES, context).getBooleanValue());
         return json;
     }
 

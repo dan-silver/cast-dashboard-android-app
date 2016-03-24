@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Cast Dashboard</string>
     <string name="action_settings" translatable="false">Settings</string>
 
-    <string name="app_id" translatable="false">3768882F</string>
+    <string name="app_id" translatable="false">825040C9</string>
     <string name="namespace" translatable="false">urn:x-cast:com.google.cast.sample.helloworld</string>
     <string name="media_route_menu_title" translatable="false">Play on&#8230;</string>
     <string name="remove_stock" translatable="false">remove stock</string>
@@ -40,8 +40,8 @@
     <string name="text_color">Text Color</string>
     <string name="number_of_columns">Number of Columns</string>
     <string name="screen_padding">Screen Padding</string>
-    <string name="calendar_duration">Calendar Duration</string>
-    <string name="rss_feed">RSS Feed</string>
-    <string name="feed_url">Feed URL</string>
-    <string name="no_rss_feed_url_set">No RSS feed URL set</string>
+    <string name="calendar_duration" translatable="false">Calendar Duration</string>
+    <string name="rss_feed" translatable="false">RSS Feed</string>
+    <string name="feed_url" translatable="false">Feed URL</string>
+    <string name="no_rss_feed_url_set" translatable="false">No RSS feed URL set</string>
 </resources>

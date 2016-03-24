@@ -80,7 +80,6 @@ public class CastCommunicator {
             public void run() {
                 try {
                     mCastManager.sendDataMessage(container.toString(), context.getResources().getString(R.string.namespace));
-                    AppRate.passSignificantEvent((MainActivity) context);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
