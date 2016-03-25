@@ -44,4 +44,11 @@
     <string name="rss_feed" translatable="false">RSS Feed</string>
     <string name="feed_url" translatable="false">Feed URL</string>
     <string name="no_rss_feed_url_set" translatable="false">No RSS feed URL set</string>
+
+    <string name="s2_weeks">2 Weeks</string>
+    <string name="s1_week">1 Week</string>
+    <string name="s3_days">3 Days</string>
+    <string name="s1_month">1 Month</string>
+    <string name="s3_months">3 Months</string>
+
 </resources>
