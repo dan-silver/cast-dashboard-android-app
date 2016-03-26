@@ -48,4 +48,6 @@
             android:textSize="@dimen/setting_text_size"
             android:textColor="@color/primary_text"/>
     </com.silver.dan.castdemo.settingsFragments.SettingItem>
+
+    <include layout="@layout/setting_line_break"/>
 </LinearLayout>

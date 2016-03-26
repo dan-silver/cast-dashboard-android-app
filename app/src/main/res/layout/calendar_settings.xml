@@ -54,5 +54,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/show_events_until"
             app:headerText="@string/calendar_duration"/>
+        <include layout="@layout/setting_line_break"/>
     </LinearLayout>
 </ScrollView>
