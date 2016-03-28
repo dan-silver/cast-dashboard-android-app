@@ -78,7 +78,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 optionShowEventLocations.setBooleanValue(isChecked);
                 optionShowEventLocations.save();
-                refreshWidget();
+                updateWidgetProperty(SHOW_EVENT_LOCATIONS, optionShowEventLocations.getBooleanValue());
             }
         });
 
@@ -91,6 +91,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
         return view;
     }
+
 
     @OnClick(R.id.show_events_until)
     public void showEventsUntilCallback() {

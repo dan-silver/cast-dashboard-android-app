@@ -27,7 +27,7 @@ public class RSSWidget extends UIWidget {
     @Override
     public JSONObject getContent() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("feed_url", widget.loadOrInitOption(RSSSettings.FEED_URL, context).value);
+        json.put(RSSSettings.FEED_URL, widget.loadOrInitOption(RSSSettings.FEED_URL, context).value);
         json.put(RSSSettings.SHOW_DATES, widget.loadOrInitOption(RSSSettings.SHOW_DATES, context).getBooleanValue());
         return json;
     }

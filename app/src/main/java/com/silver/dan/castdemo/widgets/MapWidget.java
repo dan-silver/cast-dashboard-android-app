@@ -32,7 +32,7 @@ public class MapWidget extends UIWidget {
         JSONObject json = new JSONObject();
         json.put("lat", widget.getOption(MapSettings.LOCATION_LAT).value);
         json.put("lng", widget.getOption(MapSettings.LOCATION_LONG).value);
-        json.put("zoom", Integer.valueOf(widget.getOption(MapSettings.MAP_ZOOM).value));
+        json.put(MapSettings.MAP_ZOOM, Integer.valueOf(widget.getOption(MapSettings.MAP_ZOOM).value));
         json.put("traffic", widget.getOption(MapSettings.SHOW_TRAFFIC).getBooleanValue());
         return json;
     }

@@ -9,8 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-
-import hotchemi.android.rate.AppRate;
+import java.util.List;
 
 public class CastCommunicator {
 
@@ -24,7 +23,9 @@ public class CastCommunicator {
 
     public static void sendWidget(Widget widget) {
         try {
-            CastCommunicator.sendJSON("widget", widget.getJSONContent(context));
+            JSONArray widgetsArr = new JSONArray();
+            widgetsArr.put(widget.getJSONContent(context));
+            CastCommunicator.sendWidgets(widgetsArr);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -86,5 +87,26 @@ public class CastCommunicator {
 
             }
         }.run();
+    }
+
+    public static void sendAllWidgets() {
+        Widget.fetchAll(new FetchAllWidgetsListener() {
+            @Override
+            public void results(List<Widget> widgets) {
+                JSONArray widgetsArr = new JSONArray();
+                for (Widget widget : widgets) {
+                    try {
+                        widgetsArr.put(widget.getJSONContent(context));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                CastCommunicator.sendWidgets(widgetsArr);
+            }
+        });
+    }
+
+    public static void sendWidgets(JSONArray widgetsArr) {
+        CastCommunicator.sendJSON("widgets", widgetsArr);
     }
 }

@@ -31,7 +31,6 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
     public static String LOCATION_LAT = "LOCATION_LAT";
     public static String LOCATION_LONG = "LOCATION_LONG";
-    //    public static String LOCATION_NAME = "LOCATION_NAME";
     public static String LOCATION_ADDRESS = "LOCATION_ADDRESS";
     public static String MAP_ZOOM = "MAP_ZOOM";
     public static String SHOW_TRAFFIC = "SHOW_TRAFFIC";
@@ -41,7 +40,6 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
     WidgetOption locationLat;
     WidgetOption locationLong;
-    //    WidgetOption locationNameOption;
     WidgetOption locationAddrOption;
     WidgetOption mapZoomOption;
     WidgetOption mapShowTraffic;
@@ -62,7 +60,6 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
         locationLat = loadOrInitOption(MapSettings.LOCATION_LAT);
         locationLong = loadOrInitOption(MapSettings.LOCATION_LONG);
-//        locationNameOption = loadOrInitOption(MapSettings.LOCATION_NAME);
         locationAddrOption = loadOrInitOption(MapSettings.LOCATION_ADDRESS);
         mapZoomOption = loadOrInitOption(MapSettings.MAP_ZOOM);
         mapShowTraffic = loadOrInitOption(MapSettings.SHOW_TRAFFIC);
@@ -78,7 +75,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                 if (!fromUser) return;
                 mapZoomOption.value = String.valueOf(progress + 1);
                 mapZoomOption.save();
-                updateWidgetProperty("zoom", mapZoomOption.value);
+                updateWidgetProperty(MapSettings.MAP_ZOOM, mapZoomOption.getIntValue());
             }
 
             @Override
@@ -98,7 +95,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mapShowTraffic.setBooleanValue(isChecked);
                 mapShowTraffic.save();
-                updateWidgetProperty("traffic", mapShowTraffic.getBooleanValue());
+                updateWidgetProperty(MapSettings.SHOW_TRAFFIC, mapShowTraffic.getBooleanValue());
             }
         });
 
@@ -129,14 +126,12 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
                 locationLat.value = Double.toString(location.latitude);
                 locationLong.value = Double.toString(location.longitude);
-//                locationNameOption.value = place.getName().toString();
                 locationAddrOption.value = place.getAddress().toString();
 
                 updateLocationText();
 
                 locationLat.save();
                 locationLong.save();
-//                locationNameOption.save();
                 locationAddrOption.save();
                 refreshWidget();
             }

@@ -51,7 +51,7 @@ dependencies {
         transitive = true
     }
     compile 'net.sf.opencsv:opencsv:2.3'
-    compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.8.2'
+    compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.8.3'
     compile 'com.github.QuadFlask:colorpicker:0.0.10'
 }
 

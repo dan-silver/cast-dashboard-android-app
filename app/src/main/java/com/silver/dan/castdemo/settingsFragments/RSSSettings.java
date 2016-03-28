@@ -46,7 +46,7 @@ public class RSSSettings extends WidgetSettingsFragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 showDatesOption.setBooleanValue(isChecked);
                 showDatesOption.save();
-                refreshWidget();
+                updateWidgetProperty(RSSSettings.SHOW_DATES, showDatesOption.getBooleanValue());
             }
         });
 
@@ -64,16 +64,16 @@ public class RSSSettings extends WidgetSettingsFragment {
     @OnClick(R.id.feed_url)
     public void setFeedUrl() {
         new MaterialDialog.Builder(getContext())
-                .title(R.string.feed_url)
-                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI)
-                .input(getString(R.string.feed_url), feedUrlOption.value, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-                        feedUrlOption.value = input.toString();
-                        feedUrlOption.save();
-                        updateFeedURLText();
-                        refreshWidget();
-                    }
-                }).show();
+            .title(R.string.feed_url)
+            .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI)
+            .input(getString(R.string.feed_url), feedUrlOption.value, new MaterialDialog.InputCallback() {
+                @Override
+                public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                    feedUrlOption.value = input.toString();
+                    feedUrlOption.save();
+                    updateFeedURLText();
+                    refreshWidget();
+                }
+            }).show();
     }
 }

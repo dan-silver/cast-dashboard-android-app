@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged,
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus,
                                                String sessionId, boolean wasLaunched) {
                 sendAllOptions();
-                sendAllWidgets();
+                CastCommunicator.sendAllWidgets();
                 invalidateOptionsMenu();
             }
 
@@ -270,26 +270,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChanged,
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
-    }
-
-
-    public void sendAllWidgets() {
-        Widget.fetchAll(new FetchAllWidgetsListener() {
-            @Override
-            public void results(List<Widget> widgets) {
-                JSONArray widgetsArr = new JSONArray();
-                for (Widget widget : widgets) {
-                    try {
-                        widgetsArr.put(widget.getJSONContent(getApplicationContext()));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                CastCommunicator.sendJSON("widgets", widgetsArr);
-
-            }
-        });
     }
 
 
