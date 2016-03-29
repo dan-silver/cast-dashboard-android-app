@@ -23,4 +23,10 @@
         <item>@string/s1_month</item>
         <item>@string/s3_months</item>
     </string-array>
+    <string-array name="mapTypeList" >
+        <item>@string/roadmap</item>
+        <item>@string/hybrid</item>
+        <item>@string/terrain</item>
+        <item>@string/satellite</item>
+    </string-array>
 </resources>

@@ -12,6 +12,7 @@ import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -21,7 +22,11 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
+import com.silver.dan.castdemo.Settings.BackgroundType;
+import com.silver.dan.castdemo.Settings.MapType;
 import com.silver.dan.castdemo.WidgetOption;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -34,6 +39,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     public static String LOCATION_ADDRESS = "LOCATION_ADDRESS";
     public static String MAP_ZOOM = "MAP_ZOOM";
     public static String SHOW_TRAFFIC = "SHOW_TRAFFIC";
+    public static String MAP_TYPE = "MAP_TYPE";
 
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -43,6 +49,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     WidgetOption locationAddrOption;
     WidgetOption mapZoomOption;
     WidgetOption mapShowTraffic;
+    WidgetOption mapTypeOption;
 
     @Bind(R.id.map_location)
     TwoLineSettingItem mapLocation;
@@ -52,6 +59,9 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
     @Bind(R.id.map_traffic)
     Switch mapTraffic;
+
+    @Bind(R.id.map_type)
+    TwoLineSettingItem mapType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,9 +73,11 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         locationAddrOption = loadOrInitOption(MapSettings.LOCATION_ADDRESS);
         mapZoomOption = loadOrInitOption(MapSettings.MAP_ZOOM);
         mapShowTraffic = loadOrInitOption(MapSettings.SHOW_TRAFFIC);
+        mapTypeOption = loadOrInitOption(MapSettings.MAP_TYPE);
 
 
         updateLocationText();
+        updateTypeText();
 
 
         mapZoom.setProgress(Integer.parseInt(mapZoomOption.value) - 1);
@@ -102,8 +114,39 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         return view;
     }
 
+    private void updateTypeText() {
+        MapType current = MapType.values()[mapTypeOption.getIntValue()];
+        mapType.setSubHeaderText(current.getHumanNameRes());
+    }
+
     public void updateLocationText() {
         mapLocation.setSubHeaderText(locationAddrOption.value);
+    }
+
+    @OnClick(R.id.map_type)
+    public void mapType() {
+        final ArrayList<MapType> mapTypes = new ArrayList<MapType>(){{
+            add(MapType.ROADMAP);
+            add(MapType.HYBRID);
+            add(MapType.TERRAIN);
+            add(MapType.SATELLITE);
+        }};
+
+        final MapType current = MapType.getMapType(mapTypeOption.getIntValue());
+
+        new MaterialDialog.Builder(getContext())
+                .items(R.array.mapTypeList)
+                .itemsCallbackSingleChoice(mapTypes.indexOf(current), new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        mapTypeOption.setIntValue(mapTypes.get(which).getValue());
+                        mapTypeOption.save();
+                        updateTypeText();
+                        updateWidgetProperty(MapSettings.MAP_TYPE, mapTypes.get(which).toString());
+                        return true;
+                    }
+                })
+                .show();
     }
 
     @OnClick(R.id.map_location)

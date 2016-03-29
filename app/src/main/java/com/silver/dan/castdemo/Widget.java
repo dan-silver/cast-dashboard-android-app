@@ -195,7 +195,6 @@ public class Widget extends BaseModel {
         JSONObject payload = new JSONObject();
         payload.put("type", type);
         payload.put("id", id);
-        payload.put("options", new JSONObject());
         payload.put("position", position);
 
         payload.put("data", getUIWidget(applicationContext).getContent());

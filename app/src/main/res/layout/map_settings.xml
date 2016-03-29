@@ -50,4 +50,10 @@
     </com.silver.dan.castdemo.settingsFragments.SettingItem>
 
     <include layout="@layout/setting_line_break"/>
+    <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_type"
+        app:headerText="@string/type"/>
+    <include layout="@layout/setting_line_break"/>
 </LinearLayout>

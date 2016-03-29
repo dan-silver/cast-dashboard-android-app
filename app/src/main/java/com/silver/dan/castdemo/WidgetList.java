@@ -53,8 +53,6 @@ public class WidgetList extends Fragment implements OnDragListener {
 
     }
 
-
-
     @OnClick(R.id.fab)
     public void addWidget() {
         final ArrayList<Widget.WidgetType> widgetTypes = new ArrayList<Widget.WidgetType>(){{
