@@ -24,4 +24,6 @@
     </com.silver.dan.castdemo.settingsFragments.SettingItem>
 
     <include layout="@layout/setting_line_break"/>
+    <include layout="@layout/widget_height"/>
+    <include layout="@layout/setting_line_break"/>
 </LinearLayout>

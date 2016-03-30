@@ -32,15 +32,22 @@
             android:layout_height="0dp"
             tools:layout="@layout/map_settings"
             android:layout_weight="1" />
-        <TextView
-            android:id="@+id/widget_settings_delete_button"
+        <!--Wrap textview in layout to add ripple-->
+        <!--http://stackoverflow.com/questions/27415056/using-a-custom-color-for-button-background-while-using-selectableitembackground-->
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/md_button_height"
-            android:background="@color/accent"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/md_title_textsize"
-            android:gravity="center"
-            android:text="@string/delete" />
+            android:background="@color/accent">
+            <TextView
+                android:id="@+id/widget_settings_delete_button"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/md_title_textsize"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackground"
+                android:text="@string/delete" />
+        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

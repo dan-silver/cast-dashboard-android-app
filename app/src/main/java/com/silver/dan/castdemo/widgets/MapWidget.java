@@ -20,7 +20,6 @@ public class MapWidget extends UIWidget {
 
     @Override
     public void init() {
-
         //https://www.google.com/maps/@47.6061734,-122.3310611,16.04z
         widget.initOption(MapSettings.LOCATION_LAT, "47.6061734");
         widget.initOption(MapSettings.LOCATION_LONG, "-122.3310611");

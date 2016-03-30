@@ -56,4 +56,6 @@
         android:id="@+id/map_type"
         app:headerText="@string/type"/>
     <include layout="@layout/setting_line_break"/>
+    <include layout="@layout/widget_height"/>
+    <include layout="@layout/setting_line_break"/>
 </LinearLayout>

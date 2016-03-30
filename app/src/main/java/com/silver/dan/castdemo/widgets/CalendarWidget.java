@@ -14,6 +14,7 @@ import com.silver.dan.castdemo.CalendarInfo;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,8 +124,6 @@ public class CalendarWidget extends UIWidget {
     }
 
     public JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars, int showEventsUntil) throws JSONException {
-
-
         Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
         // starting time in milliseconds

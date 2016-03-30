@@ -31,7 +31,6 @@ import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCas
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

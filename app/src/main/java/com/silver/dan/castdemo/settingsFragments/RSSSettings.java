@@ -37,8 +37,10 @@ public class RSSSettings extends WidgetSettingsFragment {
 
         feedUrlOption = loadOrInitOption(RSSSettings.FEED_URL);
         showDatesOption = loadOrInitOption(RSSSettings.SHOW_DATES);
+        optionWidgetHeight = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
 
         updateFeedURLText();
+        updateWidgetHeightText();
 
         displayDates.setChecked(showDatesOption.getBooleanValue());
         displayDates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

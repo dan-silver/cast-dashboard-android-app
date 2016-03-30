@@ -46,10 +46,11 @@ public class CalendarSettings extends WidgetSettingsFragment {
     Switch eventLocations;
 
     @Bind(R.id.show_events_until)
-    com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem showEventsUntil;
+    TwoLineSettingItem showEventsUntil;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.calendar_settings, container, false);
         ButterKnife.bind(this, view);
 
@@ -58,6 +59,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
         optionAllCalendars = loadOrInitOption(CalendarSettings.ALL_CALENDARS);
         optionShowEventLocations = loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
         optionShowEventsUntil = loadOrInitOption(CalendarSettings.SHOW_EVENTS_UNTIL);
+        optionWidgetHeight = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
 
         allCalendars.setChecked(optionAllCalendars.getBooleanValue());
 
@@ -68,7 +70,6 @@ public class CalendarSettings extends WidgetSettingsFragment {
                 displayCalendarList();
                 optionAllCalendars.save();
                 refreshWidget();
-
             }
         });
 
@@ -88,9 +89,12 @@ public class CalendarSettings extends WidgetSettingsFragment {
         displayCalendarList();
 
         updateCalendarUntilTextView();
+        updateWidgetHeightText();
 
         return view;
     }
+
+
 
 
     @OnClick(R.id.show_events_until)

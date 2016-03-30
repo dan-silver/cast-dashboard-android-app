@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Cast Dashboard</string>
     <string name="action_settings" translatable="false">Settings</string>
 
-    <string name="app_id" translatable="false">825040C9</string>
+    <string name="app_id" translatable="false">55434450</string>
     <string name="namespace" translatable="false">urn:x-cast:com.google.cast.sample.helloworld</string>
     <string name="media_route_menu_title" translatable="false">Play on&#8230;</string>
     <string name="remove_stock" translatable="false">remove stock</string>
@@ -50,10 +50,11 @@
     <string name="s3_days">3 Days</string>
     <string name="s1_month">1 Month</string>
     <string name="s3_months">3 Months</string>
-    <string name="roadmap">Roadmap</string>
-    <string name="satellite">Satellite</string>
-    <string name="hybrid">Hybrid</string>
-    <string name="terrain">Terrain</string>
-    <string name="type">Type</string>
+    <string name="roadmap" translatable="false">Roadmap</string>
+    <string name="satellite" translatable="false">Satellite</string>
+    <string name="hybrid" translatable="false">Hybrid</string>
+    <string name="terrain" translatable="false">Terrain</string>
+    <string name="type" translatable="false">Type</string>
+    <string name="widget_height" translatable="false">Widget Height</string>
 
 </resources>

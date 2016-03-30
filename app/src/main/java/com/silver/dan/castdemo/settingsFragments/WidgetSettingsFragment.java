@@ -1,16 +1,34 @@
 package com.silver.dan.castdemo.settingsFragments;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.raizlabs.android.dbflow.sql.language.Select;
+import com.raizlabs.android.dbflow.sql.language.property.Property;
 import com.silver.dan.castdemo.CastCommunicator;
+import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.Widget_Table;
 
+import butterknife.Bind;
+import butterknife.OnClick;
+
 public abstract class WidgetSettingsFragment extends Fragment {
     protected Widget widget;
+
+    public static String WIDGET_HEIGHT = "WIDGET_HEIGHT";
+
+    @Nullable
+    @Bind(R.id.widget_height)
+    TwoLineSettingItem widgetHeight;
+
+    // percentage of screen height
+    WidgetOption optionWidgetHeight;
 
     protected void refreshWidget() {
         CastCommunicator.sendWidget(widget);
@@ -20,10 +38,29 @@ public abstract class WidgetSettingsFragment extends Fragment {
         CastCommunicator.sendWidgetProperty(widget, property, value);
     }
 
-    protected WidgetOption loadOrInitOption(String showSeconds) {
-        return widget.loadOrInitOption(showSeconds, getContext());
+    protected WidgetOption loadOrInitOption(String property) {
+        return widget.loadOrInitOption(property, getContext());
     }
 
+    @Nullable
+    @OnClick(R.id.widget_height)
+    public void cycleWidgetHeight() {
+        // options are 20, 40, 60, 80, 100
+        int currentHeight = optionWidgetHeight.getIntValue();
+        if (currentHeight == 100) {
+            optionWidgetHeight.setIntValue(20);
+        } else {
+            optionWidgetHeight.setIntValue(currentHeight + 20);
+        }
+        optionWidgetHeight.save();
+        updateWidgetHeightText();
+        updateWidgetProperty(WidgetSettingsFragment.WIDGET_HEIGHT, optionWidgetHeight.getIntValue());
+    }
+
+    public void updateWidgetHeightText() {
+        if (widgetHeight != null)
+            widgetHeight.setSubHeaderText(optionWidgetHeight.getIntValue() + "%");
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,6 +75,6 @@ public abstract class WidgetSettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-}
+    }
 
 

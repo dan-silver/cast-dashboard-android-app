@@ -16,6 +16,7 @@ import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 import com.silver.dan.castdemo.widgets.CalendarWidget;
 import com.silver.dan.castdemo.widgets.ClockWidget;
 import com.silver.dan.castdemo.widgets.MapWidget;
@@ -36,6 +37,8 @@ public class Widget extends BaseModel {
 
     // For bundle data passing
     public static String ID = "WIDGET_ID";
+
+    public int widgetHeight = 60;
 
     public UIWidget getUIWidget(Context context) {
         UIWidget widget;
@@ -197,7 +200,15 @@ public class Widget extends BaseModel {
         payload.put("id", id);
         payload.put("position", position);
 
-        payload.put("data", getUIWidget(applicationContext).getContent());
+        JSONObject data = getUIWidget(applicationContext).getContent();
+
+        // if the widget has overriden the height, send it in the data {} so it can be quickly updated via the updateWidgetProperty channel
+        WidgetOption height = getOption(WidgetSettingsFragment.WIDGET_HEIGHT);
+        if (height != null) {
+            data.put(WidgetSettingsFragment.WIDGET_HEIGHT, height.getIntValue());
+        }
+
+        payload.put("data", data);
 
         return payload;
     }
@@ -246,6 +257,10 @@ public class Widget extends BaseModel {
     }
 
     public void initWidgetSettings(Context context) {
+        // global widget properties
+        initOption(WidgetSettingsFragment.WIDGET_HEIGHT, widgetHeight);
+
+        // init widget specific properties
         getUIWidget(context).init();
     }
 }

@@ -6,6 +6,7 @@ import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.settingsFragments.RSSSettings;
 import com.silver.dan.castdemo.settingsFragments.WeatherSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
