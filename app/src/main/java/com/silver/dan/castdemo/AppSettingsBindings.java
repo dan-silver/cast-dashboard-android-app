@@ -31,6 +31,9 @@ public class AppSettingsBindings extends BaseObservable {
     @Bindable
     public int screenPadding;
 
+    @Bindable
+    public String backgroundImagePath;
+
 
     private AppSettingsHelperFragment appSettings;
 
@@ -42,6 +45,7 @@ public class AppSettingsBindings extends BaseObservable {
     static String TEXT_COLOR = "TEXT_COLOR";
     static String SCREEN_PADDING = "SCREEN_PADDING";
     static String LOCALE = "LOCALE";
+    static String BACKGROUND_IMAGE_PATH = "BACKGROUND_IMAGE_PATH";
 
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
@@ -70,6 +74,12 @@ public class AppSettingsBindings extends BaseObservable {
         this.widgetColor = widgetColor;
         notifyPropertyChanged(BR.widgetColor);
         appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
+    }
+
+    public void setBackgroundImagePath(String path) {
+        this.backgroundImagePath = path;
+        notifyPropertyChanged(BR.backgroundImagePath);
+        // @TODO
     }
 
 
@@ -130,6 +140,7 @@ public class AppSettingsBindings extends BaseObservable {
         edit.putInt(WIDGET_COLOR, widgetColor);
         edit.putInt(TEXT_COLOR, textColor);
         edit.putInt(SCREEN_PADDING, screenPadding);
+        edit.putString(BACKGROUND_IMAGE_PATH, backgroundImagePath);
         edit.apply();
     }
 
@@ -145,6 +156,8 @@ public class AppSettingsBindings extends BaseObservable {
         backgroundType = BackgroundType.values()[settings.getInt(BACKGROUND_TYPE, 0)];
         widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 15); //15% x 2 + 50 = 80/100
         screenPadding = settings.getInt(SCREEN_PADDING, 15);
+
+        backgroundImagePath = settings.getString(BACKGROUND_IMAGE_PATH, "");
 
     }
 

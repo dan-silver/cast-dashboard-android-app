@@ -4,7 +4,8 @@ import com.silver.dan.castdemo.R;
 
 public enum BackgroundType {
     SLIDESHOW(0, R.string.slideshow),
-    SOLID_COLOR(1, R.string.solid_color);
+    SOLID_COLOR(1, R.string.solid_color),
+    PICTURE(2, R.string.picture);
 
     private int value;
     private int humanNameRes;

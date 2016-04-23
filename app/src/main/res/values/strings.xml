@@ -56,5 +56,7 @@
     <string name="todays_summary" translatable="false">Today\'s weather</string>
     <string name="five_day" translatable="false">5 day forecast</string>
     <string name="weather_mode" translatable="false">Forecast Mode</string>
+    <string name="picture">Picture</string>
+    <string name="dashboard_background_picture">dashboard_background_picture</string>
 
 </resources>

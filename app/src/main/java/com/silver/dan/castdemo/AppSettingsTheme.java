@@ -1,10 +1,21 @@
 package com.silver.dan.castdemo;
 
+import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -12,8 +23,12 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
 import com.silver.dan.castdemo.databinding.FragmentAppSettingsThemeBinding;
 import com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem;
+import com.silver.dan.castdemo.util.ImageUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,11 +36,17 @@ import butterknife.OnClick;
 
 public class AppSettingsTheme extends AppSettingsHelperFragment {
 
+    private static final int SELECT_PHOTO = 0;
+
     @Bind(R.id.background_type)
     TwoLineSettingItem backgroundType;
 
     @Bind(R.id.widget_transparency)
     SeekBar widgetTransparency;
+
+    @Bind(R.id.dashboard_background_picture)
+    ImageView backgroundPicture;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -55,7 +76,23 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
             }
         });
 
+        if (bindings.getBackgroundType() == BackgroundType.PICTURE) {
+            new LoadImageTask().execute(bindings.backgroundImagePath);
+        }
+
         return view;
+    }
+
+
+    private class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
+        protected Bitmap doInBackground(String... urls) {
+            File filepath = ImageUtils.getImagePath(getContext(), urls[0]);
+            return BitmapFactory.decodeFile(filepath.getAbsolutePath());
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            backgroundPicture.setImageBitmap(result);
+        }
     }
 
     @OnClick(R.id.background_type)
@@ -64,6 +101,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         final ArrayList<BackgroundType> backgroundTypes = new ArrayList<BackgroundType>() {{
             add(BackgroundType.SLIDESHOW);
             add(BackgroundType.SOLID_COLOR);
+            add(BackgroundType.PICTURE);
         }};
 
         new MaterialDialog.Builder(getContext())
@@ -72,12 +110,71 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                 .itemsCallbackSingleChoice(backgroundTypes.indexOf(bindings.getBackgroundType()), new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        bindings.setBackgroundType(backgroundTypes.get(which));
+                        BackgroundType oldBackgroundType = bindings.getBackgroundType();
+                        BackgroundType newBackgroundType = backgroundTypes.get(which);
+
+                        if (oldBackgroundType != newBackgroundType) {
+                            if (newBackgroundType == BackgroundType.PICTURE) {
+                                getBackgroundImage();
+                            } else {
+                                bindings.setBackgroundType(newBackgroundType);
+                            }
+                        }
+
                         return true;
                     }
+
+
                 })
                 .show();
     }
+
+    @OnClick(R.id.dashboard_background_picture)
+    public void getBackgroundImage() {
+        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, SELECT_PHOTO);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case SELECT_PHOTO:
+                if (resultCode == Activity.RESULT_OK) {
+
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = getContext().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        String picturePath = cursor.getString(columnIndex);
+                        cursor.close();
+
+                        Bitmap bm = BitmapFactory.decodeFile(picturePath);
+                        try {
+                            bm = ImageUtils.modifyOrientation(bm, picturePath);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        // now that we should have the picture, go ahead and change the UI bindings to show the picture option
+                        bindings.setBackgroundType(BackgroundType.PICTURE);
+
+                        Drawable d = new BitmapDrawable(getResources(), bm);
+                        backgroundPicture.setImageDrawable(d);
+
+                        String imageName = UUID.randomUUID().toString();
+
+                        bindings.setBackgroundImagePath(imageName);
+                        ImageUtils.saveToInternalStorage(bm, imageName, getContext());
+
+                    }
+                }
+        }
+    }
+
 
     @OnClick(R.id.widget_background_color)
     public void openWidgetBackgroundColorDialog() {
