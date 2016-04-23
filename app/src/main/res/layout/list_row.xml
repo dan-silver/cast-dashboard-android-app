@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:clickable="true"
+    android:background="?attr/selectableItemBackground">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_today_24dp"
+            android:id="@+id/widget_type_icon"
+            android:layout_centerVertical="true"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/widget_type_icon"
+            android:layout_toEndOf="@+id/widget_type_icon"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingStart="16dp"
+            android:paddingLeft="16dp"
+            android:orientation="vertical"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/widget_handle"
+            android:layout_toStartOf="@+id/widget_handle">
+            <TextView
+                android:id="@+id/widget_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Foobar"
+                android:textColor="@color/primary_text"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/widget_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Foobar" />
+
+
+        </LinearLayout>
+    <ImageView
+        android:id="@+id/widget_handle"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_reorder_24dp"
+        android:contentDescription="Drag to reorder widgets" />
+    </RelativeLayout>

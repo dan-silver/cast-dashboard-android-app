@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="newWidgetDialogList">
+        <item>@string/calendar</item>
+        <item>@string/map</item>
+        <item>@string/clock</item>
+        <item>@string/weather</item>
+        <item>@string/rss_feed</item>
+        <item>@string/stocks</item>
+    </string-array>
+    <string-array name="backgroundTypeList">
+        <item>@string/slideshow</item>
+        <item>@string/solid_color</item>
+    </string-array>
+    <string-array name="weather_type_list">
+        <item>@string/todays_summary</item>
+        <item>@string/five_day</item>
+    </string-array>
+    <string-array name="temperature_units_list">
+        <item>@string/Fahrenheit</item>
+        <item>@string/Celsius</item>
+    </string-array>
+    <string-array name="calendar_duration_list">
+        <item>@string/s3_days</item>
+        <item>@string/s1_week</item>
+        <item>@string/s2_weeks</item>
+        <item>@string/s1_month</item>
+        <item>@string/s3_months</item>
+    </string-array>
+    <string-array name="mapTypeList" >
+        <item>@string/roadmap</item>
+        <item>@string/hybrid</item>
+        <item>@string/terrain</item>
+        <item>@string/satellite</item>
+    </string-array>
+</resources>

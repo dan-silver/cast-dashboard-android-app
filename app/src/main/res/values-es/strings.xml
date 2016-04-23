@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="weather">Clima</string>
+    <string name="stocks">Acciones</string>
+    <string name="clock">Reloj</string>
+    <string name="calendar">Calendario</string>
+    <string name="map">Mapa</string>
+
+    <string name="delete">Elimine</string>
+    <string name="cancel">Cancele</string>
+    <string name="remove">Elimine</string>
+    <string name="Celsius">Centígrado</string>
+    <string name="Fahrenheit">Fahrenheit</string>
+    <string name="temperature_units">Unidades de Temperatura</string>
+    <string name="location">Ubicación</string>
+    <string name="show_seconds">Visualización Segundos</string>
+    <string name="background_color">Color de Fondo</string>
+    <string name="slideshow">Presentaciones Fotográficas</string>
+    <string name="solid_color">Color Sólido</string>
+    <string name="background">Fondo</string>
+    <string name="done">Listo</string>
+    <string name="text_color">Color de Texto</string>
+    <string name="number_of_columns">Número de columnas</string>
+    <string name="screen_padding">Relleno de pantalla</string>
+    <string name="s1_month">1 mes</string>
+    <string name="s1_week">1 semana</string>
+    <string name="s2_weeks">2 semanas</string>
+    <string name="s3_days">3 días</string>
+    <string name="s3_months">3 meses</string>
+</resources>

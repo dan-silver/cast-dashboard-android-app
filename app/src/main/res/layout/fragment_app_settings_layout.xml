@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="settings" type="com.silver.dan.castdemo.AppSettingsBindings"/>
+        <import type="android.view.View"/>
+    </data>
+    <ScrollView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.silver.dan.castdemo.SettingsActivity">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.silver.dan.castdemo.settingsFragments.SettingItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/setting_text_size"
+                    android:text="@string/number_of_columns"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/num_columns_label"
+                    android:textSize="@dimen/setting_text_size"
+                    android:text='@{": "+(settings.numberOfColumns+1)}'/>
+
+            </LinearLayout>
+
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/seekBar"
+                    android:progress="@{settings.numberOfColumns}"
+                    android:max="6"
+                    android:layout_marginBottom="@dimen/app_settings_padding"/>
+            </com.silver.dan.castdemo.settingsFragments.SettingItem>
+
+            <include layout="@layout/setting_line_break"/>
+
+            <com.silver.dan.castdemo.settingsFragments.SettingItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/setting_text_size"
+                    android:text="@string/screen_padding"/>
+                <SeekBar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/screen_padding"
+                    android:progress="@{settings.screenPadding}"
+                    android:max="30"
+                    android:layout_marginBottom="@dimen/app_settings_padding"/>
+            </com.silver.dan.castdemo.settingsFragments.SettingItem>
+            <include layout="@layout/setting_line_break"/>
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

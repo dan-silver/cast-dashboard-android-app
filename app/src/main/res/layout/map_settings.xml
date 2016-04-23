@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_location"
+        app:headerText="@string/location"/>
+
+
+    <include layout="@layout/setting_line_break"/>
+
+    <com.silver.dan.castdemo.settingsFragments.SettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/setting_text_size"
+            android:text="Zoom" />
+        <SeekBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/map_zoom"
+            android:layout_gravity="center_horizontal"
+            android:max="14"/>
+
+    </com.silver.dan.castdemo.settingsFragments.SettingItem>
+
+    <include layout="@layout/setting_line_break"/>
+
+
+    <com.silver.dan.castdemo.settingsFragments.SettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show Traffic"
+            android:id="@+id/map_traffic"
+            android:layout_gravity="center_horizontal"
+            android:checked="false"
+            android:textSize="@dimen/setting_text_size"
+            android:textColor="@color/primary_text"/>
+    </com.silver.dan.castdemo.settingsFragments.SettingItem>
+
+    <include layout="@layout/setting_line_break"/>
+    <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_type"
+        app:headerText="@string/type"/>
+    <include layout="@layout/setting_line_break"/>
+    <include layout="@layout/widget_height"/>
+    <include layout="@layout/setting_line_break"/>
+</LinearLayout>

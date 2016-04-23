@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="primary">#2196F3</color>
+    <color name="primary_dark">#1976D2</color>
+    <color name="primary_light">#BBDEFB</color>
+    <color name="accent">#FF4081</color>
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#48b6b6b6</color>
+    <color name="list_item_drag_highlight">#EAEAEA</color>
+
+
+    <!-- TV defaults -->
+    <color name="tv_text_light">#fff</color>
+    <color name="tv_background">#202020</color>
+</resources>

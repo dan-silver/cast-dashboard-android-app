@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="settings" type="com.silver.dan.castdemo.AppSettingsBindings"/>
+        <import type="com.silver.dan.castdemo.SettingEnums.BackgroundType"/>
+        <import type="android.view.View"/>
+    </data>
+    <ScrollView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.silver.dan.castdemo.SettingsActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+                android:id="@+id/background_type"
+                android:layout_width="match_parent"
+                app:headerText="@string/background"
+                app:subHeaderText="@{settings.backgroundType.getHumanNameRes()}"
+                android:layout_height="wrap_content"/>
+
+            <!--Only show the line break when we have an extra item visible-->
+            <LinearLayout
+                android:visibility="@{settings.backgroundType == BackgroundType.SOLID_COLOR ? View.VISIBLE : View.GONE}"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+                <include layout="@layout/setting_line_break"/>
+            </LinearLayout>
+            <com.silver.dan.castdemo.settingsFragments.SettingItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/widget_background_color"
+                android:visibility="@{settings.backgroundType == BackgroundType.SOLID_COLOR ? View.VISIBLE : View.GONE}">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/background_color"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/setting_text_size"/>
+
+                    <FrameLayout
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@color/divider"
+                        android:padding="1dp">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@{settings.widgetBackgroundColor}"/>
+                    </FrameLayout>
+                </RelativeLayout>
+            </com.silver.dan.castdemo.settingsFragments.SettingItem>
+            <include layout="@layout/setting_line_break"/>
+            <com.silver.dan.castdemo.settingsFragments.SettingItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Widget Transparency"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/setting_text_size"/>
+                <SeekBar
+                    android:id="@+id/widget_transparency"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="25"
+                    android:progress="@{settings.widgetTransparency}"/>
+            </com.silver.dan.castdemo.settingsFragments.SettingItem>
+            <include layout="@layout/setting_line_break"/>
+            <com.silver.dan.castdemo.settingsFragments.SettingItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/widget_color_setting_item">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="Widget Color"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/setting_text_size"/>
+
+                    <FrameLayout
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@color/divider"
+                        android:padding="1dp">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@{settings.widgetColor}"/>
+                    </FrameLayout>
+                </RelativeLayout>
+            </com.silver.dan.castdemo.settingsFragments.SettingItem>
+            <include layout="@layout/setting_line_break"/>
+            <com.silver.dan.castdemo.settingsFragments.SettingItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_color_setting_item">
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:text="@string/text_color"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/setting_text_size"/>
+
+                    <FrameLayout
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:background="@color/divider"
+                        android:padding="1dp">
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@{settings.textColor}"/>
+                    </FrameLayout>
+                </RelativeLayout>
+            </com.silver.dan.castdemo.settingsFragments.SettingItem>
+            <include layout="@layout/setting_line_break"/>
+        </LinearLayout>
+    </ScrollView>
+</layout>
