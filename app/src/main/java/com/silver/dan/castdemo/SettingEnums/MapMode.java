@@ -4,7 +4,7 @@ import com.silver.dan.castdemo.R;
 
 public enum MapMode {
     STANDARD(0, R.string.standard),
-    DIRRECTIONS(3, R.string.directions);
+    DIRECTIONS(1, R.string.directions);
 
     private int value;
     private int humanNameRes;

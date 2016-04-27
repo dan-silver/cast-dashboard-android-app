@@ -10,8 +10,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/map_location"
         app:headerText="@string/location"/>
-
-
+    <include layout="@layout/setting_line_break"/>
+    <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_destination"
+        app:headerText="@string/destination"/>
     <include layout="@layout/setting_line_break"/>
     <com.silver.dan.castdemo.settingsFragments.SettingItem
         android:layout_width="match_parent"

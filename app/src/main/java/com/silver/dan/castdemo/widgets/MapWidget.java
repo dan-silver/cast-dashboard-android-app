@@ -11,6 +11,8 @@ import com.silver.dan.castdemo.settingsFragments.MapSettings;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Map;
+
 public class MapWidget extends UIWidget {
 
     public MapWidget(Context context, Widget widget) {
@@ -28,6 +30,9 @@ public class MapWidget extends UIWidget {
         widget.initOption(MapSettings.SHOW_TRAFFIC, false);
         widget.initOption(MapSettings.MAP_TYPE, MapType.ROADMAP.getValue());
         widget.initOption(MapSettings.MAP_MODE, MapMode.STANDARD.getValue());
+        widget.initOption(MapSettings.DESTINATION_LONG, "");
+        widget.initOption(MapSettings.DESTINATION_LAT, "");
+        widget.initOption(MapSettings.DESTINATION_TEXT, "Not set");
     }
 
     @Override
@@ -37,8 +42,11 @@ public class MapWidget extends UIWidget {
         json.put(MapSettings.LOCATION_LONG, widget.getOption(MapSettings.LOCATION_LONG).value);
         json.put(MapSettings.MAP_ZOOM, widget.getOption(MapSettings.MAP_ZOOM).getIntValue());
         json.put(MapSettings.SHOW_TRAFFIC, widget.getOption(MapSettings.SHOW_TRAFFIC).getBooleanValue());
-        json.put(MapSettings.MAP_TYPE, widget.loadOrInitOption(MapSettings.MAP_TYPE, context));
-        json.put(MapSettings.MAP_MODE, widget.loadOrInitOption(MapSettings.MAP_MODE, context));
+        //for map type - send the actual text for the js api to consume
+        json.put(MapSettings.MAP_TYPE, MapType.getMapType(widget.loadOrInitOption(MapSettings.MAP_TYPE, context).getIntValue()).toString());
+        json.put(MapSettings.MAP_MODE, widget.loadOrInitOption(MapSettings.MAP_MODE, context).getIntValue());
+        json.put(MapSettings.DESTINATION_LAT, widget.getOption(MapSettings.DESTINATION_LAT).value);
+        json.put(MapSettings.DESTINATION_LONG, widget.getOption(MapSettings.DESTINATION_LONG).value);
         return json;
     }
 

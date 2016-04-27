@@ -28,6 +28,7 @@
     <string name="Fahrenheit">Fahrenheit</string>
     <string name="temperature_units">Temperature Units</string>
     <string name="location">Location</string>
+    <string name="destination">Destination</string>
     <string name="show_seconds">Show Seconds</string>
     <string name="slideshow">Slideshow</string>
     <string name="solid_color">Solid Color</string>

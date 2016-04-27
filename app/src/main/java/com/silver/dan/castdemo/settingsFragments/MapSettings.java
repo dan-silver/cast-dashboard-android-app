@@ -41,9 +41,12 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     public static String SHOW_TRAFFIC = "SHOW_TRAFFIC";
     public static String MAP_TYPE = "MAP_TYPE"; // hybrid, terrain, satellite, etc.
     public static String MAP_MODE = "MAP_MODE";
-
+    public static String DESTINATION_LAT = "DESTINATION_LAT";
+    public static String DESTINATION_LONG = "DESTINATION_LONG";
+    public static String DESTINATION_TEXT = "DESTINATION_TEXT";
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
+    int PLACE_AUTOCOMPLETE_REQUEST_CODE_DESTINATION = 2;
 
     WidgetOption locationLat;
     WidgetOption locationLong;
@@ -52,9 +55,15 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     WidgetOption mapShowTraffic;
     WidgetOption mapTypeOption;
     WidgetOption mapModeOption;
+    WidgetOption destinationLat;
+    WidgetOption destinationLng;
+    WidgetOption destinationText;
 
     @Bind(R.id.map_location)
     TwoLineSettingItem mapLocation;
+
+    @Bind(R.id.map_destination)
+    TwoLineSettingItem mapDestination;
 
     @Bind(R.id.map_zoom)
     SeekBar mapZoom;
@@ -81,9 +90,13 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         mapTypeOption = loadOrInitOption(MapSettings.MAP_TYPE);
         optionWidgetHeight = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
         mapModeOption = loadOrInitOption(MapSettings.MAP_MODE);
+        destinationLat = loadOrInitOption(MapSettings.DESTINATION_LAT);
+        destinationLng = loadOrInitOption(MapSettings.DESTINATION_LONG);
+        destinationText = loadOrInitOption(MapSettings.DESTINATION_TEXT);
 
         updateWidgetHeightText();
         updateLocationText();
+        updateDestinationText();
         updateTypeText();
         updateModeText();
 
@@ -134,6 +147,10 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         mapLocation.setSubHeaderText(locationAddrOption.value);
     }
 
+    public void updateDestinationText() {
+        mapDestination.setSubHeaderText(destinationText.value);
+    }
+
     @OnClick(R.id.map_type)
     public void mapType() {
         final ArrayList<MapType> mapTypes = new ArrayList<MapType>() {{
@@ -152,6 +169,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         mapTypeOption.update(mapTypes.get(which).getValue());
                         updateTypeText();
+                        //send the actual enum name for the gmaps api to consume
                         updateWidgetProperty(MapSettings.MAP_TYPE, mapTypes.get(which).toString());
                         return true;
                     }
@@ -159,12 +177,11 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                 .show();
     }
 
-
     @OnClick(R.id.map_mode)
     public void mapMode() {
         final ArrayList<MapMode> mapModes = new ArrayList<MapMode>() {{
             add(MapMode.STANDARD);
-            add(MapMode.DIRRECTIONS);
+            add(MapMode.DIRECTIONS);
         }};
 
         final MapMode current = MapMode.getMapMode(mapModeOption.getIntValue());
@@ -176,7 +193,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         mapModeOption.update(mapModes.get(which).getValue());
                         updateModeText();
-                        updateWidgetProperty(MapSettings.MAP_MODE, mapModes.get(which).toString());
+                        updateWidgetProperty(MapSettings.MAP_MODE, mapModes.get(which).getValue());
                         return true;
                     }
                 })
@@ -189,14 +206,26 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
             Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).build(getActivity());
             startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE);
         } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-            // TODO: Handle the error.
+            Log.e(MainActivity.TAG, e.toString());
         }
     }
 
+
+    @OnClick(R.id.map_destination)
+    public void getDestination() {
+        try {
+            Intent intent = new PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_OVERLAY).build(getActivity());
+            startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE_DESTINATION);
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+            Log.e(MainActivity.TAG, e.toString());
+        }
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
                 Log.i(MainActivity.TAG, "Place: " + place.getName());
                 LatLng location = place.getLatLng();
@@ -210,6 +239,19 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                 updateWidgetProperty(MapSettings.LOCATION_LAT, locationLat.value);
                 updateWidgetProperty(MapSettings.LOCATION_LONG, locationLong.value);
 
+            } else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE_DESTINATION) {
+                Place place = PlaceAutocomplete.getPlace(getContext(), data);
+                Log.i(MainActivity.TAG, "Place: " + place.getName());
+                LatLng location = place.getLatLng();
+
+                destinationLat.update(location.latitude);
+                destinationLng.update(location.longitude);
+                destinationText.update(place.getAddress().toString());
+
+                updateDestinationText();
+
+                updateWidgetProperty(MapSettings.DESTINATION_LONG, destinationLng.value);
+                updateWidgetProperty(MapSettings.DESTINATION_LAT, destinationLat.value);
             }
         }
     }
