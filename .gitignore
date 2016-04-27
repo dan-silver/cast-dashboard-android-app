@@ -8,3 +8,5 @@
 /captures
 app/src/main/res/values/secrets.xml
 
+/.idea
+.idea/modules.xml

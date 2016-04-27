@@ -2,6 +2,7 @@ package com.silver.dan.castdemo.widgets;
 
 import android.content.Context;
 
+import com.silver.dan.castdemo.SettingEnums.MapMode;
 import com.silver.dan.castdemo.SettingEnums.MapType;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
@@ -26,6 +27,7 @@ public class MapWidget extends UIWidget {
         widget.initOption(MapSettings.MAP_ZOOM, 10);
         widget.initOption(MapSettings.SHOW_TRAFFIC, false);
         widget.initOption(MapSettings.MAP_TYPE, MapType.ROADMAP.getValue());
+        widget.initOption(MapSettings.MAP_MODE, MapMode.STANDARD.getValue());
     }
 
     @Override
@@ -35,7 +37,8 @@ public class MapWidget extends UIWidget {
         json.put(MapSettings.LOCATION_LONG, widget.getOption(MapSettings.LOCATION_LONG).value);
         json.put(MapSettings.MAP_ZOOM, widget.getOption(MapSettings.MAP_ZOOM).getIntValue());
         json.put(MapSettings.SHOW_TRAFFIC, widget.getOption(MapSettings.SHOW_TRAFFIC).getBooleanValue());
-        json.put(MapSettings.MAP_TYPE, MapType.getMapType(widget.loadOrInitOption(MapSettings.MAP_TYPE, context).getIntValue()).toString());
+        json.put(MapSettings.MAP_TYPE, widget.loadOrInitOption(MapSettings.MAP_TYPE, context));
+        json.put(MapSettings.MAP_MODE, widget.loadOrInitOption(MapSettings.MAP_MODE, context));
         return json;
     }
 

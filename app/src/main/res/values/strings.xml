@@ -58,5 +58,8 @@
     <string name="weather_mode" translatable="false">Forecast Mode</string>
     <string name="picture">Picture</string>
     <string name="dashboard_background_picture">dashboard_background_picture</string>
+    <string name="standard">Standard</string>
+    <string name="directions">Directions</string>
+    <string name="mode">Mode</string>
 
 </resources>

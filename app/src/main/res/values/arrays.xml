@@ -34,4 +34,8 @@
         <item>@string/terrain</item>
         <item>@string/satellite</item>
     </string-array>
+    <string-array name="mapModeList">
+        <item>@string/standard</item>
+        <item>@string/directions</item>
+    </string-array>
 </resources>

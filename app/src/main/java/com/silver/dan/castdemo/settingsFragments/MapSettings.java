@@ -22,6 +22,7 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
 import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
+import com.silver.dan.castdemo.SettingEnums.MapMode;
 import com.silver.dan.castdemo.SettingEnums.MapType;
 import com.silver.dan.castdemo.WidgetOption;
 
@@ -38,7 +39,8 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     public static String LOCATION_ADDRESS = "LOCATION_ADDRESS";
     public static String MAP_ZOOM = "MAP_ZOOM";
     public static String SHOW_TRAFFIC = "SHOW_TRAFFIC";
-    public static String MAP_TYPE = "MAP_TYPE";
+    public static String MAP_TYPE = "MAP_TYPE"; // hybrid, terrain, satellite, etc.
+    public static String MAP_MODE = "MAP_MODE";
 
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
@@ -49,6 +51,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     WidgetOption mapZoomOption;
     WidgetOption mapShowTraffic;
     WidgetOption mapTypeOption;
+    WidgetOption mapModeOption;
 
     @Bind(R.id.map_location)
     TwoLineSettingItem mapLocation;
@@ -62,6 +65,9 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     @Bind(R.id.map_type)
     TwoLineSettingItem mapType;
 
+    @Bind(R.id.map_mode)
+    TwoLineSettingItem mapMode;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_settings, container, false);
@@ -74,11 +80,12 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         mapShowTraffic = loadOrInitOption(MapSettings.SHOW_TRAFFIC);
         mapTypeOption = loadOrInitOption(MapSettings.MAP_TYPE);
         optionWidgetHeight = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
-
+        mapModeOption = loadOrInitOption(MapSettings.MAP_MODE);
 
         updateWidgetHeightText();
         updateLocationText();
         updateTypeText();
+        updateModeText();
 
 
         mapZoom.setProgress(Integer.parseInt(mapZoomOption.value) - 1);
@@ -114,8 +121,13 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     }
 
     private void updateTypeText() {
-        MapType current = MapType.values()[mapTypeOption.getIntValue()];
+        MapType current = MapType.getMapType(mapTypeOption.getIntValue());
         mapType.setSubHeaderText(current.getHumanNameRes());
+    }
+
+    private void updateModeText() {
+        MapMode current = MapMode.getMapMode(mapModeOption.getIntValue());
+        mapMode.setSubHeaderText(current.getHumanNameRes());
     }
 
     public void updateLocationText() {
@@ -141,6 +153,30 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                         mapTypeOption.update(mapTypes.get(which).getValue());
                         updateTypeText();
                         updateWidgetProperty(MapSettings.MAP_TYPE, mapTypes.get(which).toString());
+                        return true;
+                    }
+                })
+                .show();
+    }
+
+
+    @OnClick(R.id.map_mode)
+    public void mapMode() {
+        final ArrayList<MapMode> mapModes = new ArrayList<MapMode>() {{
+            add(MapMode.STANDARD);
+            add(MapMode.DIRRECTIONS);
+        }};
+
+        final MapMode current = MapMode.getMapMode(mapModeOption.getIntValue());
+
+        new MaterialDialog.Builder(getContext())
+                .items(R.array.mapModeList)
+                .itemsCallbackSingleChoice(mapModes.indexOf(current), new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        mapModeOption.update(mapModes.get(which).getValue());
+                        updateModeText();
+                        updateWidgetProperty(MapSettings.MAP_MODE, mapModes.get(which).toString());
                         return true;
                     }
                 })
