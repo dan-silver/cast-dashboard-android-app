@@ -38,4 +38,10 @@
         <item>@string/standard</item>
         <item>@string/directions</item>
     </string-array>
+    <string-array name="travelModeList">
+        <item>@string/driving</item>
+        <item>@string/bicycling</item>
+        <item>@string/walking</item>
+        <item>@string/transit</item>
+    </string-array>
 </resources>

@@ -62,5 +62,10 @@
     <string name="standard">Standard</string>
     <string name="directions">Directions</string>
     <string name="mode">Mode</string>
+    <string name="driving">Driving</string>
+    <string name="bicycling">Bicycling</string>
+    <string name="transit">Transit</string>
+    <string name="walking">Walking</string>
+    <string name="travelMode">Travel Mode</string>
 
 </resources>

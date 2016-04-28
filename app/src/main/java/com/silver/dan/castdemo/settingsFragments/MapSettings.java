@@ -24,6 +24,7 @@ import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.SettingEnums.MapMode;
 import com.silver.dan.castdemo.SettingEnums.MapType;
+import com.silver.dan.castdemo.SettingEnums.TravelMode;
 import com.silver.dan.castdemo.WidgetOption;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     public static String DESTINATION_LAT = "DESTINATION_LAT";
     public static String DESTINATION_LONG = "DESTINATION_LONG";
     public static String DESTINATION_TEXT = "DESTINATION_TEXT";
+    public static String TRAVEL_MODE = "TRAVEL_MODE";
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     int PLACE_AUTOCOMPLETE_REQUEST_CODE_DESTINATION = 2;
@@ -58,6 +60,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     WidgetOption destinationLat;
     WidgetOption destinationLng;
     WidgetOption destinationText;
+    WidgetOption travelModeOption;
 
     @Bind(R.id.map_location)
     TwoLineSettingItem mapLocation;
@@ -77,6 +80,9 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     @Bind(R.id.map_mode)
     TwoLineSettingItem mapMode;
 
+    @Bind(R.id.map_travel_mode)
+    TwoLineSettingItem travelMode;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_settings, container, false);
@@ -93,12 +99,14 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         destinationLat = loadOrInitOption(MapSettings.DESTINATION_LAT);
         destinationLng = loadOrInitOption(MapSettings.DESTINATION_LONG);
         destinationText = loadOrInitOption(MapSettings.DESTINATION_TEXT);
+        travelModeOption = loadOrInitOption(MapSettings.TRAVEL_MODE);
 
         updateWidgetHeightText();
         updateLocationText();
         updateDestinationText();
         updateTypeText();
-        updateModeText();
+        mapModeChanged();
+        updateTravelModeText();
 
 
         mapZoom.setProgress(Integer.parseInt(mapZoomOption.value) - 1);
@@ -138,9 +146,22 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         mapType.setSubHeaderText(current.getHumanNameRes());
     }
 
-    private void updateModeText() {
+    private void mapModeChanged() {
         MapMode current = MapMode.getMapMode(mapModeOption.getIntValue());
         mapMode.setSubHeaderText(current.getHumanNameRes());
+
+        if (current == MapMode.STANDARD) {
+            mapDestination.setVisibility(View.GONE);
+            travelMode.setVisibility(View.GONE);
+        } else {
+            mapDestination.setVisibility(View.VISIBLE);
+            travelMode.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void updateTravelModeText() {
+        TravelMode current = TravelMode.getMode(travelModeOption.getIntValue());
+        travelMode.setSubHeaderText(current.getHumanNameRes());
     }
 
     public void updateLocationText() {
@@ -192,8 +213,34 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         mapModeOption.update(mapModes.get(which).getValue());
-                        updateModeText();
+                        mapModeChanged();
                         updateWidgetProperty(MapSettings.MAP_MODE, mapModes.get(which).getValue());
+                        return true;
+                    }
+                })
+                .show();
+    }
+
+    @OnClick(R.id.map_travel_mode)
+    public void travelMode() {
+        final ArrayList<TravelMode> travelModes = new ArrayList<TravelMode>() {{
+            add(TravelMode.DRIVING);
+            add(TravelMode.BICYCLING);
+            add(TravelMode.WALKING);
+            add(TravelMode.TRANSIT);
+        }};
+
+        final TravelMode current = TravelMode.getMode(travelModeOption.getIntValue());
+
+        new MaterialDialog.Builder(getContext())
+                .items(R.array.travelModeList)
+                .itemsCallbackSingleChoice(travelModes.indexOf(current), new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        travelModeOption.update(travelModes.get(which).getValue());
+                        updateTravelModeText();
+                        //send the actual enum name for the gmaps api to consume
+                        updateWidgetProperty(MapSettings.TRAVEL_MODE, travelModes.get(which).toString());
                         return true;
                     }
                 })
