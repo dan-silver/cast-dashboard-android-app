@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
 
@@ -83,6 +84,9 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     @Bind(R.id.map_travel_mode)
     TwoLineSettingItem travelMode;
 
+    @Bind(R.id.map_directions_options)
+    LinearLayout mapDirectionsOptions;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_settings, container, false);
@@ -151,11 +155,11 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         mapMode.setSubHeaderText(current.getHumanNameRes());
 
         if (current == MapMode.STANDARD) {
-            mapDestination.setVisibility(View.GONE);
-            travelMode.setVisibility(View.GONE);
+            mapDirectionsOptions.setVisibility(View.GONE);
+            mapLocation.setHeaderText(R.string.location);
         } else {
-            mapDestination.setVisibility(View.VISIBLE);
-            travelMode.setVisibility(View.VISIBLE);
+            mapDirectionsOptions.setVisibility(View.VISIBLE);
+            mapLocation.setHeaderText(R.string.starting_point);
         }
     }
 
@@ -297,8 +301,8 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
                 updateDestinationText();
 
-                updateWidgetProperty(MapSettings.DESTINATION_LONG, destinationLng.value);
                 updateWidgetProperty(MapSettings.DESTINATION_LAT, destinationLat.value);
+                updateWidgetProperty(MapSettings.DESTINATION_LONG, destinationLng.value);
             }
         }
     }

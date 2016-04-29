@@ -20,18 +20,24 @@
             android:id="@+id/map_location"
             app:headerText="@string/location"/>
         <include layout="@layout/setting_line_break"/>
-        <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/map_destination"
-            app:headerText="@string/destination"/>
-        <include layout="@layout/setting_line_break"/>
-        <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/map_travel_mode"
-            app:headerText="@string/travelMode"/>
-        <include layout="@layout/setting_line_break"/>
+            android:orientation="vertical"
+            android:id="@+id/map_directions_options">
+            <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/map_destination"
+                app:headerText="@string/destination"/>
+            <include layout="@layout/setting_line_break"/>
+            <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/map_travel_mode"
+                app:headerText="@string/travelMode"/>
+            <include layout="@layout/setting_line_break"/>
+        </LinearLayout>
         <com.silver.dan.castdemo.settingsFragments.SettingItem
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

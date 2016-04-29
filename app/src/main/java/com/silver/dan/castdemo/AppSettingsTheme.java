@@ -101,7 +101,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         final ArrayList<BackgroundType> backgroundTypes = new ArrayList<BackgroundType>() {{
             add(BackgroundType.SLIDESHOW);
             add(BackgroundType.SOLID_COLOR);
-            add(BackgroundType.PICTURE);
+//            add(BackgroundType.PICTURE);
         }};
 
         new MaterialDialog.Builder(getContext())

@@ -57,9 +57,21 @@ public class MapWidget extends UIWidget {
     @Override
     public String getWidgetPreviewSecondaryHeader() {
         WidgetOption locationAddress = widget.getOption(MapSettings.LOCATION_ADDRESS);
+
+        WidgetOption mode = widget.getOption(MapSettings.MAP_MODE);
+        String startingText = widget.getOption(MapSettings.LOCATION_ADDRESS).value;
         if (locationAddress != null) {
-            return widget.getOption(MapSettings.LOCATION_ADDRESS).value;
+            if (mode.getIntValue() == MapMode.STANDARD.getValue()) {
+                return startingText;
+            } else if (mode.getIntValue() == MapMode.DIRECTIONS.getValue()) {
+                String transitMethod = TravelMode.getMode(widget.getOption(MapSettings.TRAVEL_MODE).getIntValue()).toString().toLowerCase();
+                String transitMethodCap = Character.toUpperCase(transitMethod.charAt(0)) + transitMethod.substring(1);
+
+                String destination = widget.getOption(MapSettings.DESTINATION_TEXT).value;
+                return transitMethodCap + " directions from " + startingText + " to " + destination;
+            }
         }
+
 
         return "Location not set";
     }

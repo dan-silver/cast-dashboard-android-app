@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Cast Dashboard</string>
     <string name="action_settings" translatable="false">Settings</string>
 
-    <string name="app_id" translatable="false">55434450</string>
+    <string name="app_id" translatable="false">97FA54E0</string>
     <string name="namespace" translatable="false">urn:x-cast:com.google.cast.sample.helloworld</string>
     <string name="media_route_menu_title" translatable="false">Play on&#8230;</string>
     <string name="remove_stock" translatable="false">remove stock</string>
@@ -67,5 +67,6 @@
     <string name="transit">Transit</string>
     <string name="walking">Walking</string>
     <string name="travelMode">Travel Mode</string>
+    <string name="starting_point">Starting Point</string>
 
 </resources>
