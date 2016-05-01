@@ -28,7 +28,7 @@
     <string name="Fahrenheit">Fahrenheit</string>
     <string name="temperature_units">Temperature Units</string>
     <string name="location">Location</string>
-    <string name="destination">Destination</string>
+    <string name="destination" translatable="false">Destination</string>
     <string name="show_seconds">Show Seconds</string>
     <string name="slideshow">Slideshow</string>
     <string name="solid_color">Solid Color</string>
@@ -57,16 +57,16 @@
     <string name="todays_summary" translatable="false">Today\'s weather</string>
     <string name="five_day" translatable="false">5 day forecast</string>
     <string name="weather_mode" translatable="false">Forecast Mode</string>
-    <string name="picture">Picture</string>
-    <string name="dashboard_background_picture">dashboard_background_picture</string>
-    <string name="standard">Standard</string>
-    <string name="directions">Directions</string>
-    <string name="mode">Mode</string>
-    <string name="driving">Driving</string>
-    <string name="bicycling">Bicycling</string>
-    <string name="transit">Transit</string>
-    <string name="walking">Walking</string>
-    <string name="travelMode">Travel Mode</string>
-    <string name="starting_point">Starting Point</string>
+    <string name="picture" translatable="false">Picture</string>
+    <string name="dashboard_background_picture" translatable="false">dashboard_background_picture</string>
+    <string name="standard" translatable="false">Standard</string>
+    <string name="directions" translatable="false">Directions</string>
+    <string name="mode" translatable="false">Mode</string>
+    <string name="driving" translatable="false">Driving</string>
+    <string name="bicycling" translatable="false">Bicycling</string>
+    <string name="transit" translatable="false">Transit</string>
+    <string name="walking" translatable="false">Walking</string>
+    <string name="travelMode" translatable="false">Travel Mode</string>
+    <string name="starting_point" translatable="false">Starting Point</string>
 
 </resources>

@@ -56,18 +56,18 @@ public class MapWidget extends UIWidget {
 
     @Override
     public String getWidgetPreviewSecondaryHeader() {
-        WidgetOption locationAddress = widget.getOption(MapSettings.LOCATION_ADDRESS);
+        WidgetOption locationAddress = widget.loadOrInitOption(MapSettings.LOCATION_ADDRESS, context);
 
-        WidgetOption mode = widget.getOption(MapSettings.MAP_MODE);
-        String startingText = widget.getOption(MapSettings.LOCATION_ADDRESS).value;
+        WidgetOption mode = widget.loadOrInitOption(MapSettings.MAP_MODE, context);
+        String startingText = widget.loadOrInitOption(MapSettings.LOCATION_ADDRESS, context).value;
         if (locationAddress != null) {
             if (mode.getIntValue() == MapMode.STANDARD.getValue()) {
                 return startingText;
             } else if (mode.getIntValue() == MapMode.DIRECTIONS.getValue()) {
-                String transitMethod = TravelMode.getMode(widget.getOption(MapSettings.TRAVEL_MODE).getIntValue()).toString().toLowerCase();
+                String transitMethod = TravelMode.getMode(widget.loadOrInitOption(MapSettings.TRAVEL_MODE, context).getIntValue()).toString().toLowerCase();
                 String transitMethodCap = Character.toUpperCase(transitMethod.charAt(0)) + transitMethod.substring(1);
 
-                String destination = widget.getOption(MapSettings.DESTINATION_TEXT).value;
+                String destination = widget.loadOrInitOption(MapSettings.DESTINATION_TEXT, context).value;
                 return transitMethodCap + " directions from " + startingText + " to " + destination;
             }
         }
