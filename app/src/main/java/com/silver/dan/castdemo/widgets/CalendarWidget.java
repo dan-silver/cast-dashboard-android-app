@@ -9,8 +9,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
 import com.silver.dan.castdemo.CalendarInfo;
+import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
@@ -194,7 +196,11 @@ public class CalendarWidget extends UIWidget {
 
             JSONObject event = new JSONObject();
             event.put("title", title);
-            event.put("color", Integer.toHexString(color).substring(2));
+            try {
+                event.put("color", Integer.toHexString(color).substring(2));
+            } catch (ArrayIndexOutOfBoundsException e) {
+                Log.e(MainActivity.TAG, e.toString());
+            }
             event.put("start", startDate);
             event.put("end", endDate < end ? endDate : end); // if the event extends beyond the query windows, truncate it
             event.put("allDay", allDay);

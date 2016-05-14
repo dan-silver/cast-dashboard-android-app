@@ -2,6 +2,7 @@ package com.silver.dan.castdemo;
 
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.raizlabs.android.dbflow.annotation.Column;
@@ -9,13 +10,13 @@ import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.runtime.TransactionManager;
-import com.raizlabs.android.dbflow.runtime.transaction.SelectListTransaction;
-import com.raizlabs.android.dbflow.runtime.transaction.TransactionListenerAdapter;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.CursorResult;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 import com.silver.dan.castdemo.widgets.CalendarWidget;
 import com.silver.dan.castdemo.widgets.ClockWidget;
@@ -162,31 +163,30 @@ public class Widget extends BaseModel {
     }
 
     public static void fetchAll(final FetchAllWidgetsListener listener) {
-        TransactionManager.getInstance().addTransaction(
-                new SelectListTransaction<>(new Select().from(Widget.class).orderBy(Widget_Table.position, true),
-                        new TransactionListenerAdapter<List<Widget>>() {
-                            @Override
-                            public void onResultReceived(List<Widget> someObjectList) {
-                                listener.results(someObjectList);
-                            }
-                        }));
-
+        fetchAll(null, listener);
     }
 
+    public static void fetchAll(WidgetType type, final FetchAllWidgetsListener listener) {
+        ConditionGroup conditions = ConditionGroup.clause();
 
-    public static void fetchByType(WidgetType type, final FetchAllWidgetsListener listener) {
-        TransactionManager.getInstance().addTransaction(
+        if (type != null) {
+            conditions.and(Widget_Table.type.is(type.getValue()));
+        }
 
-                new SelectListTransaction<>(
-                        new Select().from(Widget.class)
-                                .where(ConditionGroup.clause().and(Widget_Table.type.is(type.getValue()))),
-                        new TransactionListenerAdapter<List<Widget>>() {
-                            @Override
-                            public void onResultReceived(List<Widget> someObjectList) {
-                                listener.results(someObjectList);
-                            }
-                        }));
+        QueryTransaction.Builder<Widget> query = new QueryTransaction.Builder<>(
+            new Select()
+                .from(Widget.class)
+                .where(conditions));
 
+
+        FlowManager
+            .getDatabase(WidgetDatabase.class)
+            .beginTransactionAsync(query.queryResult(new QueryTransaction.QueryResultCallback<Widget>() {
+                @Override
+                public void onQueryResult(QueryTransaction transaction, @NonNull CursorResult<Widget> result) {
+                    listener.results(result.toList());
+                }
+            }).build()).build().execute();
     }
 
     public JSONObject getJSONContent(Context applicationContext) {

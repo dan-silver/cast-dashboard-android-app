@@ -30,6 +30,7 @@ import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumer;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
+import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 
 import org.json.JSONException;
@@ -131,7 +132,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                     }
                 });
 
-        FlowManager.init(this);
+        FlowManager.init(new FlowConfig.Builder(this).build());
+
         //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
 
 
@@ -292,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             // @todo cleanup, move to client/angular
             // when the column count changes, force refresh all maps
             if (setting.equals(AppSettingsBindings.COLUMN_COUNT)) {
-                Widget.fetchByType(Widget.WidgetType.MAP, new FetchAllWidgetsListener() {
+                Widget.fetchAll(Widget.WidgetType.MAP, new FetchAllWidgetsListener() {
                     @Override
                     public void results(List<Widget> widgets) {
                         for (Widget widget : widgets) {

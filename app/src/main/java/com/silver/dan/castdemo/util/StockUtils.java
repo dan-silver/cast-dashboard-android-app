@@ -2,44 +2,41 @@ package com.silver.dan.castdemo.util;
 
 import android.content.Context;
 
-import com.raizlabs.android.dbflow.runtime.FlowContentObserver;
-import com.raizlabs.android.dbflow.runtime.TransactionManager;
-import com.raizlabs.android.dbflow.runtime.transaction.process.ProcessModelInfo;
-import com.raizlabs.android.dbflow.runtime.transaction.process.SaveModelTransaction;
+import com.raizlabs.android.dbflow.config.DatabaseDefinition;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.silver.dan.castdemo.Stock;
+import com.silver.dan.castdemo.WidgetDatabase;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
 
 
 public class StockUtils {
-    public static void insertFromCSV(Context context) {
-        CSVReader reader;
-        Stock s;
-        FlowContentObserver observer = new FlowContentObserver();
-        List<Stock> stocks = new ArrayList<>();
-        try {
-            reader = new CSVReader(new InputStreamReader(context.getAssets().open("stocks.csv")));
-            String[] line;
-            observer.beginTransaction();
+    public static void insertFromCSV(final Context context) {
 
-            while ((line = reader.readNext()) != null) {
-                s = new Stock();
-                s.setInfo(line[1], line[0]);
-                stocks.add(s);
+        DatabaseDefinition database = FlowManager.getDatabase(WidgetDatabase.class);
+        database.executeTransaction(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                CSVReader reader;
+                try {
+                    reader = new CSVReader(new InputStreamReader(context.getAssets().open("stocks.csv")));
+                    String[] line;
+
+                    while ((line = reader.readNext()) != null) {
+                        Stock s = new Stock();
+                        s.setInfo(line[1], line[0]);
+                        s.insert();
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            observer.endTransactionAndNotify();
-        }
-
-        // insert all stocks in a transaction
-        TransactionManager.getInstance().addTransaction(new SaveModelTransaction<>(ProcessModelInfo.withModels(stocks)));
+        });
     }
 }

@@ -25,13 +25,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/widget_settings_type_specific"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            tools:layout="@layout/map_settings"
-            android:layout_weight="1" />
+            android:layout_weight="1">
+            <FrameLayout
+                android:id="@+id/widget_settings_type_specific"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                tools:layout="@layout/map_settings" />
+        </ScrollView>
         <!--Wrap textview in layout to add ripple-->
         <!--http://stackoverflow.com/questions/27415056/using-a-custom-color-for-button-background-while-using-selectableitembackground-->
         <FrameLayout
@@ -49,5 +52,4 @@
                 android:text="@string/delete" />
         </FrameLayout>
     </LinearLayout>
-
 </LinearLayout>
