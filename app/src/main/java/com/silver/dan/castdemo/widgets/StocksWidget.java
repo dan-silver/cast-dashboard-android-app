@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo.widgets;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
 import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -26,7 +27,13 @@ public class StocksWidget extends UIWidget {
 
     @Override
     public void init() {
-
+        // Make sure that the stocks have been dumped into db, only happens on first app launch in async call
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Stock.insertAllStocks(context);
+            }
+        });
     }
 
 

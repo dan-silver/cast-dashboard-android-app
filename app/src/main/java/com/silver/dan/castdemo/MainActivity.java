@@ -1,6 +1,8 @@
 package com.silver.dan.castdemo;
 
 import android.annotation.TargetApi;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;

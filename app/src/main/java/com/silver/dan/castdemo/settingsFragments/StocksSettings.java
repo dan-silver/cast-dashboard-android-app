@@ -48,8 +48,6 @@ public class StocksSettings extends WidgetSettingsFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Stock.insertAllStocks(getContext());
-
         super.onCreate(savedInstanceState);
     }
 

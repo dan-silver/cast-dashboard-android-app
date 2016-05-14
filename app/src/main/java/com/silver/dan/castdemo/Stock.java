@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDoneException;
 import android.util.Log;
 
 import com.raizlabs.android.dbflow.annotation.Column;
@@ -35,15 +36,15 @@ public class Stock extends BaseModel {
 
     public static void insertAllStocks(Context context) {
         //check if stocks table is empty
-
-        long count = new Select().from(Stock.class).count();
+        long count = 0;
+        try {
+            count = new Select().from(Stock.class).count();
+        } catch (SQLiteDoneException e) {
+            // if the table isn't created yet
+        }
 
         if (count == 0) {
-            long startTime = System.currentTimeMillis();
             StockUtils.insertFromCSV(context);
-            long endTime = System.currentTimeMillis();
-            Log.v(MainActivity.TAG, "time to insert stocks: " + (endTime - startTime) + " ms");
-
         }
     }
 
