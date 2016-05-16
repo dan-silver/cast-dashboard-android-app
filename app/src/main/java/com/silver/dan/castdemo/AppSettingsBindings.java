@@ -32,10 +32,13 @@ public class AppSettingsBindings extends BaseObservable {
     public int screenPadding;
 
     @Bindable
-    public String backgroundImagePath;
+    public String backgroundImageName;
+
+    @Bindable
+    public String backgroundImageLocalPath;
 
 
-    private AppSettingsHelperFragment appSettings;
+    public AppSettingsHelperFragment appSettings;
 
     static String COLUMN_COUNT = "COLUMN_COUNT";
     static String BACKGROUND_TYPE = "BACKGROUND_TYPE";
@@ -46,6 +49,11 @@ public class AppSettingsBindings extends BaseObservable {
     static String SCREEN_PADDING = "SCREEN_PADDING";
     static String LOCALE = "LOCALE";
     static String BACKGROUND_IMAGE_PATH = "BACKGROUND_IMAGE_PATH";
+    static String BACKGROUND_IMAGE_LOCAL_PATH = "BACKGROUND_IMAGE_LOCAL_PATH";
+
+
+    // not stored as settings
+    static String SECURE_BACKGROUND_URL = "SECURE_BACKGROUND_URL";
 
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
@@ -76,12 +84,25 @@ public class AppSettingsBindings extends BaseObservable {
         appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
     }
 
-    public void setBackgroundImagePath(String path) {
-        this.backgroundImagePath = path;
-        notifyPropertyChanged(BR.backgroundImagePath);
-        // @TODO
+    public void setBackgroundImageName(String name) {
+        this.backgroundImageName = name;
+        notifyPropertyChanged(BR.backgroundImageName);
+//        ImageUtils.sendBackgroundImage(path, context);
     }
 
+
+    public void setBackgroundImageLocalPath(String path) {
+        this.backgroundImageLocalPath = path;
+        notifyPropertyChanged(BR.backgroundImageLocalPath);
+    }
+
+    public String getBackgroundImageLocalPath() {
+        return this.backgroundImageLocalPath;
+    }
+
+    public String getBackgroundImageName() {
+        return this.backgroundImageName;
+    }
 
     public void setTextColor(int textColor) {
         this.textColor = textColor;
@@ -140,7 +161,8 @@ public class AppSettingsBindings extends BaseObservable {
         edit.putInt(WIDGET_COLOR, widgetColor);
         edit.putInt(TEXT_COLOR, textColor);
         edit.putInt(SCREEN_PADDING, screenPadding);
-        edit.putString(BACKGROUND_IMAGE_PATH, backgroundImagePath);
+        edit.putString(BACKGROUND_IMAGE_PATH, backgroundImageName);
+        edit.putString(BACKGROUND_IMAGE_LOCAL_PATH, backgroundImageLocalPath);
         edit.apply();
     }
 
@@ -157,7 +179,8 @@ public class AppSettingsBindings extends BaseObservable {
         widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 15); //15% x 2 + 50 = 80/100
         screenPadding = settings.getInt(SCREEN_PADDING, 15);
 
-        backgroundImagePath = settings.getString(BACKGROUND_IMAGE_PATH, "");
+        backgroundImageLocalPath = settings.getString(BACKGROUND_IMAGE_LOCAL_PATH, "");
+        backgroundImageName = settings.getString(BACKGROUND_IMAGE_PATH, "");
 
     }
 

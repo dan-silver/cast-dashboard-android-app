@@ -1,8 +1,6 @@
 package com.silver.dan.castdemo;
 
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +19,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.common.ConnectionResult;
@@ -34,6 +34,8 @@ import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCas
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.silver.dan.castdemo.SettingEnums.BackgroundType;
+import com.silver.dan.castdemo.util.ImageUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public static final int NAV_VIEW_WIDGETS_ITEM = 0;
     public static final int NAV_VIEW_OPTIONS_LAYOUT_ITEM = 1;
     public static final int NAV_VIEW_OPTIONS_THEME_ITEM = 2;
+    public static AmazonS3Client s3Client;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -138,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
 
-
         switchToFragment(new WidgetList(), false);
 
         BaseCastManager.checkGooglePlayServices(this);
@@ -206,6 +208,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 .enableAutoManage(this, this)
                 .build();
 
+        s3Client = new AmazonS3Client( new BasicAWSCredentials( getString(R.string.AMAZON_ACCESS_KEY), getString(R.string.AMAZON_SECRET_KEY)));
 
     }
 
@@ -274,6 +277,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             options.put(AppSettingsBindings.TEXT_COLOR, settings.getTextColorHextStr());
             options.put(AppSettingsBindings.SCREEN_PADDING, settings.getScreenPaddingUI());
             options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.getLanguage());
+
+            String backgroundURL = ImageUtils.getS3ImageURL(settings.getBackgroundImageName(), this, MainActivity.s3Client);
+
+            options.put(AppSettingsBindings.SECURE_BACKGROUND_URL, backgroundURL);
         } catch (JSONException e) {
             e.printStackTrace();
         }

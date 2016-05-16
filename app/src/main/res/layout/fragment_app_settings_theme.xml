@@ -36,6 +36,11 @@
                 <com.silver.dan.castdemo.settingsFragments.SettingItem
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
                     <RelativeLayout
                         android:id="@+id/loadingPanel"
                         android:layout_width="match_parent"
@@ -51,7 +56,18 @@
                             android:maxHeight="200dp"
                             android:adjustViewBounds="true"
                             android:src="@drawable/progress_animation"/>
+
                     </RelativeLayout>
+
+                    <ProgressBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="false"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:progress="50"
+                        android:id="@+id/upload_progress"
+                        android:visibility="gone"/>
+                    </LinearLayout>
 
 
                 </com.silver.dan.castdemo.settingsFragments.SettingItem>

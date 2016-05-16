@@ -18,6 +18,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Result;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.model.LatLng;
@@ -292,7 +293,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
 
             } else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE_DESTINATION) {
                 Place place = PlaceAutocomplete.getPlace(getContext(), data);
-                Log.i(MainActivity.TAG, "Place: " + place.getName());
+
                 LatLng location = place.getLatLng();
 
                 destinationLat.update(location.latitude);
@@ -304,6 +305,8 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
                 updateWidgetProperty(MapSettings.DESTINATION_LAT, destinationLat.value);
                 updateWidgetProperty(MapSettings.DESTINATION_LONG, destinationLng.value);
             }
+        } else {
+            Log.e(MainActivity.TAG, "Google Maps API error");
         }
     }
 

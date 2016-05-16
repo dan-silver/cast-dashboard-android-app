@@ -12,19 +12,28 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.amazonaws.event.ProgressEvent;
+import com.amazonaws.event.ProgressListener;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
 import com.silver.dan.castdemo.databinding.FragmentAppSettingsThemeBinding;
 import com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem;
 import com.silver.dan.castdemo.util.ImageUtils;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +46,7 @@ import butterknife.OnClick;
 public class AppSettingsTheme extends AppSettingsHelperFragment {
 
     private static final int SELECT_PHOTO = 0;
+    private static final int MB = 1000000;
 
     @Bind(R.id.background_type)
     TwoLineSettingItem backgroundType;
@@ -47,6 +57,8 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
     @Bind(R.id.dashboard_background_picture)
     ImageView backgroundPicture;
 
+    @Bind(R.id.upload_progress)
+    ProgressBar uploadProgressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,7 +89,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         });
 
         if (bindings.getBackgroundType() == BackgroundType.PICTURE) {
-            new LoadImageTask().execute(bindings.backgroundImagePath);
+            new LoadImageTask().execute(bindings.backgroundImageLocalPath);
         }
 
         return view;
@@ -86,8 +98,9 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
 
     private class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
         protected Bitmap doInBackground(String... urls) {
-            File filepath = ImageUtils.getImagePath(getContext(), urls[0]);
-            return BitmapFactory.decodeFile(filepath.getAbsolutePath());
+            if (urls[0].length() > 0)
+                return BitmapFactory.decodeFile(urls[0]);
+            return null;
         }
 
         protected void onPostExecute(Bitmap result) {
@@ -101,7 +114,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         final ArrayList<BackgroundType> backgroundTypes = new ArrayList<BackgroundType>() {{
             add(BackgroundType.SLIDESHOW);
             add(BackgroundType.SOLID_COLOR);
-//            add(BackgroundType.PICTURE);
+            add(BackgroundType.PICTURE);
         }};
 
         new MaterialDialog.Builder(getContext())
@@ -114,10 +127,19 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                         BackgroundType newBackgroundType = backgroundTypes.get(which);
 
                         if (oldBackgroundType != newBackgroundType) {
-                            if (newBackgroundType == BackgroundType.PICTURE) {
+                            // remove old background
+                            if (oldBackgroundType == BackgroundType.PICTURE) {
+                                removeBackgroundPictureFromS3();
+                            }
+
+                            // first time selecting a background
+                            if (newBackgroundType == BackgroundType.PICTURE && (bindings.backgroundImageLocalPath == null || bindings.backgroundImageLocalPath.isEmpty())) {
                                 getBackgroundImage();
                             } else {
                                 bindings.setBackgroundType(newBackgroundType);
+                                if (newBackgroundType == BackgroundType.PICTURE && bindings.backgroundImageLocalPath != null && !bindings.backgroundImageLocalPath.isEmpty()) {
+                                    new LoadImageTask().execute(bindings.backgroundImageLocalPath);
+                                }
                             }
                         }
 
@@ -129,6 +151,15 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                 .show();
     }
 
+    private void removeBackgroundPictureFromS3() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.s3Client.deleteObject(getString(R.string.BACKGROUND_PICTURE_BUCKET), bindings.backgroundImageName);
+            }
+        });
+    }
+
     @OnClick(R.id.dashboard_background_picture)
     public void getBackgroundImage() {
         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -136,7 +167,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, final int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch (requestCode) {
@@ -149,9 +180,11 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                     if (cursor != null) {
                         cursor.moveToFirst();
                         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                        String picturePath = cursor.getString(columnIndex);
+                        final String picturePath = cursor.getString(columnIndex);
                         cursor.close();
 
+
+                        long imageSize = new File(picturePath).length();
                         Bitmap bm = BitmapFactory.decodeFile(picturePath);
                         try {
                             bm = ImageUtils.modifyOrientation(bm, picturePath);
@@ -165,16 +198,115 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                         Drawable d = new BitmapDrawable(getResources(), bm);
                         backgroundPicture.setImageDrawable(d);
 
-                        String imageName = UUID.randomUUID().toString();
+                        final String imageName = UUID.randomUUID().toString();
+                        bindings.setBackgroundImageName(imageName);
+                        bindings.setBackgroundImageLocalPath(picturePath);
 
-                        bindings.setBackgroundImagePath(imageName);
-                        ImageUtils.saveToInternalStorage(bm, imageName, getContext());
 
+                        // start with indeterminate as we're reading the bitmap, then determinate as upload progresses
+                        uploadProgressBar.setIndeterminate(true);
+                        uploadProgressBar.setVisibility(View.VISIBLE);
+
+
+                        //upload to s3 async
+                        uploadImageToS3(imageName, bm, imageSize, new FileSavedListener() {
+                            private void resetUI() {
+                                uploadProgressBar.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        uploadProgressBar.setVisibility(View.GONE);
+                                    }
+                                });
+                            }
+                            @Override
+                            public void onSaved() {
+                                resetUI();
+
+                                // send secure image URL to receiver
+                                bindings.appSettings.mCallback.onSettingChanged(AppSettingsBindings.SECURE_BACKGROUND_URL,
+                                        ImageUtils.getS3ImageURL(imageName, getContext(), MainActivity.s3Client));
+                            }
+
+                            @Override
+                            public void onError(final String err) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        resetUI();
+                                        Toast.makeText(getActivity(), err, Toast.LENGTH_LONG).show();
+                                        bindings.setBackgroundImageName(null);
+                                        bindings.setBackgroundImageLocalPath(null);
+                                        bindings.setBackgroundType(BackgroundType.SLIDESHOW);
+                                    }
+                                });
+                            }
+                        });
                     }
                 }
         }
     }
 
+    private void uploadImageToS3(final String imageName, final Bitmap image, final long imageSize, final FileSavedListener callback) {
+        // start the async upload to S3
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                int quality = 100;
+                int MAX_IMAGE_SIZE = (int) (0.8 * MB);
+                if (imageSize > MAX_IMAGE_SIZE) {
+                    quality = (int) (MAX_IMAGE_SIZE / (float) imageSize * 100);
+                }
+                
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.JPEG, quality, bos);
+                final byte[] bitmapdata = bos.toByteArray();
+                final ByteArrayInputStream bs = new ByteArrayInputStream(bitmapdata);
+
+                ObjectMetadata metadata = new ObjectMetadata();
+                metadata.setContentLength(bitmapdata.length);
+
+                try {
+                    PutObjectRequest por = new PutObjectRequest(getString(R.string.BACKGROUND_PICTURE_BUCKET), imageName, bs, metadata);
+                    por.setGeneralProgressListener(new ProgressListener() {
+                        @Override
+                        public void progressChanged(ProgressEvent progressEvent) {
+                                    if(progressEvent.getEventCode() == ProgressEvent.STARTED_EVENT_CODE) {
+                                        uploadProgressBar.post(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                uploadProgressBar.setProgress(0);
+                                                uploadProgressBar.setIndeterminate(false);
+                                                uploadProgressBar.setVisibility(View.VISIBLE);
+                                                uploadProgressBar.setMax(bitmapdata.length);
+                                            }
+                                        });
+                                    } else if (progressEvent.getEventCode() == ProgressEvent.COMPLETED_EVENT_CODE) {
+                                        Log.v(MainActivity.TAG, "Upload complete");
+                                        callback.onSaved();
+                                    } else if (progressEvent.getEventCode() == 0) { // progress notification
+                                        uploadProgressBar.incrementProgressBy((int) progressEvent.getBytesTransferred());
+                                    }
+
+                                    // regardless of how the upload was terminated, reset the UI
+                                    if (progressEvent.getEventCode() == ProgressEvent.FAILED_EVENT_CODE ||
+                                            progressEvent.getEventCode() == ProgressEvent.CANCELED_EVENT_CODE) {
+                                        callback.onError("Upload failed, try again later.");
+                                        try {
+                                            bs.close();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                        }
+                    });
+                    MainActivity.s3Client.putObject(por);
+                } catch (Exception e) {
+                    callback.onError("Error uploading photo");
+                }
+
+
+            }
+        });
+    }
 
     @OnClick(R.id.widget_background_color)
     public void openWidgetBackgroundColorDialog() {
@@ -206,7 +338,6 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
             }
         });
     }
-
 
     @Override
     public void onResume() {

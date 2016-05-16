@@ -80,7 +80,6 @@ public class CastCommunicator {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
             }
         }.run();
     }
@@ -100,5 +99,19 @@ public class CastCommunicator {
 
     public static void sendWidgets(JSONArray widgetsArr) {
         CastCommunicator.sendJSON("widgets", widgetsArr);
+    }
+
+
+    // for extremely large strings, don't wrap in JSON
+    public static void sendText(final String text) {
+        new Runnable() {
+            public void run() {
+                try {
+                    mCastManager.sendDataMessage(text, context.getResources().getString(R.string.namespace));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.run();
     }
 }
