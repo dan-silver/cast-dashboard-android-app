@@ -19,8 +19,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.common.ConnectionResult;
@@ -40,6 +38,7 @@ import com.silver.dan.castdemo.util.ImageUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -54,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public static final int NAV_VIEW_WIDGETS_ITEM = 0;
     public static final int NAV_VIEW_OPTIONS_LAYOUT_ITEM = 1;
     public static final int NAV_VIEW_OPTIONS_THEME_ITEM = 2;
-    public static AmazonS3Client s3Client;
 
     private GoogleApiClient mGoogleApiClient;
 
@@ -166,6 +164,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
                 sendAllOptions();
                 invalidateOptionsMenu();
+
+
             }
 
             // send options first, so GMaps with locale can be loaded, then send all widgets
@@ -208,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 .enableAutoManage(this, this)
                 .build();
 
-        s3Client = new AmazonS3Client( new BasicAWSCredentials( getString(R.string.AMAZON_ACCESS_KEY), getString(R.string.AMAZON_SECRET_KEY)));
 
     }
 
@@ -278,9 +277,10 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             options.put(AppSettingsBindings.SCREEN_PADDING, settings.getScreenPaddingUI());
             options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.getLanguage());
 
-            String backgroundURL = ImageUtils.getS3ImageURL(settings.getBackgroundImageName(), this, MainActivity.s3Client);
+            if (settings.getBackgroundType() == BackgroundType.PICTURE) {
+                AppSettingsTheme.sendBackgroundImage(new File(settings.backgroundImageLocalPath));
+            }
 
-            options.put(AppSettingsBindings.SECURE_BACKGROUND_URL, backgroundURL);
         } catch (JSONException e) {
             e.printStackTrace();
         }

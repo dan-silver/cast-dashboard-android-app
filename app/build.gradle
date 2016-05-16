@@ -16,6 +16,8 @@ android {
         versionCode 18
         versionName "1.2.0"
 
+        multiDexEnabled true
+
     }
     buildTypes {
         release {
@@ -53,8 +55,7 @@ dependencies {
     compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.8.3'
     compile 'com.github.QuadFlask:colorpicker:0.0.10'
 
-    compile 'com.amazonaws:aws-android-sdk-s3:2.2.16'
-
+    compile group: 'com.google.guava', name: 'guava', version: '18.0'
 }
 
 apply plugin: 'com.neenbedankt.android-apt'

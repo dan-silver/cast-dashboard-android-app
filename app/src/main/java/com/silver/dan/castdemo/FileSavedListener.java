@@ -6,4 +6,6 @@ package com.silver.dan.castdemo;
 public interface FileSavedListener {
     void onSaved();
     void onError(String s);
+
+    void onProgress(int progress, int total);
 }

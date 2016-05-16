@@ -32,9 +32,6 @@ public class AppSettingsBindings extends BaseObservable {
     public int screenPadding;
 
     @Bindable
-    public String backgroundImageName;
-
-    @Bindable
     public String backgroundImageLocalPath;
 
 
@@ -52,8 +49,6 @@ public class AppSettingsBindings extends BaseObservable {
     static String BACKGROUND_IMAGE_LOCAL_PATH = "BACKGROUND_IMAGE_LOCAL_PATH";
 
 
-    // not stored as settings
-    static String SECURE_BACKGROUND_URL = "SECURE_BACKGROUND_URL";
 
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
@@ -84,11 +79,6 @@ public class AppSettingsBindings extends BaseObservable {
         appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
     }
 
-    public void setBackgroundImageName(String name) {
-        this.backgroundImageName = name;
-        notifyPropertyChanged(BR.backgroundImageName);
-//        ImageUtils.sendBackgroundImage(path, context);
-    }
 
 
     public void setBackgroundImageLocalPath(String path) {
@@ -98,10 +88,6 @@ public class AppSettingsBindings extends BaseObservable {
 
     public String getBackgroundImageLocalPath() {
         return this.backgroundImageLocalPath;
-    }
-
-    public String getBackgroundImageName() {
-        return this.backgroundImageName;
     }
 
     public void setTextColor(int textColor) {
@@ -161,7 +147,6 @@ public class AppSettingsBindings extends BaseObservable {
         edit.putInt(WIDGET_COLOR, widgetColor);
         edit.putInt(TEXT_COLOR, textColor);
         edit.putInt(SCREEN_PADDING, screenPadding);
-        edit.putString(BACKGROUND_IMAGE_PATH, backgroundImageName);
         edit.putString(BACKGROUND_IMAGE_LOCAL_PATH, backgroundImageLocalPath);
         edit.apply();
     }
@@ -180,7 +165,6 @@ public class AppSettingsBindings extends BaseObservable {
         screenPadding = settings.getInt(SCREEN_PADDING, 15);
 
         backgroundImageLocalPath = settings.getString(BACKGROUND_IMAGE_LOCAL_PATH, "");
-        backgroundImageName = settings.getString(BACKGROUND_IMAGE_PATH, "");
 
     }
 
