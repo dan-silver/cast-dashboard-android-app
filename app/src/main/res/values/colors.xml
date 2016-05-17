@@ -14,5 +14,5 @@
 
     <!-- TV defaults -->
     <color name="tv_text_light">#fff</color>
-    <color name="tv_background">#202020</color>
+    <color name="tv_background">#3d3d3d</color>
 </resources>

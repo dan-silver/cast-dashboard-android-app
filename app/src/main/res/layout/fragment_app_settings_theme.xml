@@ -108,7 +108,7 @@
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@{settings.widgetBackgroundColor}"/>
+                            android:background="@{settings.dashBackgroundColor}"/>
                     </FrameLayout>
                 </RelativeLayout>
             </com.silver.dan.castdemo.settingsFragments.SettingItem>

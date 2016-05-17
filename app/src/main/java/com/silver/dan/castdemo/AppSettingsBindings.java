@@ -11,7 +11,7 @@ import com.silver.dan.castdemo.SettingEnums.BackgroundType;
 
 public class AppSettingsBindings extends BaseObservable {
     @Bindable
-    public Integer widgetBackgroundColor;
+    public Integer dashBackgroundColor;
 
     @Bindable
     public Integer numberOfColumns;
@@ -45,7 +45,6 @@ public class AppSettingsBindings extends BaseObservable {
     static String TEXT_COLOR = "TEXT_COLOR";
     static String SCREEN_PADDING = "SCREEN_PADDING";
     static String LOCALE = "LOCALE";
-    static String BACKGROUND_IMAGE_PATH = "BACKGROUND_IMAGE_PATH";
     static String BACKGROUND_IMAGE_LOCAL_PATH = "BACKGROUND_IMAGE_LOCAL_PATH";
 
 
@@ -67,8 +66,8 @@ public class AppSettingsBindings extends BaseObservable {
         loadAllSettings(appSettings.getContext());
     }
 
-    public void setWidgetBackgroundColor(int widgetBackgroundColor) {
-        this.widgetBackgroundColor = widgetBackgroundColor;
+    public void setDashBackgroundColor(int dashBackgroundColor) {
+        this.dashBackgroundColor = dashBackgroundColor;
         notifyPropertyChanged(BR.widgetBackgroundColor);
         appSettings.mCallback.onSettingChanged(BACKGROUND_COLOR, getBackgroundColorHexStr());
     }
@@ -101,7 +100,7 @@ public class AppSettingsBindings extends BaseObservable {
     }
 
     public String getBackgroundColorHexStr() {
-        return Integer.toHexString(widgetBackgroundColor).substring(2);
+        return Integer.toHexString(dashBackgroundColor).substring(2);
     }
 
     public String getWidgetColorHexStr() {
@@ -141,7 +140,7 @@ public class AppSettingsBindings extends BaseObservable {
         SharedPreferences.Editor edit = preferences.edit();
 
         edit.putInt(COLUMN_COUNT, numberOfColumns);
-        edit.putInt(BACKGROUND_COLOR, widgetBackgroundColor);
+        edit.putInt(BACKGROUND_COLOR, dashBackgroundColor);
         edit.putInt(BACKGROUND_TYPE, backgroundType.getValue());
         edit.putInt(WIDGET_TRANSPARENCY, widgetTransparency);
         edit.putInt(WIDGET_COLOR, widgetColor);
@@ -156,7 +155,7 @@ public class AppSettingsBindings extends BaseObservable {
 
         // Don't use setters here because we don't want to trigger a sendMessage() to TV
         numberOfColumns = settings.getInt(COLUMN_COUNT, 2);
-        widgetBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.accent));
+        dashBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.tv_background));
         widgetColor = settings.getInt(WIDGET_COLOR, ContextCompat.getColor(context, R.color.md_material_blue_800));
         textColor = settings.getInt(TEXT_COLOR, ContextCompat.getColor(context, R.color.tv_text_light));
 

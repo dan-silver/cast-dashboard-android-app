@@ -311,10 +311,10 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
 
     @OnClick(R.id.widget_background_color)
     public void openWidgetBackgroundColorDialog() {
-        createColorPickerDialog(bindings.widgetBackgroundColor, new ColorPickerClickListener() {
+        createColorPickerDialog(bindings.dashBackgroundColor, new ColorPickerClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] integers) {
-                bindings.setWidgetBackgroundColor(selectedColor);
+                bindings.setDashBackgroundColor(selectedColor);
             }
         });
     }
