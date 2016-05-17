@@ -41,10 +41,10 @@ public abstract class WidgetSettingsFragment extends Fragment {
     @Nullable
     @OnClick(R.id.widget_height)
     public void cycleWidgetHeight() {
-        // options are 20, 40, 60, 80, 100
+        // options are 40, 60, 80, 100
         int currentHeight = optionWidgetHeight.getIntValue();
         if (currentHeight == 100) {
-            optionWidgetHeight.update(20);
+            optionWidgetHeight.update(40);
         } else {
             optionWidgetHeight.update(currentHeight + 20);
         }
