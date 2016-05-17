@@ -68,7 +68,7 @@ public class AppSettingsBindings extends BaseObservable {
 
     public void setDashBackgroundColor(int dashBackgroundColor) {
         this.dashBackgroundColor = dashBackgroundColor;
-        notifyPropertyChanged(BR.widgetBackgroundColor);
+        notifyPropertyChanged(BR.dashBackgroundColor);
         appSettings.mCallback.onSettingChanged(BACKGROUND_COLOR, getBackgroundColorHexStr());
     }
 

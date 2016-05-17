@@ -37,10 +37,10 @@ public class RSSSettings extends WidgetSettingsFragment {
 
         feedUrlOption = loadOrInitOption(RSSSettings.FEED_URL);
         showDatesOption = loadOrInitOption(RSSSettings.SHOW_DATES);
-        optionWidgetHeight = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
+
+        supportWidgetHeightOption();
 
         updateFeedURLText();
-        updateWidgetHeightText();
 
         displayDates.setChecked(showDatesOption.getBooleanValue());
         displayDates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -53,6 +53,7 @@ public class RSSSettings extends WidgetSettingsFragment {
 
         return view;
     }
+
 
     public void updateFeedURLText() {
         if (feedUrlOption.value.length() > 0) {

@@ -59,7 +59,9 @@ public class CalendarSettings extends WidgetSettingsFragment {
         optionAllCalendars = loadOrInitOption(CalendarSettings.ALL_CALENDARS);
         optionShowEventLocations = loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
         optionShowEventsUntil = loadOrInitOption(CalendarSettings.SHOW_EVENTS_UNTIL);
-        optionWidgetHeight = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
+
+
+        supportWidgetHeightOption();
 
         allCalendars.setChecked(optionAllCalendars.getBooleanValue());
 
@@ -87,7 +89,6 @@ public class CalendarSettings extends WidgetSettingsFragment {
         displayCalendarList();
 
         updateCalendarUntilTextView();
-        updateWidgetHeightText();
 
         return view;
     }

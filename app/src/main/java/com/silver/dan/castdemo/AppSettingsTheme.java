@@ -153,7 +153,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                             } else {
                                 bindings.setBackgroundType(newBackgroundType);
                                 if (newBackgroundType == BackgroundType.PICTURE && bindings.backgroundImageLocalPath != null && !bindings.backgroundImageLocalPath.isEmpty()) {
-                                    new LoadImageTask().execute(bindings.backgroundImageLocalPath);
+                                    new LoadImageTask().execute(bindings.getBackgroundImageLocalPath());
                                 }
                             }
                         }
@@ -291,7 +291,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
 
 
                 int i = 0;
-                int chunkSize = 10*1000;
+                int chunkSize = 15*1000;
                 final int numMessages = (int) Math.ceil((float)length / chunkSize);
                 for (String chunk : Splitter.fixedLength(chunkSize).split(imgBase64)) {
                     CastCommunicator.sendText("base64:" + i + "/" + numMessages+ ":::" + chunk);

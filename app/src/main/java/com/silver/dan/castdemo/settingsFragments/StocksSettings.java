@@ -49,6 +49,7 @@ public class StocksSettings extends WidgetSettingsFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
 
@@ -56,6 +57,8 @@ public class StocksSettings extends WidgetSettingsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.stocks_settings, container, false);
         ButterKnife.bind(this, view);
+
+        supportWidgetHeightOption();
 
         final SimpleCursorAdapter dropDownMenuAdapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
                 new String[]{"name", "ticker"},

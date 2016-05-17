@@ -99,19 +99,20 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
         mapZoomOption = loadOrInitOption(MapSettings.MAP_ZOOM);
         mapShowTraffic = loadOrInitOption(MapSettings.SHOW_TRAFFIC);
         mapTypeOption = loadOrInitOption(MapSettings.MAP_TYPE);
-        optionWidgetHeight = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
         mapModeOption = loadOrInitOption(MapSettings.MAP_MODE);
         destinationLat = loadOrInitOption(MapSettings.DESTINATION_LAT);
         destinationLng = loadOrInitOption(MapSettings.DESTINATION_LONG);
         destinationText = loadOrInitOption(MapSettings.DESTINATION_TEXT);
         travelModeOption = loadOrInitOption(MapSettings.TRAVEL_MODE);
 
-        updateWidgetHeightText();
+
         updateLocationText();
         updateDestinationText();
         updateTypeText();
         mapModeChanged();
         updateTravelModeText();
+
+        supportWidgetHeightOption();
 
 
         mapZoom.setProgress(Integer.parseInt(mapZoomOption.value) - 1);

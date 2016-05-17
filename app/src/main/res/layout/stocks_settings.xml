@@ -2,10 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/app_settings_padding"
-    android:paddingRight="@dimen/app_settings_padding">
-
+    android:orientation="vertical">
+    <include layout="@layout/widget_height"/>
+    <include layout="@layout/setting_line_break"/>
+    <com.silver.dan.castdemo.settingsFragments.SettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <AutoCompleteTextView
         android:id="@+id/select_stock"
@@ -13,9 +15,11 @@
         android:layout_height="wrap_content"
         android:hint="Add a stock by company or symbol"
         android:singleLine="true"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/stock_list" />
+    </com.silver.dan.castdemo.settingsFragments.SettingItem>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/stock_list" />
+    <include layout="@layout/setting_line_break"/>
 </LinearLayout>

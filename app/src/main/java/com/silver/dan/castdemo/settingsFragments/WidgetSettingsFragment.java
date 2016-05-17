@@ -69,6 +69,11 @@ public abstract class WidgetSettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    protected void supportWidgetHeightOption() {
+        optionWidgetHeight = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
+        updateWidgetHeightText();
+    }
+
 }
 
 
