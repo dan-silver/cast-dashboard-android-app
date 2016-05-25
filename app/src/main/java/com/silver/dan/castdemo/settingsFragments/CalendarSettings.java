@@ -62,6 +62,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
 
         supportWidgetHeightOption();
+        supportWidgetScrollInterval();
 
         allCalendars.setChecked(optionAllCalendars.getBooleanValue());
 
