@@ -206,6 +206,11 @@ public class Widget extends BaseModel {
                 data.put(WidgetSettingsFragment.WIDGET_HEIGHT, height.getIntValue());
             }
 
+            WidgetOption scrollInterval = getOption(WidgetSettingsFragment.SCROLL_INTERVAL);
+            if (scrollInterval != null) {
+                data.put(WidgetSettingsFragment.SCROLL_INTERVAL, scrollInterval .getIntValue());
+            }
+
             payload.put("data", data);
         } catch (JSONException e) {
             e.printStackTrace();
