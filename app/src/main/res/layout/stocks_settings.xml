@@ -5,6 +5,8 @@
     android:orientation="vertical">
     <include layout="@layout/widget_height"/>
     <include layout="@layout/setting_line_break"/>
+    <include layout="@layout/widget_scroll_interval"/>
+    <include layout="@layout/setting_line_break"/>
     <com.silver.dan.castdemo.settingsFragments.SettingItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

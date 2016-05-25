@@ -47,18 +47,12 @@ public class StocksSettings extends WidgetSettingsFragment {
     RecyclerView stockList;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.stocks_settings, container, false);
         ButterKnife.bind(this, view);
 
         supportWidgetHeightOption();
+        supportWidgetScrollInterval();
 
         final SimpleCursorAdapter dropDownMenuAdapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
                 new String[]{"name", "ticker"},

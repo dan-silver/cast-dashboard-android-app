@@ -39,7 +39,7 @@ public class Widget extends BaseModel {
     public static String ID = "WIDGET_ID";
 
     public static int DEFAULT_WIDGET_HEIGHT = 60;
-    public static int DEFAULT_SCROLL_INTERVAL = 15;
+    public static int DEFAULT_SCROLL_INTERVAL = 20;
 
     public UIWidget getUIWidget(Context context) {
         UIWidget widget = null;
@@ -201,14 +201,14 @@ public class Widget extends BaseModel {
             JSONObject data = getUIWidget(applicationContext).getContent();
 
             // if the widget has overridden the height, send it in the data {} so it can be quickly updated via the updateWidgetProperty channel
-            WidgetOption height = getOption(WidgetSettingsFragment.WIDGET_HEIGHT);
+            WidgetOption height = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT, applicationContext);
             if (height != null) {
                 data.put(WidgetSettingsFragment.WIDGET_HEIGHT, height.getIntValue());
             }
 
-            WidgetOption scrollInterval = getOption(WidgetSettingsFragment.SCROLL_INTERVAL);
+            WidgetOption scrollInterval = loadOrInitOption(WidgetSettingsFragment.SCROLL_INTERVAL, applicationContext);
             if (scrollInterval != null) {
-                data.put(WidgetSettingsFragment.SCROLL_INTERVAL, scrollInterval .getIntValue());
+                data.put(WidgetSettingsFragment.SCROLL_INTERVAL, scrollInterval.getIntValue());
             }
 
             payload.put("data", data);

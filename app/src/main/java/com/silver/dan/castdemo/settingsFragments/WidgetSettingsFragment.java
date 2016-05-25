@@ -65,7 +65,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
     public void cycleWidgetScrollInterval() {
         // options are 10, 20, 30, 40
         int currentInterval = optionScrollInterval.getIntValue();
-        if (currentInterval == 40) {
+        if (currentInterval >= 40) {
             optionScrollInterval.update(10);
         } else {
             optionScrollInterval.update(currentInterval + 10);
@@ -104,7 +104,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
 
 
     protected void supportWidgetScrollInterval() {
-        optionScrollInterval = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
+        optionScrollInterval = loadOrInitOption(WidgetSettingsFragment.SCROLL_INTERVAL);
         updateScrollIntervalText();
     }
 }
