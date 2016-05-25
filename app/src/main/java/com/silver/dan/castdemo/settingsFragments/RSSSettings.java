@@ -39,7 +39,7 @@ public class RSSSettings extends WidgetSettingsFragment {
         showDatesOption = loadOrInitOption(RSSSettings.SHOW_DATES);
 
         supportWidgetHeightOption();
-
+        supportWidgetScrollInterval();
         updateFeedURLText();
 
         displayDates.setChecked(showDatesOption.getBooleanValue());

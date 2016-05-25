@@ -18,13 +18,21 @@ public abstract class WidgetSettingsFragment extends Fragment {
     protected Widget widget;
 
     public static String WIDGET_HEIGHT = "WIDGET_HEIGHT";
+    public static String SCROLL_INTERVAL = "SCROLL_INTERVAL";
 
     @Nullable
     @Bind(R.id.widget_height)
     TwoLineSettingItem widgetHeight;
 
+    @Nullable
+    @Bind(R.id.widget_scroll_interval)
+    TwoLineSettingItem scrollInterval;
+
     // percentage of screen height
     WidgetOption optionWidgetHeight;
+
+    // scroll interval in seconds
+    WidgetOption optionScrollInterval;
 
     protected void refreshWidget() {
         CastCommunicator.sendWidget(widget);
@@ -52,9 +60,29 @@ public abstract class WidgetSettingsFragment extends Fragment {
         updateWidgetProperty(WidgetSettingsFragment.WIDGET_HEIGHT, optionWidgetHeight.getIntValue());
     }
 
+    @Nullable
+    @OnClick(R.id.widget_scroll_interval)
+    public void cycleWidgetScrollInterval() {
+        // options are 10, 20, 30, 40
+        int currentInterval = optionScrollInterval.getIntValue();
+        if (currentInterval == 40) {
+            optionScrollInterval.update(10);
+        } else {
+            optionScrollInterval.update(currentInterval + 10);
+        }
+        updateScrollIntervalText();
+        updateWidgetProperty(WidgetSettingsFragment.SCROLL_INTERVAL, optionScrollInterval.getIntValue());
+    }
+
     public void updateWidgetHeightText() {
         if (widgetHeight != null)
             widgetHeight.setSubHeaderText(optionWidgetHeight.getIntValue() + "%");
+    }
+
+
+    public void updateScrollIntervalText() {
+        if (scrollInterval != null)
+            scrollInterval.setSubHeaderText(optionScrollInterval.getIntValue() + "s");
     }
 
     @Override
@@ -74,6 +102,11 @@ public abstract class WidgetSettingsFragment extends Fragment {
         updateWidgetHeightText();
     }
 
+
+    protected void supportWidgetScrollInterval() {
+        optionScrollInterval = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT);
+        updateScrollIntervalText();
+    }
 }
 
 

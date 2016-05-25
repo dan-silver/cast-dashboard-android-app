@@ -38,7 +38,8 @@ public class Widget extends BaseModel {
     // For bundle data passing
     public static String ID = "WIDGET_ID";
 
-    public int DEFAULT_WIDGET_HEIGHT = 60;
+    public static int DEFAULT_WIDGET_HEIGHT = 60;
+    public static int DEFAULT_SCROLL_INTERVAL = 15;
 
     public UIWidget getUIWidget(Context context) {
         UIWidget widget = null;
@@ -259,6 +260,7 @@ public class Widget extends BaseModel {
     public void initWidgetSettings(Context context) {
         // global widget properties
         initOption(WidgetSettingsFragment.WIDGET_HEIGHT, DEFAULT_WIDGET_HEIGHT);
+        initOption(WidgetSettingsFragment.SCROLL_INTERVAL, DEFAULT_SCROLL_INTERVAL);
 
         // init widget specific properties
         getUIWidget(context).init();

@@ -296,7 +296,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                 for (String chunk : Splitter.fixedLength(chunkSize).split(imgBase64)) {
                     CastCommunicator.sendText("base64:" + i + "/" + numMessages+ ":::" + chunk);
                     i+=1;
-                    if (i % 10 == 0 && callback != null) {
+                    if (i % 5 == 0 && callback != null) {
                         callback.onProgress(i, numMessages);
                     }
 
