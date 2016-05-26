@@ -35,6 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -121,6 +122,22 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         protected void onPostExecute(Bitmap result) {
             backgroundPicture.setImageBitmap(result);
         }
+    }
+
+    @OnClick(R.id.slideshowInterval)
+    public void setSlideShowInterval() {
+        final ArrayList<Integer> options = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60));
+        new MaterialDialog.Builder(getContext())
+                .title(R.string.slideshowSpeed)
+                .items(options)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        bindings.setSlideshowInterval(options.get(which));
+                        return true;
+                    }
+                })
+                .show();
     }
 
     @OnClick(R.id.background_type)

@@ -69,5 +69,6 @@
     <string name="travelMode" translatable="false">Travel Mode</string>
     <string name="starting_point" translatable="false">Starting Point</string>
     <string name="widget_scroll_interval" translatable="false">Scroll Interval</string>
+    <string name="slideshowSpeed">Slideshow Speed</string>
 
 </resources>

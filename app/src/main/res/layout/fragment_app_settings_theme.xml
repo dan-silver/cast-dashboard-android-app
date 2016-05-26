@@ -25,6 +25,27 @@
                 app:subHeaderText="@{settings.backgroundType.getHumanNameRes()}"
                 android:layout_height="wrap_content"/>
 
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="@{settings.backgroundType == BackgroundType.SLIDESHOW ? View.VISIBLE : View.GONE}">
+
+                <include layout="@layout/setting_line_break" />
+
+                <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+                    android:layout_width="match_parent"
+                    app:headerText="@string/slideshowSpeed"
+                    android:id="@+id/slideshowInterval"
+                    app:subHeaderText='@{String.valueOf(settings.slideshowInterval) + " seconds"}'
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -276,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             options.put(AppSettingsBindings.TEXT_COLOR, settings.getTextColorHextStr());
             options.put(AppSettingsBindings.SCREEN_PADDING, settings.getScreenPaddingUI());
             options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.getLanguage());
+            options.put(AppSettingsBindings.SLIDESHOW_INTERVAL, settings.getSlideshowInterval());
 
             if (settings.getBackgroundType() == BackgroundType.PICTURE) {
                 AppSettingsTheme.sendBackgroundImage(new File(settings.backgroundImageLocalPath));

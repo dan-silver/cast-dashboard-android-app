@@ -34,6 +34,9 @@ public class AppSettingsBindings extends BaseObservable {
     @Bindable
     public String backgroundImageLocalPath;
 
+    @Bindable
+    public int slideshowInterval;
+
 
     public AppSettingsHelperFragment appSettings;
 
@@ -46,6 +49,7 @@ public class AppSettingsBindings extends BaseObservable {
     static String SCREEN_PADDING = "SCREEN_PADDING";
     static String LOCALE = "LOCALE";
     static String BACKGROUND_IMAGE_LOCAL_PATH = "BACKGROUND_IMAGE_LOCAL_PATH";
+    static String SLIDESHOW_INTERVAL = "SLIDESHOW_INTERVAL";
 
 
 
@@ -78,6 +82,12 @@ public class AppSettingsBindings extends BaseObservable {
         appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
     }
 
+
+    public void setSlideshowInterval(int interval) {
+        this.slideshowInterval= interval;
+        notifyPropertyChanged(BR.slideshowInterval);
+        appSettings.mCallback.onSettingChanged(SLIDESHOW_INTERVAL, getSlideshowInterval());
+    }
 
 
     public void setBackgroundImageLocalPath(String path) {
@@ -147,6 +157,7 @@ public class AppSettingsBindings extends BaseObservable {
         edit.putInt(TEXT_COLOR, textColor);
         edit.putInt(SCREEN_PADDING, screenPadding);
         edit.putString(BACKGROUND_IMAGE_LOCAL_PATH, backgroundImageLocalPath);
+        edit.putInt(SLIDESHOW_INTERVAL, slideshowInterval);
         edit.apply();
     }
 
@@ -162,6 +173,8 @@ public class AppSettingsBindings extends BaseObservable {
         backgroundType = BackgroundType.values()[settings.getInt(BACKGROUND_TYPE, 0)];
         widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 15); //15% x 2 + 50 = 80/100
         screenPadding = settings.getInt(SCREEN_PADDING, 15);
+
+        slideshowInterval = settings.getInt(SLIDESHOW_INTERVAL, 30);
 
         backgroundImageLocalPath = settings.getString(BACKGROUND_IMAGE_LOCAL_PATH, "");
 
@@ -183,5 +196,9 @@ public class AppSettingsBindings extends BaseObservable {
 
     public BackgroundType getBackgroundType() {
         return this.backgroundType;
+    }
+
+    public int getSlideshowInterval() {
+        return slideshowInterval;
     }
 }
