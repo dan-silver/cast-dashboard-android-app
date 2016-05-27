@@ -4,6 +4,7 @@
         <item>@string/calendar</item>
         <item>@string/map</item>
         <item>@string/clock</item>
+        <item>@string/countdown_timer</item>
         <item>@string/weather</item>
         <item>@string/rss_feed</item>
         <item>@string/stocks</item>

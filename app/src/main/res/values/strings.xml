@@ -70,5 +70,10 @@
     <string name="starting_point" translatable="false">Starting Point</string>
     <string name="widget_scroll_interval" translatable="false">Scroll Interval</string>
     <string name="slideshowSpeed" translatable="false">Slideshow Speed</string>
+    <string name="seconds" translatable="false">seconds</string>
+    <string name="countdown_timer">Countdown Timer</string>
+    <string name="label">Label</string>
+    <string name="countdown_timer_text">Countdown Timer Text</string>
+    <string name="a_wonderful_day">A Wonderful Day!</string>
 
 </resources>

@@ -127,9 +127,13 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
     @OnClick(R.id.slideshowInterval)
     public void setSlideShowInterval() {
         final ArrayList<Integer> options = new ArrayList<>(Arrays.asList(10, 20, 30, 40, 50, 60));
+        ArrayList<String> optionLabels = new ArrayList<>();
+        for (Integer option : options) {
+            optionLabels.add(option + " " + getString(R.string.seconds));
+        }
         new MaterialDialog.Builder(getContext())
                 .title(R.string.slideshowSpeed)
-                .items(options)
+                .items(optionLabels)
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {

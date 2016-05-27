@@ -13,8 +13,8 @@ android {
         applicationId "com.silver.dan.castdemo"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 21
-        versionName "1.2.2"
+        versionCode 23
+        versionName "1.2.5"
 
         multiDexEnabled true
 
@@ -56,6 +56,8 @@ dependencies {
     compile 'com.github.QuadFlask:colorpicker:0.0.10'
 
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
+    compile 'com.wdullaer:materialdatetimepicker:2.3.0'
+
 }
 
 apply plugin: 'com.neenbedankt.android-apt'

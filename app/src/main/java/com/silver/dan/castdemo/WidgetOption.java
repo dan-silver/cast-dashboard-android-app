@@ -9,6 +9,8 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
+import java.util.Date;
+
 @ModelContainer
 @Table(database = WidgetDatabase.class)
 public class WidgetOption extends BaseModel {
@@ -48,6 +50,14 @@ public class WidgetOption extends BaseModel {
 
     public int getIntValue() {
         return Integer.valueOf(value);
+    }
+
+    public void setDate(Date datetime) {
+        this.value = Long.toString(datetime.getTime());
+    }
+
+    public Date getDate() {
+        return new Date(Long.parseLong(this.value));
     }
 
     public void update(int value) {

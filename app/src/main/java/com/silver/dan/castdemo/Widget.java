@@ -20,6 +20,7 @@ import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransacti
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 import com.silver.dan.castdemo.widgets.CalendarWidget;
 import com.silver.dan.castdemo.widgets.ClockWidget;
+import com.silver.dan.castdemo.widgets.CountdownWidget;
 import com.silver.dan.castdemo.widgets.MapWidget;
 import com.silver.dan.castdemo.widgets.RSSWidget;
 import com.silver.dan.castdemo.widgets.StocksWidget;
@@ -62,9 +63,13 @@ public class Widget extends BaseModel {
             case RSS:
                 widget = new RSSWidget(context, this);
                 break;
+            case COUNTDOWN:
+                widget = new CountdownWidget(context, this);
+                break;
         }
         return widget;
     }
+
 
     enum WidgetType {
         CALENDAR(0, R.string.calendar, R.drawable.ic_today_24dp),
@@ -72,7 +77,8 @@ public class Widget extends BaseModel {
         MAP(3, R.string.map, R.drawable.ic_map_24dp),
         CLOCK(4, R.string.clock, R.drawable.ic_access_time_24dp),
         WEATHER(5, R.string.weather, R.drawable.ic_cloud_queue_24dp),
-        RSS(6, R.string.rss_feed, R.drawable.ic_rss_feed_black_24px);
+        RSS(6, R.string.rss_feed, R.drawable.ic_rss_feed_black_24px),
+        COUNTDOWN(7, R.string.countdown_timer, R.drawable.ic_timer_black_24dp);
 
         private int value;
         private int icon;
@@ -238,6 +244,10 @@ public class Widget extends BaseModel {
 
     public void initOption(String key, int defaultValue) {
         initOption(key, String.valueOf(defaultValue));
+    }
+
+    public void initOption(String key, long oneWeek) {
+        initOption(key, Long.toString(oneWeek));
     }
 
     public WidgetOption loadOrInitOption(String optionKey, Context context) {

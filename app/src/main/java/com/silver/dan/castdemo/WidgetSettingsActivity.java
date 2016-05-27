@@ -14,6 +14,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.ClockSettings;
+import com.silver.dan.castdemo.settingsFragments.CountdownSettings;
 import com.silver.dan.castdemo.settingsFragments.MapSettings;
 import com.silver.dan.castdemo.settingsFragments.RSSSettings;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
@@ -73,6 +74,9 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                 break;
             case RSS:
                 typeSettingsFragment = new RSSSettings();
+                break;
+            case COUNTDOWN:
+                typeSettingsFragment = new CountdownSettings();
                 break;
         }
 

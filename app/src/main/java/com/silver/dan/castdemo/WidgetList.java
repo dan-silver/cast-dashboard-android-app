@@ -59,6 +59,7 @@ public class WidgetList extends Fragment implements OnDragListener {
             add(Widget.WidgetType.CALENDAR);
             add(Widget.WidgetType.MAP);
             add(Widget.WidgetType.CLOCK);
+            add(Widget.WidgetType.COUNTDOWN);
             add(Widget.WidgetType.WEATHER);
             add(Widget.WidgetType.RSS);
             add(Widget.WidgetType.STOCKS);
