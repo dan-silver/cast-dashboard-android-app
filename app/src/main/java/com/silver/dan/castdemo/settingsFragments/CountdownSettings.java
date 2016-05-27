@@ -78,7 +78,7 @@ public class CountdownSettings extends WidgetSettingsFragment {
     public void updateCountdownText() {
         new MaterialDialog.Builder(getContext())
                 .title(R.string.countdown_timer_text)
-                .inputType(InputType.TYPE_CLASS_TEXT)
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES)
                 .input(getString(R.string.countdown_timer_text), textOption.value, new MaterialDialog.InputCallback() {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
