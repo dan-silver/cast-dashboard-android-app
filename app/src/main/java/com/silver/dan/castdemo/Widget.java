@@ -183,7 +183,8 @@ public class Widget extends BaseModel {
         QueryTransaction.Builder<Widget> query = new QueryTransaction.Builder<>(
             new Select()
                 .from(Widget.class)
-                .where(conditions));
+                .where(conditions)
+                .orderBy(Widget_Table.position, true));
 
 
         FlowManager

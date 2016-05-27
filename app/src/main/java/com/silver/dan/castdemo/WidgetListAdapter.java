@@ -34,7 +34,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         Collections.swap(widgetList, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
 
-        mainActivity.onItemMoved(getWidgetsOrder());
+        mainActivity.onItemMoved(saveWidgetsOrder());
     }
 
     public WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener) {
@@ -50,7 +50,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
     }
 
-    public JSONObject getWidgetsOrder() {
+    public JSONObject saveWidgetsOrder() {
         JSONObject widgetOrder = new JSONObject();
         int i = 0;
         try {

@@ -104,6 +104,7 @@ public class WidgetList extends Fragment implements OnDragListener {
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
+
                 WidgetListAdapter adapter = new WidgetListAdapter(widgets, activity, ctx);
 
                 widgetList.setAdapter(adapter);
