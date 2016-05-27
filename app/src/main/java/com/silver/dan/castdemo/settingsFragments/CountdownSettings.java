@@ -83,7 +83,7 @@ public class CountdownSettings extends WidgetSettingsFragment {
                     @Override
                     public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
                         textOption.update(input.toString());
-                        updateWidgetProperty(COUNTDOWN_TEXT, textOption);
+                        updateWidgetProperty(COUNTDOWN_TEXT, textOption.value);
                         updateCountdownTextLabel();
                     }
                 }).show();
@@ -104,7 +104,7 @@ public class CountdownSettings extends WidgetSettingsFragment {
 
                         dateOption.setDate(curDate.getTime());
                         dateOption.save();
-                        updateWidgetProperty(COUNTDOWN_DATE, dateOption);
+                        updateWidgetProperty(COUNTDOWN_DATE, dateOption.value);
                         updateCountdownDateAndTimeText();
                     }
                 },
@@ -134,7 +134,7 @@ public class CountdownSettings extends WidgetSettingsFragment {
 
                         dateOption.setDate(curDate.getTime());
                         dateOption.save();
-                        updateWidgetProperty(COUNTDOWN_DATE, dateOption);
+                        updateWidgetProperty(COUNTDOWN_DATE, dateOption.value);
                         updateCountdownDateAndTimeText();
 
                     }
