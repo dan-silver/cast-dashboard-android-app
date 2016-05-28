@@ -76,7 +76,8 @@ public class CastCommunicator {
         new Runnable() {
             public void run() {
                 try {
-                    mCastManager.sendDataMessage(container.toString(), context.getResources().getString(R.string.namespace));
+                    if (mCastManager.isConnected())
+                        mCastManager.sendDataMessage(container.toString(), context.getResources().getString(R.string.namespace));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
