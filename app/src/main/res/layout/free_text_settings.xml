@@ -3,12 +3,9 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-        <jp.wasabeef.richeditor.RichEditor
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/rich_editor"/>
-    <!--</ScrollView>-->
+    <jp.wasabeef.richeditor.RichEditor
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:longClickable="false"
+        android:id="@+id/rich_editor"/>
 </LinearLayout>

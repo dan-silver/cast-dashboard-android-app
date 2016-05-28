@@ -83,7 +83,7 @@ public class Widget extends BaseModel {
         WEATHER(5, R.string.weather, R.drawable.ic_cloud_queue_24dp),
         RSS(6, R.string.rss_feed, R.drawable.ic_rss_feed_black_24px),
         COUNTDOWN(7, R.string.countdown_timer, R.drawable.ic_timer_black_24dp),
-        TEXT(8, R.string.text, R.drawable.ic_insert_comment_black_24dp);
+        TEXT(8, R.string.custom_text, R.drawable.ic_insert_comment_black_24dp);
 
         private int value;
         private int icon;

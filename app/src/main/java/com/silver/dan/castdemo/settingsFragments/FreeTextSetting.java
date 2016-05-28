@@ -35,11 +35,13 @@ public class FreeTextSetting extends WidgetSettingsFragment {
 
         richEditor.setHtml(customText.value);
         richEditor.setEditorHeight(500);
+        richEditor.setPadding(10, 40, 10, 10);
         richEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override
             public void onTextChange(String text) {
                 customText.update(text);
-                updateWidgetProperty(CUSTOM_TEXT, text);
+
+                updateWidgetProperty(FreeTextSetting.CUSTOM_TEXT, text);
             }
         });
 
