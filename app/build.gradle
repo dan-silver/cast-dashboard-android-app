@@ -58,6 +58,8 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
     compile 'com.wdullaer:materialdatetimepicker:2.3.0'
 
+    compile 'jp.wasabeef:richeditor-android:1.2.0'
+
 }
 
 apply plugin: 'com.neenbedankt.android-apt'

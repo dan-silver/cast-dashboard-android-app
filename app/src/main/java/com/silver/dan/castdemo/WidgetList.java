@@ -63,6 +63,7 @@ public class WidgetList extends Fragment implements OnDragListener {
             add(Widget.WidgetType.WEATHER);
             add(Widget.WidgetType.RSS);
             add(Widget.WidgetType.STOCKS);
+            add(Widget.WidgetType.TEXT);
         }};
 
         new MaterialDialog.Builder(getContext())

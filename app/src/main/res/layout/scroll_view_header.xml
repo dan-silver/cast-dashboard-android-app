@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/black">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+
+        <ImageButton
+            android:id="@+id/action_undo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/undo"
+            />
+
+        <ImageButton
+            android:id="@+id/action_redo"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/redo"
+            />
+
+        <ImageButton
+            android:id="@+id/action_bold"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/bold"
+            />
+
+        <ImageButton
+            android:id="@+id/action_italic"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/italic"
+            />
+
+        <ImageButton
+            android:id="@+id/action_strikethrough"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/strikethrough"
+            />
+
+        <ImageButton
+            android:id="@+id/action_underline"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/underline"
+            />
+
+        <ImageButton
+            android:id="@+id/action_heading1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/h1"
+            />
+
+        <ImageButton
+            android:id="@+id/action_heading2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/h2"
+            />
+
+        <ImageButton
+            android:id="@+id/action_heading3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/h3"
+            />
+
+        <ImageButton
+            android:id="@+id/action_heading4"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/h4"
+            />
+
+        <ImageButton
+            android:id="@+id/action_heading5"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/h5"
+            />
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/action_heading6"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:background="@null"-->
+        <!--android:contentDescription="@null"-->
+        <!--android:src="@mipmap/h6"-->
+        <!--/>-->
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/action_txt_color"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:background="@null"-->
+        <!--android:contentDescription="@null"-->
+        <!--android:src="@mipmap/txt_color"-->
+        <!--/>-->
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/action_bg_color"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:background="@null"-->
+        <!--android:contentDescription="@null"-->
+        <!--android:src="@mipmap/bg_color"-->
+        <!--/>-->
+
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/action_indent"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:background="@null"-->
+        <!--android:contentDescription="@null"-->
+        <!--android:src="@mipmap/indent"-->
+        <!--/>-->
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/action_outdent"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:background="@null"-->
+        <!--android:contentDescription="@null"-->
+        <!--android:src="@mipmap/outdent"-->
+        <!--/>-->
+
+        <ImageButton
+            android:id="@+id/action_align_left"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/justify_left"
+            />
+
+        <ImageButton
+            android:id="@+id/action_align_center"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/justify_center"
+            />
+
+        <ImageButton
+            android:id="@+id/action_align_right"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="@null"
+            android:src="@mipmap/justify_right"
+            />
+
+        <!--<ImageButton-->
+        <!--android:id="@+id/action_insert_checkbox"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:background="@null"-->
+        <!--android:contentDescription="@null"-->
+        <!--android:src="@android:mipmap/checkbox_on_background"-->
+        <!--/>-->
+
+    </LinearLayout>
+</HorizontalScrollView>

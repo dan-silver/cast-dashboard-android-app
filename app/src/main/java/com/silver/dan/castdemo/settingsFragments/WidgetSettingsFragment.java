@@ -16,6 +16,8 @@ import butterknife.OnClick;
 
 public abstract class WidgetSettingsFragment extends Fragment {
     protected Widget widget;
+    protected int scrollViewHeaderLayout = -1;
+
 
     public static String WIDGET_HEIGHT = "WIDGET_HEIGHT";
     public static String SCROLL_INTERVAL = "SCROLL_INTERVAL";
@@ -33,6 +35,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
 
     // scroll interval in seconds
     WidgetOption optionScrollInterval;
+
 
     protected void refreshWidget() {
         CastCommunicator.sendWidget(widget);
@@ -107,6 +110,19 @@ public abstract class WidgetSettingsFragment extends Fragment {
         optionScrollInterval = loadOrInitOption(WidgetSettingsFragment.SCROLL_INTERVAL);
         updateScrollIntervalText();
     }
+
+    public boolean hasScrollViewHeader() {
+        return scrollViewHeaderLayout != -1;
+    }
+
+    protected void setScrollViewHeader(int layoutResource) {
+        scrollViewHeaderLayout = layoutResource;
+    }
+
+    public int getScrollViewHeader() {
+        return scrollViewHeaderLayout;
+    }
+
 }
 
 

@@ -73,5 +73,6 @@
     <string name="countdown_timer" translatable="false">Countdown Timer</string>
     <string name="countdown_timer_text" translatable="false">Countdown Timer Text</string>
     <string name="a_wonderful_day" translatable="false">A Wonderful Day!</string>
+    <string name="text">Text</string>
 
 </resources>
