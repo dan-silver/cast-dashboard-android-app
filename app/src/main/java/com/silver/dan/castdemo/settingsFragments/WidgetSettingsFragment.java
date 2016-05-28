@@ -82,7 +82,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
 
     public void updateScrollIntervalText() {
         if (scrollInterval != null)
-            scrollInterval.setSubHeaderText(optionScrollInterval.getIntValue() + "s");
+            scrollInterval.setSubHeaderText(optionScrollInterval.getIntValue() + " " + getString(R.string.seconds));
     }
 
     @Override

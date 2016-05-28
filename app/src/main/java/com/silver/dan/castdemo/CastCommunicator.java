@@ -73,11 +73,13 @@ public class CastCommunicator {
     }
 
     public static void sendJSONContainer(final JSONObject container) {
+        if (!mCastManager.isConnected())
+            return;
+
         new Runnable() {
             public void run() {
                 try {
-                    if (mCastManager.isConnected())
-                        mCastManager.sendDataMessage(container.toString(), context.getResources().getString(R.string.namespace));
+                    mCastManager.sendDataMessage(container.toString(), context.getResources().getString(R.string.namespace));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -102,9 +104,11 @@ public class CastCommunicator {
         CastCommunicator.sendJSON("widgets", widgetsArr);
     }
 
-
     // for extremely large strings, don't wrap in JSON
     public static void sendText(final String text) {
+        if (!mCastManager.isConnected())
+            return;
+
         new Runnable() {
             public void run() {
                 try {
