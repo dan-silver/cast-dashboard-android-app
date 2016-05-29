@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.settingsFragments.WeatherSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +33,11 @@ public class WeatherWidget extends UIWidget {
         json.put("units", widget.loadOrInitOption(WeatherSettings.WEATHER_UNITS, context).value);
         json.put(WeatherSettings.WEATHER_TYPE, widget.loadOrInitOption(WeatherSettings.WEATHER_TYPE, context).value);
         return json;
+    }
+
+    @Override
+    public WidgetSettingsFragment createSettingsFragment() {
+        return new WeatherSettings();
     }
 
     @Override

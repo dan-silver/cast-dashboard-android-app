@@ -4,6 +4,8 @@ import android.content.Context;
 
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.settingsFragments.ClockSettings;
+import com.silver.dan.castdemo.settingsFragments.CountdownSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +28,11 @@ public class ClockWidget extends UIWidget {
         JSONObject options = new JSONObject();
         options.put(ClockSettings.SHOW_SECONDS, widget.getOption(ClockSettings.SHOW_SECONDS).getBooleanValue());
         return options;
+    }
+
+    @Override
+    public WidgetSettingsFragment createSettingsFragment() {
+        return new ClockSettings();
     }
 
     @Override

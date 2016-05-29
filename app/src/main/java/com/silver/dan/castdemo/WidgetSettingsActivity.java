@@ -61,33 +61,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
         setTitle(getApplicationContext().getString(widget.getHumanNameRes()) + " Widget");
 
-        WidgetSettingsFragment typeSettingsFragment = null;
-        switch (widget.getWidgetType()) {
-            case CALENDAR:
-                typeSettingsFragment = new CalendarSettings();
-                break;
-            case STOCKS:
-                typeSettingsFragment = new StocksSettings();
-                break;
-            case MAP:
-                typeSettingsFragment = new MapSettings();
-                break;
-            case CLOCK:
-                typeSettingsFragment = new ClockSettings();
-                break;
-            case WEATHER:
-                typeSettingsFragment = new WeatherSettings();
-                break;
-            case RSS:
-                typeSettingsFragment = new RSSSettings();
-                break;
-            case COUNTDOWN:
-                typeSettingsFragment = new CountdownSettings();
-                break;
-            case TEXT:
-                typeSettingsFragment = new FreeTextSetting();
-                break;
-        }
+        WidgetSettingsFragment typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
 
         Bundle bundle = new Bundle();
         bundle.putLong(Widget.ID, widget.id);

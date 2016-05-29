@@ -8,6 +8,7 @@ import com.silver.dan.castdemo.SettingEnums.TravelMode;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.settingsFragments.MapSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,6 +51,11 @@ public class MapWidget extends UIWidget {
         json.put(MapSettings.DESTINATION_LAT, widget.getOption(MapSettings.DESTINATION_LAT).value);
         json.put(MapSettings.DESTINATION_LONG, widget.getOption(MapSettings.DESTINATION_LONG).value);
         return json;
+    }
+
+    @Override
+    public WidgetSettingsFragment createSettingsFragment() {
+        return new MapSettings();
     }
 
     @Override

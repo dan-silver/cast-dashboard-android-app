@@ -5,6 +5,7 @@ import android.content.Context;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.settingsFragments.CountdownSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +35,11 @@ public class CountdownWidget extends UIWidget {
         json.put(CountdownSettings.COUNTDOWN_DATE, widget.loadOrInitOption(CountdownSettings.COUNTDOWN_DATE, context).value);
         json.put(CountdownSettings.COUNTDOWN_TEXT, widget.loadOrInitOption(CountdownSettings.COUNTDOWN_TEXT, context).value);
         return json;
+    }
+
+    @Override
+    public WidgetSettingsFragment createSettingsFragment() {
+        return new CountdownSettings();
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.content.Context;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.settingsFragments.RSSSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +16,8 @@ public class RSSWidget extends UIWidget {
     public RSSWidget(Context context, Widget widget) {
         super(context, widget);
     }
+
+
 
     @Override
     public void init() {
@@ -29,6 +32,11 @@ public class RSSWidget extends UIWidget {
         json.put(RSSSettings.FEED_URL, widget.loadOrInitOption(RSSSettings.FEED_URL, context).value);
         json.put(RSSSettings.SHOW_DATES, widget.loadOrInitOption(RSSSettings.SHOW_DATES, context).getBooleanValue());
         return json;
+    }
+
+    @Override
+    public WidgetSettingsFragment createSettingsFragment() {
+        return new RSSSettings();
     }
 
     @Override

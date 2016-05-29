@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.settingsFragments.FreeTextSetting;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +29,11 @@ public class FreeTextWidget extends UIWidget {
         JSONObject json = new JSONObject();
         json.put(FreeTextSetting.CUSTOM_TEXT, widget.loadOrInitOption(FreeTextSetting.CUSTOM_TEXT, context).value);
         return json;
+    }
+
+    @Override
+    public WidgetSettingsFragment createSettingsFragment() {
+        return new FreeTextSetting();
     }
 
     @Override

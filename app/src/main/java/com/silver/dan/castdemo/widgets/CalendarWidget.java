@@ -17,6 +17,7 @@ import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,6 +36,11 @@ public class CalendarWidget extends UIWidget {
                 new String[]{Manifest.permission.READ_CALENDAR},
                 CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS);
         return CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS;
+    }
+
+    @Override
+    public WidgetSettingsFragment createSettingsFragment() {
+        return new CalendarSettings();
     }
 
     @Override

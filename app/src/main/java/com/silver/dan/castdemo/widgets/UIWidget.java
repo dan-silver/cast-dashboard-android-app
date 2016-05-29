@@ -3,6 +3,8 @@ package com.silver.dan.castdemo.widgets;
 import android.content.Context;
 
 import com.silver.dan.castdemo.Widget;
+import com.silver.dan.castdemo.settingsFragments.RSSSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,7 +21,13 @@ abstract public class UIWidget {
         return -1;
     }
 
+    public abstract WidgetSettingsFragment createSettingsFragment();
 
+
+    /*
+     * This method should return true if there are no prerequisites to the widget being created.
+     * Return false if the widget needs special permissions before it's created.
+     */
     public boolean canBeCreated() {
         return true;
     }

@@ -10,6 +10,7 @@ import com.silver.dan.castdemo.Stock_Table;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
+import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,6 +67,11 @@ public class StocksWidget extends UIWidget {
         }
         json.put("tickers", tickers);
         return json;
+    }
+
+    @Override
+    public WidgetSettingsFragment createSettingsFragment() {
+        return new StocksSettings();
     }
 
     @Override
