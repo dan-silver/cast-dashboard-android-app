@@ -35,7 +35,6 @@ import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
-import com.silver.dan.castdemo.util.ImageUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -360,8 +359,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(MainActivity.TAG, "Error connecting to google services");
     }
-
-
 
 
     @Override

@@ -15,7 +15,9 @@ abstract public class UIWidget {
 
     public abstract JSONObject getContent() throws JSONException;
 
-    public int requestPermissions() {return -1;}
+    public int requestPermissions() {
+        return -1;
+    }
 
 
     public boolean canBeCreated() {

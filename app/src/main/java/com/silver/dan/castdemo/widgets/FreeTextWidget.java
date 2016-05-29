@@ -32,6 +32,6 @@ public class FreeTextWidget extends UIWidget {
 
     @Override
     public String getWidgetPreviewSecondaryHeader() {
-        return "----";
+        return "";
     }
 }

@@ -255,6 +255,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                                     }
                                 });
                             }
+
                             @Override
                             public void onSaved() {
                                 resetUI();
@@ -302,7 +303,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                 if (imageSize > MAX_IMAGE_SIZE) {
                     quality = (int) (MAX_IMAGE_SIZE / (float) imageSize * 100);
                 }
-                
+
                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 image.compress(Bitmap.CompressFormat.JPEG, quality, bos);
 
@@ -312,11 +313,11 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
 
 
                 int i = 0;
-                int chunkSize = 15*1000;
-                final int numMessages = (int) Math.ceil((float)length / chunkSize);
+                int chunkSize = 15 * 1000;
+                final int numMessages = (int) Math.ceil((float) length / chunkSize);
                 for (String chunk : Splitter.fixedLength(chunkSize).split(imgBase64)) {
-                    CastCommunicator.sendText("base64:" + i + "/" + numMessages+ ":::" + chunk);
-                    i+=1;
+                    CastCommunicator.sendText("base64:" + i + "/" + numMessages + ":::" + chunk);
+                    i += 1;
                     if (i % 5 == 0 && callback != null) {
                         callback.onProgress(i, numMessages);
                     }

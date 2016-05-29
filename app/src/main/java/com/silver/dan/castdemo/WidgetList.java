@@ -82,7 +82,6 @@ public class WidgetList extends Fragment implements OnDragListener {
                         widget.position = widgetList.getAdapter().getItemCount();
 
 
-
                         CanBeCreatedListener listener = new CanBeCreatedListener() {
                             @Override
                             public void onCanBeCreated() {
@@ -117,7 +116,7 @@ public class WidgetList extends Fragment implements OnDragListener {
     }
 
     public void processPermissionReceivedCallback(int key, boolean permissionGranted) {
-        for (Iterator<CanBeCreatedListener> iterator = widgetCanBeCreatedListeners.iterator(); iterator.hasNext();) {
+        for (Iterator<CanBeCreatedListener> iterator = widgetCanBeCreatedListeners.iterator(); iterator.hasNext(); ) {
             CanBeCreatedListener listener = iterator.next();
             if (listener.key == key) {
                 if (permissionGranted) {

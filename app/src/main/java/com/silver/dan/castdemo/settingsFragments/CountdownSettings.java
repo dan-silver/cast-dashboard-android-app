@@ -118,7 +118,6 @@ public class CountdownSettings extends WidgetSettingsFragment {
     }
 
 
-
     @OnClick(R.id.countdown_time)
     public void updateCountdownTime() {
         Calendar cal = Calendar.getInstance();

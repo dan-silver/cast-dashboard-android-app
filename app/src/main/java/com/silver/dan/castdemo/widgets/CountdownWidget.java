@@ -4,17 +4,13 @@ import android.content.Context;
 
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
-import com.silver.dan.castdemo.settingsFragments.ClockSettings;
 import com.silver.dan.castdemo.settingsFragments.CountdownSettings;
-import com.silver.dan.castdemo.settingsFragments.RSSSettings;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 
 public class CountdownWidget extends UIWidget {
@@ -26,7 +22,7 @@ public class CountdownWidget extends UIWidget {
     @Override
     public void init() {
         Date date = new Date();
-        long oneWeek = date.getTime() + (long) 7*24*60*60*1000;
+        long oneWeek = date.getTime() + (long) 7 * 24 * 60 * 60 * 1000;
         widget.initOption(CountdownSettings.COUNTDOWN_DATE, oneWeek);
         widget.initOption(CountdownSettings.COUNTDOWN_TEXT, context.getString(R.string.a_wonderful_day));
     }

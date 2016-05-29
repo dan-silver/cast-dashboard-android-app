@@ -2,7 +2,6 @@ package com.silver.dan.castdemo;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDoneException;
-import android.util.Log;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;

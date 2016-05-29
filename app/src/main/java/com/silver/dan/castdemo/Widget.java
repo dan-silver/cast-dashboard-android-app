@@ -186,20 +186,20 @@ public class Widget extends BaseModel {
         }
 
         QueryTransaction.Builder<Widget> query = new QueryTransaction.Builder<>(
-            new Select()
-                .from(Widget.class)
-                .where(conditions)
-                .orderBy(Widget_Table.position, true));
+                new Select()
+                        .from(Widget.class)
+                        .where(conditions)
+                        .orderBy(Widget_Table.position, true));
 
 
         FlowManager
-            .getDatabase(WidgetDatabase.class)
-            .beginTransactionAsync(query.queryResult(new QueryTransaction.QueryResultCallback<Widget>() {
-                @Override
-                public void onQueryResult(QueryTransaction transaction, @NonNull CursorResult<Widget> result) {
-                    listener.results(result.toList());
-                }
-            }).build()).build().execute();
+                .getDatabase(WidgetDatabase.class)
+                .beginTransactionAsync(query.queryResult(new QueryTransaction.QueryResultCallback<Widget>() {
+                    @Override
+                    public void onQueryResult(QueryTransaction transaction, @NonNull CursorResult<Widget> result) {
+                        listener.results(result.toList());
+                    }
+                }).build()).build().execute();
     }
 
 

@@ -27,4 +27,5 @@
     <string name="s2_weeks">2 semanas</string>
     <string name="s3_days">3 días</string>
     <string name="s3_months">3 meses</string>
+    <string name="custom_text">Texto personalizado</string>
 </resources>

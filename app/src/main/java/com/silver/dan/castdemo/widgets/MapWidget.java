@@ -12,8 +12,6 @@ import com.silver.dan.castdemo.settingsFragments.MapSettings;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Map;
-
 public class MapWidget extends UIWidget {
 
     public MapWidget(Context context, Widget widget) {

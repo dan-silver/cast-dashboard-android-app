@@ -52,7 +52,6 @@ public class AppSettingsBindings extends BaseObservable {
     static String SLIDESHOW_INTERVAL = "SLIDESHOW_INTERVAL";
 
 
-
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
     public AppSettingsBindings() {
@@ -84,7 +83,7 @@ public class AppSettingsBindings extends BaseObservable {
 
 
     public void setSlideshowInterval(int interval) {
-        this.slideshowInterval= interval;
+        this.slideshowInterval = interval;
         notifyPropertyChanged(BR.slideshowInterval);
         appSettings.mCallback.onSettingChanged(SLIDESHOW_INTERVAL, getSlideshowInterval());
     }

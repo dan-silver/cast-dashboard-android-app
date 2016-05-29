@@ -45,83 +45,96 @@ public class FreeTextSetting extends WidgetSettingsFragment {
             }
         });
 
-        
+
         getActivity().findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.undo();
             }
         });
 
 
         getActivity().findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setBold();
             }
         });
 
         getActivity().findViewById(R.id.action_italic).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setItalic();
             }
         });
 
 
         getActivity().findViewById(R.id.action_strikethrough).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setStrikeThrough();
             }
         });
 
         getActivity().findViewById(R.id.action_underline).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setUnderline();
             }
         });
 
         getActivity().findViewById(R.id.action_heading1).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setHeading(1);
             }
         });
 
         getActivity().findViewById(R.id.action_heading2).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setHeading(2);
             }
         });
 
         getActivity().findViewById(R.id.action_heading3).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setHeading(3);
             }
         });
 
         getActivity().findViewById(R.id.action_heading4).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setHeading(4);
             }
         });
 
         getActivity().findViewById(R.id.action_heading5).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setHeading(5);
             }
         });
 
         getActivity().findViewById(R.id.action_align_left).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setAlignLeft();
             }
         });
 
         getActivity().findViewById(R.id.action_align_center).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setAlignCenter();
             }
         });
 
         getActivity().findViewById(R.id.action_align_right).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 richEditor.setAlignRight();
             }
         });
