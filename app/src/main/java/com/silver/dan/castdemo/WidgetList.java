@@ -1,9 +1,6 @@
 package com.silver.dan.castdemo;
 
-import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,10 +9,8 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.widgetList.OnDragListener;
 import com.silver.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
 import com.silver.dan.castdemo.widgets.CanBeCreatedListener;

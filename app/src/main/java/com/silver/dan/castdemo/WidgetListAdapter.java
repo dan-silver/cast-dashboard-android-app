@@ -34,8 +34,12 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
     public void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(widgetList, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-
-        mainActivity.onItemMoved(saveWidgetsOrder());
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                mainActivity.onItemMoved(saveWidgetsOrder());
+            }
+        });
     }
 
     public WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener) {

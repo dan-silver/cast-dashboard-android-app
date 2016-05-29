@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">DEV Cast Dashboard</string>
-
     <string name="app_id" translatable="false">F66FF87E</string>
 </resources>
