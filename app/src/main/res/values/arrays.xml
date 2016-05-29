@@ -47,5 +47,4 @@
         <item>@string/walking</item>
         <item>@string/transit</item>
     </string-array>
-    <string name="youtube">YouTube</string>
 </resources>

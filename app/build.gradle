@@ -6,6 +6,10 @@ android {
             keyAlias 'release-sign'
             storeFile file('/home/dan/android-keys.jks')
         }
+        debug {
+            keyAlias 'release-sign'
+            storeFile file('/home/dan/android-keys.jks')
+        }
     }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -45,6 +49,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-maps:9.0.1'
     compile 'com.google.android.gms:play-services-location:9.0.1'
 
+    compile 'com.google.apis:google-api-services-youtube:v3-rev174-1.22.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:recyclerview-v7:23.4.0'
 
