@@ -3,7 +3,6 @@ package com.silver.dan.castdemo.widgets;
 import android.content.Context;
 
 import com.silver.dan.castdemo.Widget;
-import com.silver.dan.castdemo.settingsFragments.RSSSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
@@ -47,7 +46,8 @@ abstract public class UIWidget {
             listener.onCanBeCreated();
         } else {
             // request the permissions for the widget, and set the callback key
-            this.canBeCreatedListener.key = requestPermissions();
+            int requirementsToCreateWidget = requestPermissions();
+            this.canBeCreatedListener.setRequiredCondition(requirementsToCreateWidget);
         }
     }
 }

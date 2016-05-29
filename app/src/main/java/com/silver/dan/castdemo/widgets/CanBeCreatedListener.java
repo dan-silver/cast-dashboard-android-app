@@ -5,8 +5,15 @@ package com.silver.dan.castdemo.widgets;
  */
 
 public abstract class CanBeCreatedListener {
-    public int key;
+    private int requiredCondition;
 
     public abstract void onCanBeCreated();
 
+    public boolean checkIfConditionsAreMet(int key) {
+        return key == requiredCondition;
+    }
+
+    public void setRequiredCondition(int condition) {
+        this.requiredCondition = condition;
+    }
 }

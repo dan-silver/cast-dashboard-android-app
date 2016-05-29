@@ -36,7 +36,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     public static String SHOW_EVENT_LOCATIONS = "SHOW_EVENT_LOCATIONS";
     public static String SHOW_EVENTS_UNTIL = "SHOW_EVENTS_UNTIL";
 
-    public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000;
+    public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000; // this integer must be unique across all app permission requests
 
     Integer numDaysDisplayValues[] = new Integer[]{3, 7, 14, 30, 90};
 

@@ -2,13 +2,14 @@
 <resources>
     <string-array name="newWidgetDialogList">
         <item>@string/calendar</item>
-        <item>@string/map</item>
         <item>@string/clock</item>
         <item>@string/countdown_timer</item>
-        <item>@string/weather</item>
+        <item>@string/custom_text</item>
+        <item>@string/map</item>
         <item>@string/rss_feed</item>
         <item>@string/stocks</item>
-        <item>@string/custom_text</item>
+        <item>@string/weather</item>
+        <item>@string/YouTube</item>
     </string-array>
     <string-array name="backgroundTypeList">
         <item>@string/slideshow</item>
@@ -46,4 +47,5 @@
         <item>@string/walking</item>
         <item>@string/transit</item>
     </string-array>
+    <string name="youtube">YouTube</string>
 </resources>

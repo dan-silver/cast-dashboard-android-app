@@ -64,13 +64,14 @@ public class WidgetList extends Fragment implements OnDragListener {
     public void addWidget() {
         final ArrayList<Widget.WidgetType> widgetTypes = new ArrayList<Widget.WidgetType>() {{
             add(Widget.WidgetType.CALENDAR);
-            add(Widget.WidgetType.MAP);
             add(Widget.WidgetType.CLOCK);
+            add(Widget.WidgetType.CUSTOM_TEXT);
             add(Widget.WidgetType.COUNTDOWN);
-            add(Widget.WidgetType.WEATHER);
+            add(Widget.WidgetType.MAP);
             add(Widget.WidgetType.RSS);
             add(Widget.WidgetType.STOCKS);
-            add(Widget.WidgetType.TEXT);
+            add(Widget.WidgetType.WEATHER);
+            add(Widget.WidgetType.YOUTUBE);
         }};
 
         new MaterialDialog.Builder(getContext())
@@ -102,8 +103,6 @@ public class WidgetList extends Fragment implements OnDragListener {
                                 refreshList();
                                 CastCommunicator.sendWidget(widget);
                             }
-
-
                         };
                         widget.getUIWidget(getContext()).setOnCanBeCreatedListener(listener);
 
@@ -128,7 +127,7 @@ public class WidgetList extends Fragment implements OnDragListener {
     public void processPermissionReceivedCallback(int key, boolean permissionGranted) {
         for (Iterator<CanBeCreatedListener> iterator = widgetCanBeCreatedListeners.iterator(); iterator.hasNext(); ) {
             CanBeCreatedListener listener = iterator.next();
-            if (listener.key == key) {
+            if (listener.checkIfConditionsAreMet(key)) {
                 if (permissionGranted) {
                     listener.onCanBeCreated();
                 } else {
