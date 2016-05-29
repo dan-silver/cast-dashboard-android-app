@@ -202,6 +202,7 @@ public class Widget extends BaseModel {
             }).build()).build().execute();
     }
 
+
     public JSONObject getJSONContent(Context applicationContext) {
         JSONObject payload = new JSONObject();
 

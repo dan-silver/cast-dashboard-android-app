@@ -1,6 +1,9 @@
 package com.silver.dan.castdemo;
 
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,12 +12,16 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.widgetList.OnDragListener;
 import com.silver.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
+import com.silver.dan.castdemo.widgets.CanBeCreatedListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.Bind;
@@ -24,6 +31,8 @@ import butterknife.OnClick;
 public class WidgetList extends Fragment implements OnDragListener {
 
     MainActivity activity;
+
+    ArrayList<CanBeCreatedListener> widgetCanBeCreatedListeners = new ArrayList<>();
 
     @Bind(R.id.widgetList)
     RecyclerView widgetList;
@@ -72,16 +81,30 @@ public class WidgetList extends Fragment implements OnDragListener {
                 .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        Widget widget = new Widget();
+                        final Widget widget = new Widget();
 
                         widget.setType(widgetTypes.get(which));
                         widget.position = widgetList.getAdapter().getItemCount();
 
-                        widget.save();
 
-                        widget.initWidgetSettings(getContext());
-                        refreshList();
-                        CastCommunicator.sendWidget(widget);
+
+                        CanBeCreatedListener listener = new CanBeCreatedListener() {
+                            @Override
+                            public void onCanBeCreated() {
+                                widget.save();
+
+                                widget.initWidgetSettings(getContext());
+                                refreshList();
+                                CastCommunicator.sendWidget(widget);
+                            }
+
+
+                        };
+                        widget.getUIWidget(getContext()).onCanBeCreated(listener);
+
+                        if (!widget.getUIWidget(getContext()).canBeCreated()) {
+                            widgetCanBeCreatedListeners.add(listener);
+                        }
 
                         return true;
                     }
@@ -96,6 +119,19 @@ public class WidgetList extends Fragment implements OnDragListener {
 
         refreshList();
         super.onResume();
+    }
+
+    public void processPermissionReceivedCallback(int key, boolean permissionGranted) {
+        for (Iterator<CanBeCreatedListener> iterator = widgetCanBeCreatedListeners.iterator(); iterator.hasNext();) {
+            CanBeCreatedListener listener = iterator.next();
+            if (listener.key == key) {
+                if (permissionGranted) {
+                    listener.onCanBeCreated();
+                } else {
+                    iterator.remove();
+                }
+            }
+        }
     }
 
     public void refreshList() {
@@ -121,4 +157,5 @@ public class WidgetList extends Fragment implements OnDragListener {
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         mItemTouchHelper.startDrag(viewHolder);
     }
+
 }

@@ -11,7 +11,16 @@ abstract public class UIWidget {
     public Widget widget;
     public Context context;
 
+    public CanBeCreatedListener canBeCreatedListener;
+
     public abstract JSONObject getContent() throws JSONException;
+
+    public int requestPermissions() {return -1;}
+
+
+    public boolean canBeCreated() {
+        return true;
+    }
 
     public abstract String getWidgetPreviewSecondaryHeader();
 
@@ -21,4 +30,14 @@ abstract public class UIWidget {
     }
 
     public abstract void init();
+
+    public void onCanBeCreated(CanBeCreatedListener listener) {
+        this.canBeCreatedListener = listener;
+        if (canBeCreated()) {
+            listener.onCanBeCreated();
+        } else {
+            // request the permissions for the widget, and set the callback key
+            this.canBeCreatedListener.key = requestPermissions();
+        }
+    }
 }

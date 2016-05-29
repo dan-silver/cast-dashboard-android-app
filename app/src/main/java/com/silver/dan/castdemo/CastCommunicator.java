@@ -21,11 +21,6 @@ public class CastCommunicator {
         CastCommunicator.mCastManager = mCastManager;
     }
 
-    public static void sendWidget(Widget widget) {
-        JSONArray widgetsArr = new JSONArray();
-        widgetsArr.put(widget.getJSONContent(context));
-        CastCommunicator.sendWidgets(widgetsArr);
-    }
 
     public static void sendWidgetProperty(Widget widget, String property, Object value) {
         try {
@@ -87,7 +82,19 @@ public class CastCommunicator {
         }.run();
     }
 
+    public static void sendWidget(Widget widget) {
+        if (!mCastManager.isConnected())
+            return;
+
+        JSONArray widgetsArr = new JSONArray();
+        widgetsArr.put(widget.getJSONContent(context));
+        CastCommunicator.sendWidgets(widgetsArr);
+    }
+
     public static void sendAllWidgets() {
+        if (!mCastManager.isConnected())
+            return;
+
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {

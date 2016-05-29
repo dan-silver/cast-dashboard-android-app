@@ -102,7 +102,6 @@ public class WidgetSettingsActivity extends AppCompatActivity {
         if (typeSettingsFragment.hasScrollViewHeader()) {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             inflater.inflate(typeSettingsFragment.getScrollViewHeader(), scrollViewHeader, true);
-
         }
     }
 

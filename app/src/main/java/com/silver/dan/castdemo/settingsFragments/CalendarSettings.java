@@ -1,6 +1,11 @@
 package com.silver.dan.castdemo.settingsFragments;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.silver.dan.castdemo.CalendarInfo;
@@ -29,6 +35,8 @@ public class CalendarSettings extends WidgetSettingsFragment {
     public static String CALENDAR_ENABLED = "CALENDAR_ENABLED";
     public static String SHOW_EVENT_LOCATIONS = "SHOW_EVENT_LOCATIONS";
     public static String SHOW_EVENTS_UNTIL = "SHOW_EVENTS_UNTIL";
+
+    public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000;
 
     Integer numDaysDisplayValues[] = new Integer[]{3, 7, 14, 30, 90};
 
@@ -64,13 +72,14 @@ public class CalendarSettings extends WidgetSettingsFragment {
         supportWidgetHeightOption();
         supportWidgetScrollInterval();
 
+
         allCalendars.setChecked(optionAllCalendars.getBooleanValue());
 
         allCalendars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 optionAllCalendars.update(isChecked);
-                displayCalendarList();
+                updateCalendarListContents();
                 refreshWidget();
             }
         });
@@ -87,13 +96,40 @@ public class CalendarSettings extends WidgetSettingsFragment {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         calendarList.setLayoutManager(mLayoutManager);
 
-        displayCalendarList();
+        updateCalendarListVisibility();
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_CALENDAR},
+                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+        } else {
+            updateCalendarListContents();
+        }
 
         updateCalendarUntilTextView();
 
         return view;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    updateCalendarListContents();
+                    updateCalendarUntilTextView();
+                } else {
+                    Context context = getContext();
+                    CharSequence text = "The calendar widget cannot work without the read calendar permission.  Either delete the widget or allow access.";
+                    int duration = Toast.LENGTH_LONG;
+
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+            }
+        }
+    }
 
     @OnClick(R.id.show_events_until)
     public void showEventsUntilCallback() {
@@ -116,17 +152,21 @@ public class CalendarSettings extends WidgetSettingsFragment {
         showEventsUntil.setSubHeaderText(getResources().getStringArray(R.array.calendar_duration_list)[getSelectedCalendarOptionIndex()]);
     }
 
-    public void displayCalendarList() {
+    public void updateCalendarListContents() {
+        updateCalendarListVisibility();
+        // query for the list of calendars
+        List<CalendarInfo> calendars = CalendarWidget.getCalendars(getContext(), widget);
+        CalendarListAdapter mAdapter = new CalendarListAdapter(calendars, widget);
+        calendarList.setAdapter(mAdapter);
+    }
+
+    public void updateCalendarListVisibility() {
         if (optionAllCalendars.getBooleanValue()) {
             calendarList.setVisibility(View.GONE);
         } else {
             calendarList.setVisibility(View.VISIBLE);
-
-            // query for the list of calendars
-            List<CalendarInfo> calendars = CalendarWidget.getCalendars(getContext(), widget);
-            CalendarListAdapter mAdapter = new CalendarListAdapter(calendars, widget);
-            calendarList.setAdapter(mAdapter);
         }
+
     }
 
     private int getSelectedCalendarOptionIndex() {

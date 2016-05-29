@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo;
 
 import android.annotation.TargetApi;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +34,7 @@ import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOv
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
+import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.util.ImageUtils;
 
 import org.json.JSONException;
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     private static DataCastManager mCastManager;
     private DataCastConsumer mCastConsumer;
     private MenuItem mediaRouteMenuItem;
+    private WidgetList widgetListFrag;
 
     public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
         FragmentManager fm = getSupportFragmentManager();
@@ -138,8 +141,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         FlowManager.init(new FlowConfig.Builder(this).build());
 
         //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
-
-        switchToFragment(new WidgetList(), false);
+        widgetListFrag = new WidgetList();
+        switchToFragment(widgetListFrag, false);
 
         BaseCastManager.checkGooglePlayServices(this);
         CastConfiguration.Builder options = new CastConfiguration.Builder(getResources().getString(R.string.app_id))
@@ -357,4 +360,44 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(MainActivity.TAG, "Error connecting to google services");
     }
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+        switch (requestCode) {
+
+            // if the user accepts the read calendar access, resend all of the calendar widgets
+            // if they deny, remove all calendar widgets
+            case CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Widget.fetchAll(Widget.WidgetType.CALENDAR, new FetchAllWidgetsListener() {
+                        @Override
+                        public void results(List<Widget> widgets) {
+                            for (Widget w : widgets) {
+                                CastCommunicator.sendWidget(w);
+                            }
+                        }
+                    });
+                    widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS, true);
+                } else {
+                    Widget.fetchAll(Widget.WidgetType.CALENDAR, new FetchAllWidgetsListener() {
+                        @Override
+                        public void results(List<Widget> widgets) {
+                            for (Widget w : widgets) {
+                                CastCommunicator.deleteWidget(w);
+                                w.delete();
+                            }
+
+                            widgetListFrag.refreshList();
+                        }
+                    });
+                    widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS, false);
+                }
+            }
+        }
+    }
+
 }
