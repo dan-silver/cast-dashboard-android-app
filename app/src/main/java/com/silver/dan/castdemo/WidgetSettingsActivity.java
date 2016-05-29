@@ -13,14 +13,6 @@ import android.widget.FrameLayout;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.raizlabs.android.dbflow.sql.language.Select;
-import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
-import com.silver.dan.castdemo.settingsFragments.ClockSettings;
-import com.silver.dan.castdemo.settingsFragments.CountdownSettings;
-import com.silver.dan.castdemo.settingsFragments.FreeTextSetting;
-import com.silver.dan.castdemo.settingsFragments.MapSettings;
-import com.silver.dan.castdemo.settingsFragments.RSSSettings;
-import com.silver.dan.castdemo.settingsFragments.StocksSettings;
-import com.silver.dan.castdemo.settingsFragments.WeatherSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import butterknife.Bind;
@@ -39,6 +31,17 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
     @Bind(R.id.scroll_view_header)
     FrameLayout scrollViewHeader;
+    private long widgetId = -1;
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        savedInstanceState.putLong(Widget.ID, widgetId);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +51,12 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         Bundle b = getIntent().getExtras();
-        long widgetId = b.getLong(Widget.ID);
+        widgetId = b.getLong(Widget.ID);
 
 
         // lookup widget in the database

@@ -12,7 +12,6 @@
     <string name="SHARED_PREFS_OPTIONS" translatable="false">OPTIONS</string>
 
 
-
     <!--Widget Types-->
     <string name="calendar">Calendar</string>
     <string name="stocks">Stocks</string>
@@ -76,5 +75,6 @@
     <string name="custom_text">Custom Text</string>
     <string name="YouTube" translatable="false">YouTube</string>
     <string name="video">Video</string>
+    <string name="searchResultsFor">"Search results for "</string>
 
 </resources>

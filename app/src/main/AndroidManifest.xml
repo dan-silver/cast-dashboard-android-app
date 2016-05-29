@@ -5,19 +5,19 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!--To save dashboard background image -->
+    <!-- To save dashboard background image -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- CalendarSettings widget -->
     <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <application
-        android:name="com.silver.dan.castdemo.ExampleApplication"
+        android:name=".ExampleApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.silver.dan.castdemo.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,18 +26,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.silver.dan.castdemo.WidgetSettingsActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:name=".WidgetSettingsActivity"
             android:label="@string/app_name"
-            android:parentActivityName="com.silver.dan.castdemo.MainActivity"
-            android:theme="@style/AppTheme">
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.silver.dan.castdemo.MainActivity" />
         </activity>
+        <activity
+            android:name=".YouTubeSelectionActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".WidgetSettingsActivity"
+            android:theme="@style/AppThemeDialog">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.silver.dan.castdemo.WidgetSettingsActivity" />
+        </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/androidGeoApiKey"/>
+            android:value="@string/androidGeoApiKey" />
     </application>
 
 </manifest>

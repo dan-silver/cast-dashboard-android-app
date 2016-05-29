@@ -6,10 +6,6 @@ android {
             keyAlias 'release-sign'
             storeFile file('/home/dan/android-keys.jks')
         }
-        debug {
-            keyAlias 'release-sign'
-            storeFile file('/home/dan/android-keys.jks')
-        }
     }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -64,6 +60,9 @@ dependencies {
     compile 'com.wdullaer:materialdatetimepicker:2.3.0'
 
     compile 'jp.wasabeef:richeditor-android:1.2.0'
+
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
 
 }
 
