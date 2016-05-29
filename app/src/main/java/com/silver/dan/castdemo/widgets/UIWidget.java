@@ -33,7 +33,7 @@ abstract public class UIWidget {
 
     public abstract void init();
 
-    public void onCanBeCreated(CanBeCreatedListener listener) {
+    public void setOnCanBeCreatedListener(CanBeCreatedListener listener) {
         this.canBeCreatedListener = listener;
         if (canBeCreated()) {
             listener.onCanBeCreated();

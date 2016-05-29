@@ -82,6 +82,14 @@ public class WidgetList extends Fragment implements OnDragListener {
                         widget.position = widgetList.getAdapter().getItemCount();
 
 
+                        /*
+                         *
+                         * The idea here is to have a callback for when the widget can be created.
+                         * If there are no widget creation requirements, such as extra app runtime permissions,
+                         * create it right away. Otherwise save the callback so it can be executed when the widget
+                         * can be created.
+                         *
+                         */
                         CanBeCreatedListener listener = new CanBeCreatedListener() {
                             @Override
                             public void onCanBeCreated() {
@@ -94,7 +102,7 @@ public class WidgetList extends Fragment implements OnDragListener {
 
 
                         };
-                        widget.getUIWidget(getContext()).onCanBeCreated(listener);
+                        widget.getUIWidget(getContext()).setOnCanBeCreatedListener(listener);
 
                         if (!widget.getUIWidget(getContext()).canBeCreated()) {
                             widgetCanBeCreatedListeners.add(listener);
@@ -122,7 +130,7 @@ public class WidgetList extends Fragment implements OnDragListener {
                 if (permissionGranted) {
                     listener.onCanBeCreated();
                 } else {
-                    iterator.remove();
+                    iterator.remove(); //removes from list and iterator to prevent double access
                 }
             }
         }
