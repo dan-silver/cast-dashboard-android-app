@@ -25,8 +25,6 @@ import butterknife.OnClick;
 
 public class WidgetList extends Fragment implements OnDragListener {
 
-    MainActivity activity;
-
     ArrayList<CanBeCreatedListener> widgetCanBeCreatedListeners = new ArrayList<>();
 
     @Bind(R.id.widgetList)
@@ -43,6 +41,11 @@ public class WidgetList extends Fragment implements OnDragListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.widget_list, container, false);
         ButterKnife.bind(this, view);
+
+
+        // initially populate this list with an empty widget list
+        WidgetListAdapter adapter = new WidgetListAdapter(null, (MainActivity) getActivity(), this);
+        widgetList.setAdapter(adapter);
 
 
         return view;
@@ -116,8 +119,7 @@ public class WidgetList extends Fragment implements OnDragListener {
 
     @Override
     public void onResume() {
-        activity = (MainActivity) getActivity();
-        activity.setDrawerItemChecked(MainActivity.NAV_VIEW_WIDGETS_ITEM);
+        ((MainActivity) getActivity()).setDrawerItemChecked(MainActivity.NAV_VIEW_WIDGETS_ITEM);
 
         refreshList();
         super.onResume();
@@ -137,16 +139,18 @@ public class WidgetList extends Fragment implements OnDragListener {
     }
 
     public void refreshList() {
-        final WidgetList ctx = this;
 
         // async fetch all saved widgets
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
 
-                WidgetListAdapter adapter = new WidgetListAdapter(widgets, activity, ctx);
+                WidgetListAdapter adapter = (WidgetListAdapter) widgetList.getAdapter();
 
-                widgetList.setAdapter(adapter);
+                adapter.setWidgetList(widgets);
+                adapter.notifyDataSetChanged();
+
+
 
                 ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
                 mItemTouchHelper = new ItemTouchHelper(callback);

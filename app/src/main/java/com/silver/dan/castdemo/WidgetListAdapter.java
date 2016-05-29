@@ -75,12 +75,19 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
     // should only be necessary on widget delete, so there's not a gap in the orders
     // important since current widget position for new ones is the length of the list
     public void syncWidgetPositions() {
+        if (widgetList == null)
+            return;
+
         int i = 0;
         for (Widget widget : widgetList) {
             widget.position = i;
             widget.save();
             i++;
         }
+    }
+
+    public void setWidgetList(List<Widget> widgetList) {
+        this.widgetList = widgetList;
     }
 
     public class WidgetViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
