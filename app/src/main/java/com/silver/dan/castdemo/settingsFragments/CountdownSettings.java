@@ -102,7 +102,7 @@ public class CountdownSettings extends WidgetSettingsFragment {
 
                         curDate.set(year, monthOfYear, dayOfMonth);
 
-                        dateOption.setDate(curDate.getTime());
+                        dateOption.setValue(curDate.getTime());
                         dateOption.save();
                         updateWidgetProperty(COUNTDOWN_DATE, dateOption.value);
                         updateCountdownDateAndTimeText();
@@ -131,7 +131,7 @@ public class CountdownSettings extends WidgetSettingsFragment {
 
                         curDate.set(curDate.get(Calendar.YEAR), curDate.get(Calendar.MONTH), curDate.get(Calendar.DAY_OF_MONTH), hourOfDay, minute, second);
 
-                        dateOption.setDate(curDate.getTime());
+                        dateOption.setValue(curDate.getTime());
                         dateOption.save();
                         updateWidgetProperty(COUNTDOWN_DATE, dateOption.value);
                         updateCountdownDateAndTimeText();

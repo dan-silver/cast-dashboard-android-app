@@ -76,5 +76,7 @@
     <string name="YouTube" translatable="false">YouTube</string>
     <string name="video">Video</string>
     <string name="searchResultsFor">"Search results for "</string>
+    <string name="searchYouTube">Search YouTube</string>
+    <string name="try_searching_again">Try searching again</string>
 
 </resources>

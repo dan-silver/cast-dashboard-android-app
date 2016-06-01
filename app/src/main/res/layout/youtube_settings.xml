@@ -4,11 +4,23 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.silver.dan.castdemo.DelayAutoCompleteTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:imeOptions="flagNoExtractUi|actionSearch"
+        android:hint="@string/searchYouTube"
+        android:drawableEnd="@drawable/ic_search_black_24dp"
+        android:drawableRight="@drawable/ic_search_black_24dp"
+        android:inputType="text|textAutoCorrect|textCapSentences"
+        android:id="@+id/video"/>
+
     <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:headerText="@string/video"
-        android:id="@+id/video"/>
+        app:headerText="@string/video"/>
 
     <include layout="@layout/setting_line_break"/>
 </LinearLayout>

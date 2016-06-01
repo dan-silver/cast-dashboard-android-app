@@ -40,19 +40,19 @@ public class WidgetOption extends BaseModel {
         return value.equals("1");
     }
 
-    public void setBooleanValue(boolean booleanValue) {
+    public void setValue(boolean booleanValue) {
         this.value = booleanValue ? "1" : "0";
     }
 
-    public void setIntValue(int value) {
-        this.value = String.valueOf(value);
+    public void setValue(int value) {
+        this.value = Integer.toString(value);
     }
 
     public int getIntValue() {
         return Integer.valueOf(value);
     }
 
-    public void setDate(Date datetime) {
+    public void setValue(Date datetime) {
         this.value = Long.toString(datetime.getTime());
     }
 
@@ -61,23 +61,34 @@ public class WidgetOption extends BaseModel {
     }
 
     public void update(int value) {
-        setIntValue(value);
+        setValue(value);
         save();
     }
 
-    public void update(boolean isChecked) {
-        setBooleanValue(isChecked);
+    public void update(boolean value) {
+        setValue(value);
         save();
     }
 
     public void update(String str) {
-        this.value = str;
+        setValue(str);
         save();
     }
 
     public void update(double n) {
-        this.value = String.valueOf(n);
+        setValue(n);
         this.save();
     }
 
+    private void setValue(double n) {
+        this.value = Double.toString(n);
+    }
+
+    public void setValue(long l) {
+        this.value = Long.toString(l);
+    }
+
+    public void setValue(String str) {
+        this.value = str;
+    }
 }

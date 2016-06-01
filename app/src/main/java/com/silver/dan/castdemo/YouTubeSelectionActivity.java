@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
@@ -24,6 +24,7 @@ import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
+import com.silver.dan.castdemo.settingsFragments.YouTubeSettings;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -61,80 +62,83 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
 
     }
 
-    public void searchYouTube(final String queryTerm) {
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    YouTube youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
-                        public void initialize(HttpRequest request) throws IOException {
-                        }
-                    }).setApplicationName(getResources().getString(R.string.app_name)).build();
+    private class SearchYouTubeTask extends AsyncTask<String, String, List<YouTubeSearchResult>> {
 
-
-                    // Define the API request for retrieving search results.
-                    YouTube.Search.List search = youtube.search().list("id,snippet");
-
-                    // Set your developer key from the {{ Google Cloud Console }} for
-                    // non-authenticated requests. See:
-                    // {{ https://cloud.google.com/console }}
-                    String apiKey = getString(R.string.BrowserKey1);
-                    search.setKey(apiKey);
-                    search.setQ(queryTerm);
-
-                    // Restrict the search results to only include videos. See:
-                    // https://developers.google.com/youtube/v3/docs/search/list#type
-                    search.setType("video");
-
-                    search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
-
-                    // Call the API and print results.
-                    search.getRequestHeaders().set("referer", getString(R.string.browserRefererSpoof));
-                    SearchListResponse searchResponse = search.execute();
-                    List<SearchResult> searchResultList = searchResponse.getItems();
-
-                    final List<YouTubeSearchResult> results = new ArrayList<>();
-
-
-
-                    for (SearchResult apiRes : searchResultList) {
-                        YouTubeSearchResult result = new YouTubeSearchResult();
-                        SearchResultSnippet info = apiRes.getSnippet();
-                        result.name = info.getTitle();
-
-                        result.imageUrl = info.getThumbnails().getMedium().getUrl();
-                        result.id = apiRes.getId().getVideoId();
-                        result.channelTitle = info.getChannelTitle();
-                        result.publishedDate = new Date(info.getPublishedAt().getValue());
-                        results.add(result);
-                    }
-
-
-//                    ((YouTubeAdapter)searchResultsList.getAdapter()).setList(results);
-
-
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            YouTubeAdapter adapter = new YouTubeAdapter(results);
-                            // Attach the adapter to the recyclerview to populate items
-                            searchResultsList.setAdapter(adapter);
-                            // Set layout manager to position the items
-                            searchResultsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        }
-                    });
-
-                } catch (GoogleJsonResponseException e) {
-                    Log.e(MainActivity.TAG, "There was a service error: " + e.getDetails().getCode() + " : "
-                            + e.getDetails().getMessage());
-                } catch (IOException e) {
-                    Log.e(MainActivity.TAG, "There was an IO error: " + e.getCause() + " : " + e.getMessage());
-                } catch (Throwable t) {
-                    Log.e(MainActivity.TAG, t.toString());
+        @Override
+        protected List<YouTubeSearchResult> doInBackground(String... params) {
+            YouTube youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
+                public void initialize(HttpRequest request) throws IOException {
                 }
+            }).setApplicationName(getResources().getString(R.string.app_name)).build();
+
+
+            // Define the API request for retrieving search results.
+            YouTube.Search.List search;
+            try {
+                search = youtube.search().list("id,snippet");
+            } catch (IOException e) {
+                Log.e(MainActivity.TAG, e.toString());
+                return new ArrayList<>();
             }
-        });
+
+            // Set your developer key from the {{ Google Cloud Console }} for
+            // non-authenticated requests. See:
+            // {{ https://cloud.google.com/console }}
+            String apiKey = getString(R.string.BrowserKey1);
+            search.setKey(apiKey);
+            search.setQ(params[0]);
+
+            // Restrict the search results to only include videos. See:
+            // https://developers.google.com/youtube/v3/docs/search/list#type
+            search.setType("video");
+
+            search.setMaxResults(NUMBER_OF_VIDEOS_RETURNED);
+
+            // Call the API and print results.
+            search.getRequestHeaders().set("referer", getString(R.string.browserRefererSpoof));
+            SearchListResponse searchResponse;
+            try {
+                searchResponse = search.execute();
+            } catch (IOException e) {
+                Log.e(MainActivity.TAG, "There was an IO error: " + e.getCause() + " : " + e.getMessage());
+                return new ArrayList<>();
+            }
+            List<SearchResult> searchResultList = searchResponse.getItems();
+
+            final List<YouTubeSearchResult> results = new ArrayList<>();
+
+
+
+            for (SearchResult apiRes : searchResultList) {
+                YouTubeSearchResult result = new YouTubeSearchResult();
+                SearchResultSnippet info = apiRes.getSnippet();
+                result.name = info.getTitle();
+
+                result.imageUrl = info.getThumbnails().getMedium().getUrl();
+                result.id = apiRes.getId().getVideoId();
+                result.channelTitle = info.getChannelTitle();
+                result.publishedDate = new Date(info.getPublishedAt().getValue());
+                results.add(result);
+            }
+            return results;
+        }
+
+        @Override
+        protected void onPostExecute(List<YouTubeSearchResult> results) {
+            YouTubeAdapter adapter = new YouTubeAdapter(results);
+            // Attach the adapter to the recyclerview to populate items
+            searchResultsList.setAdapter(adapter);
+            // Set layout manager to position the items
+            searchResultsList.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+        }
+
+        @Override
+        protected void onPreExecute() {}
+    }
+
+    public void searchYouTube(final String queryTerm) {
+        new SearchYouTubeTask().execute(queryTerm);
     }
 
     private class YouTubeSearchResult {
@@ -162,7 +166,7 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            YouTubeSearchResult item = items.get(position);
+            final YouTubeSearchResult item = items.get(position);
             holder.nameTextView.setText(item.name);
             holder.tvChannelTitle.setText(item.channelTitle);
 
@@ -175,6 +179,17 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
                     .load(item.imageUrl)
                     .into(holder.ivThumbnail);
 
+
+            holder.vSearchResult.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent data = new Intent();
+                    data.putExtra(YouTubeSettings.VIDEO_ID, item.id);
+                    data.putExtra(YouTubeSettings.CACHED_VIDEO_NAME, item.name);
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+            });
         }
 
         @Override
@@ -196,6 +211,7 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
             public TextView tvChannelTitle;
             public TextView tvPublishedDate;
             public ImageView ivThumbnail;
+            public View vSearchResult;
 
             // We also create a constructor that accepts the entire item row
             // and does the view lookups to find each subview
@@ -208,6 +224,7 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
                 tvChannelTitle = (TextView) itemView.findViewById(R.id.channel_title);
                 tvPublishedDate = (TextView) itemView.findViewById(R.id.video_published_date);
                 ivThumbnail = (ImageView) itemView.findViewById(R.id.video_image);
+                vSearchResult = itemView.findViewById(R.id.search_result);
 
             }
         }
