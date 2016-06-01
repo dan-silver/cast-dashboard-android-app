@@ -17,15 +17,14 @@ public class YouTubeWidget extends UIWidget {
 
     @Override
     public void init() {
-        widget.initOption(YouTubeSettings.VIDEO_ID, -1);
-        widget.initOption(YouTubeSettings.CACHED_VIDEO_NAME, "");
+        widget.initOption(YouTubeSettings.PLAYLIST_DETAILS, "[]");
     }
 
 
     @Override
     public JSONObject getContent() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put(YouTubeSettings.VIDEO_ID, widget.loadOrInitOption(YouTubeSettings.VIDEO_ID, context).value);
+        json.put(YouTubeSettings.PLAYLIST_DETAILS, widget.loadOrInitOption(YouTubeSettings.PLAYLIST_DETAILS, context).value);
         return json;
     }
 

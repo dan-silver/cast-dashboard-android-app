@@ -18,10 +18,9 @@
         android:inputType="text|textAutoCorrect|textCapSentences"
         android:id="@+id/video"/>
 
-    <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+    <include layout="@layout/setting_line_break"/>
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:headerText="@string/video"/>
-
-    <include layout="@layout/setting_line_break"/>
+        android:id="@+id/youtube_playlist"/>
 </LinearLayout>

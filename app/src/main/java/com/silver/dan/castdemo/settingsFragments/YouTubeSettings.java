@@ -7,6 +7,9 @@ package com.silver.dan.castdemo.settingsFragments;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +20,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.silver.dan.castdemo.DelayAutoCompleteTextView;
+import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.YouTubeSelectionActivity;
+import com.silver.dan.castdemo.youtube.OnVideoClickListener;
+import com.silver.dan.castdemo.youtube.YouTubeVideo;
+import com.silver.dan.castdemo.youtube.YouTubeVideoListAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -27,15 +42,27 @@ import butterknife.ButterKnife;
 
 public class YouTubeSettings extends WidgetSettingsFragment {
 
-
     @Bind(R.id.video)
     DelayAutoCompleteTextView videoSearchInput;
 
-    WidgetOption selectedVideoId;
-    WidgetOption selectedVideoName;
+    @Bind(R.id.youtube_playlist)
+    RecyclerView playlist;
 
-    public static String VIDEO_ID = "VIDEO_ID";
-    public static String CACHED_VIDEO_NAME = "VIDEO_NAME";
+
+    WidgetOption playlistDetails;
+
+
+    // for storing in db
+    public static String PLAYLIST_DETAILS = "PLAYLIST_DETAILS";
+
+    // for getting results from search activity in data bundles
+    public static final String VIDEO_ID = "VIDEO_ID";
+    public static final String VIDEO_NAME = "VIDEO_NAME";
+    public static final String VIDEO_IMG_URL = "VIDEO_IMG_URL";
+    public static final String VIDEO_DATE = "VIDEO_DATE";
+    public static final String VIDEO_CHANNEL = "VIDEO_CHANNEL";
+
+
     private int SEARCH_YOUTUBE_REQUEST = 1;
     private AutoCompleteAdapter adapter;
 
@@ -46,8 +73,7 @@ public class YouTubeSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.youtube_settings, container, false);
         ButterKnife.bind(this, view);
 
-        selectedVideoId   = loadOrInitOption(VIDEO_ID);
-        selectedVideoName = loadOrInitOption(CACHED_VIDEO_NAME);
+        playlistDetails = loadOrInitOption(PLAYLIST_DETAILS);
 
         videoSearchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -74,20 +100,44 @@ public class YouTubeSettings extends WidgetSettingsFragment {
             }
         });
 
-        // if the video hasn't been set yet, focus on the search bar
-        if (selectedVideoId.value.equals("")) {
-//            videoSearchInput.requestFocus();
-//            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 
-
-//            ((InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE))
-//                    .showSoftInput(videoSearchInput, InputMethodManager.SHOW_FORCED);
-//            this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
-
-        }
+        YouTubeVideoListAdapter adapter = new YouTubeVideoListAdapter(getPlaylist(), new OnVideoClickListener() {
+            @Override
+            public void onClick(YouTubeVideo video) {
+                //@todo
+            }
+        });
+        // Attach the adapter to the recyclerview to populate items
+        playlist.setAdapter(adapter);
+        // Set layout manager to position the items
+        playlist.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return view;
+    }
+
+
+    public void savePlaylist() {
+        List<YouTubeVideo> videos = ((YouTubeVideoListAdapter) playlist.getAdapter()).getVideos();
+        JSONArray videoArr = new JSONArray();
+        for (YouTubeVideo video : videos) {
+            videoArr.put(video.convertToJSON());
+        }
+        playlistDetails.update(videoArr.toString());
+    }
+
+    public List<YouTubeVideo> getPlaylist() {
+        ArrayList<YouTubeVideo> videos = new ArrayList<>();
+        try {
+            JSONArray jsonarray = new JSONArray(playlistDetails.value);
+
+            for (int i = 0; i < jsonarray.length(); i++) {
+                JSONObject jsonobject = jsonarray.getJSONObject(i);
+                videos.add(YouTubeVideo.createFromJson(jsonobject));
+            }
+        } catch (JSONException e) {
+            Log.e(MainActivity.TAG, e.toString());
+        }
+        return videos;
     }
 
 
@@ -108,12 +158,22 @@ public class YouTubeSettings extends WidgetSettingsFragment {
             // Make sure the request was successful
             if (resultCode == Activity.RESULT_OK) {
                 String videoId = data.getStringExtra(VIDEO_ID);
-                String videoName = data.getStringExtra(CACHED_VIDEO_NAME);
+                String videoName = data.getStringExtra(VIDEO_NAME);
+                String videoImgUrl = data.getStringExtra(VIDEO_IMG_URL);
+                long videoDate = data.getLongExtra(VIDEO_DATE, 0);
+                String channelName = data.getStringExtra(VIDEO_CHANNEL);
 
-                selectedVideoId.update(videoId);
-                selectedVideoName.update(videoName);
+                YouTubeVideo video = new YouTubeVideo();
+                video.id = videoId;
+                video.name = videoName;
+                video.imageUrl = videoImgUrl;
+                video.publishedDate = new Date(videoDate);
+                video.channelTitle = channelName;
 
-                updateWidgetProperty(VIDEO_ID, videoId);
+//                updateWidgetProperty(VIDEO_ID, videoId);
+
+                ((YouTubeVideoListAdapter) playlist.getAdapter()).addVideo(video);
+                savePlaylist();
 
                 videoSearchInput.setText("");
             }

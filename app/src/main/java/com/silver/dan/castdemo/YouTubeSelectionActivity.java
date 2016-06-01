@@ -125,8 +125,12 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
                 @Override
                 public void onClick(YouTubeVideo video) {
                     Intent data = new Intent();
+
                     data.putExtra(YouTubeSettings.VIDEO_ID, video.id);
-                    data.putExtra(YouTubeSettings.CACHED_VIDEO_NAME, video.name);
+                    data.putExtra(YouTubeSettings.VIDEO_NAME, video.name);
+                    data.putExtra(YouTubeSettings.VIDEO_IMG_URL, video.imageUrl);
+                    data.putExtra(YouTubeSettings.VIDEO_DATE, video.publishedDate.getTime());
+                    data.putExtra(YouTubeSettings.VIDEO_CHANNEL, video.channelTitle);
                     setResult(RESULT_OK, data);
                     finish();
                 }
