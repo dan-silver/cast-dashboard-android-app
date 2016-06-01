@@ -12,8 +12,9 @@
         android:layout_marginLeft="10dp"
         android:imeOptions="flagNoExtractUi|actionSearch"
         android:hint="@string/searchYouTube"
-        android:drawableEnd="@drawable/ic_search_black_24dp"
-        android:drawableRight="@drawable/ic_search_black_24dp"
+        android:drawableStart="@drawable/ic_search_black_24dp"
+        android:drawablePadding="6dp"
+        android:drawableLeft="@drawable/ic_search_black_24dp"
         android:inputType="text|textAutoCorrect|textCapSentences"
         android:id="@+id/video"/>
 

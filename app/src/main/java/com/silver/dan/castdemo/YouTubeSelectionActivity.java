@@ -1,6 +1,5 @@
 package com.silver.dan.castdemo;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,11 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
@@ -25,10 +20,11 @@ import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.google.api.services.youtube.model.SearchResultSnippet;
 import com.silver.dan.castdemo.settingsFragments.YouTubeSettings;
-import com.squareup.picasso.Picasso;
+import com.silver.dan.castdemo.youtube.OnVideoClickListener;
+import com.silver.dan.castdemo.youtube.YouTubeVideo;
+import com.silver.dan.castdemo.youtube.YouTubeVideoListAdapter;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -62,10 +58,10 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
 
     }
 
-    private class SearchYouTubeTask extends AsyncTask<String, String, List<YouTubeSearchResult>> {
+    private class SearchYouTubeTask extends AsyncTask<String, String, List<YouTubeVideo>> {
 
         @Override
-        protected List<YouTubeSearchResult> doInBackground(String... params) {
+        protected List<YouTubeVideo> doInBackground(String... params) {
             YouTube youtube = new YouTube.Builder(HTTP_TRANSPORT, JSON_FACTORY, new HttpRequestInitializer() {
                 public void initialize(HttpRequest request) throws IOException {
                 }
@@ -105,12 +101,12 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
             }
             List<SearchResult> searchResultList = searchResponse.getItems();
 
-            final List<YouTubeSearchResult> results = new ArrayList<>();
+            final List<YouTubeVideo> results = new ArrayList<>();
 
 
 
             for (SearchResult apiRes : searchResultList) {
-                YouTubeSearchResult result = new YouTubeSearchResult();
+                YouTubeVideo result = new YouTubeVideo();
                 SearchResultSnippet info = apiRes.getSnippet();
                 result.name = info.getTitle();
 
@@ -124,8 +120,17 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPostExecute(List<YouTubeSearchResult> results) {
-            YouTubeAdapter adapter = new YouTubeAdapter(results);
+        protected void onPostExecute(List<YouTubeVideo> results) {
+            YouTubeVideoListAdapter adapter = new YouTubeVideoListAdapter(results, new OnVideoClickListener() {
+                @Override
+                public void onClick(YouTubeVideo video) {
+                    Intent data = new Intent();
+                    data.putExtra(YouTubeSettings.VIDEO_ID, video.id);
+                    data.putExtra(YouTubeSettings.CACHED_VIDEO_NAME, video.name);
+                    setResult(RESULT_OK, data);
+                    finish();
+                }
+            });
             // Attach the adapter to the recyclerview to populate items
             searchResultsList.setAdapter(adapter);
             // Set layout manager to position the items
@@ -141,92 +146,5 @@ public class YouTubeSelectionActivity extends AppCompatActivity {
         new SearchYouTubeTask().execute(queryTerm);
     }
 
-    private class YouTubeSearchResult {
-        public String name;
-        public String id;
-        public String imageUrl;
-        public String channelTitle;
-        public Date publishedDate;
-    }
 
-    public class YouTubeAdapter extends RecyclerView.Adapter<YouTubeAdapter.ViewHolder> {
-
-        private List<YouTubeSearchResult> items;
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-            Context context = parent.getContext();
-            LayoutInflater inflater = LayoutInflater.from(context);
-
-            View contactView = inflater.inflate(R.layout.youtube_search_result_item, parent, false);
-
-            return new ViewHolder(contactView);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            final YouTubeSearchResult item = items.get(position);
-            holder.nameTextView.setText(item.name);
-            holder.tvChannelTitle.setText(item.channelTitle);
-
-
-            DateFormat df = DateFormat.getDateInstance();
-            String dateStr = df.format(item.publishedDate);
-            holder.tvPublishedDate.setText(dateStr);
-
-            Picasso.with(getBaseContext())
-                    .load(item.imageUrl)
-                    .into(holder.ivThumbnail);
-
-
-            holder.vSearchResult.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent data = new Intent();
-                    data.putExtra(YouTubeSettings.VIDEO_ID, item.id);
-                    data.putExtra(YouTubeSettings.CACHED_VIDEO_NAME, item.name);
-                    setResult(RESULT_OK, data);
-                    finish();
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return items.size();
-        }
-
-        public YouTubeAdapter(List<YouTubeSearchResult> results) {
-            this.items = results;
-        }
-
-
-        // Provide a direct reference to each of the views within a data item
-        // Used to cache the views within the item layout for fast access
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            // Your holder should contain a member variable
-            // for any view that will be set as you render a row
-            public TextView nameTextView;
-            public TextView tvChannelTitle;
-            public TextView tvPublishedDate;
-            public ImageView ivThumbnail;
-            public View vSearchResult;
-
-            // We also create a constructor that accepts the entire item row
-            // and does the view lookups to find each subview
-            public ViewHolder(View itemView) {
-                // Stores the itemView in a public final member variable that can be used
-                // to access the context from any ViewHolder instance.
-                super(itemView);
-
-                nameTextView = (TextView) itemView.findViewById(R.id.video_name);
-                tvChannelTitle = (TextView) itemView.findViewById(R.id.channel_title);
-                tvPublishedDate = (TextView) itemView.findViewById(R.id.video_published_date);
-                ivThumbnail = (ImageView) itemView.findViewById(R.id.video_image);
-                vSearchResult = itemView.findViewById(R.id.search_result);
-
-            }
-        }
-    }
 }
