@@ -22,7 +22,7 @@ import com.silver.dan.castdemo.WidgetOption;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -44,13 +44,13 @@ public class WeatherSettings extends WidgetSettingsFragment {
     WidgetOption weatherTempUnits;
     WidgetOption weatherTypeOption;
 
-    @Bind(R.id.weather_city)
+    @BindView(R.id.weather_city)
     TwoLineSettingItem sWeatherCity;
 
-    @Bind(R.id.weather_degrees_unit)
+    @BindView(R.id.weather_degrees_unit)
     TwoLineSettingItem tempUnits;
 
-    @Bind(R.id.weather_type)
+    @BindView(R.id.weather_type)
     TwoLineSettingItem weatherType;
 
     @Override

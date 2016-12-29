@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -46,17 +46,18 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
     private static final int SELECT_PHOTO = 0;
     private static final int MB = 1000000;
 
-    @Bind(R.id.background_type)
+    @BindView(R.id.background_type)
     TwoLineSettingItem backgroundType;
 
-    @Bind(R.id.widget_transparency)
+    @BindView(R.id.widget_transparency)
     SeekBar widgetTransparency;
 
-    @Bind(R.id.dashboard_background_picture)
+    @BindView(R.id.dashboard_background_picture)
     ImageView backgroundPicture;
 
-    @Bind(R.id.upload_progress)
+    @BindView(R.id.upload_progress)
     ProgressBar uploadProgressBar;
+
     private BackgroundType oldBackgroundType;
 
     @Override

@@ -30,7 +30,7 @@ import com.silver.dan.castdemo.WidgetOption_Table;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StocksSettings extends WidgetSettingsFragment {
@@ -40,10 +40,10 @@ public class StocksSettings extends WidgetSettingsFragment {
     final StockListAdapter stockListAdapter = new StockListAdapter(stocks);
 
 
-    @Bind(R.id.select_stock)
+    @BindView(R.id.select_stock)
     AutoCompleteTextView addStock;
 
-    @Bind(R.id.stock_list)
+    @BindView(R.id.stock_list)
     RecyclerView stockList;
 
     @Override

@@ -15,7 +15,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -23,13 +23,13 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
     private Widget widget;
 
-    @Bind(R.id.widget_settings_type_specific)
+    @BindView(R.id.widget_settings_type_specific)
     FrameLayout widgetTypeSettings;
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar toolbar;
 
-    @Bind(R.id.scroll_view_header)
+    @BindView(R.id.scroll_view_header)
     FrameLayout scrollViewHeader;
     private long widgetId = -1;
 

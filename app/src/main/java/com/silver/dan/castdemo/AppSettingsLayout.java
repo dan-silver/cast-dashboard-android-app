@@ -8,15 +8,15 @@ import android.widget.SeekBar;
 
 import com.silver.dan.castdemo.databinding.FragmentAppSettingsLayoutBinding;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class AppSettingsLayout extends AppSettingsHelperFragment {
 
-    @Bind(R.id.seekBar)
+    @BindView(R.id.seekBar)
     SeekBar columnCount;
 
-    @Bind(R.id.screen_padding)
+    @BindView(R.id.screen_padding)
     SeekBar screenPadding;
 
     @Override

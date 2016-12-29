@@ -18,7 +18,7 @@ android {
     }
     buildTypes {
         release {
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
         }
         debug {
             applicationIdSuffix ".debug"
@@ -39,12 +39,13 @@ dependencies {
     compile 'com.android.support:mediarouter-v7:25.1.0'
     compile 'com.android.support:support-annotations:25.1.0'
     compile 'com.android.support:recyclerview-v7:25.1.0'
-    compile 'com.google.android.gms:play-services-cast:9.0.1'
-    compile 'com.google.android.gms:play-services-maps:9.0.1'
-    compile 'com.google.android.gms:play-services-location:9.0.1'
+    compile 'com.google.android.gms:play-services-cast:10.0.1'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
+    compile 'com.google.android.gms:play-services-location:10.0.1'
+    compile 'com.google.android.gms:play-services-places:10.0.1'
 
-    compile 'com.google.apis:google-api-services-youtube:v3-rev174-1.22.0'
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    compile 'com.jakewharton:butterknife-compiler:8.4.0'
 
     compile('com.github.afollestad.material-dialogs:core:0.8.5.8@aar') {
         transitive = true

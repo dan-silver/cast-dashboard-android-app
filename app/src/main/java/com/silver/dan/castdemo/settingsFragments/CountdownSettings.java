@@ -22,19 +22,19 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CountdownSettings extends WidgetSettingsFragment {
 
-    @Bind(R.id.countdown_date)
+    @BindView(R.id.countdown_date)
     TwoLineSettingItem countdownDate;
 
-    @Bind(R.id.countdown_time)
+    @BindView(R.id.countdown_time)
     TwoLineSettingItem countdownTime;
 
-    @Bind(R.id.countdown_text)
+    @BindView(R.id.countdown_text)
     TwoLineSettingItem countdownText;
 
     WidgetOption dateOption, textOption;

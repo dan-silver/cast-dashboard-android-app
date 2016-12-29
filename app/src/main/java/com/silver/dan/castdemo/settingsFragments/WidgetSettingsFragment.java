@@ -11,7 +11,7 @@ import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.Widget_Table;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public abstract class WidgetSettingsFragment extends Fragment {
@@ -23,11 +23,11 @@ public abstract class WidgetSettingsFragment extends Fragment {
     public static String SCROLL_INTERVAL = "SCROLL_INTERVAL";
 
     @Nullable
-    @Bind(R.id.widget_height)
+    @BindView(R.id.widget_height)
     TwoLineSettingItem widgetHeight;
 
     @Nullable
-    @Bind(R.id.widget_scroll_interval)
+    @BindView(R.id.widget_scroll_interval)
     TwoLineSettingItem scrollInterval;
 
     // percentage of screen height

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -27,7 +27,7 @@ public class WidgetList extends Fragment implements OnDragListener {
 
     ArrayList<CanBeCreatedListener> widgetCanBeCreatedListeners = new ArrayList<>();
 
-    @Bind(R.id.widgetList)
+    @BindView(R.id.widgetList)
     RecyclerView widgetList;
 
     public WidgetList() {

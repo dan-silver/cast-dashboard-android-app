@@ -8,14 +8,14 @@ import android.view.ViewGroup;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.WidgetOption;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.richeditor.RichEditor;
 
 
 public class FreeTextSetting extends WidgetSettingsFragment {
 
-    @Bind(R.id.rich_editor)
+    @BindView(R.id.rich_editor)
     RichEditor richEditor;
 
     WidgetOption customText;

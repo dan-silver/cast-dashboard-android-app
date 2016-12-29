@@ -8,14 +8,14 @@ import android.widget.TextView;
 
 import com.silver.dan.castdemo.R;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class TwoLineSettingItem extends SettingItem {
-    @Bind(R.id.two_line_settings_item_header)
+    @BindView(R.id.two_line_settings_item_header)
     TextView header;
 
-    @Bind(R.id.two_line_settings_item_sub_header)
+    @BindView(R.id.two_line_settings_item_sub_header)
     TextView subHeader;
 
     public TwoLineSettingItem(Context context, AttributeSet attrs, int defStyle) {

@@ -25,7 +25,7 @@ import com.silver.dan.castdemo.widgets.CalendarWidget;
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -44,16 +44,16 @@ public class CalendarSettings extends WidgetSettingsFragment {
     WidgetOption optionShowEventLocations;
     WidgetOption optionShowEventsUntil;
 
-    @Bind(R.id.display_all_calendars)
+    @BindView(R.id.display_all_calendars)
     Switch allCalendars;
 
-    @Bind(R.id.calendar_list)
+    @BindView(R.id.calendar_list)
     RecyclerView calendarList;
 
-    @Bind(R.id.display_event_locations)
+    @BindView(R.id.display_event_locations)
     Switch eventLocations;
 
-    @Bind(R.id.show_events_until)
+    @BindView(R.id.show_events_until)
     TwoLineSettingItem showEventsUntil;
 
     @Override

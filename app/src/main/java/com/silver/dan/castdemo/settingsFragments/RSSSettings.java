@@ -13,16 +13,16 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.WidgetOption;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RSSSettings extends WidgetSettingsFragment {
 
-    @Bind(R.id.feed_url)
+    @BindView(R.id.feed_url)
     TwoLineSettingItem feedUrl;
 
-    @Bind(R.id.display_rss_dates)
+    @BindView(R.id.display_rss_dates)
     Switch displayDates;
 
     WidgetOption feedUrlOption, showDatesOption;

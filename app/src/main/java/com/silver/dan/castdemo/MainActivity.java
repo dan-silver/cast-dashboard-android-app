@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.common.ConnectionResult;
@@ -44,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements OnSettingChangedListener, GoogleApiClient.OnConnectionFailedListener {
@@ -58,14 +59,15 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     private GoogleApiClient mGoogleApiClient;
 
 
+
     //drawer
-    @Bind(R.id.nvView)
+    @BindView(R.id.nvView)
     NavigationView navView;
 
-    @Bind(R.id.drawer_layout)
+    @BindView(R.id.drawer_layout)
     DrawerLayout mDrawer;
 
-    @Bind(R.id.top_toolbar)
+    @BindView(R.id.top_toolbar)
     Toolbar top_toolbar;
 
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
+        ButterKnife.setDebug(true);
         ButterKnife.bind(this);
 
 
@@ -362,8 +365,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
 
             // if the user accepts the read calendar access, resend all of the calendar widgets

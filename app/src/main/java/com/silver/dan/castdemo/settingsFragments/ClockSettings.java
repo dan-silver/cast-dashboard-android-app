@@ -10,12 +10,12 @@ import android.widget.Switch;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.WidgetOption;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ClockSettings extends WidgetSettingsFragment {
 
-    @Bind(R.id.clock_show_seconds)
+    @BindView(R.id.clock_show_seconds)
     Switch showSeconds;
 
     WidgetOption showSecondsOption;

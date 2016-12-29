@@ -30,7 +30,7 @@ import com.silver.dan.castdemo.WidgetOption;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -63,28 +63,28 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     WidgetOption destinationText;
     WidgetOption travelModeOption;
 
-    @Bind(R.id.map_location)
+    @BindView(R.id.map_location)
     TwoLineSettingItem mapLocation;
 
-    @Bind(R.id.map_destination)
+    @BindView(R.id.map_destination)
     TwoLineSettingItem mapDestination;
 
-    @Bind(R.id.map_zoom)
+    @BindView(R.id.map_zoom)
     SeekBar mapZoom;
 
-    @Bind(R.id.map_traffic)
+    @BindView(R.id.map_traffic)
     Switch mapTraffic;
 
-    @Bind(R.id.map_type)
+    @BindView(R.id.map_type)
     TwoLineSettingItem mapType;
 
-    @Bind(R.id.map_mode)
+    @BindView(R.id.map_mode)
     TwoLineSettingItem mapMode;
 
-    @Bind(R.id.map_travel_mode)
+    @BindView(R.id.map_travel_mode)
     TwoLineSettingItem travelMode;
 
-    @Bind(R.id.map_directions_options)
+    @BindView(R.id.map_directions_options)
     LinearLayout mapDirectionsOptions;
 
     @Override
