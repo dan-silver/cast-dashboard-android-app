@@ -27,7 +27,6 @@ import com.silver.dan.castdemo.widgets.RSSWidget;
 import com.silver.dan.castdemo.widgets.StocksWidget;
 import com.silver.dan.castdemo.widgets.UIWidget;
 import com.silver.dan.castdemo.widgets.WeatherWidget;
-import com.silver.dan.castdemo.widgets.YouTubeWidget;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,8 +70,6 @@ public class Widget extends BaseModel {
             case CUSTOM_TEXT:
                 widget = new FreeTextWidget(context, this);
                 break;
-            case YOUTUBE:
-                widget = new YouTubeWidget(context, this);
         }
         return widget;
     }
@@ -86,8 +83,7 @@ public class Widget extends BaseModel {
         WEATHER(5, R.string.weather, R.drawable.ic_cloud_queue_24dp),
         RSS(6, R.string.rss_feed, R.drawable.ic_rss_feed_black_24px),
         COUNTDOWN(7, R.string.countdown_timer, R.drawable.ic_timer_black_24dp),
-        CUSTOM_TEXT(8, R.string.custom_text, R.drawable.ic_insert_comment_black_24dp),
-        YOUTUBE(9, R.string.YouTube, R.drawable.youtube);
+        CUSTOM_TEXT(8, R.string.custom_text, R.drawable.ic_insert_comment_black_24dp);
 
         private int value;
         private int icon;

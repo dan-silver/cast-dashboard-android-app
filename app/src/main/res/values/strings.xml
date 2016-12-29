@@ -73,10 +73,8 @@
     <string name="countdown_timer_text" translatable="false">Countdown Timer Text</string>
     <string name="a_wonderful_day" translatable="false">A Wonderful Day!</string>
     <string name="custom_text">Custom Text</string>
-    <string name="YouTube" translatable="false">YouTube</string>
     <string name="video">Video</string>
     <string name="searchResultsFor">"Search results for "</string>
-    <string name="searchYouTube">Search YouTube</string>
     <string name="try_searching_again">Try searching again</string>
 
 </resources>
