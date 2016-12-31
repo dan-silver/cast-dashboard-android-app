@@ -13,6 +13,7 @@ import com.silver.dan.castdemo.Widget_Table;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.Optional;
 
 public abstract class WidgetSettingsFragment extends Fragment {
     protected Widget widget;
@@ -49,7 +50,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
         return widget.loadOrInitOption(property, getContext());
     }
 
-    @Nullable
+    @Optional
     @OnClick(R.id.widget_height)
     public void cycleWidgetHeight() {
         // options are 40, 60, 80, 100
@@ -63,7 +64,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
         updateWidgetProperty(WidgetSettingsFragment.WIDGET_HEIGHT, optionWidgetHeight.getIntValue());
     }
 
-    @Nullable
+    @Optional
     @OnClick(R.id.widget_scroll_interval)
     public void cycleWidgetScrollInterval() {
         // options are 10, 20, 30, 40
