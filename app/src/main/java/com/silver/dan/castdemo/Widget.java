@@ -40,10 +40,10 @@ public class Widget extends BaseModel {
     // For bundle data passing
     public static String ID = "WIDGET_ID";
 
-    public static int DEFAULT_WIDGET_HEIGHT = 60;
-    public static int DEFAULT_SCROLL_INTERVAL = 20;
+    private static int DEFAULT_WIDGET_HEIGHT = 60;
+    private static int DEFAULT_SCROLL_INTERVAL = 20;
 
-    public UIWidget getUIWidget(Context context) {
+    UIWidget getUIWidget(Context context) {
         UIWidget widget = null;
         switch (getWidgetType()) {
             case STOCKS:
@@ -115,7 +115,7 @@ public class Widget extends BaseModel {
         }
     }
 
-    public WidgetType getWidgetType() {
+    private WidgetType getWidgetType() {
         return WidgetType.getEnumByValue(type);
     }
 
@@ -174,11 +174,11 @@ public class Widget extends BaseModel {
                 .queryList();
     }
 
-    public static void fetchAll(final FetchAllWidgetsListener listener) {
+    static void fetchAll(final FetchAllWidgetsListener listener) {
         fetchAll(null, listener);
     }
 
-    public static void fetchAll(WidgetType type, final FetchAllWidgetsListener listener) {
+    static void fetchAll(WidgetType type, final FetchAllWidgetsListener listener) {
         ConditionGroup conditions = ConditionGroup.clause();
 
         if (type != null) {
@@ -203,7 +203,7 @@ public class Widget extends BaseModel {
     }
 
 
-    public JSONObject getJSONContent(Context applicationContext) {
+    JSONObject getJSONContent(Context applicationContext) {
         JSONObject payload = new JSONObject();
 
         try {
@@ -279,7 +279,7 @@ public class Widget extends BaseModel {
 
     }
 
-    public void initWidgetSettings(Context context) {
+    void initWidgetSettings(Context context) {
         // global widget properties
         initOption(WidgetSettingsFragment.WIDGET_HEIGHT, DEFAULT_WIDGET_HEIGHT);
         initOption(WidgetSettingsFragment.SCROLL_INTERVAL, DEFAULT_SCROLL_INTERVAL);

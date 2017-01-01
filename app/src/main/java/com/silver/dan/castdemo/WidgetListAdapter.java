@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetViewHolder> implements ItemTouchHelperAdapter {
+class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetViewHolder> implements ItemTouchHelperAdapter {
 
     private final MainActivity mainActivity;
     private List<Widget> widgetList;
@@ -42,7 +42,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         });
     }
 
-    public WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener) {
+    WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener) {
         this.widgetList = widgetList;
         this.mainActivity = activity;
         mDragStartListener = dragStartListener;
@@ -55,7 +55,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
     }
 
-    public JSONObject saveWidgetsOrder() {
+    private JSONObject saveWidgetsOrder() {
         JSONObject widgetOrder = new JSONObject();
         int i = 0;
         try {
@@ -74,7 +74,7 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
 
     // should only be necessary on widget delete, so there's not a gap in the orders
     // important since current widget position for new ones is the length of the list
-    public void syncWidgetPositions() {
+    private void syncWidgetPositions() {
         if (widgetList == null)
             return;
 
@@ -90,15 +90,15 @@ public class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.Wi
         this.widgetList = widgetList;
     }
 
-    public class WidgetViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
-        protected TextView topHeader;
-        protected TextView bottomHeader;
-        protected ImageView typeIcon;
-        protected View listItemView;
-        protected ImageView handleView;
+    class WidgetViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
+        TextView topHeader;
+        TextView bottomHeader;
+        ImageView typeIcon;
+        View listItemView;
+        ImageView handleView;
 
 
-        public WidgetViewHolder(View view) {
+        WidgetViewHolder(View view) {
             super(view);
             this.topHeader = (TextView) view.findViewById(R.id.widget_name);
             this.bottomHeader = (TextView) view.findViewById(R.id.widget_type);

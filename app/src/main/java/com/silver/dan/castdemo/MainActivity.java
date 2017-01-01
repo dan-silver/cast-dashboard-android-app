@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close
         );
 
-        mDrawer.setDrawerListener(mDrawerToggle);
+        mDrawer.addDrawerListener(mDrawerToggle);
         ab.setDisplayHomeAsUpEnabled(true);
 
         mDrawerToggle.syncState();
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         navView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         selectDrawerItem(menuItem);
                         return true;
                     }

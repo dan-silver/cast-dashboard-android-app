@@ -8,5 +8,5 @@ public class WidgetDatabase {
 
     public static final String NAME = "Widgets2";
 
-    public static final int VERSION = 1;
+    static final int VERSION = 1;
 }
