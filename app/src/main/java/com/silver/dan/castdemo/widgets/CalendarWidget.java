@@ -34,8 +34,8 @@ public class CalendarWidget extends UIWidget {
     public int requestPermissions() {
         ActivityCompat.requestPermissions((Activity) context,
                 new String[]{Manifest.permission.READ_CALENDAR},
-                CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-        return CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS;
+                CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR);
+        return CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR;
     }
 
     @Override
@@ -157,7 +157,7 @@ public class CalendarWidget extends UIWidget {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions((Activity) context,
                     new String[]{Manifest.permission.READ_CALENDAR},
-                    CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                    CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR);
 
             return null;
         }

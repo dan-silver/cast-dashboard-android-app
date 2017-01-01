@@ -36,7 +36,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     public static String SHOW_EVENT_LOCATIONS = "SHOW_EVENT_LOCATIONS";
     public static String SHOW_EVENTS_UNTIL = "SHOW_EVENTS_UNTIL";
 
-    public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1000; // this integer must be unique across all app permission requests
+    public static final int MY_PERMISSIONS_REQUEST_READ_CALENDAR = 1000; // this integer must be unique across all app permission requests
 
     Integer numDaysDisplayValues[] = new Integer[]{3, 7, 14, 30, 90};
 
@@ -101,7 +101,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.READ_CALENDAR},
-                    MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                    MY_PERMISSIONS_REQUEST_READ_CALENDAR);
         } else {
             updateCalendarListContents();
         }
@@ -115,7 +115,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+            case MY_PERMISSIONS_REQUEST_READ_CALENDAR: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     updateCalendarListContents();
                     updateCalendarUntilTextView();

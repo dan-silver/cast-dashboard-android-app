@@ -23,7 +23,6 @@ import android.view.MenuItem;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.Places;
 import com.google.android.libraries.cast.companionlibrary.cast.BaseCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
 import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
@@ -332,7 +331,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
             // if the user accepts the read calendar access, resend all of the calendar widgets
             // if they deny, remove all calendar widgets
-            case CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+            case CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Widget.fetchAll(Widget.WidgetType.CALENDAR, new FetchAllWidgetsListener() {
                         @Override
@@ -342,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                             }
                         }
                     });
-                    widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS, true);
+                    widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR, true);
                 } else {
                     Widget.fetchAll(Widget.WidgetType.CALENDAR, new FetchAllWidgetsListener() {
                         @Override
@@ -355,7 +354,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                             widgetListFrag.refreshList();
                         }
                     });
-                    widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CONTACTS, false);
+                    widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR, false);
                 }
             }
         }
