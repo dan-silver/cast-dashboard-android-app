@@ -20,9 +20,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 import com.google.android.gms.cast.ApplicationMetadata;
-import com.google.android.gms.cast.CastDevice;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Places;
@@ -55,9 +53,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public static final int NAV_VIEW_WIDGETS_ITEM = 0;
     public static final int NAV_VIEW_OPTIONS_LAYOUT_ITEM = 1;
     public static final int NAV_VIEW_OPTIONS_THEME_ITEM = 2;
-
-    private GoogleApiClient mGoogleApiClient;
-
 
 
     //drawer
@@ -194,14 +189,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             }
         };
 
-        mGoogleApiClient = new GoogleApiClient
-                .Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addApi(Places.PLACE_DETECTION_API)
-                .enableAutoManage(this, this)
-                .build();
-
-
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -248,12 +235,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         return true;
     }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
 
     private void sendAllOptions() {
         AppSettingsBindings settings = new AppSettingsBindings();
@@ -327,7 +308,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         mCastManager = DataCastManager.getInstance();
         if (mCastManager != null) {
             mCastManager.addDataCastConsumer(mCastConsumer);
-            mCastManager.incrementUiCounter();
         }
 
         super.onResume();
@@ -338,12 +318,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         mDrawer.closeDrawer(GravityCompat.START);
         uncheckAllMenuItems();
         super.onBackPressed();
-    }
-
-    @Override
-    public void onPause() {
-        mCastManager.decrementUiCounter();
-        super.onPause();
     }
 
     @Override
