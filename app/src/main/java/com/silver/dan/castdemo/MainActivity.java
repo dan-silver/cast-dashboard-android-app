@@ -169,19 +169,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
                 sendAllOptions();
                 invalidateOptionsMenu();
-
-
-            }
-
-            // send options first, so GMaps with locale can be loaded, then send all widgets
-            @Override
-            public void onMessageReceived(CastDevice castDevice, String namespace, String message) {
-                super.onMessageReceived(castDevice, namespace, message);
-                if (namespace.equals(getResources().getString(R.string.namespace))) {
-                    if (message.equals("LIBS_LOADED")) {
-                        CastCommunicator.sendAllWidgets();
-                    }
-                }
+                CastCommunicator.sendAllWidgets();
             }
 
             @Override

@@ -91,7 +91,7 @@ public class CastCommunicator {
         CastCommunicator.sendWidgets(widgetsArr);
     }
 
-    public static void sendAllWidgets() {
+    static void sendAllWidgets() {
         if (!mCastManager.isConnected())
             return;
 
@@ -107,12 +107,12 @@ public class CastCommunicator {
         });
     }
 
-    public static void sendWidgets(JSONArray widgetsArr) {
+    private static void sendWidgets(JSONArray widgetsArr) {
         CastCommunicator.sendJSON("widgets", widgetsArr);
     }
 
     // for extremely large strings, don't wrap in JSON
-    public static void sendText(final String text) {
+    static void sendText(final String text) {
         if (!mCastManager.isConnected())
             return;
 

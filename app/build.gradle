@@ -54,7 +54,7 @@ dependencies {
     compile 'com.github.QuadFlask:colorpicker:0.0.12'
 
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
-    compile 'com.wdullaer:materialdatetimepicker:2.3.0'
+    compile 'com.wdullaer:materialdatetimepicker:2.5.0'
 
     compile 'jp.wasabeef:richeditor-android:1.2.1'
 
