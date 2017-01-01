@@ -40,5 +40,27 @@
         app:itemTextAppearance="@style/TextAppearance.AppCompat.Menu"
         android:background="@android:color/white"
         app:itemTextColor="@color/drawer_item"
-        app:headerLayout="@layout/nav_drawer_header" />
+        app:headerLayout="@layout/nav_drawer_header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:clickable="true"
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:id="@+id/logout_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:paddingLeft="20dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                android:textColor="@color/drawer_item"
+                android:text="@string/log_out" />
+        </LinearLayout>
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>

@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.common.ConnectionResult;
@@ -29,13 +33,16 @@ import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumer;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
+import com.google.firebase.auth.FirebaseAuth;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,6 +51,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements OnSettingChangedListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -63,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @BindView(R.id.top_toolbar)
     Toolbar top_toolbar;
+
+    @OnClick(R.id.logout_btn)
+    public void logout() {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
     private static DataCastManager mCastManager;
@@ -188,6 +204,20 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             }
         };
 
+        setupNavBarUserInfo();
+    }
+
+    private void setupNavBarUserInfo() {
+        View header = navView.getHeaderView(0);
+
+        TextView displayName = (TextView) header.findViewById(R.id.userDisplayName);
+        displayName.setText(LoginActivity.user.getDisplayName());
+
+        TextView email = (TextView) header.findViewById(R.id.userEmail);
+        email.setText(LoginActivity.user.getEmail());
+
+        ImageView profilePhoto = (ImageView) header.findViewById(R.id.userPhoto);
+        Picasso.with(getApplicationContext()).load(LoginActivity.user.getPhotoUrl()).into(profilePhoto);
     }
 
     private void selectDrawerItem(MenuItem menuItem) {

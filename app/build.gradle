@@ -61,8 +61,10 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp3:okhttp:3.5.0'
 
-
+    compile 'com.google.firebase:firebase-auth:10.0.1'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
 }
+
 
 apply plugin: 'com.neenbedankt.android-apt'
 
