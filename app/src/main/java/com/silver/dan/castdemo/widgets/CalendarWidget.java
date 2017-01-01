@@ -49,8 +49,7 @@ public class CalendarWidget extends UIWidget {
     }
 
     // Projection array. Creating indices for this array instead of doing
-
-    public static final String[] EVENT_PROJECTION = new String[]{
+    private static final String[] EVENT_PROJECTION = new String[]{
             CalendarContract.Calendars._ID,                           // 0
             CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
             CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
@@ -135,7 +134,7 @@ public class CalendarWidget extends UIWidget {
         return calendars;
     }
 
-    public JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars, int showEventsUntil) throws JSONException {
+    private JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars, int showEventsUntil) throws JSONException {
         Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
         // starting time in milliseconds
