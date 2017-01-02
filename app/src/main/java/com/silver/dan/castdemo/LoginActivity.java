@@ -43,6 +43,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     static FirebaseUser user;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +89,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         };
         mAuth.addAuthStateListener(mAuthListener);
 
+    }
+
+    static boolean restoreUser() {
+        if (LoginActivity.user != null) {
+            return true;
+        }
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            LoginActivity.user = user;
+            return true;
+        }
+        return false;
     }
 
     @OnClick(R.id.sign_in_button)
@@ -170,5 +184,4 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
     }
-
 }

@@ -1,5 +1,6 @@
 package com.silver.dan.castdemo;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.raizlabs.android.dbflow.annotation.Column;
@@ -15,18 +16,23 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWrites;
+import static com.silver.dan.castdemo.Widget.getFirebaseDashboardWidgetsRef;
+
 @ModelContainer
 @Table(database = WidgetDatabase.class)
 @IgnoreExtraProperties
 public class WidgetOption extends BaseModel {
 
-
+    @Exclude
+    Widget widgetRef;
 
     @PrimaryKey(autoincrement = true)
     @Exclude
     public long id;
 
     @Column
+    @Exclude
     public String key;
 
     @Column
@@ -35,12 +41,23 @@ public class WidgetOption extends BaseModel {
     public WidgetOption() {
     }
 
+    @Exclude
+    void saveFirebase() {
+        getOptionsRef()
+                .child(this.key)
+                .setValue(this.toMap());
+    }
+
+    @Exclude
+    private DatabaseReference getOptionsRef() {
+        return getFirebaseDashboardWidgetsRef()
+                .child(widgetRef.guid)
+                .child("optionsMap");
+    }
 
     @Exclude
     public Map<String, String> toMap() {
         HashMap<String, String> result = new HashMap<>();
-
-        result.put("key", key);
         result.put("value", value);
 
         return result;
@@ -90,13 +107,15 @@ public class WidgetOption extends BaseModel {
     @Exclude
     @Override
     public void save() {
-        super.save();
+        if (!useFirebaseForReadsAndWrites)
+            super.save();
 
-        Widget widget = widgetForeignKeyContainer.load();
 
-        if (widget != null) {
-            widget.saveFirebaseOnly();
-        }
+
+//        if (widgetRef != null) {
+//            widgetRef.saveFirebaseOnly();
+            saveFirebase();
+//        }
     }
 
     @Exclude
@@ -137,4 +156,5 @@ public class WidgetOption extends BaseModel {
     public void setValue(String str) {
         this.value = str;
     }
+
 }

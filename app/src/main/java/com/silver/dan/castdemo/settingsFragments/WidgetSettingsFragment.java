@@ -1,11 +1,13 @@
 package com.silver.dan.castdemo.settingsFragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.CastCommunicator;
+import com.silver.dan.castdemo.FirebaseMigration;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
@@ -89,16 +91,37 @@ public abstract class WidgetSettingsFragment extends Fragment {
             scrollInterval.setSubHeaderText(optionScrollInterval.getIntValue() + " " + getString(R.string.seconds));
     }
 
+    abstract public void initView();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Bundle bundle = this.getArguments();
-        long widgetId = bundle.getLong(Widget.ID, -1);
-
-        // lookup widget in the database
-        // display appropriate settings for that widget type
-        widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
-
         super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        final WidgetSettingsFragment _this = this;
+        if (FirebaseMigration.useFirebaseForReadsAndWrites) {
+            String widgetKey = bundle.getString(Widget.GUID);
+            Widget.getFromKey(widgetKey, new Widget.GetWidgetCallback() {
+                @Override
+                public void complete(Widget widget) {
+                    _this.widget = widget;
+                    _this.initView();
+                }
+
+                @Override
+                public void error() {
+
+                }
+            });
+
+        } else {
+            long widgetId = bundle.getLong(Widget.ID, -1);
+
+            // lookup widget in the database
+            // display appropriate settings for that widget type
+            widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
+            this.initView();
+
+        }
     }
 
     protected void supportWidgetHeightOption() {

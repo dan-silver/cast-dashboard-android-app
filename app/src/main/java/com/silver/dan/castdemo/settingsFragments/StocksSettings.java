@@ -51,6 +51,13 @@ public class StocksSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.stocks_settings, container, false);
         ButterKnife.bind(this, view);
 
+
+        return view;
+    }
+
+    @Override
+    public void initView() {
+
         supportWidgetHeightOption();
         supportWidgetScrollInterval();
 
@@ -142,8 +149,6 @@ public class StocksSettings extends WidgetSettingsFragment {
             stockListAdapter.addStock(info);
         }
 
-
-        return view;
     }
 
     public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.ViewHolder> {

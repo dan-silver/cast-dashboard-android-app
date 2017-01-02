@@ -3,13 +3,15 @@ package com.silver.dan.castdemo;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.ValueEventListener;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
@@ -38,8 +40,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWrites;
 
 @ModelContainer
 @Table(database = WidgetDatabase.class)
@@ -56,6 +61,7 @@ public class Widget extends BaseModel {
 
     @Exclude
     private static int DEFAULT_SCROLL_INTERVAL = 20;
+    public static String GUID = "GUID";
 
     @Exclude
     UIWidget getUIWidget(Context context) {
@@ -129,22 +135,76 @@ public class Widget extends BaseModel {
         }
     }
 
-    public DatabaseReference getFirebaseWidgetRef() {
-
-
+    @Exclude
+    protected static DatabaseReference getFirebaseDashboardWidgetsRef() {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference widgetsRef = mDatabase
+        return mDatabase
                 .child("users")
                 .child(LoginActivity.user.getUid())
                 .child("dashboards")
                 .child(FirebaseMigration.dashboardId)
                 .child("widgets");
+    }
 
+
+    public interface GetWidgetCallback {
+        void complete(Widget widget);
+
+        void error();
+    }
+
+    // firebase
+    @Exclude
+    public static void getFromKey(String key, final GetWidgetCallback callback) {
+        DatabaseReference ref = getFirebaseDashboardWidgetsRef()
+                .child(key);
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Widget widget = dataSnapshot.getValue(Widget.class);
+                    widget.guid = dataSnapshot.getKey();
+
+
+                    Widget.loadOptions(widget);
+                    callback.complete(widget);
+                    return;
+                }
+                callback.error();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(MainActivity.TAG, "loadPost:onCancelled", databaseError.toException());
+                callback.error();
+                // ...
+            }
+        };
+
+        ref.addListenerForSingleValueEvent(postListener);
+    }
+
+    @Exclude
+    private static void loadOptions(Widget widget) {
+        if (widget.optionsMap != null) {
+            for (Map.Entry pair : widget.optionsMap.entrySet()) {
+                WidgetOption opt = (WidgetOption) pair.getValue();
+                opt.widgetRef = widget;
+                opt.key = (String) pair.getKey();
+            }
+        }
+    }
+
+    @Exclude
+    private DatabaseReference getFirebaseWidgetRef() {
+        DatabaseReference widgetsRef = getFirebaseDashboardWidgetsRef();
 
         // if the guid is empty, it's never been saved to firebase before
         if (this.guid == null) {
             this.guid = widgetsRef.push().getKey();
-            this.save();
+//            this.save();
         }
 
         return widgetsRef.child(this.guid);
@@ -152,13 +212,25 @@ public class Widget extends BaseModel {
 
 
     @Exclude
+    void saveFirstTimeWithMigration() {
+        getFirebaseWidgetRef().setValue(this.toMapFirstTimeMigration());
+    }
+
+
+    @Exclude
     @Override
     public void save() {
-        super.save();
+        if (!useFirebaseForReadsAndWrites)
+            super.save();
         saveFirebaseOnly();
     }
 
     void saveFirebaseOnly() {
+        if (useFirebaseForReadsAndWrites)
+            getFirebaseWidgetRef().setValue(this.toMap());
+    }
+
+    void forceFirebaseSave() {
         getFirebaseWidgetRef().setValue(this.toMap());
     }
 
@@ -181,11 +253,19 @@ public class Widget extends BaseModel {
     @Column
     public int type;
 
-    @Column
+    @Exclude
     public String guid;
 
     @Column
     public int position;
+
+    // needs to be accessible for DELETE
+    @Exclude
+    @Deprecated
+    List<WidgetOption> options;
+
+    // for firebase
+    public Map<String, WidgetOption> optionsMap;
 
     @Exclude
     public int getIconResource() {
@@ -202,24 +282,40 @@ public class Widget extends BaseModel {
 
 
     @Exclude
+    public Map<String, Object> toMapFirstTimeMigration() {
+        Map<String, Object> widgetMap = toMap();
+
+        Map<String, Map<String, String>> optionsMap = new HashMap<>();
+
+        for (WidgetOption opt : this.getOptions()) {
+            optionsMap.put(opt.key, opt.toMap());
+        }
+
+        widgetMap.put("optionsMap", optionsMap);
+
+        return widgetMap;
+    }
+
+    @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
 
         result.put("type", type);
         result.put("position", position);
-        result.put("options", getMappedOptions());
+        result.put("optionsMap", getMappedOptions());
 
         return result;
     }
 
-    // [{key:x,value:y}]
-    // can't be a normal dictionary because some widgets don't have unique keys (stocks/calendar)
-    private List<Map<String, String>> getMappedOptions() {
-        List<Map<String, String>> options = new ArrayList<>();
+    // {key:x,value:y}
+    private Map<String, WidgetOption> getMappedOptions() {
+        return optionsMap;
+
+/*        Map<String, String> options = new HashMap<>();
         for (WidgetOption opt : getOptions()) {
-            options.add(opt.toMap());
+            options.put(opt.key, opt.value);
         }
-        return options;
+        return options; */
     }
 
     @Exclude
@@ -227,8 +323,7 @@ public class Widget extends BaseModel {
         this.type = type.getValue();
     }
 
-    // needs to be accessible for DELETE
-    List<WidgetOption> options;
+
 
     @Exclude
     @OneToMany(methods = {OneToMany.Method.SAVE, OneToMany.Method.DELETE}, variableName = "options")
@@ -245,6 +340,10 @@ public class Widget extends BaseModel {
 
     @Exclude
     public WidgetOption getOption(String key) {
+        if (useFirebaseForReadsAndWrites) {
+            return this.optionsMap.get(key);
+        }
+
         return SQLite.select()
                 .from(WidgetOption.class)
                 .where(WidgetOption_Table.widgetForeignKeyContainer_id.eq(id))
@@ -253,7 +352,13 @@ public class Widget extends BaseModel {
     }
 
     @Exclude
+    @Deprecated
     public List<WidgetOption> getOptions(String key) {
+        if (useFirebaseForReadsAndWrites) {
+            return new ArrayList<>();
+        }
+
+
         return SQLite.select()
                 .from(WidgetOption.class)
                 .where(WidgetOption_Table.widgetForeignKeyContainer_id.eq(id))
@@ -268,28 +373,62 @@ public class Widget extends BaseModel {
 
 
     @Exclude
-    static void fetchAll(WidgetType type, final FetchAllWidgetsListener listener) {
-        ConditionGroup conditions = ConditionGroup.clause();
+    static void fetchAll(final WidgetType type, final FetchAllWidgetsListener listener) {
+        if (useFirebaseForReadsAndWrites) {
+            ValueEventListener postListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    List<Widget> widgets = new ArrayList<>();
+                    Iterator<DataSnapshot> iter = dataSnapshot.getChildren().iterator();
+                    while (iter.hasNext()) {
+                        DataSnapshot nextWidget = iter.next();
+                        Widget widget = nextWidget.getValue(Widget.class);
 
-        if (type != null) {
-            conditions.and(Widget_Table.type.is(type.getValue()));
-        }
+                        widget.guid = nextWidget.getKey();
 
-        QueryTransaction.Builder<Widget> query = new QueryTransaction.Builder<>(
-                new Select()
-                        .from(Widget.class)
-                        .where(conditions)
-                        .orderBy(Widget_Table.position, true));
+                        Widget.loadOptions(widget);
 
-
-        FlowManager
-                .getDatabase(WidgetDatabase.class)
-                .beginTransactionAsync(query.queryResult(new QueryTransaction.QueryResultCallback<Widget>() {
-                    @Override
-                    public void onQueryResult(QueryTransaction transaction, @NonNull CursorResult<Widget> result) {
-                        listener.results(result.toList());
+                        // optionally use the filter
+                        if (type == null || type == widget.getWidgetType())
+                            widgets.add(widget);
                     }
-                }).build()).build().execute();
+                    listener.results(widgets);
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Getting Post failed, log a message
+                    Log.w(MainActivity.TAG, "loadPost:onCancelled", databaseError.toException());
+                    // ...
+                }
+            };
+
+            getFirebaseDashboardWidgetsRef().addListenerForSingleValueEvent(postListener);
+
+        } else {
+            ConditionGroup conditions = ConditionGroup.clause();
+
+            if (type != null) {
+                conditions.and(Widget_Table.type.is(type.getValue()));
+            }
+
+            QueryTransaction.Builder<Widget> query = new QueryTransaction.Builder<>(
+                    new Select()
+                            .from(Widget.class)
+                            .where(conditions)
+                            .orderBy(Widget_Table.position, true));
+
+
+            FlowManager
+                    .getDatabase(WidgetDatabase.class)
+                    .beginTransactionAsync(query.queryResult(new QueryTransaction.QueryResultCallback<Widget>() {
+                        @Override
+                        public void onQueryResult(QueryTransaction transaction, @NonNull CursorResult<Widget> result) {
+                            listener.results(result.toList());
+                        }
+                    }).build()).build().execute();
+        }
     }
 
 

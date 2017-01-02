@@ -91,7 +91,11 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_settings, container, false);
         ButterKnife.bind(this, view);
+        return view;
+    }
 
+    // this.widget must exist
+    public void initView() {
         locationLat = loadOrInitOption(MapSettings.LOCATION_LAT);
         locationLong = loadOrInitOption(MapSettings.LOCATION_LONG);
         locationAddrOption = loadOrInitOption(MapSettings.LOCATION_ADDRESS);
@@ -143,7 +147,6 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
             }
         });
 
-        return view;
     }
 
     private void updateTypeText() {

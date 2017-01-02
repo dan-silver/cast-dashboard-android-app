@@ -31,6 +31,13 @@ public class FreeTextSetting extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.free_text_settings, container, false);
         ButterKnife.bind(this, view);
 
+
+        return view;
+    }
+
+    @Override
+    public void initView() {
+
         customText = loadOrInitOption(CUSTOM_TEXT);
 
         richEditor.setHtml(customText.value);
@@ -138,8 +145,5 @@ public class FreeTextSetting extends WidgetSettingsFragment {
                 richEditor.setAlignRight();
             }
         });
-
-        return view;
     }
-
 }

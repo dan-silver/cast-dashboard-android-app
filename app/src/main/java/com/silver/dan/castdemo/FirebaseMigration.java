@@ -18,9 +18,11 @@ import java.util.Map;
  * Created by dan on 1/1/17.
  */
 
-class FirebaseMigration {
+public class FirebaseMigration {
     private DatabaseReference mDatabase;
     public static String dashboardId;
+
+    public static boolean useFirebaseForReadsAndWrites = false;
 
     FirebaseMigration() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -50,8 +52,11 @@ class FirebaseMigration {
             return result;
         }
     }
+    interface SimpleCompletionListener {
+        void onComplete();
+    }
 
-    void start() {
+    void start(final SimpleCompletionListener callback) {
         // check if we've already pushed the dashboard to /user/uid/dashboards
         // if so, get the dashboard ID
 
@@ -60,15 +65,24 @@ class FirebaseMigration {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() > 0) {
                     FirebaseMigration.dashboardId = dataSnapshot.getChildren().iterator().next().getKey();
+                    useFirebaseForReadsAndWrites = true;
+                    callback.onComplete();
                 } else {
-                    uploadDashboard();
+                    uploadDashboard(new SimpleCompletionListener() {
+                        @Override
+                        public void onComplete() {
+                            callback.onComplete();
+                        }
+                    });
                 }
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
                 Log.w(MainActivity.TAG, "loadPost:onCancelled", databaseError.toException());
+                callback.onComplete();
                 // ...
             }
         };
@@ -78,7 +92,7 @@ class FirebaseMigration {
         dashboardsRef.addListenerForSingleValueEvent(postListener);
     }
 
-    private void uploadDashboard() {
+    private void uploadDashboard(final SimpleCompletionListener callback) {
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
@@ -102,10 +116,11 @@ class FirebaseMigration {
                 //
 
                 for (Widget widget : widgets) {
-                    // save locally for now also
-                    // force saving the widget populates the GUID locally and uploads a clone to firebase
-                    widget.save();
+                    widget.saveFirstTimeWithMigration();
                 }
+
+                useFirebaseForReadsAndWrites = true;
+                callback.onComplete();
 
             }
         });

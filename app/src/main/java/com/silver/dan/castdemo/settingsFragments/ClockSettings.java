@@ -12,6 +12,7 @@ import com.silver.dan.castdemo.WidgetOption;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 
 public class ClockSettings extends WidgetSettingsFragment {
 
@@ -27,6 +28,11 @@ public class ClockSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.clock_settings, container, false);
         ButterKnife.bind(this, view);
 
+        return view;
+    }
+
+    @Override
+    public void initView() {
         showSecondsOption = loadOrInitOption(ClockSettings.SHOW_SECONDS);
 
         showSeconds.setChecked(showSecondsOption.getBooleanValue());
@@ -37,6 +43,6 @@ public class ClockSettings extends WidgetSettingsFragment {
                 updateWidgetProperty(SHOW_SECONDS, showSecondsOption.getBooleanValue());
             }
         });
-        return view;
+
     }
 }

@@ -62,51 +62,6 @@ public class CalendarSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.calendar_settings, container, false);
         ButterKnife.bind(this, view);
 
-        // restore saved options into GUI
-
-        optionAllCalendars = loadOrInitOption(CalendarSettings.ALL_CALENDARS);
-        optionShowEventLocations = loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
-        optionShowEventsUntil = loadOrInitOption(CalendarSettings.SHOW_EVENTS_UNTIL);
-
-
-        supportWidgetHeightOption();
-        supportWidgetScrollInterval();
-
-
-        allCalendars.setChecked(optionAllCalendars.getBooleanValue());
-
-        allCalendars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                optionAllCalendars.update(isChecked);
-                updateCalendarListContents();
-                refreshWidget();
-            }
-        });
-
-        eventLocations.setChecked(optionShowEventLocations.getBooleanValue());
-        eventLocations.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                optionShowEventLocations.update(isChecked);
-                updateWidgetProperty(SHOW_EVENT_LOCATIONS, optionShowEventLocations.getBooleanValue());
-            }
-        });
-
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        calendarList.setLayoutManager(mLayoutManager);
-
-        updateCalendarListVisibility();
-
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.READ_CALENDAR},
-                    MY_PERMISSIONS_REQUEST_READ_CALENDAR);
-        } else {
-            updateCalendarListContents();
-        }
-
-        updateCalendarUntilTextView();
 
         return view;
     }
@@ -175,5 +130,55 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
     public static List<WidgetOption> getEnabledCalendars(Widget widget) {
         return widget.getOptions(CalendarSettings.CALENDAR_ENABLED);
+    }
+
+    @Override
+    public void initView() {
+
+        // restore saved options into GUI
+
+        optionAllCalendars = loadOrInitOption(CalendarSettings.ALL_CALENDARS);
+        optionShowEventLocations = loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
+        optionShowEventsUntil = loadOrInitOption(CalendarSettings.SHOW_EVENTS_UNTIL);
+
+
+        supportWidgetHeightOption();
+        supportWidgetScrollInterval();
+
+
+        allCalendars.setChecked(optionAllCalendars.getBooleanValue());
+
+        allCalendars.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                optionAllCalendars.update(isChecked);
+                updateCalendarListContents();
+                refreshWidget();
+            }
+        });
+
+        eventLocations.setChecked(optionShowEventLocations.getBooleanValue());
+        eventLocations.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                optionShowEventLocations.update(isChecked);
+                updateWidgetProperty(SHOW_EVENT_LOCATIONS, optionShowEventLocations.getBooleanValue());
+            }
+        });
+
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        calendarList.setLayoutManager(mLayoutManager);
+
+        updateCalendarListVisibility();
+
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_CALENDAR},
+                    MY_PERMISSIONS_REQUEST_READ_CALENDAR);
+        } else {
+            updateCalendarListContents();
+        }
+
+        updateCalendarUntilTextView();
     }
 }

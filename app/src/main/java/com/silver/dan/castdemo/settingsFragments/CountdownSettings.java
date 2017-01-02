@@ -47,12 +47,6 @@ public class CountdownSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.countdown_settings, container, false);
         ButterKnife.bind(this, view);
 
-        dateOption = loadOrInitOption(COUNTDOWN_DATE);
-        textOption = loadOrInitOption(COUNTDOWN_TEXT);
-
-        updateCountdownTextLabel();
-        updateCountdownDateAndTimeText();
-
         return view;
     }
 
@@ -145,5 +139,15 @@ public class CountdownSettings extends WidgetSettingsFragment {
 
         dpd.show(getActivity().getFragmentManager(), "timepickerdialog");
 
+    }
+
+    @Override
+    public void initView() {
+
+        dateOption = loadOrInitOption(COUNTDOWN_DATE);
+        textOption = loadOrInitOption(COUNTDOWN_TEXT);
+
+        updateCountdownTextLabel();
+        updateCountdownDateAndTimeText();
     }
 }

@@ -35,21 +35,6 @@ public class RSSSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.rss_settings, container, false);
         ButterKnife.bind(this, view);
 
-        feedUrlOption = loadOrInitOption(RSSSettings.FEED_URL);
-        showDatesOption = loadOrInitOption(RSSSettings.SHOW_DATES);
-
-        supportWidgetHeightOption();
-        supportWidgetScrollInterval();
-        updateFeedURLText();
-
-        displayDates.setChecked(showDatesOption.getBooleanValue());
-        displayDates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                showDatesOption.update(isChecked);
-                updateWidgetProperty(RSSSettings.SHOW_DATES, showDatesOption.getBooleanValue());
-            }
-        });
 
         return view;
     }
@@ -76,5 +61,25 @@ public class RSSSettings extends WidgetSettingsFragment {
                         updateFeedURLText();
                     }
                 }).show();
+    }
+
+    @Override
+    public void initView() {
+        feedUrlOption = loadOrInitOption(RSSSettings.FEED_URL);
+        showDatesOption = loadOrInitOption(RSSSettings.SHOW_DATES);
+
+        supportWidgetHeightOption();
+        supportWidgetScrollInterval();
+        updateFeedURLText();
+
+        displayDates.setChecked(showDatesOption.getBooleanValue());
+        displayDates.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                showDatesOption.update(isChecked);
+                updateWidgetProperty(RSSSettings.SHOW_DATES, showDatesOption.getBooleanValue());
+            }
+        });
+
     }
 }

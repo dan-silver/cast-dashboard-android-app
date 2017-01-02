@@ -58,17 +58,6 @@ public class WeatherSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.weather_settings, container, false);
         ButterKnife.bind(this, view);
 
-        weatherLng = loadOrInitOption(WEATHER_LNG);
-        weatherLat = loadOrInitOption(WEATHER_LAT);
-        weatherCity = loadOrInitOption(WEATHER_CITY);
-        weatherTempUnits = loadOrInitOption(WEATHER_UNITS);
-        weatherTypeOption = loadOrInitOption(WEATHER_TYPE);
-
-        sWeatherCity.setSubHeaderText(weatherCity.value);
-
-        updateWeatherUnitsTextView();
-        updateWeatherModeTextView();
-
         return view;
     }
 
@@ -165,5 +154,21 @@ public class WeatherSettings extends WidgetSettingsFragment {
 
             }
         }
+    }
+
+    @Override
+    public void initView() {
+
+        weatherLng = loadOrInitOption(WEATHER_LNG);
+        weatherLat = loadOrInitOption(WEATHER_LAT);
+        weatherCity = loadOrInitOption(WEATHER_CITY);
+        weatherTempUnits = loadOrInitOption(WEATHER_UNITS);
+        weatherTypeOption = loadOrInitOption(WEATHER_TYPE);
+
+        sWeatherCity.setSubHeaderText(weatherCity.value);
+
+        updateWeatherUnitsTextView();
+        updateWeatherModeTextView();
+
     }
 }

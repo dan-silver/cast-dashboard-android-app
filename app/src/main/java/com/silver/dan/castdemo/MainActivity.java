@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @BindView(R.id.top_toolbar)
     Toolbar top_toolbar;
+    private FragmentManager fm;
 
     @OnClick(R.id.logout_btn)
     public void logout() {
@@ -89,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
 
     public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
-        FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.main_fragment, destinationFrag);
 
@@ -115,6 +115,21 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         setContentView(R.layout.drawer_layout);
         ButterKnife.setDebug(true);
         ButterKnife.bind(this);
+
+
+        FlowManager.init(new FlowConfig.Builder(this).build());
+
+        FirebaseMigration migration = new FirebaseMigration();
+        migration.start(new FirebaseMigration.SimpleCompletionListener() {
+            @Override
+            public void onComplete() {
+                //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
+                switchToFragment(widgetListFrag, false);
+            }
+        });
+        widgetListFrag = new WidgetList();
+        fm = getSupportFragmentManager();
+
 
 
         // Set the adapter for the list view
@@ -152,11 +167,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                     }
                 });
 
-        FlowManager.init(new FlowConfig.Builder(this).build());
-
-        //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
-        widgetListFrag = new WidgetList();
-        switchToFragment(widgetListFrag, false);
 
         BaseCastManager.checkGooglePlayServices(this);
         CastConfiguration.Builder options = new CastConfiguration.Builder(getResources().getString(R.string.app_id))
@@ -203,17 +213,21 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             }
         };
 
+
+        if (!LoginActivity.restoreUser()) {
+            logout();
+            return;
+        }
+
         setupNavBarUserInfo();
 
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        FirebaseMigration migration = new FirebaseMigration();
-        migration.start();
     }
 
     private void setupNavBarUserInfo() {
         View header = navView.getHeaderView(0);
+
 
         TextView displayName = (TextView) header.findViewById(R.id.userDisplayName);
         displayName.setText(LoginActivity.user.getDisplayName());

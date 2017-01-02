@@ -31,7 +31,9 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
     @BindView(R.id.scroll_view_header)
     FrameLayout scrollViewHeader;
+
     private long widgetId = -1;
+    private String widgetKey = null;
 
 
     @Override
@@ -56,19 +58,43 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
 
         Bundle b = getIntent().getExtras();
-        widgetId = b.getLong(Widget.ID);
+        if (!FirebaseMigration.useFirebaseForReadsAndWrites) {
+            widgetId = b.getLong(Widget.ID);
+            widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
+            completeSetup();
+        } else {
+            widgetKey = b.getString(Widget.GUID);
+            final WidgetSettingsActivity _this = this;
+            Widget.getFromKey(widgetKey, new Widget.GetWidgetCallback() {
+                @Override
+                public void complete(Widget widget) {
+                    _this.widget = widget;
+                    completeSetup();
+                }
 
+                @Override
+                public void error() {
 
+                }
+            });
+
+        }
+
+    }
+
+    private void completeSetup() {
         // lookup widget in the database
         // display appropriate settings for that widget type
-        widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
-
         setTitle(getApplicationContext().getString(widget.getHumanNameRes()) + " Widget");
 
         WidgetSettingsFragment typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putLong(Widget.ID, widget.id);
+        if (FirebaseMigration.useFirebaseForReadsAndWrites) {
+            bundle.putString(Widget.GUID, widget.guid);
+        } else {
+            bundle.putLong(Widget.ID, widget.id);
+        }
         typeSettingsFragment.setArguments(bundle);
 
         FragmentManager fm = getSupportFragmentManager();
