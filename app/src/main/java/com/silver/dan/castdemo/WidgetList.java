@@ -101,6 +101,7 @@ public class WidgetList extends Fragment implements OnDragListener {
                                 widget.initWidgetSettings(getContext());
                                 refreshList();
                                 CastCommunicator.sendWidget(widget);
+
                             }
                         };
                         widget.getUIWidget(getContext()).setOnCanBeCreatedListener(listener);

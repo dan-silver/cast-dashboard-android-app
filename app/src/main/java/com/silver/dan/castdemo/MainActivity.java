@@ -207,6 +207,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        FirebaseMigration migration = new FirebaseMigration(getApplicationContext());
+        migration.start();
     }
 
     private void setupNavBarUserInfo() {

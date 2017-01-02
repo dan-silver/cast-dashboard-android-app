@@ -10,3 +10,4 @@ app/src/main/res/values/secrets.xml
 app/src/debug/res/values/secrets.xml
 /.idea
 .idea/modules.xml
+app/app-release.apk

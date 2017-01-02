@@ -3,8 +3,13 @@ package com.silver.dan.castdemo;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.annotation.WorkerThread;
 import android.util.Log;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.IgnoreExtraProperties;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
@@ -31,18 +36,27 @@ import com.silver.dan.castdemo.widgets.WeatherWidget;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @ModelContainer
 @Table(database = WidgetDatabase.class)
+@IgnoreExtraProperties
+
 public class Widget extends BaseModel {
 
     // For bundle data passing
+    @Exclude
     public static String ID = "WIDGET_ID";
 
+    @Exclude
     private static int DEFAULT_WIDGET_HEIGHT = 60;
+
+    @Exclude
     private static int DEFAULT_SCROLL_INTERVAL = 20;
 
+    @Exclude
     UIWidget getUIWidget(Context context) {
         UIWidget widget = null;
         switch (getWidgetType()) {
@@ -73,7 +87,6 @@ public class Widget extends BaseModel {
         }
         return widget;
     }
-
 
     enum WidgetType {
         CALENDAR(0, R.string.calendar, R.drawable.ic_today_24dp),
@@ -115,11 +128,52 @@ public class Widget extends BaseModel {
         }
     }
 
+    public DatabaseReference getFirebaseWidgetRef() {
+
+
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference widgetsRef = mDatabase
+                .child("users")
+                .child(LoginActivity.user.getUid())
+                .child("dashboards")
+                .child(FirebaseMigration.dashboardId)
+                .child("widgets");
+
+
+        // if the guid is empty, it's never been saved to firebase before
+        if (this.guid == null) {
+            this.guid = widgetsRef.push().getKey();
+            this.save();
+        }
+
+        return widgetsRef.child(this.guid);
+    }
+
+
+    @Exclude
+    @Override
+    public void save() {
+        super.save();
+        saveFirebaseOnly();
+    }
+
+    void saveFirebaseOnly() {
+        getFirebaseWidgetRef().setValue(this.toMap());
+    }
+
+    @Exclude
+    @Override
+    public void delete() {
+        getFirebaseWidgetRef().removeValue();
+        super.delete();
+    }
+
+    @Exclude
     private WidgetType getWidgetType() {
         return WidgetType.getEnumByValue(type);
     }
 
-
+    @Exclude
     @PrimaryKey(autoincrement = true)
     public long id;
 
@@ -127,12 +181,17 @@ public class Widget extends BaseModel {
     public int type;
 
     @Column
+    public String guid;
+
+    @Column
     public int position;
 
+    @Exclude
     public int getIconResource() {
         return getWidgetType().getIcon();
     }
 
+    @Exclude
     public int getHumanNameRes() {
         return getWidgetType().getHumanNameRes();
     }
@@ -140,6 +199,27 @@ public class Widget extends BaseModel {
     public Widget() {
     }
 
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+
+        result.put("type", type);
+        result.put("position", position);
+        result.put("options", getMappedOptions());
+
+        return result;
+    }
+
+    private Map<String, Object> getMappedOptions() {
+        Map<String, Object> mappedOptions = new HashMap<>();
+        for (WidgetOption opt : getOptions()) {
+            mappedOptions.put(opt.key, opt.value);
+        }
+        return mappedOptions;
+    }
+
+    @Exclude
     public void setType(WidgetType type) {
         this.type = type.getValue();
     }
@@ -147,17 +227,20 @@ public class Widget extends BaseModel {
     // needs to be accessible for DELETE
     List<WidgetOption> options;
 
+    @Exclude
     @OneToMany(methods = {OneToMany.Method.SAVE, OneToMany.Method.DELETE}, variableName = "options")
     public List<WidgetOption> getOptions() {
-        if (options == null || options.isEmpty()) {
+//        if (options == null || options.isEmpty()) {
             options = SQLite.select()
                     .from(WidgetOption.class)
                     .where(WidgetOption_Table.widgetForeignKeyContainer_id.eq(id))
                     .queryList();
-        }
+//        }
         return options;
     }
 
+
+    @Exclude
     public WidgetOption getOption(String key) {
         return SQLite.select()
                 .from(WidgetOption.class)
@@ -166,6 +249,7 @@ public class Widget extends BaseModel {
                 .querySingle();
     }
 
+    @Exclude
     public List<WidgetOption> getOptions(String key) {
         return SQLite.select()
                 .from(WidgetOption.class)
@@ -174,10 +258,13 @@ public class Widget extends BaseModel {
                 .queryList();
     }
 
+    @Exclude
     static void fetchAll(final FetchAllWidgetsListener listener) {
         fetchAll(null, listener);
     }
 
+
+    @Exclude
     static void fetchAll(WidgetType type, final FetchAllWidgetsListener listener) {
         ConditionGroup conditions = ConditionGroup.clause();
 
@@ -203,6 +290,7 @@ public class Widget extends BaseModel {
     }
 
 
+    @Exclude
     JSONObject getJSONContent(Context applicationContext) {
         JSONObject payload = new JSONObject();
 
@@ -232,7 +320,7 @@ public class Widget extends BaseModel {
         return payload;
     }
 
-
+    @Exclude
     public void initOption(String key, String defaultValue) {
         if (this.getOption(key) != null) {
             return;
@@ -243,20 +331,25 @@ public class Widget extends BaseModel {
         option.value = defaultValue;
         option.associateWidget(this);
         option.save();
+
     }
 
+    @Exclude
     public void initOption(String key, boolean defaultValue) {
         initOption(key, defaultValue ? 1 : 0);
     }
 
+    @Exclude
     public void initOption(String key, int defaultValue) {
         initOption(key, String.valueOf(defaultValue));
     }
 
+    @Exclude
     public void initOption(String key, long oneWeek) {
         initOption(key, Long.toString(oneWeek));
     }
 
+    @Exclude
     public WidgetOption loadOrInitOption(String optionKey, Context context) {
         WidgetOption option = getOption(optionKey);
 
@@ -279,12 +372,13 @@ public class Widget extends BaseModel {
 
     }
 
+    @Exclude
     void initWidgetSettings(Context context) {
         // global widget properties
         initOption(WidgetSettingsFragment.WIDGET_HEIGHT, DEFAULT_WIDGET_HEIGHT);
         initOption(WidgetSettingsFragment.SCROLL_INTERVAL, DEFAULT_SCROLL_INTERVAL);
 
-        // init widget specific properties
+        // start widget specific properties
         getUIWidget(context).init();
     }
 }
