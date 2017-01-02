@@ -86,7 +86,7 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         }
     }
 
-    public void setWidgetList(List<Widget> widgetList) {
+    void setWidgetList(List<Widget> widgetList) {
         this.widgetList = widgetList;
     }
 

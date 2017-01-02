@@ -175,14 +175,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         mCastConsumer = new DataCastConsumerImpl() {
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-                sendAllOptions();
-                invalidateOptionsMenu();
-                CastCommunicator.sendAllWidgets();
-            }
-
-            @Override
-            public void onDisconnected() {
-                invalidateOptionsMenu();
+//                if (wasLaunched) {
+//                // always need to send since changes might have been made while not connected
+                    sendAllOptions();
+                    CastCommunicator.sendAllWidgets();
+//                }
             }
 
             @Override

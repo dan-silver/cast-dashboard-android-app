@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:background="@color/primary_dark"
     android:paddingTop="50dp"
-    android:paddingBottom="0dp">
+    android:paddingBottom="10dp">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,11 +13,11 @@
         android:gravity="center_vertical"
         android:orientation="horizontal" >
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+        <com.silver.dan.castdemo.ViewHelpers.RoundedImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:id="@+id/userPhoto"
             android:src="@drawable/ic_stat_action_notification" />
 
