@@ -33,7 +33,6 @@ import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumer;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
-import com.google.firebase.auth.FirebaseAuth;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
@@ -42,7 +41,6 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -74,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @OnClick(R.id.logout_btn)
     public void logout() {
-        FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra(LoginActivity.LOGOUT, true);
         startActivity(intent);
         finish();
     }
