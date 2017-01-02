@@ -58,9 +58,13 @@
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:paddingLeft="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Menu"
                 android:textColor="@color/drawer_item"
-                android:text="@string/log_out" />
+                android:text="@string/log_out"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"/>
         </LinearLayout>
     </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>
