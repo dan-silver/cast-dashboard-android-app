@@ -1,6 +1,5 @@
 package com.silver.dan.castdemo;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -83,16 +82,15 @@ class FirebaseMigration {
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
-
-
-                DatabaseReference dashboardsRef = mDatabase.child("users").child(LoginActivity.user.getUid()).child("dashboards");
+                DatabaseReference dashboardsRef = mDatabase
+                    .child("users")
+                    .child(LoginActivity.user.getUid())
+                    .child("dashboards");
 
                 dashboardId = dashboardsRef.push().getKey();
 
                 Dashboard dash = new Dashboard(dashboardId);
                 Map<String, Object> postValues = dash.toMap();
-
-
                 Map<String, Object> childUpdates = new HashMap<>();
                 childUpdates.put(dashboardId, postValues);
 
