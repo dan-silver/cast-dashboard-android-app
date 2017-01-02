@@ -121,6 +121,7 @@ public class StocksSettings extends WidgetSettingsFragment {
                                         WidgetOption_Table.key.is(STOCK_IN_LIST), WidgetOption_Table.value.is(Long.toString(stock.getId())));
 
                                 new Delete().from(WidgetOption.class).where(conditions).execute();
+                                widget.save();
                                 refreshWidget();
                             }
                         })

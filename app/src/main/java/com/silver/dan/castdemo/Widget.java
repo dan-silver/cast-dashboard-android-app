@@ -36,6 +36,7 @@ import com.silver.dan.castdemo.widgets.WeatherWidget;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -211,12 +212,14 @@ public class Widget extends BaseModel {
         return result;
     }
 
-    private Map<String, Object> getMappedOptions() {
-        Map<String, Object> mappedOptions = new HashMap<>();
+    // [{key:x,value:y}]
+    // can't be a normal dictionary because some widgets don't have unique keys (stocks/calendar)
+    private List<Map<String, String>> getMappedOptions() {
+        List<Map<String, String>> options = new ArrayList<>();
         for (WidgetOption opt : getOptions()) {
-            mappedOptions.put(opt.key, opt.value);
+            options.add(opt.toMap());
         }
-        return mappedOptions;
+        return options;
     }
 
     @Exclude

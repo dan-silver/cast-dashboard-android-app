@@ -1,10 +1,8 @@
 package com.silver.dan.castdemo;
 
 import android.content.Context;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -12,9 +10,7 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
-import com.silver.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +23,7 @@ class FirebaseMigration {
     private final Context context;
     private DatabaseReference mDatabase;
     public static String dashboardId;
+    private boolean uploadingFirstTimeInProgress = false;
 
     FirebaseMigration(Context applicationContext) {
         this.context = applicationContext;
@@ -37,10 +34,8 @@ class FirebaseMigration {
     @IgnoreExtraProperties
     public class Dashboard {
         private String id;
-        //        public String id;
-        public String userId;
+        String userId;
 
-//        public ArrayList<Map<String, Object>> widgets;
 
         public Dashboard() {
 
@@ -57,7 +52,6 @@ class FirebaseMigration {
             HashMap<String, Object> result = new HashMap<>();
             result.put("id", id);
             result.put("userId", userId);
-//            result.put("widgets", widgets);
             return result;
         }
     }
@@ -91,6 +85,11 @@ class FirebaseMigration {
 
     private void uploadDashboard() {
         // async fetch all saved widgets
+        if (uploadingFirstTimeInProgress) {
+            return;
+        }
+        uploadingFirstTimeInProgress = true;
+
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
@@ -100,7 +99,7 @@ class FirebaseMigration {
 
                 dashboardId = dashboardsRef.push().getKey();
 
-                Dashboard dash = new Dashboard(dashboardId);//, username, title, body);
+                Dashboard dash = new Dashboard(dashboardId);
                 Map<String, Object> postValues = dash.toMap();
 
 
@@ -111,22 +110,15 @@ class FirebaseMigration {
 
 
                 //
-                // insert widgets
+                // upload widgets
                 //
 
-                DatabaseReference widgetsRef = dashboardsRef.child(dashboardId).child("widgets");
-
-                Map<String, Object> widgetUpdates = new HashMap<>();
                 for (Widget widget : widgets) {
-                    String widgetUid = widgetsRef.push().getKey();
-                    widgetUpdates.put(widgetUid, widget.toMap());
-
                     // save locally for now also
-                    widget.guid = widgetUid;
+                    // force saving the widget populates the GUID locally and uploads a clone to firebase
                     widget.save();
                 }
 
-                widgetsRef.updateChildren(widgetUpdates);
             }
         });
 

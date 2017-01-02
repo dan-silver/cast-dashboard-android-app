@@ -36,6 +36,17 @@ public class WidgetOption extends BaseModel {
     }
 
 
+    @Exclude
+    public Map<String, String> toMap() {
+        HashMap<String, String> result = new HashMap<>();
+
+        result.put("key", key);
+        result.put("value", value);
+
+        return result;
+    }
+
+
     @Column
     @ForeignKey(saveForeignKeyModel = false)
     @Exclude

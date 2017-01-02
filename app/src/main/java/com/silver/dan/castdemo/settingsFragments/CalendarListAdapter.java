@@ -87,6 +87,8 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
                             .where(conditions)
                             .execute();
 
+                    widget.save();
+
                 }
                 CastCommunicator.sendWidget(widget);
 
