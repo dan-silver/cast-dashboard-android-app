@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        FirebaseMigration migration = new FirebaseMigration(getApplicationContext());
+        FirebaseMigration migration = new FirebaseMigration();
         migration.start();
     }
 

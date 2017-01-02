@@ -20,15 +20,11 @@ import java.util.Map;
  */
 
 class FirebaseMigration {
-    private final Context context;
     private DatabaseReference mDatabase;
     public static String dashboardId;
-    private boolean uploadingFirstTimeInProgress = false;
 
-    FirebaseMigration(Context applicationContext) {
-        this.context = applicationContext;
+    FirebaseMigration() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
     }
 
     @IgnoreExtraProperties
@@ -84,12 +80,6 @@ class FirebaseMigration {
     }
 
     private void uploadDashboard() {
-        // async fetch all saved widgets
-        if (uploadingFirstTimeInProgress) {
-            return;
-        }
-        uploadingFirstTimeInProgress = true;
-
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
