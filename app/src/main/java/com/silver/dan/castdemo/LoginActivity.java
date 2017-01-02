@@ -15,8 +15,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
@@ -29,7 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     public static String LOGOUT = "LOGOUT";
     private FirebaseAuth mAuth;
 
@@ -71,6 +69,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         Intent intent = getIntent();
         final boolean shouldLogout = intent.getBooleanExtra(LoginActivity.LOGOUT, false);
 
+        if (shouldLogout) {
+            signout();
+        }
         FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -152,38 +153,21 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     public void signout() {
-
-
-        AuthUI.getInstance()
-                .signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // user is now signed out
-                        startActivity(new Intent(MyActivity.this, SignInActivity.class));
-                        finish();
-                    }
-                });
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(new ResultCallback<Status>() {
+        mGoogleApiClient.connect();
+        mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
             @Override
-            public void onResult(@NonNull Status status) {
+            public void onConnected(@Nullable Bundle bundle) {
                 FirebaseAuth.getInstance().signOut();
+                if(mGoogleApiClient.isConnected()) {
+                    Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                }
+            }
+
+            @Override
+            public void onConnectionSuspended(int i) {
+
             }
         });
-
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-        Intent intent = getIntent();
-        boolean shouldLogout = intent.getBooleanExtra(LoginActivity.LOGOUT, false);
-        if (shouldLogout) {
-            signout();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
 }
