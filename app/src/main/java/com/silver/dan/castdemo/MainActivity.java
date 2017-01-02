@@ -33,6 +33,7 @@ import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumer;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
 import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
@@ -83,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     private DataCastConsumer mCastConsumer;
     private MenuItem mediaRouteMenuItem;
     private WidgetList widgetListFrag;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
 
     public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
         FragmentManager fm = getSupportFragmentManager();
@@ -200,6 +204,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         };
 
         setupNavBarUserInfo();
+
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     private void setupNavBarUserInfo() {
