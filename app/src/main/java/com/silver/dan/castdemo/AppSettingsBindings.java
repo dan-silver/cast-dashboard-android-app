@@ -185,8 +185,6 @@ public class AppSettingsBindings extends BaseObservable {
         return mDatabase
                 .child("users")
                 .child(LoginActivity.user.getUid())
-                .child("dashboards")
-                .child(FirebaseMigration.dashboardId)
                 .child("options");
     }
 

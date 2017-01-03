@@ -61,7 +61,7 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         try {
             for (Widget widget : widgetList) {
                 widget.position = i;
-                widget.save();
+                widget.savePosition();
                 widgetOrder.put(String.valueOf(widget.id), widget.position);
                 i++;
             }

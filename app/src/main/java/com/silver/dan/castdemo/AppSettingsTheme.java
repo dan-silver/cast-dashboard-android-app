@@ -15,7 +15,6 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
 import com.silver.dan.castdemo.databinding.FragmentAppSettingsThemeBinding;
 import com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem;
-import com.silver.dan.castdemo.util.ColorConverter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +26,6 @@ import butterknife.OnClick;
 public class AppSettingsTheme extends AppSettingsHelperFragment {
 
     private static final int SELECT_PHOTO = 0;
-    private static final int MB = 1000000;
 
     @BindView(R.id.background_type)
     TwoLineSettingItem backgroundType;

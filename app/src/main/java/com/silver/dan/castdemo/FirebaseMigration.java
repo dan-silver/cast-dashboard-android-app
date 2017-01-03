@@ -21,7 +21,6 @@ import java.util.Map;
 
 public class FirebaseMigration {
     private DatabaseReference mDatabase;
-    public static String dashboardId;
 
     public static boolean useFirebaseForReadsAndWrites = false;
 
@@ -29,30 +28,6 @@ public class FirebaseMigration {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
-    @IgnoreExtraProperties
-    public class Dashboard {
-        private String id;
-        String userId;
-
-
-        public Dashboard() {
-
-        }
-
-        public Dashboard(String id) {
-            this.id = id;
-            this.userId = LoginActivity.user.getUid();
-        }
-
-
-        @Exclude
-        public Map<String, Object> toMap() {
-            HashMap<String, Object> result = new HashMap<>();
-            result.put("id", id);
-            result.put("userId", userId);
-            return result;
-        }
-    }
     interface SimpleCompletionListener {
         void onComplete();
     }
@@ -65,7 +40,6 @@ public class FirebaseMigration {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getChildrenCount() > 0) {
-                    FirebaseMigration.dashboardId = dataSnapshot.getChildren().iterator().next().getKey();
                     useFirebaseForReadsAndWrites = true;
                     callback.onComplete();
                 } else {
@@ -88,8 +62,7 @@ public class FirebaseMigration {
             }
         };
 
-
-        DatabaseReference dashboardsRef = mDatabase.child("users").child(LoginActivity.user.getUid()).child("dashboards");
+        DatabaseReference dashboardsRef = mDatabase.child("users").child(LoginActivity.user.getUid());
         dashboardsRef.addListenerForSingleValueEvent(postListener);
     }
 
@@ -97,21 +70,6 @@ public class FirebaseMigration {
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
-                DatabaseReference dashboardsRef = mDatabase
-                    .child("users")
-                    .child(LoginActivity.user.getUid())
-                    .child("dashboards");
-
-                dashboardId = dashboardsRef.push().getKey();
-
-                Dashboard dash = new Dashboard(dashboardId);
-                Map<String, Object> postValues = dash.toMap();
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put(dashboardId, postValues);
-
-                dashboardsRef.updateChildren(childUpdates);
-
-
                 //
                 // upload widgets
                 //
@@ -133,8 +91,6 @@ public class FirebaseMigration {
 
             }
         });
-
-
     }
 
 }

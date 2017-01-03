@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +28,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWrites;
+
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+    private static final String DEVICE_MIGRATED_TO_FIREBASE = "MIGRATED_TO_FIREBASE";
     public static String LOGOUT = "LOGOUT";
     private FirebaseAuth mAuth;
 
@@ -42,7 +46,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private int RC_SIGN_IN = 10000;
 
     static FirebaseUser user;
-
+    private String SHARED_PREFS = "SHARED_PREFS_USER_FLOW";
 
 
     @Override
@@ -83,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     LoginActivity.user = user;
-                    launchMainActivity();
+                    userFinishedAuth();
                 }
             }
         };
@@ -147,7 +151,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         signInButton.setVisibility(View.VISIBLE);
                     } else {
                         LoginActivity.user = task.getResult().getUser();
-                        launchMainActivity();
+                        userFinishedAuth();
                     }
 
 
@@ -155,19 +159,42 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             });
     }
 
-    private void launchMainActivity() {
+    private SharedPreferences getSharedPref() {
+        return getApplicationContext().getSharedPreferences(SHARED_PREFS, 0);
+    }
+
+    private boolean hasMigrated() {
+        return getSharedPref().getBoolean(DEVICE_MIGRATED_TO_FIREBASE, false);
+    }
+
+    private void setHasMigrated(boolean migrated) {
+        getSharedPref().edit().putBoolean(DEVICE_MIGRATED_TO_FIREBASE, migrated).apply();
+    }
+
+    private void userFinishedAuth() {
+        if (hasMigrated()) {
+            useFirebaseForReadsAndWrites = true;
+            launchMainActivity();
+            return;
+        }
+
         FirebaseMigration migration = new FirebaseMigration();
         migration.start(getApplicationContext(), new FirebaseMigration.SimpleCompletionListener() {
             @Override
             public void onComplete() {
-                //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
-
+                setHasMigrated(true);
+                useFirebaseForReadsAndWrites = true;
+                launchMainActivity();
             }
         });
 
+    }
+
+    private void launchMainActivity() {
+        //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

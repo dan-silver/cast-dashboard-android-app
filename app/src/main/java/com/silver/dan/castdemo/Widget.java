@@ -41,6 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -143,8 +145,6 @@ public class Widget extends BaseModel {
         return mDatabase
                 .child("users")
                 .child(LoginActivity.user.getUid())
-                .child("dashboards")
-                .child(FirebaseMigration.dashboardId)
                 .child("widgets");
     }
 
@@ -242,8 +242,10 @@ public class Widget extends BaseModel {
             getFirebaseWidgetRef().setValue(this.toMap());
     }
 
-    void forceFirebaseSave() {
-        getFirebaseWidgetRef().setValue(this.toMap());
+    void savePosition() {
+        getFirebaseWidgetRef()
+                .child("position")
+                .setValue(this.position);
     }
 
     @Exclude
@@ -438,9 +440,7 @@ public class Widget extends BaseModel {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     List<Widget> widgets = new ArrayList<>();
-                    Iterator<DataSnapshot> iter = dataSnapshot.getChildren().iterator();
-                    while (iter.hasNext()) {
-                        DataSnapshot nextWidget = iter.next();
+                    for (DataSnapshot nextWidget : dataSnapshot.getChildren()) {
                         Widget widget = nextWidget.getValue(Widget.class);
 
                         widget.guid = nextWidget.getKey();
@@ -451,6 +451,15 @@ public class Widget extends BaseModel {
                         if (type == null || type == widget.getWidgetType())
                             widgets.add(widget);
                     }
+
+                    Collections.sort(widgets, new Comparator<Widget>() {
+                        @Override
+                        public int compare(Widget w1, Widget w2) {
+                            if(w1.position == w2.position)
+                                return 0;
+                            return w1.position < w2.position ? -1 : 1;
+                        }
+                    });
                     listener.results(widgets);
 
                 }
@@ -458,6 +467,8 @@ public class Widget extends BaseModel {
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
                     // Getting Post failed, log a message
+//                    listener.onError();
+//                    @todo
                     Log.w(MainActivity.TAG, "loadPost:onCancelled", databaseError.toException());
                     // ...
                 }
@@ -466,6 +477,7 @@ public class Widget extends BaseModel {
             getFirebaseDashboardWidgetsRef().addListenerForSingleValueEvent(postListener);
 
         } else {
+            // this code path is only used for the initial firebase migration
             ConditionGroup conditions = ConditionGroup.clause();
 
             if (type != null) {

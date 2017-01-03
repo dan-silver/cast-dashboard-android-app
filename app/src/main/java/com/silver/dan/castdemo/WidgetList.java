@@ -16,6 +16,7 @@ import com.silver.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
 import com.silver.dan.castdemo.widgets.CanBeCreatedListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -145,6 +146,7 @@ public class WidgetList extends Fragment implements OnDragListener {
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
+                // manually order the list
                 widgetsCache = widgets;
 
                 WidgetListAdapter adapter = (WidgetListAdapter) widgetList.getAdapter();
