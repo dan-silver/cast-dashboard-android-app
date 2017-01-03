@@ -5,6 +5,7 @@ import com.silver.dan.castdemo.R;
 public enum BackgroundType {
     SLIDESHOW(0, R.string.slideshow),
     SOLID_COLOR(1, R.string.solid_color),
+    @Deprecated
     PICTURE(2, R.string.picture);
 
     private int value;

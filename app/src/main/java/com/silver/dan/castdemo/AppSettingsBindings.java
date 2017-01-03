@@ -292,6 +292,10 @@ public class AppSettingsBindings extends BaseObservable {
         textColor = ColorConverter.intToString(iTextColor);
 
         backgroundType = settings.getInt(BACKGROUND_TYPE, 0);
+        if (BackgroundType.values()[backgroundType] == BackgroundType.PICTURE) {
+            backgroundType = BackgroundType.SLIDESHOW.getValue();
+        }
+
 
         widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 15); //15% x 2 + 50 = 80/100
         screenPadding = settings.getInt(SCREEN_PADDING, 15);
