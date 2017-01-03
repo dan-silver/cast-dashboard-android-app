@@ -14,28 +14,29 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
+import com.silver.dan.castdemo.util.ColorConverter;
 
 import java.util.HashMap;
 
 public class AppSettingsBindings extends BaseObservable {
 
     @Bindable
-    public Integer dashBackgroundColor;
+    public String dashBackgroundColor;
 
     @Bindable
     public Integer numberOfColumns;
 
     @Bindable
-    public BackgroundType backgroundType;
+    public Integer backgroundType;
 
     @Bindable
     public Integer widgetTransparency;
 
     @Bindable
-    public Integer widgetColor;
+    public String widgetColor;
 
     @Bindable
-    public Integer textColor;
+    public String textColor;
 
     @Bindable
     public Integer screenPadding;
@@ -88,17 +89,28 @@ public class AppSettingsBindings extends BaseObservable {
 
     @Exclude
     public void setDashBackgroundColor(int dashBackgroundColor) {
-        this.dashBackgroundColor = dashBackgroundColor;
+        this.dashBackgroundColor = ColorConverter.intToString(dashBackgroundColor);
         notifyPropertyChanged(BR.dashBackgroundColor);
         appSettings.mCallback.onSettingChanged(BACKGROUND_COLOR, getBackgroundColorHexStr());
     }
 
     @Exclude
-    public void setWidgetColor(int widgetColor) {
+    public void setWidgetColor(String widgetColor) {
+//        this.widgetColor = convertColorLongToString(widgetColor);
         this.widgetColor = widgetColor;
         notifyPropertyChanged(BR.widgetColor);
         appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
     }
+
+    @Exclude
+    public void setWidgetColor(int widgetColor) {
+        this.widgetColor = ColorConverter.intToString(widgetColor);
+        notifyPropertyChanged(BR.widgetColor);
+        appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
+    }
+
+
+
 
     @Exclude
     public void setSlideshowInterval(int interval) {
@@ -109,6 +121,13 @@ public class AppSettingsBindings extends BaseObservable {
 
     @Exclude
     public void setTextColor(int textColor) {
+        this.textColor = ColorConverter.intToString(textColor);
+        notifyPropertyChanged(BR.textColor);
+        appSettings.mCallback.onSettingChanged(TEXT_COLOR, getTextColorHextStr());
+    }
+
+    @Exclude
+    public void setTextColor(String textColor) {
         this.textColor = textColor;
         notifyPropertyChanged(BR.textColor);
         appSettings.mCallback.onSettingChanged(TEXT_COLOR, getTextColorHextStr());
@@ -116,17 +135,17 @@ public class AppSettingsBindings extends BaseObservable {
 
     @Exclude
     public String getTextColorHextStr() {
-        return Integer.toHexString(textColor).substring(2);
+        return textColor;
     }
 
     @Exclude
     public String getBackgroundColorHexStr() {
-        return Integer.toHexString(dashBackgroundColor).substring(2);
+        return dashBackgroundColor;
     }
 
     @Exclude
     public String getWidgetColorHexStr() {
-        return Integer.toHexString(widgetColor).substring(2);
+        return widgetColor;
     }
 
     @Exclude
@@ -136,7 +155,7 @@ public class AppSettingsBindings extends BaseObservable {
 
     @Exclude
     public String getBackgroundTypeUI() {
-        return this.backgroundType.name();
+        return BackgroundType.values()[this.backgroundType].name();
     }
 
     @Exclude
@@ -154,7 +173,7 @@ public class AppSettingsBindings extends BaseObservable {
     }
 
     @Exclude
-    public void setBackgroundType(BackgroundType type) {
+    public void setBackgroundType(Integer type) {
         this.backgroundType = type;
         notifyPropertyChanged(BR.backgroundType);
         appSettings.mCallback.onSettingChanged(BACKGROUND_TYPE, getBackgroundTypeUI());
@@ -176,14 +195,14 @@ public class AppSettingsBindings extends BaseObservable {
     public void saveAllSettings() {
         HashMap<String, Object> settings = new HashMap<>();
 
-        settings.put(COLUMN_COUNT, numberOfColumns);
-        settings.put(BACKGROUND_COLOR, dashBackgroundColor);
-        settings.put(BACKGROUND_TYPE, backgroundType.getValue());
-        settings.put(WIDGET_TRANSPARENCY, widgetTransparency);
-        settings.put(WIDGET_COLOR, widgetColor);
-        settings.put(TEXT_COLOR, textColor);
-        settings.put(SLIDESHOW_INTERVAL, slideshowInterval);
-        settings.put(SCREEN_PADDING, screenPadding);
+        settings.put("numberOfColumns", numberOfColumns);
+        settings.put("dashBackgroundColor", dashBackgroundColor);
+        settings.put("backgroundType", backgroundType);
+        settings.put("widgetTransparency", widgetTransparency);
+        settings.put("widgetColor", widgetColor);
+        settings.put("textColor", textColor);
+        settings.put("slideshowInterval", slideshowInterval);
+        settings.put("screenPadding", screenPadding);
 
         getFirebaseDashboardOptionsRef().setValue(settings);
 
@@ -206,25 +225,25 @@ public class AppSettingsBindings extends BaseObservable {
                 }
 
                 if (tempSettings.dashBackgroundColor == null) {
-                    dashBackgroundColor = ContextCompat.getColor(context, R.color.tv_background);
+                    dashBackgroundColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.tv_background));
                 } else {
                     dashBackgroundColor = tempSettings.dashBackgroundColor;
                 }
 
                 if (tempSettings.widgetColor == null) {
-                    widgetColor = ContextCompat.getColor(context, R.color.md_material_blue_800);
+                    widgetColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.md_material_blue_800));
                 } else {
                     widgetColor = tempSettings.widgetColor;
                 }
 
                 if (tempSettings.textColor == null) {
-                    textColor = ContextCompat.getColor(context, R.color.tv_text_light);
+                    textColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.tv_text_light));
                 } else {
                     textColor = tempSettings.textColor;
                 }
 
                 if (tempSettings.backgroundType == null) {
-                    backgroundType = BackgroundType.values()[0];
+                    backgroundType = 0;
                 } else {
                     backgroundType = tempSettings.backgroundType;
                 }
@@ -263,11 +282,17 @@ public class AppSettingsBindings extends BaseObservable {
 
         // Don't use setters here because we don't want to trigger a sendMessage() to TV
         numberOfColumns = settings.getInt(COLUMN_COUNT, 2);
-        dashBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.tv_background));
-        widgetColor = settings.getInt(WIDGET_COLOR, ContextCompat.getColor(context, R.color.md_material_blue_800));
-        textColor = settings.getInt(TEXT_COLOR, ContextCompat.getColor(context, R.color.tv_text_light));
+        int iDashBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.tv_background));
+        dashBackgroundColor = ColorConverter.intToString(iDashBackgroundColor);
 
-        backgroundType = BackgroundType.values()[settings.getInt(BACKGROUND_TYPE, 0)];
+        int iWidgetColor = settings.getInt(WIDGET_COLOR, ContextCompat.getColor(context, R.color.md_material_blue_800));
+        widgetColor = ColorConverter.intToString(iWidgetColor);
+
+        int iTextColor = settings.getInt(TEXT_COLOR, ContextCompat.getColor(context, R.color.tv_text_light));
+        textColor = ColorConverter.intToString(iTextColor);
+
+        backgroundType = settings.getInt(BACKGROUND_TYPE, 0);
+
         widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 15); //15% x 2 + 50 = 80/100
         screenPadding = settings.getInt(SCREEN_PADDING, 15);
 
@@ -293,7 +318,7 @@ public class AppSettingsBindings extends BaseObservable {
 
     @Exclude
     public BackgroundType getBackgroundType() {
-        return this.backgroundType;
+        return BackgroundType.values()[this.backgroundType];
     }
 
     @Exclude

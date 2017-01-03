@@ -15,6 +15,7 @@ import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
 import com.silver.dan.castdemo.databinding.FragmentAppSettingsThemeBinding;
 import com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem;
+import com.silver.dan.castdemo.util.ColorConverter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,7 +107,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         BackgroundType newBackgroundType = backgroundTypes.get(which);
-                        bindings.setBackgroundType(newBackgroundType);
+                        bindings.setBackgroundType(newBackgroundType.getValue());
                         return true;
                     }
 

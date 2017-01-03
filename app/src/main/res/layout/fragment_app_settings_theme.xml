@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="settings" type="com.silver.dan.castdemo.AppSettingsBindings"/>
+        <import type="com.silver.dan.castdemo.util.ColorConverter"/>
         <import type="com.silver.dan.castdemo.SettingEnums.BackgroundType"/>
         <import type="android.view.View"/>
     </data>
@@ -129,7 +130,7 @@
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@{settings.dashBackgroundColor}"/>
+                            android:background="@{ColorConverter.stringToInteger(settings.dashBackgroundColor)}"/>
                     </FrameLayout>
                 </RelativeLayout>
             </com.silver.dan.castdemo.settingsFragments.SettingItem>
@@ -179,7 +180,7 @@
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@{settings.widgetColor}"/>
+                            android:background="@{ColorConverter.stringToInteger(settings.widgetColor)}"/>
                     </FrameLayout>
                 </RelativeLayout>
             </com.silver.dan.castdemo.settingsFragments.SettingItem>
@@ -212,7 +213,7 @@
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@{settings.textColor}"/>
+                        android:background="@{ColorConverter.stringToInteger(settings.textColor)}"/>
                     </FrameLayout>
                 </RelativeLayout>
             </com.silver.dan.castdemo.settingsFragments.SettingItem>

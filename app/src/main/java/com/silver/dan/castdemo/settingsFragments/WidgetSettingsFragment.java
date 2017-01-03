@@ -1,17 +1,13 @@
 package com.silver.dan.castdemo.settingsFragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.CastCommunicator;
-import com.silver.dan.castdemo.FirebaseMigration;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
-import com.silver.dan.castdemo.Widget_Table;
 
 import butterknife.BindView;
 import butterknife.OnClick;
