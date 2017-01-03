@@ -1,4 +1,4 @@
-package com.silver.dan.castdemo.util;
+package com.silver.dan.castdemo.Util;
 
 import android.content.Context;
 

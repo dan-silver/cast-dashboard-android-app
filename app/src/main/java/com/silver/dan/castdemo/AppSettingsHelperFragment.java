@@ -1,13 +1,12 @@
 package com.silver.dan.castdemo;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
-import com.silver.dan.castdemo.util.ColorConverter;
+import com.silver.dan.castdemo.Util.ColorConverter;
 
 public class AppSettingsHelperFragment extends Fragment {
 

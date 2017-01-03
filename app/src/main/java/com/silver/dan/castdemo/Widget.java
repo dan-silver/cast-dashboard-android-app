@@ -55,16 +55,12 @@ import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWr
 @IgnoreExtraProperties
 
 public class Widget extends BaseModel {
-
-    // For bundle data passing
-    @Exclude
-    public static String ID = "WIDGET_ID";
-
     @Exclude
     private static int DEFAULT_WIDGET_HEIGHT = 60;
 
     @Exclude
     private static int DEFAULT_SCROLL_INTERVAL = 20;
+
     public static String GUID = "GUID";
 
     @Exclude
@@ -535,9 +531,15 @@ public class Widget extends BaseModel {
 
     @Exclude
     public void initOption(String key, String defaultValue) {
+        if (this.optionsMap == null) {
+            this.optionsMap = new HashMap<>();
+        }
+
+
         if (this.getOption(key) != null) {
             return;
         }
+
 
         WidgetOption option = new WidgetOption();
         option.key = key;
@@ -545,6 +547,7 @@ public class Widget extends BaseModel {
         option.associateWidget(this);
         option.save();
 
+        this.optionsMap.put(key, option);
     }
 
     @Exclude

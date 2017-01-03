@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable name="settings" type="com.silver.dan.castdemo.AppSettingsBindings"/>
-        <import type="com.silver.dan.castdemo.util.ColorConverter"/>
+        <import type="com.silver.dan.castdemo.Util.ColorConverter"/>
         <import type="com.silver.dan.castdemo.SettingEnums.BackgroundType"/>
         <import type="android.view.View"/>
     </data>

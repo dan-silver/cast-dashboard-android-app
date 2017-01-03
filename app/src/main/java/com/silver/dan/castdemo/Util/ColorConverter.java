@@ -1,4 +1,4 @@
-package com.silver.dan.castdemo.util;
+package com.silver.dan.castdemo.Util;
 
 /**
  * Created by dan on 1/2/17.

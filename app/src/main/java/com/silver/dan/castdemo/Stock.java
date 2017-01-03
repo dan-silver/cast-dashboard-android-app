@@ -9,7 +9,7 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
-import com.silver.dan.castdemo.util.StockUtils;
+import com.silver.dan.castdemo.Util.StockUtils;
 
 @ModelContainer
 @Table(database = WidgetDatabase.class)

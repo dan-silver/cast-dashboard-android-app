@@ -14,7 +14,7 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
-import com.silver.dan.castdemo.util.ColorConverter;
+import com.silver.dan.castdemo.Util.ColorConverter;
 
 import java.util.HashMap;
 
@@ -183,9 +183,9 @@ public class AppSettingsBindings extends BaseObservable {
     protected static DatabaseReference getFirebaseDashboardOptionsRef() {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase
-                .child("users")
-                .child(LoginActivity.user.getUid())
-                .child("options");
+            .child("users")
+            .child(LoginActivity.user.getUid())
+            .child("options");
     }
 
 
@@ -216,49 +216,49 @@ public class AppSettingsBindings extends BaseObservable {
                 AppSettingsBindings tempSettings = dataSnapshot.getValue(AppSettingsBindings.class);
 
                 // Don't use setters here because we don't want to trigger a sendMessage() to TV
-                if (tempSettings.numberOfColumns == null) {
+                if (tempSettings == null || tempSettings.numberOfColumns == null) {
                     numberOfColumns = 2;
                 } else {
                     numberOfColumns = tempSettings.numberOfColumns;
                 }
 
-                if (tempSettings.dashBackgroundColor == null) {
+                if (tempSettings == null || tempSettings.dashBackgroundColor == null) {
                     dashBackgroundColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.tv_background));
                 } else {
                     dashBackgroundColor = tempSettings.dashBackgroundColor;
                 }
 
-                if (tempSettings.widgetColor == null) {
+                if (tempSettings == null || tempSettings.widgetColor == null) {
                     widgetColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.md_material_blue_800));
                 } else {
                     widgetColor = tempSettings.widgetColor;
                 }
 
-                if (tempSettings.textColor == null) {
+                if (tempSettings == null || tempSettings.textColor == null) {
                     textColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.tv_text_light));
                 } else {
                     textColor = tempSettings.textColor;
                 }
 
-                if (tempSettings.backgroundType == null) {
+                if (tempSettings == null || tempSettings.backgroundType == null) {
                     backgroundType = 0;
                 } else {
                     backgroundType = tempSettings.backgroundType;
                 }
 
-                if (tempSettings.widgetTransparency == null) {
+                if (tempSettings == null || tempSettings.widgetTransparency == null) {
                     widgetTransparency = 15; //15% x 2 + 50 = 80/100
                 } else {
                     widgetTransparency = tempSettings.widgetTransparency;
                 }
 
-                if (tempSettings.screenPadding == null) {
+                if (tempSettings == null || tempSettings.screenPadding == null) {
                     screenPadding = 15;
                 } else {
                     screenPadding = tempSettings.screenPadding;
                 }
 
-                if (tempSettings.slideshowInterval == null) {
+                if (tempSettings == null || tempSettings.slideshowInterval == null) {
                     slideshowInterval = 30;
                 } else {
                     slideshowInterval = tempSettings.slideshowInterval;

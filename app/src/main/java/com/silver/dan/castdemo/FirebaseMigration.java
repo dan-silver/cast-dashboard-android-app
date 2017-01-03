@@ -33,9 +33,6 @@ public class FirebaseMigration {
     }
 
     void start(final Context context, final SimpleCompletionListener callback) {
-        // check if we've already pushed the dashboard to /user/uid/dashboards
-        // if so, get the dashboard ID
-
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
