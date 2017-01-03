@@ -32,7 +32,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
     @BindView(R.id.scroll_view_header)
     FrameLayout scrollViewHeader;
 
-    private long widgetId = -1;
+//    private long widgetId = -1;
     private String widgetKey = null;
 
 
@@ -42,7 +42,8 @@ public class WidgetSettingsActivity extends AppCompatActivity {
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.
-        savedInstanceState.putLong(Widget.ID, widgetId);
+//        savedInstanceState.putLong(Widget.ID, widgetId);
+        savedInstanceState.putString(Widget.GUID, widgetKey);
     }
 
     @Override
@@ -58,28 +59,10 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
 
         Bundle b = getIntent().getExtras();
-        if (!FirebaseMigration.useFirebaseForReadsAndWrites) {
-            widgetId = b.getLong(Widget.ID);
-            widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
-            completeSetup();
-        } else {
-            widgetKey = b.getString(Widget.GUID);
-            final WidgetSettingsActivity _this = this;
-            Widget.getFromKey(widgetKey, new Widget.GetWidgetCallback() {
-                @Override
-                public void complete(Widget widget) {
-                    _this.widget = widget;
-                    completeSetup();
-                }
-
-                @Override
-                public void error() {
-
-                }
-            });
-
-        }
-
+//        if (FirebaseMigration.useFirebaseForReadsAndWrites) {
+        widgetKey = b.getString(Widget.GUID);
+        widget = Widget.getFromCache(widgetKey);
+        completeSetup();
     }
 
     private void completeSetup() {
@@ -90,11 +73,11 @@ public class WidgetSettingsActivity extends AppCompatActivity {
         WidgetSettingsFragment typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
 
         Bundle bundle = new Bundle();
-        if (FirebaseMigration.useFirebaseForReadsAndWrites) {
+//        if (FirebaseMigration.useFirebaseForReadsAndWrites) {
             bundle.putString(Widget.GUID, widget.guid);
-        } else {
-            bundle.putLong(Widget.ID, widget.id);
-        }
+//        } else {
+//            bundle.putLong(Widget.ID, widget.id);
+//        }
         typeSettingsFragment.setArguments(bundle);
 
         FragmentManager fm = getSupportFragmentManager();

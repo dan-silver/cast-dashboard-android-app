@@ -1,5 +1,7 @@
 package com.silver.dan.castdemo;
 
+import android.text.TextUtils;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -12,8 +14,11 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWrites;
@@ -67,11 +72,15 @@ public class WidgetOption extends BaseModel {
     @Column
     @ForeignKey(saveForeignKeyModel = false)
     @Exclude
+    @Deprecated
     ForeignKeyContainer<Widget> widgetForeignKeyContainer;
 
     @Exclude
     public void associateWidget(Widget widget) {
         widgetForeignKeyContainer = FlowManager.getContainerAdapter(Widget.class).toForeignKeyContainer(widget);
+
+        // keep this line, remove container eventually
+        this.widgetRef = widget;
     }
 
     @Exclude
@@ -157,4 +166,26 @@ public class WidgetOption extends BaseModel {
         this.value = str;
     }
 
+
+    @Exclude
+    public List<String> getList() {
+        String[] stringArray = this.value.split(",");
+        List<String> items = new ArrayList<>();
+        for (String item : stringArray) {
+            items.add(item);
+        }
+
+        return items;
+    }
+
+    @Exclude
+    public void update(List<String> enabledIds) {
+        setValue(enabledIds);
+        save();
+    }
+
+    @Exclude
+    protected void setValue(List<String> enabledIds) {
+        setValue(TextUtils.join(",", enabledIds));
+    }
 }

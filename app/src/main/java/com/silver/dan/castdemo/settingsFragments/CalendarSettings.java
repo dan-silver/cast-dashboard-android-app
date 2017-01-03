@@ -43,6 +43,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
     WidgetOption optionAllCalendars;
     WidgetOption optionShowEventLocations;
     WidgetOption optionShowEventsUntil;
+    WidgetOption optionCalendarsEnabled;
 
     @BindView(R.id.display_all_calendars)
     Switch allCalendars;
@@ -128,8 +129,8 @@ public class CalendarSettings extends WidgetSettingsFragment {
         return Arrays.asList(numDaysDisplayValues).indexOf(optionShowEventsUntil.getIntValue());
     }
 
-    public static List<WidgetOption> getEnabledCalendars(Widget widget) {
-        return widget.getOptions(CalendarSettings.CALENDAR_ENABLED);
+    public static List<String> getEnabledCalendars(Widget widget) {
+        return widget.getOption(CalendarSettings.CALENDAR_ENABLED).getList();
     }
 
     @Override
@@ -140,6 +141,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
         optionAllCalendars = loadOrInitOption(CalendarSettings.ALL_CALENDARS);
         optionShowEventLocations = loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS);
         optionShowEventsUntil = loadOrInitOption(CalendarSettings.SHOW_EVENTS_UNTIL);
+        optionCalendarsEnabled = loadOrInitOption(CalendarSettings.CALENDAR_ENABLED);
 
 
         supportWidgetHeightOption();

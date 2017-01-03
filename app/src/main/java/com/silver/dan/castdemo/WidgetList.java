@@ -30,6 +30,8 @@ public class WidgetList extends Fragment implements OnDragListener {
     @BindView(R.id.widgetList)
     RecyclerView widgetList;
 
+    static List<Widget> widgetsCache;
+
     public WidgetList() {
 
     }
@@ -143,6 +145,7 @@ public class WidgetList extends Fragment implements OnDragListener {
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
+                widgetsCache = widgets;
 
                 WidgetListAdapter adapter = (WidgetListAdapter) widgetList.getAdapter();
 

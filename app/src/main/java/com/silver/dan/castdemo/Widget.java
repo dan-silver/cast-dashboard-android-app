@@ -24,6 +24,8 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
+import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
+import com.silver.dan.castdemo.settingsFragments.StocksSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 import com.silver.dan.castdemo.widgets.CalendarWidget;
 import com.silver.dan.castdemo.widgets.ClockWidget;
@@ -151,6 +153,16 @@ public class Widget extends BaseModel {
         void complete(Widget widget);
 
         void error();
+    }
+
+
+    // firebase
+    @Exclude
+    public static Widget getFromCache(String key) {
+        for (Widget widget : WidgetList.widgetsCache) {
+            if (widget.guid.equals(key)) return widget;
+        }
+        return null;
     }
 
     // firebase
@@ -281,15 +293,61 @@ public class Widget extends BaseModel {
     }
 
 
+
+    // Migrate old list format to string CSV
+    // the dbflow implementation didn't use unique keys, firebase we do
+
     @Exclude
     public Map<String, Object> toMapFirstTimeMigration() {
         Map<String, Object> widgetMap = toMap();
 
         Map<String, Map<String, String>> optionsMap = new HashMap<>();
 
+        List<WidgetOption> enabledCalendars = new ArrayList<>();
+        List<WidgetOption> savedStocks = new ArrayList<>();
         for (WidgetOption opt : this.getOptions()) {
+            if (opt.key.equals(CalendarSettings.CALENDAR_ENABLED)) {
+                enabledCalendars.add(opt);
+                continue;
+            }
+
+            if (opt.key.equals(StocksSettings.STOCK_IN_LIST)) {
+                savedStocks.add(opt);
+                continue;
+            }
+
             optionsMap.put(opt.key, opt.toMap());
         }
+
+
+        if (enabledCalendars.size() > 0) {
+            WidgetOption enabledCalendarsOption = new WidgetOption();
+            enabledCalendarsOption.key = CalendarSettings.CALENDAR_ENABLED;
+            List<String> enabledCalIds = new ArrayList<>();
+            for (WidgetOption cal : enabledCalendars)
+                enabledCalIds.add(cal.value);
+
+            enabledCalendarsOption.setValue(enabledCalIds);
+
+            optionsMap.put(CalendarSettings.CALENDAR_ENABLED, enabledCalendarsOption.toMap());
+        }
+
+        if (savedStocks.size() > 0) {
+            WidgetOption savedStocksOption = new WidgetOption();
+            savedStocksOption.key = StocksSettings.STOCK_IN_LIST;
+            List<String> stockTickers = new ArrayList<>();
+            for (WidgetOption stock : savedStocks) {
+                Stock selectedStock = new Select().from(Stock.class).where(Stock_Table._id.is(stock.getIntValue())).querySingle();
+                if (selectedStock != null)
+                    stockTickers.add(selectedStock.getTicker());
+            }
+
+            savedStocksOption.setValue(stockTickers);
+
+            optionsMap.put(StocksSettings.STOCK_IN_LIST, savedStocksOption.toMap());
+        }
+
+
 
         widgetMap.put("optionsMap", optionsMap);
 
@@ -326,6 +384,7 @@ public class Widget extends BaseModel {
 
 
     @Exclude
+    @Deprecated
     @OneToMany(methods = {OneToMany.Method.SAVE, OneToMany.Method.DELETE}, variableName = "options")
     public List<WidgetOption> getOptions() {
 //        if (options == null || options.isEmpty()) {

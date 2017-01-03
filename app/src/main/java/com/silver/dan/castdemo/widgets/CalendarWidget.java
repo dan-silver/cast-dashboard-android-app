@@ -71,6 +71,7 @@ public class CalendarWidget extends UIWidget {
         widget.initOption(CalendarSettings.ALL_CALENDARS, true);
         widget.initOption(CalendarSettings.SHOW_EVENT_LOCATIONS, true);
         widget.initOption(CalendarSettings.SHOW_EVENTS_UNTIL, 30);
+        widget.initOption(CalendarSettings.CALENDAR_ENABLED, "");
 
         if (!canBeCreated()) {
             requestPermissions();
@@ -118,13 +119,13 @@ public class CalendarWidget extends UIWidget {
 
         // figure out which of the calendars are enabled
 
-        List<WidgetOption> enabled_calendars = CalendarSettings.getEnabledCalendars(widget);
+        List<String> enabled_calendars = CalendarSettings.getEnabledCalendars(widget);
 
 
         for (CalendarInfo calendar : calendars) {
             calendar.enabled = false;
-            for (WidgetOption enabledCalendar : enabled_calendars) {
-                if (calendar.id.equals(enabledCalendar.value)) {
+            for (String enabledCalendarId : enabled_calendars) {
+                if (calendar.id.equals(enabledCalendarId)) {
                     calendar.enabled = true;
                     break;
                 }
@@ -227,8 +228,6 @@ public class CalendarWidget extends UIWidget {
         JSONObject json = new JSONObject();
 
 
-        List<String> calendarIds = new ArrayList<>();
-
         WidgetOption optionAllCalendars = widget.loadOrInitOption(CalendarSettings.ALL_CALENDARS, context);
         WidgetOption optionShowEventLocations = widget.loadOrInitOption(CalendarSettings.SHOW_EVENT_LOCATIONS, context);
         WidgetOption optionShowEventsUntil = widget.loadOrInitOption(CalendarSettings.SHOW_EVENTS_UNTIL, context);
@@ -236,9 +235,10 @@ public class CalendarWidget extends UIWidget {
         boolean showAllCalendars = optionAllCalendars.getBooleanValue();
         int showEventsUntil = optionShowEventsUntil.getIntValue();
 
+        List<String> calendarIds = new ArrayList<>();
         if (!showAllCalendars) {
-            for (WidgetOption a : CalendarSettings.getEnabledCalendars(widget)) {
-                calendarIds.add(a.value);
+            for (String id: CalendarSettings.getEnabledCalendars(widget)) {
+                calendarIds.add(id);
             }
         }
 
@@ -261,14 +261,14 @@ public class CalendarWidget extends UIWidget {
             //@todo optimize this section
 
             // contains ids
-            List<WidgetOption> enabledCalendars = CalendarSettings.getEnabledCalendars(widget);
+            List<String> enabledCalendarIds = CalendarSettings.getEnabledCalendars(widget);
 
 
             // contains title, id
             List<CalendarInfo> calendars = getCalendars(context, widget);
 
 
-            int numCalendars = enabledCalendars.size();
+            int numCalendars = enabledCalendarIds.size();
 
             if (numCalendars == 0) {
                 return "No calendars selected";
@@ -277,8 +277,8 @@ public class CalendarWidget extends UIWidget {
             ArrayList<String> previewCalendars = new ArrayList<>();
             int charCount = 0;
             for (CalendarInfo calendarInfo : calendars) {
-                for (WidgetOption option : enabledCalendars) {
-                    if (calendarInfo.id.equals(option.value)) {
+                for (String enabledCalendarId : enabledCalendarIds) {
+                    if (calendarInfo.id.equals(enabledCalendarId)) {
                         previewCalendars.add(calendarInfo.name);
                         charCount += calendarInfo.name.length();
                         break;

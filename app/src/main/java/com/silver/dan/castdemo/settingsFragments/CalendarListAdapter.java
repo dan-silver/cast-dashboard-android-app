@@ -65,31 +65,27 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 calendar.enabled = isChecked;
+
+                WidgetOption calendarEnabled = widget.getOption(CalendarSettings.CALENDAR_ENABLED);
+                List<String> enabledIds = calendarEnabled.getList();
+
+
+
                 if (isChecked) {
-
-                    // add a CALENDAR_ENABLED entry
-                    WidgetOption calendarEnabled = new WidgetOption();
-                    calendarEnabled.key = CalendarSettings.CALENDAR_ENABLED;
-                    calendarEnabled.value = calendar.id;
-                    calendarEnabled.associateWidget(widget);
-                    calendarEnabled.save();
-
+                    if (enabledIds.contains(calendar.id)) {
+                        // already there
+                    } else {
+                        enabledIds.add(calendar.id);
+                    }
                 } else {
-                    // remove the CALENDAR_ENABLED entry
-                    ConditionGroup conditions = ConditionGroup.clause();
-                    conditions.andAll(
-                            WidgetOption_Table.widgetForeignKeyContainer_id.is(widget.id),
-                            WidgetOption_Table.key.is(CalendarSettings.CALENDAR_ENABLED),
-                            WidgetOption_Table.value.is(calendar.id));
-
-                    new Delete()
-                            .from(WidgetOption.class)
-                            .where(conditions)
-                            .execute();
-
-                    widget.save();
-
+                    enabledIds.remove(calendar.id);
                 }
+
+                calendarEnabled.update(enabledIds);
+
+//                widget.save();
+
+//                calendarEnabled.save();
                 CastCommunicator.sendWidget(widget);
 
             }

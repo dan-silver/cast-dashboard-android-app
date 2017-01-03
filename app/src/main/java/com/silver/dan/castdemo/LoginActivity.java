@@ -156,9 +156,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void launchMainActivity() {
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
-        finish();
+        FirebaseMigration migration = new FirebaseMigration();
+        migration.start(new FirebaseMigration.SimpleCompletionListener() {
+            @Override
+            public void onComplete() {
+                //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
     }
 
     @Override

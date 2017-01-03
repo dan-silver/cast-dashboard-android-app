@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @BindView(R.id.top_toolbar)
     Toolbar top_toolbar;
-    private FragmentManager fm;
 
     @OnClick(R.id.logout_btn)
     public void logout() {
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
 
     public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
-        FragmentTransaction transaction = fm.beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.main_fragment, destinationFrag);
 
         if (addToBackStack)
@@ -119,16 +118,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         FlowManager.init(new FlowConfig.Builder(this).build());
 
-        FirebaseMigration migration = new FirebaseMigration();
-        migration.start(new FirebaseMigration.SimpleCompletionListener() {
-            @Override
-            public void onComplete() {
-                //Delete.tables(Widget.class, WidgetOption.class, Stock.class);
-                switchToFragment(widgetListFrag, false);
-            }
-        });
         widgetListFrag = new WidgetList();
-        fm = getSupportFragmentManager();
+        switchToFragment(widgetListFrag, false);
 
 
 

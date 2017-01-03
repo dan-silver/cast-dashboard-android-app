@@ -9,6 +9,7 @@ import com.silver.dan.castdemo.Stock;
 import com.silver.dan.castdemo.Stock_Table;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
+import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
@@ -35,37 +36,23 @@ public class StocksWidget extends UIWidget {
                 Stock.insertAllStocks(context);
             }
         });
+        widget.initOption(StocksSettings.STOCK_IN_LIST, "");
     }
 
 
     @Override
     public JSONObject getContent() throws JSONException {
-
-
-        // get the ids of the stocks
-        List<WidgetOption> a = widget.getOptions(StocksSettings.STOCK_IN_LIST);
-
-
-        if (a.size() == 0) {
-            JSONObject json = new JSONObject();
-            json.put("tickers", new JSONArray());
-            return json;
-        }
-
-        ConditionGroup conditions = ConditionGroup.clause();
-        for (WidgetOption stockOption : a) {
-            conditions.or(Stock_Table._id.is(Long.parseLong(stockOption.value)));
-        }
-
-        // convert ids to tickers
-        List<Stock> selectedStocks = new Select().from(Stock.class).where(conditions).queryList();
+        WidgetOption savedStocks = widget.getOption(StocksSettings.STOCK_IN_LIST);
+        List<String> stockTickers = savedStocks.getList();
 
         JSONObject json = new JSONObject();
         JSONArray tickers = new JSONArray();
-        for (Stock stock : selectedStocks) {
-            tickers.put(stock.getTicker());
+        for (String ticker: stockTickers) {
+            tickers.put(ticker);
         }
+
         json.put("tickers", tickers);
+
         return json;
     }
 
@@ -76,8 +63,9 @@ public class StocksWidget extends UIWidget {
 
     @Override
     public String getWidgetPreviewSecondaryHeader() {
-        List<WidgetOption> savedStocks = widget.getOptions(StocksSettings.STOCK_IN_LIST);
-        if (savedStocks.size() == 0) {
+        WidgetOption savedStocksOption = widget.getOption(StocksSettings.STOCK_IN_LIST);
+        List<String> tickers = savedStocksOption.getList();
+        if (tickers.size() == 0) {
             return "No stocks selected";
         }
 
@@ -87,11 +75,15 @@ public class StocksWidget extends UIWidget {
         ArrayList<String> stocksString = new ArrayList<>();
 
 
-        for (WidgetOption option : savedStocks) {
-            Stock stock = new Select().from(Stock.class).where(Stock_Table._id.is(Long.parseLong(option.value))).querySingle();
+        for (String ticker: tickers) {
+            Stock stock = new Select().from(Stock.class).where(Stock_Table.ticker.is(ticker)).querySingle();
+
+            if (stock == null) {
+                continue;
+            }
 
             // in the case of 1, use the company name
-            if (savedStocks.size() == 1) {
+            if (tickers.size() == 1) {
                 return stock.getName();
             }
 

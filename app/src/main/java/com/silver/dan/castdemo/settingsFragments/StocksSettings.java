@@ -39,12 +39,13 @@ public class StocksSettings extends WidgetSettingsFragment {
     ArrayList<StockInfo> stocks = new ArrayList<>();
     final StockListAdapter stockListAdapter = new StockListAdapter(stocks);
 
-
     @BindView(R.id.select_stock)
     AutoCompleteTextView addStock;
 
     @BindView(R.id.stock_list)
     RecyclerView stockList;
+
+    WidgetOption optionSavedStocks;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +58,8 @@ public class StocksSettings extends WidgetSettingsFragment {
 
     @Override
     public void initView() {
+
+        optionSavedStocks = loadOrInitOption(StocksSettings.STOCK_IN_LIST);
 
         supportWidgetHeightOption();
         supportWidgetScrollInterval();
@@ -91,12 +94,19 @@ public class StocksSettings extends WidgetSettingsFragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Stock selectedStock = new Select().from(Stock.class).where(Stock_Table._id.is(id)).querySingle();
 
+                if (selectedStock == null) {
+                    return;
+                }
 
-                WidgetOption stockDbRecord = new WidgetOption();
-                stockDbRecord.key = STOCK_IN_LIST;
-                stockDbRecord.value = Long.toString(selectedStock.get_id());
-                stockDbRecord.associateWidget(widget);
-                stockDbRecord.save();
+                String ticker = selectedStock.getTicker();
+
+                List<String> stockTickers = optionSavedStocks.getList();
+
+                if (!stockTickers.contains(ticker)) {
+                    stockTickers.add(ticker);
+                    optionSavedStocks.update(stockTickers);
+                }
+
 
                 stockListAdapter.addStock(selectedStock);
                 addStock.clearListSelection();
@@ -123,12 +133,15 @@ public class StocksSettings extends WidgetSettingsFragment {
                                 stockListAdapter.deleteStock(position);
 
 
-                                ConditionGroup conditions = ConditionGroup.clause();
-                                conditions.andAll(WidgetOption_Table.widgetForeignKeyContainer_id.eq(widget.id),
-                                        WidgetOption_Table.key.is(STOCK_IN_LIST), WidgetOption_Table.value.is(Long.toString(stock.getId())));
+                                String ticker = stock.getTicker();
 
-                                new Delete().from(WidgetOption.class).where(conditions).execute();
-                                widget.save();
+                                List<String> stockTickers = optionSavedStocks.getList();
+
+                                if (stockTickers.contains(ticker)) {
+                                    stockTickers.remove(ticker);
+                                    optionSavedStocks.update(stockTickers);
+                                }
+
                                 refreshWidget();
                             }
                         })
@@ -137,12 +150,10 @@ public class StocksSettings extends WidgetSettingsFragment {
         }));
 
         // query the db to get the saved stocks
-        List<WidgetOption> savedStocks = widget.getOptions(STOCK_IN_LIST);
+        for (String ticker : optionSavedStocks.getList()) {
+            Stock stock = new Select().from(Stock.class).where(Stock_Table.ticker.is(ticker)).querySingle();
 
-        for (WidgetOption option : savedStocks) {
-            long stockId = Long.parseLong(option.value);
-
-            Stock stock = new Select().from(Stock.class).where(Stock_Table._id.is(stockId)).querySingle();
+            if (stock == null) continue;
 
             StockInfo info = new StockInfo(stock.getTicker(), stock.getName(), stock.get_id());
 

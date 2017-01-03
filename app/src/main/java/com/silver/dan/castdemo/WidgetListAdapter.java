@@ -142,11 +142,11 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(mainActivity, WidgetSettingsActivity.class);
-                if (FirebaseMigration.useFirebaseForReadsAndWrites) {
+//                if (FirebaseMigration.useFirebaseForReadsAndWrites) {
                     intent.putExtra(Widget.GUID, widget.guid);
-                } else {
-                    intent.putExtra(Widget.ID, widget.id);
-                }
+//                } else {
+//                    intent.putExtra(Widget.ID, widget.id);
+//                }
 
                 mainActivity.startActivity(intent);
             }
