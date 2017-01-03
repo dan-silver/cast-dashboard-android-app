@@ -1,5 +1,6 @@
 package com.silver.dan.castdemo;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -56,7 +57,7 @@ public class FirebaseMigration {
         void onComplete();
     }
 
-    void start(final SimpleCompletionListener callback) {
+    void start(final Context context, final SimpleCompletionListener callback) {
         // check if we've already pushed the dashboard to /user/uid/dashboards
         // if so, get the dashboard ID
 
@@ -68,7 +69,7 @@ public class FirebaseMigration {
                     useFirebaseForReadsAndWrites = true;
                     callback.onComplete();
                 } else {
-                    uploadDashboard(new SimpleCompletionListener() {
+                    uploadDashboard(context, new SimpleCompletionListener() {
                         @Override
                         public void onComplete() {
                             callback.onComplete();
@@ -92,7 +93,7 @@ public class FirebaseMigration {
         dashboardsRef.addListenerForSingleValueEvent(postListener);
     }
 
-    private void uploadDashboard(final SimpleCompletionListener callback) {
+    private void uploadDashboard(final Context context, final SimpleCompletionListener callback) {
         Widget.fetchAll(new FetchAllWidgetsListener() {
             @Override
             public void results(List<Widget> widgets) {
@@ -121,6 +122,14 @@ public class FirebaseMigration {
 
                 useFirebaseForReadsAndWrites = true;
                 callback.onComplete();
+
+                //
+                // options
+                //
+
+                AppSettingsBindings options = new AppSettingsBindings();
+                options.loadAllSettingsFromSharedPreferences(context);
+                options.saveAllSettings();
 
             }
         });

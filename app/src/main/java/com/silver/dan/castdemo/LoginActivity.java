@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void launchMainActivity() {
         FirebaseMigration migration = new FirebaseMigration();
-        migration.start(new FirebaseMigration.SimpleCompletionListener() {
+        migration.start(getApplicationContext(), new FirebaseMigration.SimpleCompletionListener() {
             @Override
             public void onComplete() {
                 //Delete.tables(Widget.class, WidgetOption.class, Stock.class);

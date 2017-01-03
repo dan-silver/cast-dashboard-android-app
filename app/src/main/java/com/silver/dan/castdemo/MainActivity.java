@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -70,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @BindView(R.id.top_toolbar)
     Toolbar top_toolbar;
+    protected static AppSettingsBindings settings;
 
     @OnClick(R.id.logout_btn)
     public void logout() {
@@ -214,6 +214,20 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        // load app settings
+        settings = new AppSettingsBindings();
+        settings.loadSettings(getApplicationContext(), new AppSettingsBindings.onLoadCallback() {
+            @Override
+            public void onReady() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+        });
     }
 
     private void setupNavBarUserInfo() {
@@ -276,9 +290,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     }
 
     private void sendAllOptions() {
-        AppSettingsBindings settings = new AppSettingsBindings();
-        settings.loadAllSettings(this);
-
         JSONObject options = new JSONObject();
         try {
             options.put(AppSettingsBindings.COLUMN_COUNT, settings.getNumberOfColumnsUI());
@@ -290,10 +301,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             options.put(AppSettingsBindings.SCREEN_PADDING, settings.getScreenPaddingUI());
             options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.getLanguage());
             options.put(AppSettingsBindings.SLIDESHOW_INTERVAL, settings.getSlideshowInterval());
-
-            if (settings.getBackgroundType() == BackgroundType.PICTURE) {
-                AppSettingsTheme.sendBackgroundImage(new File(settings.backgroundImageLocalPath));
-            }
 
         } catch (JSONException e) {
             e.printStackTrace();

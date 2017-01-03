@@ -25,7 +25,7 @@ public class AppSettingsLayout extends AppSettingsHelperFragment {
         ButterKnife.bind(this, view);
 
         viewModel = FragmentAppSettingsLayoutBinding.bind(view);
-        bindings = new AppSettingsBindings();
+        bindings = MainActivity.settings;
         bindings.init(this);
         ((FragmentAppSettingsLayoutBinding) viewModel).setSettings(bindings);
 
