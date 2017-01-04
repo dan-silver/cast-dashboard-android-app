@@ -21,7 +21,6 @@ public class CastCommunicator {
         CastCommunicator.mCastManager = mCastManager;
     }
 
-
     public static void sendWidgetProperty(Widget widget, String property, Object value) {
         try {
             JSONObject propertyValue = new JSONObject();
@@ -34,7 +33,7 @@ public class CastCommunicator {
         }
     }
 
-    public static void deleteWidget(Widget widget) {
+    static void deleteWidget(Widget widget) {
         try {
             JSONObject info = new JSONObject();
             info.put("id", widget.guid);
@@ -45,7 +44,7 @@ public class CastCommunicator {
 
     }
 
-    public static void sendJSON(final String key, final JSONObject payload) {
+    static void sendJSON(final String key, final JSONObject payload) {
         JSONObject container = new JSONObject();
 
         try {
@@ -56,7 +55,7 @@ public class CastCommunicator {
         sendJSONContainer(container);
     }
 
-    public static void sendJSON(final String key, final JSONArray payload) {
+    private static void sendJSON(final String key, final JSONArray payload) {
         JSONObject container = new JSONObject();
 
         try {
@@ -67,7 +66,7 @@ public class CastCommunicator {
         CastCommunicator.sendJSONContainer(container);
     }
 
-    public static void sendJSONContainer(final JSONObject container) {
+    private static void sendJSONContainer(final JSONObject container) {
         if (!mCastManager.isConnected())
             return;
 

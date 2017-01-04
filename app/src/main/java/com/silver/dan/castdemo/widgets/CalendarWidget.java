@@ -45,8 +45,11 @@ public class CalendarWidget extends UIWidget {
 
     @Override
     public boolean canBeCreated() {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
-                == PackageManager.PERMISSION_GRANTED;
+        return hasRequiredPermissions();
+    }
+
+    private boolean hasRequiredPermissions() {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED;
     }
 
     // Projection array. Creating indices for this array instead of doing
@@ -134,9 +137,6 @@ public class CalendarWidget extends UIWidget {
         }
 
         return calendars;
-    }
-    private boolean hasRequiredPermissions() {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED;
     }
 
     private JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars, int showEventsUntil) throws JSONException {

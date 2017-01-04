@@ -33,7 +33,7 @@ public class Stock extends BaseModel {
     public Stock() {
     }
 
-    public static void insertAllStocks(Context context) {
+    static void insertAllStocks(Context context) {
         //check if stocks table is empty
         long count = 0;
         try {

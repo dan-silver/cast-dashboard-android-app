@@ -59,6 +59,7 @@ public class AppSettingsBindings extends BaseObservable {
     static String SLIDESHOW_INTERVAL = "SLIDESHOW_INTERVAL";
 
 
+    @Deprecated
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
     public interface onLoadCallback {
@@ -96,7 +97,6 @@ public class AppSettingsBindings extends BaseObservable {
 
     @Exclude
     public void setWidgetColor(String widgetColor) {
-//        this.widgetColor = convertColorLongToString(widgetColor);
         this.widgetColor = widgetColor;
         notifyPropertyChanged(BR.widgetColor);
         appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
