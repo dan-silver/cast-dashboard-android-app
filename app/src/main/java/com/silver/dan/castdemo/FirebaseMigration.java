@@ -19,10 +19,10 @@ import java.util.Map;
  * Created by dan on 1/1/17.
  */
 
-public class FirebaseMigration {
+class FirebaseMigration {
     private DatabaseReference mDatabase;
 
-    public static boolean useFirebaseForReadsAndWrites = false;
+    static boolean useFirebaseForReadsAndWrites = false;
 
     FirebaseMigration() {
         mDatabase = FirebaseDatabase.getInstance().getReference();

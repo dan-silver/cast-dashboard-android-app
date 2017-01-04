@@ -148,7 +148,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
-
         loadingSpinner.setVisibility(View.VISIBLE);
         signInButton.setVisibility(View.GONE);
 
@@ -164,12 +163,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                         loadingSpinner.setVisibility(View.GONE);
                         signInButton.setVisibility(View.VISIBLE);
-                    } else {
-                        LoginActivity.user = task.getResult().getUser();
-                        userFinishedAuth();
                     }
-
-
                 }
             });
     }
