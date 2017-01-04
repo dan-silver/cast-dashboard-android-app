@@ -1,13 +1,10 @@
 package com.silver.dan.castdemo;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -24,8 +21,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AppSettingsTheme extends AppSettingsHelperFragment {
-
-    private static final int SELECT_PHOTO = 0;
 
     @BindView(R.id.background_type)
     TwoLineSettingItem backgroundType;

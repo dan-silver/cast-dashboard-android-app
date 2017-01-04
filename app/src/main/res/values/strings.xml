@@ -1,15 +1,12 @@
 <resources>
     <string name="app_name" translatable="false">Cast Dashboard</string>
-    <string name="action_settings" translatable="false">Settings</string>
 
     <string name="namespace" translatable="false">urn:x-cast:com.google.cast.sample.helloworld</string>
     <string name="media_route_menu_title" translatable="false">Play on&#8230;</string>
-    <string name="remove_stock" translatable="false">remove stock</string>
     <string name="navigation_drawer_open" translatable="false">open</string>
     <string name="navigation_drawer_close" translatable="false">closed</string>
 
     <string name="intro_overlay_text" translatable="false">Find your cast device in the top menu</string>
-    <string name="SHARED_PREFS_OPTIONS" translatable="false">OPTIONS</string>
 
 
     <!--Widget Types-->
@@ -56,7 +53,6 @@
     <string name="five_day" translatable="false">5 day forecast</string>
     <string name="weather_mode" translatable="false">Forecast Mode</string>
     <string name="picture" translatable="false">Picture (Beta)</string>
-    <string name="dashboard_background_picture" translatable="false">dashboard_background_picture</string>
     <string name="standard" translatable="false">Standard</string>
     <string name="directions" translatable="false">Directions</string>
     <string name="mode" translatable="false">Mode</string>
