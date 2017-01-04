@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -424,7 +423,7 @@ public class Widget extends BaseModel {
     }
 
     @Exclude
-    static void fetchAll(final FetchAllWidgetsListener listener) {
+    static void fetchAll(FetchAllWidgetsListener listener) {
         fetchAll(null, listener);
     }
 

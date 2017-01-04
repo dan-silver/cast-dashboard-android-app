@@ -27,13 +27,6 @@ public class StocksWidget extends UIWidget {
 
     @Override
     public void init() {
-        // Make sure that the stocks have been dumped into db, only happens on first app launch in async call
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                Stock.insertAllStocks(context);
-            }
-        });
         widget.initOption(StocksSettings.STOCK_IN_LIST, "");
     }
 

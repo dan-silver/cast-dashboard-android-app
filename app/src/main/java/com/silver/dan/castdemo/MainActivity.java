@@ -35,14 +35,12 @@ import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOv
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.silver.dan.castdemo.SettingEnums.BackgroundType;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;

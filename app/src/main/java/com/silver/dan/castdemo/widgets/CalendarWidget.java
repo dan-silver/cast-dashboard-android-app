@@ -45,7 +45,8 @@ public class CalendarWidget extends UIWidget {
 
     @Override
     public boolean canBeCreated() {
-        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED;
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR)
+                == PackageManager.PERMISSION_GRANTED;
     }
 
     // Projection array. Creating indices for this array instead of doing
@@ -134,6 +135,9 @@ public class CalendarWidget extends UIWidget {
 
         return calendars;
     }
+    private boolean hasRequiredPermissions() {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED;
+    }
 
     private JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars, int showEventsUntil) throws JSONException {
         Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -154,7 +158,7 @@ public class CalendarWidget extends UIWidget {
                         CalendarContract.Instances.ALL_DAY,
                         CalendarContract.Instances.EVENT_LOCATION};
 
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+        if (!hasRequiredPermissions()) {
             ActivityCompat.requestPermissions((Activity) context,
                     new String[]{Manifest.permission.READ_CALENDAR},
                     CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR);
@@ -254,6 +258,10 @@ public class CalendarWidget extends UIWidget {
 
     @Override
     public String getWidgetPreviewSecondaryHeader() {
+        if (!hasRequiredPermissions()) {
+            return "Requires permission to access your calendar!";
+        }
+
         WidgetOption optionAllCalendars = widget.loadOrInitOption(CalendarSettings.ALL_CALENDARS, context);
         if (optionAllCalendars.getBooleanValue()) {
             return "Displaying all calendars";

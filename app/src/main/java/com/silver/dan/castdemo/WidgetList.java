@@ -16,7 +16,6 @@ import com.silver.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
 import com.silver.dan.castdemo.widgets.CanBeCreatedListener;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class WidgetList extends Fragment implements OnDragListener {
 
 
         // initially populate this list with an empty widget list
-        WidgetListAdapter adapter = new WidgetListAdapter(null, (MainActivity) getActivity(), this);
+        WidgetListAdapter adapter = new WidgetListAdapter(null, (MainActivity) getActivity(), this, widgetCanBeCreatedListeners);
         widgetList.setAdapter(adapter);
 
 
@@ -107,7 +106,7 @@ public class WidgetList extends Fragment implements OnDragListener {
 
                             }
                         };
-                        widget.getUIWidget(getContext()).setOnCanBeCreatedListener(listener);
+                        widget.getUIWidget(getContext()).setOnCanBeCreatedOrEditedListener(listener);
 
                         if (!widget.getUIWidget(getContext()).canBeCreated()) {
                             widgetCanBeCreatedListeners.add(listener);

@@ -15,18 +15,22 @@ import android.widget.TextView;
 import com.silver.dan.castdemo.widgetList.ItemTouchHelperAdapter;
 import com.silver.dan.castdemo.widgetList.ItemTouchHelperViewHolder;
 import com.silver.dan.castdemo.widgetList.OnDragListener;
+import com.silver.dan.castdemo.widgets.CanBeCreatedListener;
 import com.silver.dan.castdemo.widgets.UIWidget;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.DoubleAdder;
 
 
 class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetViewHolder> implements ItemTouchHelperAdapter {
 
     private final MainActivity mainActivity;
+    private final ArrayList<CanBeCreatedListener> widgetCanBeCreatedListeners; // ref to WidgetList.javas copy
     private List<Widget> widgetList;
     private final OnDragListener mDragStartListener;
 
@@ -42,10 +46,11 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         });
     }
 
-    WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener) {
+    WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener, ArrayList<CanBeCreatedListener> widgetCanBeCreatedListeners) {
         this.widgetList = widgetList;
         this.mainActivity = activity;
         mDragStartListener = dragStartListener;
+        this.widgetCanBeCreatedListeners = widgetCanBeCreatedListeners;
 
         syncWidgetPositions();
     }
@@ -130,7 +135,7 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
     @Override
     public void onBindViewHolder(final WidgetViewHolder customViewHolder, int i) {
         final Widget widget = widgetList.get(i);
-        UIWidget uiWidget = widget.getUIWidget(mainActivity);
+        final UIWidget uiWidget = widget.getUIWidget(mainActivity);
 
         customViewHolder.topHeader.setText(mainActivity.getApplicationContext().getString(widget.getHumanNameRes()));
         customViewHolder.bottomHeader.setText(uiWidget.getWidgetPreviewSecondaryHeader());
@@ -139,16 +144,32 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         customViewHolder.typeIcon.setImageResource(widget.getIconResource());
 
         customViewHolder.listItemView.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mainActivity, WidgetSettingsActivity.class);
+
+
+                CanBeCreatedListener listener = new CanBeCreatedListener() {
+                    @Override
+                    public void onCanBeCreated() {
+
+
+                        Intent intent = new Intent(mainActivity, WidgetSettingsActivity.class);
 //                if (FirebaseMigration.useFirebaseForReadsAndWrites) {
-                    intent.putExtra(Widget.GUID, widget.guid);
+                        intent.putExtra(Widget.GUID, widget.guid);
 //                } else {
 //                    intent.putExtra(Widget.ID, widget.id);
 //                }
 
-                mainActivity.startActivity(intent);
+                        mainActivity.startActivity(intent);
+
+                    }
+                };
+                uiWidget.setOnCanBeCreatedOrEditedListener(listener);
+
+                if (!uiWidget.canBeCreated()) {
+                    widgetCanBeCreatedListeners.add(listener);
+                }
             }
         });
 

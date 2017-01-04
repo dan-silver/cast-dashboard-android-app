@@ -2,6 +2,7 @@ package com.silver.dan.castdemo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -92,6 +93,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         };
         mAuth.addAuthStateListener(mAuthListener);
+
+
+        // Moving here because we can't do this on stock widget creation since they might sync an
+        // account that has one
+        // 
+        // Make sure that the stocks have been dumped into db, only happens on first app launch
+        // in async call
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Stock.insertAllStocks(getApplicationContext());
+            }
+        });
+
 
     }
 

@@ -33,12 +33,6 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
     @BindView(R.id.widget_transparency)
     SeekBar widgetTransparency;
 
-    @BindView(R.id.dashboard_background_picture)
-    ImageView backgroundPicture;
-
-    @BindView(R.id.upload_progress)
-    ProgressBar uploadProgressBar;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_app_settings_theme, container, false);
@@ -112,13 +106,6 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
 
                 })
                 .show();
-    }
-
-
-    @OnClick(R.id.dashboard_background_picture)
-    public void getBackgroundImage() {
-        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, SELECT_PHOTO);
     }
 
     @OnClick(R.id.widget_background_color)
