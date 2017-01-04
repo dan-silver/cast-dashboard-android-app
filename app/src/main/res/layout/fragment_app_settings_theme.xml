@@ -81,7 +81,7 @@
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@{ColorConverter.stringToInteger(settings.dashBackgroundColor)}"/>
+                            android:background="@{ColorConverter.stringToInt(settings.dashBackgroundColor)}"/>
                     </FrameLayout>
                 </RelativeLayout>
             </com.silver.dan.castdemo.settingsFragments.SettingItem>
@@ -131,7 +131,7 @@
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@{ColorConverter.stringToInteger(settings.widgetColor)}"/>
+                            android:background="@{ColorConverter.stringToInt(settings.widgetColor)}"/>
                     </FrameLayout>
                 </RelativeLayout>
             </com.silver.dan.castdemo.settingsFragments.SettingItem>
@@ -164,7 +164,7 @@
                     <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@{ColorConverter.stringToInteger(settings.textColor)}"/>
+                        android:background="@{ColorConverter.stringToInt(settings.textColor)}"/>
                     </FrameLayout>
                 </RelativeLayout>
             </com.silver.dan.castdemo.settingsFragments.SettingItem>

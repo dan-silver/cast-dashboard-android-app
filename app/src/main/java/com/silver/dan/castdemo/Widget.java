@@ -257,6 +257,7 @@ public class Widget extends BaseModel {
 
     @Exclude
     @PrimaryKey(autoincrement = true)
+    @Deprecated
     public long id;
 
     @Column
@@ -408,21 +409,6 @@ public class Widget extends BaseModel {
     }
 
     @Exclude
-    @Deprecated
-    public List<WidgetOption> getOptions(String key) {
-        if (useFirebaseForReadsAndWrites) {
-            return new ArrayList<>();
-        }
-
-
-        return SQLite.select()
-                .from(WidgetOption.class)
-                .where(WidgetOption_Table.widgetForeignKeyContainer_id.eq(id))
-                .and(WidgetOption_Table.key.eq(key))
-                .queryList();
-    }
-
-    @Exclude
     static void fetchAll(FetchAllWidgetsListener listener) {
         fetchAll(null, listener);
     }
@@ -504,7 +490,7 @@ public class Widget extends BaseModel {
 
         try {
             payload.put("type", type);
-            payload.put("id", id);
+            payload.put("id", guid);
             payload.put("position", position);
 
             JSONObject data = getUIWidget(applicationContext).getContent();

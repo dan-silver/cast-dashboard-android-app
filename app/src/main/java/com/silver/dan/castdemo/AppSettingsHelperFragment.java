@@ -31,7 +31,7 @@ public class AppSettingsHelperFragment extends Fragment {
     }
 
     public void createColorPickerDialog(String initialColor, ColorPickerClickListener onResult) {
-        createColorPickerDialog(ColorConverter.stringToInteger(initialColor), onResult);
+        createColorPickerDialog(ColorConverter.stringToInt(initialColor), onResult);
     }
 
     public void createColorPickerDialog(int initialColor, ColorPickerClickListener onResult) {

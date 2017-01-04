@@ -25,7 +25,7 @@ public class CastCommunicator {
     public static void sendWidgetProperty(Widget widget, String property, Object value) {
         try {
             JSONObject propertyValue = new JSONObject();
-            propertyValue.put("widgetId", widget.id);
+            propertyValue.put("widgetId", widget.guid);
             propertyValue.put("property", property);
             propertyValue.put("value", value);
             CastCommunicator.sendJSON("widgetProperty", propertyValue);
@@ -37,7 +37,7 @@ public class CastCommunicator {
     public static void deleteWidget(Widget widget) {
         try {
             JSONObject info = new JSONObject();
-            info.put("id", widget.id);
+            info.put("id", widget.guid);
             CastCommunicator.sendJSON("deleteWidget", info);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -111,19 +111,4 @@ public class CastCommunicator {
         CastCommunicator.sendJSON("widgets", widgetsArr);
     }
 
-    // for extremely large strings, don't wrap in JSON
-    static void sendText(final String text) {
-        if (!mCastManager.isConnected())
-            return;
-
-        new Runnable() {
-            public void run() {
-                try {
-                    mCastManager.sendDataMessage(text, context.getResources().getString(R.string.namespace));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.run();
-    }
 }
