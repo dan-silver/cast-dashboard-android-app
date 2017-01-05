@@ -21,7 +21,7 @@ public class RSSWidget extends UIWidget {
 
     @Override
     public void init() {
-        widget.initOption(RSSSettings.FEED_URL, "http://rss.nytimes.com/services/xml/rss/nyt/InternationalHome.xml");
+        widget.initOption(RSSSettings.FEED_URL, "http://www.cbsnews.com/latest/rss/main");
         widget.initOption(RSSSettings.SHOW_DATES, true);
     }
 

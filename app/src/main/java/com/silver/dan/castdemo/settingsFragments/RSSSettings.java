@@ -59,6 +59,7 @@ public class RSSSettings extends WidgetSettingsFragment {
                         feedUrlOption.update(input.toString());
                         updateWidgetProperty(RSSSettings.FEED_URL, feedUrlOption);
                         updateFeedURLText();
+                        refreshWidget();
                     }
                 }).show();
     }
