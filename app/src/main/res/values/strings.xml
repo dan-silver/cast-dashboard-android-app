@@ -10,7 +10,7 @@
 
 
     <!--Widget Types-->
-    <string name="calendar">Calendar</string>
+    <string name="calendar">Android Calendar</string>
     <string name="stocks">Stocks</string>
     <string name="map">Map</string>
     <string name="clock">Clock</string>

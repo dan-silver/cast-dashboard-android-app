@@ -24,7 +24,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.DoubleAdder;
 
 
 class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetViewHolder> implements ItemTouchHelperAdapter {
@@ -67,7 +66,7 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
             for (Widget widget : widgetList) {
                 widget.position = i;
                 widget.savePosition();
-                widgetOrder.put(String.valueOf(widget.guid), widget.position);
+                widgetOrder.put(widget.guid, widget.position);
                 i++;
             }
         } catch (JSONException e) {
@@ -152,14 +151,8 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
                 CanBeCreatedListener listener = new CanBeCreatedListener() {
                     @Override
                     public void onCanBeCreated() {
-
-
                         Intent intent = new Intent(mainActivity, WidgetSettingsActivity.class);
-//                if (FirebaseMigration.useFirebaseForReadsAndWrites) {
                         intent.putExtra(Widget.GUID, widget.guid);
-//                } else {
-//                    intent.putExtra(Widget.ID, widget.id);
-//                }
 
                         mainActivity.startActivity(intent);
 

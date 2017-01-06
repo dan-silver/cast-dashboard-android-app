@@ -138,18 +138,16 @@ public class Widget extends BaseModel {
     protected static DatabaseReference getFirebaseDashboardWidgetsRef() {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase
-                .child("users")
-                .child(LoginActivity.user.getUid())
-                .child("widgets");
+            .child("users")
+            .child(LoginActivity.user.getUid())
+            .child("widgets");
     }
-
 
     public interface GetWidgetCallback {
         void complete(Widget widget);
 
         void error();
     }
-
 
     // firebase
     @Exclude
