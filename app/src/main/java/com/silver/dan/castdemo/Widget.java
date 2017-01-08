@@ -2,28 +2,20 @@ package com.silver.dan.castdemo;
 
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.google.firebase.database.ValueEventListener;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
 import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.CursorResult;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
-import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
@@ -41,8 +33,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -136,55 +126,13 @@ public class Widget extends BaseModel {
     }
 
     @Exclude
-    protected static DatabaseReference getFirebaseDashboardWidgetsRef() {
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-        return mDatabase
-            .child("users")
-            .child(LoginActivity.user.getUid())
+    static DatabaseReference getFirebaseDashboardWidgetsRef() {
+        return Dashboard.getFirebaseUserDashboardReference()
             .child("widgets");
     }
 
-//    public interface GetWidgetCallback {
-//        void complete(Widget widget);
-//
-//        void error();
-//    }
-
-    // firebase
-//    @Exclude
-//    public static void getFromKey(String key, final GetWidgetCallback callback) {
-//        DatabaseReference ref = getFirebaseDashboardWidgetsRef()
-//                .child(key);
-//
-//        ValueEventListener postListener = new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    Widget widget = dataSnapshot.getValue(Widget.class);
-//                    widget.guid = dataSnapshot.getKey();
-//
-//
-//                    Widget.loadOptions(widget);
-//                    callback.complete(widget);
-//                    return;
-//                }
-//                callback.error();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                // Getting Post failed, log a message
-//                Log.w(MainActivity.TAG, "loadPost:onCancelled", databaseError.toException());
-//                callback.error();
-//                // ...
-//            }
-//        };
-//
-//        ref.addListenerForSingleValueEvent(postListener);
-//    }
-
     @Exclude
-    protected static void loadOptions(Widget widget) {
+    static void loadOptions(Widget widget) {
         if (widget.optionsMap != null) {
             for (Map.Entry pair : widget.optionsMap.entrySet()) {
                 WidgetOption opt = (WidgetOption) pair.getValue();

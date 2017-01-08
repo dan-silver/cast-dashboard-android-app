@@ -45,6 +45,7 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
                 mainActivity.onItemMoved(saveWidgetsOrder());
             }
         });
+        syncWidgetPositions();
     }
 
     WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener, ArrayList<CanBeCreatedListener> widgetCanBeCreatedListeners) {
@@ -53,8 +54,6 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         mDragStartListener = dragStartListener;
         this.widgetCanBeCreatedListeners = widgetCanBeCreatedListeners;
 
-        // @todo
-//        syncWidgetPositions();
     }
 
     @Override
@@ -98,6 +97,7 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         notifyItemInserted(widgetList.indexOf(widget));
     }
 
+    // @todo investigate broken animation
     void deleteWidget(Widget widget) {
         int index = widgetList.indexOf(widget);
         notifyItemRemoved(index);

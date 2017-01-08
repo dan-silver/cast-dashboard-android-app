@@ -32,7 +32,7 @@ public class Dashboard {
         return null;
     }
 
-    public interface OnLoadCallback  {
+    interface OnLoadCallback  {
         void onReady();
 
         void onError();
@@ -42,7 +42,7 @@ public class Dashboard {
 
     }
 
-    public static DatabaseReference getDashboardReference() {
+    public static DatabaseReference getFirebaseUserDashboardReference() {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase
             .child("users")
@@ -69,7 +69,7 @@ public class Dashboard {
             }
         };
 
-        getDashboardReference().addListenerForSingleValueEvent(postListener);
+        getFirebaseUserDashboardReference().addListenerForSingleValueEvent(postListener);
 
     }
     private void addWidgets(DataSnapshot rawWidgets) {
