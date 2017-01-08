@@ -61,6 +61,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.web_client_id))
+                .requestServerAuthCode(getString(R.string.web_client_id), false)
                 .requestEmail()
                 .build();
 
@@ -152,6 +153,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         signInButton.setVisibility(View.GONE);
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+
+        String serverAuthCode = acct.getServerAuthCode();
 
         mAuth.signInWithCredential(credential)
             .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
