@@ -291,19 +291,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         try {
             options.put(setting, value);
             CastCommunicator.sendJSON("options", options);
-
-            // @todo cleanup, move to client/angular
-            // when the column count changes, force refresh all maps
-//            if (setting.equals(AppSettingsBindings.COLUMN_COUNT)) {
-//                Widget.fetchAll(Widget.WidgetType.MAP, new FetchAllWidgetsListener() {
-//                    @Override
-//                    public void results(List<Widget> widgets) {
-//                        for (Widget widget : widgets) {
-//                            CastCommunicator.sendWidget(widget);
-//                        }
-//                    }
-//                });
-//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
