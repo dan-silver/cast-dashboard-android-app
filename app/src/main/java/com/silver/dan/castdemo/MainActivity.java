@@ -81,8 +81,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
 
     public void switchToFragment(final Fragment destinationFrag, final boolean addToBackStack) {
-        new Handler().post(new Runnable() {
-            public void run() {
+//        new Handler().post(new Runnable() {
+//            public void run() {
                 FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                 transaction.replace(R.id.main_fragment, destinationFrag);
 
@@ -90,21 +90,17 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                     transaction.addToBackStack(null);
 
                 transaction.commit();
-            }
-        });
+//            }
+//        });
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
-        ButterKnife.setDebug(true);
         ButterKnife.bind(this);
 
-
         FlowManager.init(new FlowConfig.Builder(this).build());
-
-
 
 
         // Set the adapter for the list view
@@ -164,11 +160,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         mCastConsumer = new DataCastConsumerImpl() {
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-//                if (wasLaunched) {
-//                // always need to send since changes might have been made while not connected
-                    sendAllOptions();
-                    CastCommunicator.sendAllWidgets();
-//                }
+                sendAllOptions();
+                CastCommunicator.sendAllWidgets();
             }
         };
 
@@ -183,8 +176,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        // load app settings
-
+        // load options and widgets
         dashboard = new Dashboard();
         dashboard.loadFromFirebase(getApplicationContext(), new Dashboard.OnLoadCallback() {
             @Override
@@ -310,26 +302,30 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @Override
     protected void onResume() {
-        Log.d(TAG, "onResume() was called");
+        super.onResume();
         mCastManager = DataCastManager.getInstance();
         if (mCastManager != null) {
             mCastManager.addDataCastConsumer(mCastConsumer);
         }
-        super.onResume();
+
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    public void onActivityResult(int requestCode, int resultCode, final Intent intent) {
         if (requestCode == WidgetSettingsActivity.REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 if (intent.hasExtra(Widget.DELETE_WIDGET)) {
-                    String widgetIdToDelete = intent.getStringExtra(Widget.DELETE_WIDGET);
-                    widgetListFrag.deleteWidget(dashboard.getWidgetById(widgetIdToDelete));
+                    new Handler().post(new Runnable() {
+                        public void run() {
+                            String widgetIdToDelete = intent.getStringExtra(Widget.DELETE_WIDGET);
+                            widgetListFrag.deleteWidget(dashboard.getWidgetById(widgetIdToDelete));
+                        }
+                    });
                 }
             }
         }
     }
 
-                @Override
+    @Override
     public void onBackPressed() {
         mDrawer.closeDrawer(GravityCompat.START);
         uncheckAllMenuItems();

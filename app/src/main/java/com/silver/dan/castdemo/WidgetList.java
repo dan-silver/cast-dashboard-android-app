@@ -127,9 +127,6 @@ public class WidgetList extends Fragment implements OnDragListener {
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity()).setDrawerItemChecked(MainActivity.NAV_VIEW_WIDGETS_ITEM);
-
-        adapter.notifyDataSetChanged();
-
     }
 
     public void processPermissionReceivedCallback(int key, boolean permissionGranted) {
