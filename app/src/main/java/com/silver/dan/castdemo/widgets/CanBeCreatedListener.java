@@ -13,7 +13,7 @@ public abstract class CanBeCreatedListener {
         return key == requiredCondition;
     }
 
-    public void setRequiredCondition(int condition) {
+    void setRequiredCondition(int condition) {
         this.requiredCondition = condition;
     }
 }

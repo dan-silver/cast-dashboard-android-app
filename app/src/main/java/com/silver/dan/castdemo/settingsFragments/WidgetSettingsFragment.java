@@ -94,30 +94,19 @@ public abstract class WidgetSettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         final WidgetSettingsFragment _this = this;
-//        if (FirebaseMigration.useFirebaseForReadsAndWrites) {
-            String widgetKey = bundle.getString(Widget.GUID);
-            Widget.getFromKey(widgetKey, new Widget.GetWidgetCallback() {
-                @Override
-                public void complete(Widget widget) {
-                    _this.widget = widget;
-                    _this.initView();
-                }
+        String widgetKey = bundle.getString(Widget.GUID);
+        Widget.getFromKey(widgetKey, new Widget.GetWidgetCallback() {
+            @Override
+            public void complete(Widget widget) {
+                _this.widget = widget;
+                _this.initView();
+            }
 
-                @Override
-                public void error() {
+            @Override
+            public void error() {
 
-                }
-            });
-
-/*        } else {
-            long widgetId = bundle.getLong(Widget.ID, -1);
-
-            // lookup widget in the database
-            // display appropriate settings for that widget type
-            widget = new Select().from(Widget.class).where(Widget_Table.id.eq(widgetId)).querySingle();
-            this.initView();
-
-        }*/
+            }
+        });
     }
 
     protected void supportWidgetHeightOption() {

@@ -16,6 +16,7 @@ import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -120,11 +121,7 @@ public class WidgetOption extends BaseModel {
             super.save();
 
 
-
-//        if (widgetRef != null) {
-//            widgetRef.saveFirebaseOnly();
-            saveFirebase();
-//        }
+        saveFirebase();
     }
 
     @Exclude
@@ -171,9 +168,7 @@ public class WidgetOption extends BaseModel {
     public List<String> getList() {
         String[] stringArray = this.value.split(",");
         List<String> items = new ArrayList<>();
-        for (String item : stringArray) {
-            items.add(item);
-        }
+        Collections.addAll(items, stringArray);
 
         return items;
     }

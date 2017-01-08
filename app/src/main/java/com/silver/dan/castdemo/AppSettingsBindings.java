@@ -96,21 +96,11 @@ public class AppSettingsBindings extends BaseObservable {
     }
 
     @Exclude
-    public void setWidgetColor(String widgetColor) {
-        this.widgetColor = widgetColor;
-        notifyPropertyChanged(BR.widgetColor);
-        appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
-    }
-
-    @Exclude
     public void setWidgetColor(int widgetColor) {
         this.widgetColor = ColorConverter.intToString(widgetColor);
         notifyPropertyChanged(BR.widgetColor);
         appSettings.mCallback.onSettingChanged(WIDGET_COLOR, getWidgetColorHexStr());
     }
-
-
-
 
     @Exclude
     public void setSlideshowInterval(int interval) {

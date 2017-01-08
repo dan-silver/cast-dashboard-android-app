@@ -32,7 +32,6 @@ public class WidgetSettingsActivity extends AppCompatActivity {
     @BindView(R.id.scroll_view_header)
     FrameLayout scrollViewHeader;
 
-//    private long widgetId = -1;
     private String widgetKey = null;
 
 
@@ -42,7 +41,6 @@ public class WidgetSettingsActivity extends AppCompatActivity {
         // Save UI state changes to the savedInstanceState.
         // This bundle will be passed to onCreate if the process is
         // killed and restarted.
-//        savedInstanceState.putLong(Widget.ID, widgetId);
         savedInstanceState.putString(Widget.GUID, widgetKey);
     }
 
@@ -59,7 +57,6 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
 
         Bundle b = getIntent().getExtras();
-//        if (FirebaseMigration.useFirebaseForReadsAndWrites) {
         widgetKey = b.getString(Widget.GUID);
         widget = Widget.getFromCache(widgetKey);
         completeSetup();
@@ -73,11 +70,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
         WidgetSettingsFragment typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
 
         Bundle bundle = new Bundle();
-//        if (FirebaseMigration.useFirebaseForReadsAndWrites) {
-            bundle.putString(Widget.GUID, widget.guid);
-//        } else {
-//            bundle.putLong(Widget.ID, widget.id);
-//        }
+        bundle.putString(Widget.GUID, widget.guid);
         typeSettingsFragment.setArguments(bundle);
 
         FragmentManager fm = getSupportFragmentManager();

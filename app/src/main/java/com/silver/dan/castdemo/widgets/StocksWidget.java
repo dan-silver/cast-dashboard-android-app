@@ -1,7 +1,6 @@
 package com.silver.dan.castdemo.widgets;
 
 import android.content.Context;
-import android.os.AsyncTask;
 
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.Stock;

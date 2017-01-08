@@ -82,10 +82,6 @@ public class CalendarListAdapter extends RecyclerView.Adapter<CalendarListAdapte
                 }
 
                 calendarEnabled.update(enabledIds);
-
-//                widget.save();
-
-//                calendarEnabled.save();
                 CastCommunicator.sendWidget(widget);
 
             }

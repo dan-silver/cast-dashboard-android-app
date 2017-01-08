@@ -209,7 +209,6 @@ public class Widget extends BaseModel {
         // if the guid is empty, it's never been saved to firebase before
         if (this.guid == null) {
             this.guid = widgetsRef.push().getKey();
-//            this.save();
         }
 
         return widgetsRef.child(this.guid);
@@ -364,12 +363,6 @@ public class Widget extends BaseModel {
     // {key:x,value:y}
     private Map<String, WidgetOption> getMappedOptions() {
         return optionsMap;
-
-/*        Map<String, String> options = new HashMap<>();
-        for (WidgetOption opt : getOptions()) {
-            options.put(opt.key, opt.value);
-        }
-        return options; */
     }
 
     @Exclude
