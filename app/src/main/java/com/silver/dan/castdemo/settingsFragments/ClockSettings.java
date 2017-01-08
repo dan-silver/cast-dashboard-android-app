@@ -27,7 +27,7 @@ public class ClockSettings extends WidgetSettingsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.clock_settings, container, false);
         ButterKnife.bind(this, view);
-
+        initView();
         return view;
     }
 

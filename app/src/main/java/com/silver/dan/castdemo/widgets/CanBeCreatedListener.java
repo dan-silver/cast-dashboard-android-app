@@ -9,7 +9,7 @@ public abstract class CanBeCreatedListener {
 
     public abstract void onCanBeCreated();
 
-    public boolean checkIfConditionsAreMet(int key) {
+    public boolean ifConditionsAreMet(int key) {
         return key == requiredCondition;
     }
 

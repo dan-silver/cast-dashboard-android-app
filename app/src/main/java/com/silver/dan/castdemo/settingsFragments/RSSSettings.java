@@ -34,7 +34,7 @@ public class RSSSettings extends WidgetSettingsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.rss_settings, container, false);
         ButterKnife.bind(this, view);
-
+        initView();
 
         return view;
     }

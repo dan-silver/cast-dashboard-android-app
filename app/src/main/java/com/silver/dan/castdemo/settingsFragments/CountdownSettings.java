@@ -46,7 +46,7 @@ public class CountdownSettings extends WidgetSettingsFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.countdown_settings, container, false);
         ButterKnife.bind(this, view);
-
+        initView();
         return view;
     }
 

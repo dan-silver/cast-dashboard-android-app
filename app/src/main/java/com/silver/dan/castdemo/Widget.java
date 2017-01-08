@@ -143,56 +143,47 @@ public class Widget extends BaseModel {
             .child("widgets");
     }
 
-    public interface GetWidgetCallback {
-        void complete(Widget widget);
-
-        void error();
-    }
-
-    // firebase
-    @Exclude
-    public static Widget getFromCache(String key) {
-        for (Widget widget : WidgetList.widgetsCache) {
-            if (widget.guid.equals(key)) return widget;
-        }
-        return null;
-    }
+//    public interface GetWidgetCallback {
+//        void complete(Widget widget);
+//
+//        void error();
+//    }
 
     // firebase
+//    @Exclude
+//    public static void getFromKey(String key, final GetWidgetCallback callback) {
+//        DatabaseReference ref = getFirebaseDashboardWidgetsRef()
+//                .child(key);
+//
+//        ValueEventListener postListener = new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if (dataSnapshot.exists()) {
+//                    Widget widget = dataSnapshot.getValue(Widget.class);
+//                    widget.guid = dataSnapshot.getKey();
+//
+//
+//                    Widget.loadOptions(widget);
+//                    callback.complete(widget);
+//                    return;
+//                }
+//                callback.error();
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                // Getting Post failed, log a message
+//                Log.w(MainActivity.TAG, "loadPost:onCancelled", databaseError.toException());
+//                callback.error();
+//                // ...
+//            }
+//        };
+//
+//        ref.addListenerForSingleValueEvent(postListener);
+//    }
+
     @Exclude
-    public static void getFromKey(String key, final GetWidgetCallback callback) {
-        DatabaseReference ref = getFirebaseDashboardWidgetsRef()
-                .child(key);
-
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Widget widget = dataSnapshot.getValue(Widget.class);
-                    widget.guid = dataSnapshot.getKey();
-
-
-                    Widget.loadOptions(widget);
-                    callback.complete(widget);
-                    return;
-                }
-                callback.error();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(MainActivity.TAG, "loadPost:onCancelled", databaseError.toException());
-                callback.error();
-                // ...
-            }
-        };
-
-        ref.addListenerForSingleValueEvent(postListener);
-    }
-
-    @Exclude
-    private static void loadOptions(Widget widget) {
+    protected static void loadOptions(Widget widget) {
         if (widget.optionsMap != null) {
             for (Map.Entry pair : widget.optionsMap.entrySet()) {
                 WidgetOption opt = (WidgetOption) pair.getValue();
@@ -244,6 +235,7 @@ public class Widget extends BaseModel {
     @Override
     public void delete() {
         getFirebaseWidgetRef().removeValue();
+        MainActivity.dashboard.removeWidget(this);
         super.delete();
     }
 
@@ -398,82 +390,6 @@ public class Widget extends BaseModel {
                 .and(WidgetOption_Table.key.eq(key))
                 .querySingle();
     }
-
-    @Exclude
-    static void fetchAll(FetchAllWidgetsListener listener) {
-        fetchAll(null, listener);
-    }
-
-
-    @Exclude
-    static void fetchAll(final WidgetType type, final FetchAllWidgetsListener listener) {
-        if (useFirebaseForReadsAndWrites) {
-            ValueEventListener postListener = new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    List<Widget> widgets = new ArrayList<>();
-                    for (DataSnapshot nextWidget : dataSnapshot.getChildren()) {
-                        Widget widget = nextWidget.getValue(Widget.class);
-
-                        widget.guid = nextWidget.getKey();
-
-                        Widget.loadOptions(widget);
-
-                        // optionally use the filter
-                        if (type == null || type == widget.getWidgetType())
-                            widgets.add(widget);
-                    }
-
-                    Collections.sort(widgets, new Comparator<Widget>() {
-                        @Override
-                        public int compare(Widget w1, Widget w2) {
-                            if(w1.position == w2.position)
-                                return 0;
-                            return w1.position < w2.position ? -1 : 1;
-                        }
-                    });
-                    listener.results(widgets);
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    // Getting Post failed, log a message
-//                    listener.onError();
-//                    @todo
-                    Log.w(MainActivity.TAG, "loadPost:onCancelled", databaseError.toException());
-                    // ...
-                }
-            };
-
-            getFirebaseDashboardWidgetsRef().addListenerForSingleValueEvent(postListener);
-
-        } else {
-            // this code path is only used for the initial firebase migration
-            ConditionGroup conditions = ConditionGroup.clause();
-
-            if (type != null) {
-                conditions.and(Widget_Table.type.is(type.getValue()));
-            }
-
-            QueryTransaction.Builder<Widget> query = new QueryTransaction.Builder<>(
-                    new Select()
-                            .from(Widget.class)
-                            .where(conditions)
-                            .orderBy(Widget_Table.position, true));
-
-
-            FlowManager
-                    .getDatabase(WidgetDatabase.class)
-                    .beginTransactionAsync(query.queryResult(new QueryTransaction.QueryResultCallback<Widget>() {
-                        @Override
-                        public void onQueryResult(QueryTransaction transaction, @NonNull CursorResult<Widget> result) {
-                            listener.results(result.toList());
-                        }
-                    }).build()).build().execute();
-        }
-    }
-
 
     @Exclude
     JSONObject getJSONContent(Context applicationContext) {

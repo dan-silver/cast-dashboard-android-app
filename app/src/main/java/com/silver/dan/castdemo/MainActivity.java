@@ -1,9 +1,7 @@
 package com.silver.dan.castdemo;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -31,7 +29,6 @@ import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration
 import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumer;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
-import com.google.android.libraries.cast.companionlibrary.widgets.IntroductoryOverlay;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -42,7 +39,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -66,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @BindView(R.id.top_toolbar)
     Toolbar top_toolbar;
-    protected static AppSettingsBindings settings;
+    public static Dashboard dashboard;
 
     @OnClick(R.id.logout_btn)
     public void logout() {
@@ -84,14 +80,18 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
-    public void switchToFragment(Fragment destinationFrag, boolean addToBackStack) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.main_fragment, destinationFrag);
+    public void switchToFragment(final Fragment destinationFrag, final boolean addToBackStack) {
+        new Handler().post(new Runnable() {
+            public void run() {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.main_fragment, destinationFrag);
 
-        if (addToBackStack)
-            transaction.addToBackStack(null);
+                if (addToBackStack)
+                    transaction.addToBackStack(null);
 
-        transaction.commit();
+                transaction.commit();
+            }
+        });
     }
 
     @Override
@@ -104,8 +104,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         FlowManager.init(new FlowConfig.Builder(this).build());
 
-        widgetListFrag = new WidgetList();
-        switchToFragment(widgetListFrag, false);
 
 
 
@@ -161,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         mCastManager.setStopOnDisconnect(false);
 
         mCastManager.reconnectSessionIfPossible();
-        CastCommunicator.init(this, mCastManager);
+
 
         mCastConsumer = new DataCastConsumerImpl() {
             @Override
@@ -186,11 +184,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         // load app settings
-        settings = new AppSettingsBindings();
-        settings.loadAllSettingsFromFirebase(getApplicationContext(), new AppSettingsBindings.onLoadCallback() {
+
+        dashboard = new Dashboard();
+        dashboard.loadFromFirebase(getApplicationContext(), new Dashboard.OnLoadCallback() {
             @Override
             public void onReady() {
-
+                widgetListFrag = new WidgetList();
+                switchToFragment(widgetListFrag, false);
             }
 
             @Override
@@ -198,6 +198,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
             }
         });
+
+        CastCommunicator.init(this, mCastManager, dashboard);
     }
 
     private void setupNavBarUserInfo() {
@@ -261,15 +263,15 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     private void sendAllOptions() {
         JSONObject options = new JSONObject();
         try {
-            options.put(AppSettingsBindings.COLUMN_COUNT, settings.getNumberOfColumnsUI());
-            options.put(AppSettingsBindings.BACKGROUND_COLOR, settings.getBackgroundColorHexStr());
-            options.put(AppSettingsBindings.WIDGET_COLOR, settings.getWidgetColorHexStr());
-            options.put(AppSettingsBindings.BACKGROUND_TYPE, settings.getBackgroundTypeUI());
-            options.put(AppSettingsBindings.WIDGET_TRANSPARENCY, settings.getWidgetTransparencyUI());
-            options.put(AppSettingsBindings.TEXT_COLOR, settings.getTextColorHextStr());
-            options.put(AppSettingsBindings.SCREEN_PADDING, settings.getScreenPaddingUI());
+            options.put(AppSettingsBindings.COLUMN_COUNT, dashboard.settings.getNumberOfColumnsUI());
+            options.put(AppSettingsBindings.BACKGROUND_COLOR, dashboard.settings.getBackgroundColorHexStr());
+            options.put(AppSettingsBindings.WIDGET_COLOR, dashboard.settings.getWidgetColorHexStr());
+            options.put(AppSettingsBindings.BACKGROUND_TYPE, dashboard.settings.getBackgroundTypeUI());
+            options.put(AppSettingsBindings.WIDGET_TRANSPARENCY, dashboard.settings.getWidgetTransparencyUI());
+            options.put(AppSettingsBindings.TEXT_COLOR, dashboard.settings.getTextColorHextStr());
+            options.put(AppSettingsBindings.SCREEN_PADDING, dashboard.settings.getScreenPaddingUI());
             options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.getLanguage());
-            options.put(AppSettingsBindings.SLIDESHOW_INTERVAL, settings.getSlideshowInterval());
+            options.put(AppSettingsBindings.SLIDESHOW_INTERVAL, dashboard.settings.getSlideshowInterval());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -292,16 +294,16 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
             // @todo cleanup, move to client/angular
             // when the column count changes, force refresh all maps
-            if (setting.equals(AppSettingsBindings.COLUMN_COUNT)) {
-                Widget.fetchAll(Widget.WidgetType.MAP, new FetchAllWidgetsListener() {
-                    @Override
-                    public void results(List<Widget> widgets) {
-                        for (Widget widget : widgets) {
-                            CastCommunicator.sendWidget(widget);
-                        }
-                    }
-                });
-            }
+//            if (setting.equals(AppSettingsBindings.COLUMN_COUNT)) {
+//                Widget.fetchAll(Widget.WidgetType.MAP, new FetchAllWidgetsListener() {
+//                    @Override
+//                    public void results(List<Widget> widgets) {
+//                        for (Widget widget : widgets) {
+//                            CastCommunicator.sendWidget(widget);
+//                        }
+//                    }
+//                });
+//            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -344,34 +346,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
-
-            // if the user accepts the read calendar access, resend all of the calendar widgets
-            // if they deny, remove all calendar widgets
             case CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Widget.fetchAll(Widget.WidgetType.CALENDAR, new FetchAllWidgetsListener() {
-                        @Override
-                        public void results(List<Widget> widgets) {
-                            for (Widget w : widgets) {
-                                CastCommunicator.sendWidget(w);
-                            }
-                        }
-                    });
-                    widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR, true);
-                } else {
-                    Widget.fetchAll(Widget.WidgetType.CALENDAR, new FetchAllWidgetsListener() {
-                        @Override
-                        public void results(List<Widget> widgets) {
-                            for (Widget w : widgets) {
-                                CastCommunicator.deleteWidget(w);
-                                w.delete();
-                            }
-
-                            widgetListFrag.refreshList();
-                        }
-                    });
-                    widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR, false);
-                }
+                boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR, granted);
             }
         }
     }

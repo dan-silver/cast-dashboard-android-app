@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
@@ -10,7 +11,13 @@ import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.ValueEventListener;
+import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
+import com.raizlabs.android.dbflow.sql.language.CursorResult;
+import com.raizlabs.android.dbflow.sql.language.Select;
+import com.raizlabs.android.dbflow.structure.database.transaction.QueryTransaction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,30 +71,50 @@ class FirebaseMigration {
     }
 
     private void uploadDashboard(final Context context, final SimpleCompletionListener callback) {
-        Widget.fetchAll(new FetchAllWidgetsListener() {
-            @Override
-            public void results(List<Widget> widgets) {
-                //
-                // upload widgets
-                //
+        ConditionGroup conditions = ConditionGroup.clause();
 
-                for (Widget widget : widgets) {
-                    widget.saveFirstTimeWithMigration();
-                }
+        QueryTransaction.Builder<Widget> query = new QueryTransaction.Builder<>(
+                new Select()
+                        .from(Widget.class)
+                        .where(conditions)
+                        .orderBy(Widget_Table.position, true));
 
-                useFirebaseForReadsAndWrites = true;
-                callback.onComplete();
 
-                //
-                // options
-                //
+        FlowManager
+                .getDatabase(WidgetDatabase.class)
+                .beginTransactionAsync(query.queryResult(new QueryTransaction.QueryResultCallback<Widget>() {
+                    @Override
+                    public void onQueryResult(QueryTransaction transaction, @NonNull CursorResult<Widget> result) {
+                        List<Widget> widgets = result.toList();
 
-                AppSettingsBindings options = new AppSettingsBindings();
-                options.loadAllSettingsFromSharedPreferences(context);
-                options.saveAllSettings();
+                        //
+                        // upload widgets
+                        //
 
-            }
-        });
+
+                        if (widgets != null) {
+                            for (Widget widget : widgets) {
+                                widget.saveFirstTimeWithMigration();
+                            }
+                        }
+
+                        useFirebaseForReadsAndWrites = true;
+                        callback.onComplete();
+
+                        //
+                        // options
+                        //
+
+                        AppSettingsBindings options = new AppSettingsBindings();
+                        options.loadAllSettingsFromSharedPreferences(context);
+                        options.saveAllSettings();
+                    }
+                }).build()).build().execute();
+
+
+
+
+
     }
 
 }

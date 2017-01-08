@@ -63,6 +63,7 @@ public class CalendarSettings extends WidgetSettingsFragment {
         View view = inflater.inflate(R.layout.calendar_settings, container, false);
         ButterKnife.bind(this, view);
 
+        initView();
 
         return view;
     }

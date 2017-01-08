@@ -91,6 +91,7 @@ public class MapSettings extends WidgetSettingsFragment implements GoogleApiClie
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.map_settings, container, false);
         ButterKnife.bind(this, view);
+        initView();
         return view;
     }
 

@@ -170,6 +170,10 @@ public class WidgetOption extends BaseModel {
         List<String> items = new ArrayList<>();
         Collections.addAll(items, stringArray);
 
+
+        if (items.size() == 1 && items.get(0).length() == 0)
+            return new ArrayList<>();
+
         return items;
     }
 

@@ -58,7 +58,8 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         widgetKey = b.getString(Widget.GUID);
-        widget = Widget.getFromCache(widgetKey);
+
+        widget = MainActivity.dashboard.getWidgetById(widgetKey);
         completeSetup();
     }
 

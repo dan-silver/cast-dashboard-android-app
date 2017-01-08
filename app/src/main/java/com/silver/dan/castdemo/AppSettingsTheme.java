@@ -34,7 +34,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         ButterKnife.bind(this, view);
 
         viewModel = FragmentAppSettingsThemeBinding.bind(view);
-        bindings = MainActivity.settings;
+        bindings = MainActivity.dashboard.settings;
         bindings.init(this);
         ((FragmentAppSettingsThemeBinding) viewModel).setSettings(bindings);
 

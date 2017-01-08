@@ -62,14 +62,36 @@ public class AppSettingsBindings extends BaseObservable {
     @Deprecated
     static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
 
-    public interface onLoadCallback {
-        void onReady();
-
-        void onError();
-    }
-
 
     public AppSettingsBindings() {
+    }
+
+    public void initDefaults(Context context) {
+        // default settings
+        if (dashBackgroundColor == null)
+            dashBackgroundColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.tv_background));
+
+        if (numberOfColumns == null)
+            numberOfColumns = 2;
+
+        if (backgroundType == null)
+            backgroundType = BackgroundType.SLIDESHOW.getValue();
+
+        if (widgetTransparency == null)
+            widgetTransparency = 15; //15% x 2 + 50 = 80/100
+
+        if (widgetColor == null)
+            widgetColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.md_material_blue_800));
+
+        if (textColor == null)
+            textColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.tv_text_light));
+
+        if (screenPadding == null)
+            screenPadding = 15;
+
+        if (slideshowInterval == null)
+            slideshowInterval = 30;
+
         addOnPropertyChangedCallback(new OnPropertyChangedCallback() {
             @Override
             public void onPropertyChanged(Observable sender, int propertyId) {
@@ -189,74 +211,6 @@ public class AppSettingsBindings extends BaseObservable {
         settings.put("screenPadding", screenPadding);
 
         getFirebaseDashboardOptionsRef().setValue(settings);
-
-    }
-
-    @Exclude
-    public void loadAllSettingsFromFirebase(final Context context, final onLoadCallback callback) {
-
-        getFirebaseDashboardOptionsRef().addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                AppSettingsBindings tempSettings = dataSnapshot.getValue(AppSettingsBindings.class);
-
-                // Don't use setters here because we don't want to trigger a sendMessage() to TV
-                if (tempSettings == null || tempSettings.numberOfColumns == null) {
-                    numberOfColumns = 2;
-                } else {
-                    numberOfColumns = tempSettings.numberOfColumns;
-                }
-
-                if (tempSettings == null || tempSettings.dashBackgroundColor == null) {
-                    dashBackgroundColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.tv_background));
-                } else {
-                    dashBackgroundColor = tempSettings.dashBackgroundColor;
-                }
-
-                if (tempSettings == null || tempSettings.widgetColor == null) {
-                    widgetColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.md_material_blue_800));
-                } else {
-                    widgetColor = tempSettings.widgetColor;
-                }
-
-                if (tempSettings == null || tempSettings.textColor == null) {
-                    textColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.tv_text_light));
-                } else {
-                    textColor = tempSettings.textColor;
-                }
-
-                if (tempSettings == null || tempSettings.backgroundType == null) {
-                    backgroundType = 0;
-                } else {
-                    backgroundType = tempSettings.backgroundType;
-                }
-
-                if (tempSettings == null || tempSettings.widgetTransparency == null) {
-                    widgetTransparency = 15; //15% x 2 + 50 = 80/100
-                } else {
-                    widgetTransparency = tempSettings.widgetTransparency;
-                }
-
-                if (tempSettings == null || tempSettings.screenPadding == null) {
-                    screenPadding = 15;
-                } else {
-                    screenPadding = tempSettings.screenPadding;
-                }
-
-                if (tempSettings == null || tempSettings.slideshowInterval == null) {
-                    slideshowInterval = 30;
-                } else {
-                    slideshowInterval = tempSettings.slideshowInterval;
-                }
-                callback.onReady();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                callback.onError();
-            }
-        });
 
     }
 

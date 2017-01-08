@@ -29,8 +29,7 @@ public class WidgetList extends Fragment implements OnDragListener {
 
     @BindView(R.id.widgetList)
     RecyclerView widgetList;
-
-    static List<Widget> widgetsCache;
+    private WidgetListAdapter adapter;
 
     public WidgetList() {
 
@@ -38,17 +37,17 @@ public class WidgetList extends Fragment implements OnDragListener {
 
     private ItemTouchHelper mItemTouchHelper;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        adapter = new WidgetListAdapter(MainActivity.dashboard.widgets, (MainActivity) getActivity(), this, widgetCanBeCreatedListeners);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.widget_list, container, false);
         ButterKnife.bind(this, view);
-
-
-        // initially populate this list with an empty widget list
-        WidgetListAdapter adapter = new WidgetListAdapter(null, (MainActivity) getActivity(), this, widgetCanBeCreatedListeners);
-        widgetList.setAdapter(adapter);
-
 
         return view;
     }
@@ -56,8 +55,7 @@ public class WidgetList extends Fragment implements OnDragListener {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-
+        widgetList.setAdapter(adapter);
         widgetList.setLayoutManager(new LinearLayoutManager(getContext()));
 
     }
@@ -100,8 +98,10 @@ public class WidgetList extends Fragment implements OnDragListener {
                             public void onCanBeCreated() {
                                 widget.save();
 
+                                adapter.addWidget(widget);
+
                                 widget.initWidgetSettings(getContext());
-                                refreshList();
+
                                 CastCommunicator.sendWidget(widget);
 
                             }
@@ -120,16 +120,22 @@ public class WidgetList extends Fragment implements OnDragListener {
 
     @Override
     public void onResume() {
+        super.onResume();
         ((MainActivity) getActivity()).setDrawerItemChecked(MainActivity.NAV_VIEW_WIDGETS_ITEM);
 
-        refreshList();
-        super.onResume();
+        adapter.notifyDataSetChanged();
+
+        // @todo move to onCreate for 1 time setup?
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(widgetList);
+
     }
 
     public void processPermissionReceivedCallback(int key, boolean permissionGranted) {
         for (Iterator<CanBeCreatedListener> iterator = widgetCanBeCreatedListeners.iterator(); iterator.hasNext(); ) {
             CanBeCreatedListener listener = iterator.next();
-            if (listener.checkIfConditionsAreMet(key)) {
+            if (listener.ifConditionsAreMet(key)) {
                 if (permissionGranted) {
                     listener.onCanBeCreated();
                 } else {
@@ -137,29 +143,6 @@ public class WidgetList extends Fragment implements OnDragListener {
                 }
             }
         }
-    }
-
-    public void refreshList() {
-
-        // async fetch all saved widgets
-        Widget.fetchAll(new FetchAllWidgetsListener() {
-            @Override
-            public void results(List<Widget> widgets) {
-                // manually order the list
-                widgetsCache = widgets;
-
-                WidgetListAdapter adapter = (WidgetListAdapter) widgetList.getAdapter();
-
-                adapter.setWidgetList(widgets);
-                adapter.notifyDataSetChanged();
-
-
-
-                ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
-                mItemTouchHelper = new ItemTouchHelper(callback);
-                mItemTouchHelper.attachToRecyclerView(widgetList);
-            }
-        });
     }
 
     @Override

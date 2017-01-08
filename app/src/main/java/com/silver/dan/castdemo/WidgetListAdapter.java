@@ -51,7 +51,8 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         mDragStartListener = dragStartListener;
         this.widgetCanBeCreatedListeners = widgetCanBeCreatedListeners;
 
-        syncWidgetPositions();
+        // @todo
+//        syncWidgetPositions();
     }
 
     @Override
@@ -90,9 +91,11 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         }
     }
 
-    void setWidgetList(List<Widget> widgetList) {
-        this.widgetList = widgetList;
+    public void addWidget(Widget widget) {
+        this.widgetList.add(widget);
+        notifyDataSetChanged();
     }
+
 
     class WidgetViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         TextView topHeader;
@@ -146,8 +149,6 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
 
             @Override
             public void onClick(View v) {
-
-
                 CanBeCreatedListener listener = new CanBeCreatedListener() {
                     @Override
                     public void onCanBeCreated() {

@@ -9,16 +9,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 
 public class CastCommunicator {
 
     static Context context;
     static DataCastManager mCastManager;
+    private static Dashboard dashboard;
 
-    public static void init(Context ctx, DataCastManager mCastManager) {
+    public static void init(Context ctx, DataCastManager mCastManager, Dashboard dashboard) {
         CastCommunicator.context = ctx;
         CastCommunicator.mCastManager = mCastManager;
+        CastCommunicator.dashboard = dashboard;
     }
 
     public static void sendWidgetProperty(Widget widget, String property, Object value) {
@@ -94,16 +95,15 @@ public class CastCommunicator {
         if (!mCastManager.isConnected())
             return;
 
-        Widget.fetchAll(new FetchAllWidgetsListener() {
-            @Override
-            public void results(List<Widget> widgets) {
-                JSONArray widgetsArr = new JSONArray();
-                for (Widget widget : widgets) {
-                    widgetsArr.put(widget.getJSONContent(context));
-                }
-                CastCommunicator.sendWidgets(widgetsArr);
-            }
-        });
+        if (CastCommunicator.dashboard == null) {
+            throw new Error("dashboard is not set yet");
+        }
+
+        JSONArray widgetsArr = new JSONArray();
+        for (Widget widget : CastCommunicator.dashboard.widgets) {
+            widgetsArr.put(widget.getJSONContent(context));
+        }
+        CastCommunicator.sendWidgets(widgetsArr);
     }
 
     private static void sendWidgets(JSONArray widgetsArr) {

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 import com.silver.dan.castdemo.CastCommunicator;
+import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
@@ -93,20 +94,8 @@ public abstract class WidgetSettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
-        final WidgetSettingsFragment _this = this;
         String widgetKey = bundle.getString(Widget.GUID);
-        Widget.getFromKey(widgetKey, new Widget.GetWidgetCallback() {
-            @Override
-            public void complete(Widget widget) {
-                _this.widget = widget;
-                _this.initView();
-            }
-
-            @Override
-            public void error() {
-
-            }
-        });
+        this.widget = MainActivity.dashboard.getWidgetById(widgetKey);
     }
 
     protected void supportWidgetHeightOption() {
