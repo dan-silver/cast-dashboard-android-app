@@ -96,7 +96,6 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         notifyItemInserted(widgetList.indexOf(widget));
     }
 
-    // @todo investigate broken animation
     void deleteWidget(Widget widget) {
         int index = widgetList.indexOf(widget);
         notifyItemRemoved(index);

@@ -38,7 +38,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
 
 
     protected void refreshWidget() {
-        CastCommunicator.sendWidget(widget);
+        CastCommunicator.sendWidget(widget, getContext());
     }
 
     protected void updateWidgetProperty(String property, Object value) {

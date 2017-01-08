@@ -11,15 +11,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 
 public class CastCommunicator {
-
-    static Context context;
-    static DataCastManager mCastManager;
+    private static DataCastManager mCastManager;
     private static Dashboard dashboard;
+    private static String namespace;
 
-    public static void init(Context ctx, DataCastManager mCastManager, Dashboard dashboard) {
-        CastCommunicator.context = ctx;
+    public static void init(DataCastManager mCastManager, Dashboard dashboard, String namespace) {
         CastCommunicator.mCastManager = mCastManager;
         CastCommunicator.dashboard = dashboard;
+        CastCommunicator.namespace = namespace;
     }
 
     public static void sendWidgetProperty(Widget widget, String property, Object value) {
@@ -74,7 +73,7 @@ public class CastCommunicator {
         new Runnable() {
             public void run() {
                 try {
-                    mCastManager.sendDataMessage(container.toString(), context.getResources().getString(R.string.namespace));
+                    mCastManager.sendDataMessage(container.toString(), CastCommunicator.namespace);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -82,7 +81,7 @@ public class CastCommunicator {
         }.run();
     }
 
-    public static void sendWidget(Widget widget) {
+    public static void sendWidget(Widget widget, Context context) {
         if (!mCastManager.isConnected())
             return;
 
@@ -91,7 +90,7 @@ public class CastCommunicator {
         CastCommunicator.sendWidgets(widgetsArr);
     }
 
-    static void sendAllWidgets() {
+    static void sendAllWidgets(Context context) {
         if (!mCastManager.isConnected())
             return;
 

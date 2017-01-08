@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
                 sendAllOptions();
-                CastCommunicator.sendAllWidgets();
+                CastCommunicator.sendAllWidgets(getApplicationContext());
             }
         };
 
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             }
         });
 
-        CastCommunicator.init(this, mCastManager, dashboard);
+        CastCommunicator.init(mCastManager, dashboard, getResources().getString(R.string.namespace));
 
         switchToFragment(new LoadingFragment(), false);
     }
