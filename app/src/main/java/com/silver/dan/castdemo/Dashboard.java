@@ -32,10 +32,6 @@ public class Dashboard {
         return null;
     }
 
-    public void removeWidget(Widget widget) {
-        this.widgets.remove(widget);
-    }
-
     public interface OnLoadCallback  {
         void onReady();
 

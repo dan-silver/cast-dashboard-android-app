@@ -61,6 +61,7 @@ public class Widget extends BaseModel {
     private static int DEFAULT_SCROLL_INTERVAL = 20;
 
     public static String GUID = "GUID";
+    public static String DELETE_WIDGET = "DELETE_WIDGET";
 
     @Exclude
     UIWidget getUIWidget(Context context) {
@@ -235,7 +236,6 @@ public class Widget extends BaseModel {
     @Override
     public void delete() {
         getFirebaseWidgetRef().removeValue();
-        MainActivity.dashboard.removeWidget(this);
         super.delete();
     }
 

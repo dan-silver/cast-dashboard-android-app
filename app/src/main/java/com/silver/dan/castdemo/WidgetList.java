@@ -9,6 +9,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.silver.dan.castdemo.widgetList.OnDragListener;
@@ -22,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class WidgetList extends Fragment implements OnDragListener {
 
@@ -40,7 +42,6 @@ public class WidgetList extends Fragment implements OnDragListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         adapter = new WidgetListAdapter(MainActivity.dashboard.widgets, (MainActivity) getActivity(), this, widgetCanBeCreatedListeners);
     }
 
@@ -57,7 +58,11 @@ public class WidgetList extends Fragment implements OnDragListener {
         super.onViewCreated(view, savedInstanceState);
         widgetList.setAdapter(adapter);
         widgetList.setLayoutManager(new LinearLayoutManager(getContext()));
+        widgetList.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
 
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(widgetList);
     }
 
     @OnClick(R.id.fab)
@@ -125,11 +130,6 @@ public class WidgetList extends Fragment implements OnDragListener {
 
         adapter.notifyDataSetChanged();
 
-        // @todo move to onCreate for 1 time setup?
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(widgetList);
-
     }
 
     public void processPermissionReceivedCallback(int key, boolean permissionGranted) {
@@ -150,4 +150,7 @@ public class WidgetList extends Fragment implements OnDragListener {
         mItemTouchHelper.startDrag(viewHolder);
     }
 
+    public void deleteWidget(Widget widget) {
+        adapter.deleteWidget(widget);
+    }
 }

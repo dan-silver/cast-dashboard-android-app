@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+
 
 class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetViewHolder> implements ItemTouchHelperAdapter {
 
@@ -91,9 +93,16 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         }
     }
 
-    public void addWidget(Widget widget) {
+    void addWidget(Widget widget) {
         this.widgetList.add(widget);
-        notifyDataSetChanged();
+        notifyItemInserted(widgetList.indexOf(widget));
+    }
+
+    void deleteWidget(Widget widget) {
+        int index = widgetList.indexOf(widget);
+        notifyItemRemoved(index);
+        this.widgetList.remove(widget);
+        widget.delete();
     }
 
 
@@ -155,7 +164,7 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
                         Intent intent = new Intent(mainActivity, WidgetSettingsActivity.class);
                         intent.putExtra(Widget.GUID, widget.guid);
 
-                        mainActivity.startActivity(intent);
+                        mainActivity.startActivityForResult(intent, WidgetSettingsActivity.REQUEST_CODE);
 
                     }
                 };

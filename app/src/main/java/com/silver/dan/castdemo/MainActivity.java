@@ -313,11 +313,21 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         if (mCastManager != null) {
             mCastManager.addDataCastConsumer(mCastConsumer);
         }
-
         super.onResume();
     }
 
-    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == WidgetSettingsActivity.REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                if (intent.hasExtra(Widget.DELETE_WIDGET)) {
+                    String widgetIdToDelete = intent.getStringExtra(Widget.DELETE_WIDGET);
+                    widgetListFrag.deleteWidget(dashboard.getWidgetById(widgetIdToDelete));
+                }
+            }
+        }
+    }
+
+                @Override
     public void onBackPressed() {
         mDrawer.closeDrawer(GravityCompat.START);
         uncheckAllMenuItems();

@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -20,6 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class WidgetSettingsActivity extends AppCompatActivity {
+    public static int REQUEST_CODE = 7774;
 
     private Widget widget;
 
@@ -97,8 +99,13 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         CastCommunicator.deleteWidget(widget);
-                        widget.delete();
-                        onBackPressed();
+
+
+                        Intent resultIntent = new Intent();
+                        resultIntent.putExtra(Widget.DELETE_WIDGET, widget.guid);
+                        setResult(RESULT_OK, resultIntent);
+                        finish();
+
                     }
                 })
                 .show();

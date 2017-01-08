@@ -70,6 +70,8 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:10.0.1'
 
     compile 'com.google.android.gms:play-services-auth:10.0.1'
+
+    compile 'jp.wasabeef:recyclerview-animators:2.2.5'
 }
 
 
