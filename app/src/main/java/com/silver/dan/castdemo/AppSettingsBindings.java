@@ -78,10 +78,6 @@ public class AppSettingsBindings extends BaseObservable {
         });
     }
 
-    public void loadSettings(Context context, final onLoadCallback callback) {
-        loadAllSettingsFromFirebase(context, callback);
-    }
-
     @Exclude
     public void init(AppSettingsHelperFragment appSettings) {
         this.appSettings = appSettings;

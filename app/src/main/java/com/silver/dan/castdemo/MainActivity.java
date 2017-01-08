@@ -52,7 +52,6 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity implements OnSettingChangedListener, GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
-    private boolean mIsHoneyCombOrAbove = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
     public static final int NAV_VIEW_WIDGETS_ITEM = 0;
     public static final int NAV_VIEW_OPTIONS_LAYOUT_ITEM = 1;
     public static final int NAV_VIEW_OPTIONS_THEME_ITEM = 2;
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
     private static DataCastManager mCastManager;
     private DataCastConsumer mCastConsumer;
-    private MenuItem mediaRouteMenuItem;
     private WidgetList widgetListFrag;
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -94,16 +92,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             transaction.addToBackStack(null);
 
         transaction.commit();
-    }
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void showFtu() {
-        IntroductoryOverlay overlay = new IntroductoryOverlay.Builder(this)
-                .setMenuItem(mediaRouteMenuItem)
-                .setTitleText(R.string.intro_overlay_text)
-                .setSingleTime()
-                .build();
-        overlay.show();
     }
 
     @Override
@@ -184,22 +172,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                     CastCommunicator.sendAllWidgets();
 //                }
             }
-
-            @Override
-            public void onCastAvailabilityChanged(boolean castPresent) {
-                if (castPresent && mIsHoneyCombOrAbove) {
-
-                    new Handler().postDelayed(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            if (mediaRouteMenuItem.isVisible()) {
-                                showFtu();
-                            }
-                        }
-                    }, 1000);
-                }
-            }
         };
 
 
@@ -215,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         // load app settings
         settings = new AppSettingsBindings();
-        settings.loadSettings(getApplicationContext(), new AppSettingsBindings.onLoadCallback() {
+        settings.loadAllSettingsFromFirebase(getApplicationContext(), new AppSettingsBindings.onLoadCallback() {
             @Override
             public void onReady() {
 
@@ -281,8 +253,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
-        mediaRouteMenuItem = mCastManager.
-                addMediaRouterButton(menu, R.id.media_route_menu_item);
+        mCastManager.addMediaRouterButton(menu, R.id.media_route_menu_item);
 
         return true;
     }

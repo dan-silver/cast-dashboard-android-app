@@ -6,8 +6,6 @@
     <string name="navigation_drawer_open" translatable="false">open</string>
     <string name="navigation_drawer_close" translatable="false">closed</string>
 
-    <string name="intro_overlay_text" translatable="false">Find your cast device in the top menu</string>
-
 
     <!--Widget Types-->
     <string name="calendar">Android Calendar</string>
