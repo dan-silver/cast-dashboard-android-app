@@ -200,6 +200,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         });
 
         CastCommunicator.init(this, mCastManager, dashboard);
+
+        switchToFragment(new LoadingFragment(), false);
     }
 
     private void setupNavBarUserInfo() {
