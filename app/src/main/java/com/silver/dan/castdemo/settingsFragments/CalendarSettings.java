@@ -112,7 +112,10 @@ public class CalendarSettings extends WidgetSettingsFragment {
     public void updateCalendarListContents() {
         updateCalendarListVisibility();
         // query for the list of calendars
-        List<CalendarInfo> calendars = CalendarWidget.getCalendars(getContext(), widget);
+        CalendarWidget calendarWidget = (CalendarWidget) widget.getUIWidget(getContext());
+        List<CalendarInfo> calendars = calendarWidget.getCalendars();
+
+
         CalendarListAdapter mAdapter = new CalendarListAdapter(calendars, widget);
         calendarList.setAdapter(mAdapter);
     }
@@ -128,10 +131,6 @@ public class CalendarSettings extends WidgetSettingsFragment {
 
     private int getSelectedCalendarOptionIndex() {
         return Arrays.asList(numDaysDisplayValues).indexOf(optionShowEventsUntil.getIntValue());
-    }
-
-    public static List<String> getEnabledCalendars(Widget widget) {
-        return widget.getOption(CalendarSettings.CALENDAR_ENABLED).getList();
     }
 
     @Override

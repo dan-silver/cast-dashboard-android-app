@@ -54,7 +54,7 @@ public class Widget extends BaseModel {
     public static String DELETE_WIDGET = "DELETE_WIDGET";
 
     @Exclude
-    UIWidget getUIWidget(Context context) {
+    public UIWidget getUIWidget(Context context) {
         UIWidget widget = null;
         switch (getWidgetType()) {
             case STOCKS:

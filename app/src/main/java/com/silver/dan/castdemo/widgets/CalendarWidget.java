@@ -83,7 +83,7 @@ public class CalendarWidget extends UIWidget {
     }
 
 
-    public static List<CalendarInfo> getCalendars(Context context, Widget widget) {
+    public List<CalendarInfo> getCalendars() {
         // Run query
         Cursor cur;
         ContentResolver cr = context.getContentResolver();
@@ -123,7 +123,7 @@ public class CalendarWidget extends UIWidget {
 
         // figure out which of the calendars are enabled
 
-        List<String> enabled_calendars = CalendarSettings.getEnabledCalendars(widget);
+        List<String> enabled_calendars = getEnabledCalendars();
 
 
         for (CalendarInfo calendar : calendars) {
@@ -138,6 +138,11 @@ public class CalendarWidget extends UIWidget {
 
         return calendars;
     }
+
+    private List<String> getEnabledCalendars() {
+        return widget.loadOrInitOption(CalendarSettings.CALENDAR_ENABLED, context).getList();
+    }
+
 
     private JSONArray getCalendarEvents(Context context, List<String> calendarIds, boolean allCalendars, int showEventsUntil) throws JSONException {
         Calendar cal1 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -241,7 +246,7 @@ public class CalendarWidget extends UIWidget {
 
         List<String> calendarIds = new ArrayList<>();
         if (!showAllCalendars) {
-            for (String id: CalendarSettings.getEnabledCalendars(widget)) {
+            for (String id: getEnabledCalendars()) {
                 calendarIds.add(id);
             }
         }
@@ -269,11 +274,11 @@ public class CalendarWidget extends UIWidget {
             //@todo optimize this section
 
             // contains ids
-            List<String> enabledCalendarIds = CalendarSettings.getEnabledCalendars(widget);
+            List<String> enabledCalendarIds = getEnabledCalendars();
 
 
             // contains title, id
-            List<CalendarInfo> calendars = getCalendars(context, widget);
+            List<CalendarInfo> calendars = getCalendars();
 
 
             int numCalendars = enabledCalendarIds.size();
