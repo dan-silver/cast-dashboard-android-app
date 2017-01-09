@@ -17,13 +17,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.gson.JsonObject;
+import com.koushikdutta.ion.Ion;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +49,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private int RC_SIGN_IN = 10000;
 
     static FirebaseUser user;
+    static String userJwt;
+
     private String SHARED_PREFS = "SHARED_PREFS_USER_FLOW";
 
 
@@ -80,16 +84,18 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         if (shouldLogout) {
             signout();
         }
+
         FirebaseAuth.AuthStateListener mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (shouldLogout) {
                     return;
-                }
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    LoginActivity.user = user;
-                    userFinishedAuth();
+//                }
+//                FirebaseUser user = firebaseAuth.getCurrentUser();
+//                if (user != null) {
+//                    LoginActivity.user = user;
+//
+////                    userFinishedAuth();
                 }
             }
         };
@@ -148,27 +154,60 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
+    interface SimpleListener<t> {
+        void onComplete(t result);
+        void onError(Exception e);
+    }
+
+    private void exchangeServerAuthCodeForJWT(String firebaseUserId, String authCode, final SimpleListener<String> jwtCallback) {
+        Ion.with(getApplicationContext())
+            .load(getString(R.string.APP_URL) + "/exchangeServerAuthCodeForJWT")
+            .setBodyParameter("serverCode", authCode)
+            .setBodyParameter("firebaseUserId", firebaseUserId)
+            .asJsonObject()
+            .setCallback(new com.koushikdutta.async.future.FutureCallback<JsonObject>() {
+                @Override
+                public void onCompleted(Exception e, JsonObject result) {
+                    if (e != null) {
+                        jwtCallback.onError(e);
+                        return;
+                    }
+                    jwtCallback.onComplete(result.get("serviceAccessToken").getAsString());
+                }
+            });
+    }
+
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         loadingSpinner.setVisibility(View.VISIBLE);
         signInButton.setVisibility(View.GONE);
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        mAuth.signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                LoginActivity.user = authResult.getUser();
+                String userId = authResult.getUser().getUid();
+                String serverAuthCode = acct.getServerAuthCode();
 
-        String serverAuthCode = acct.getServerAuthCode();
-
-        mAuth.signInWithCredential(credential)
-            .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(), "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-
-                        loadingSpinner.setVisibility(View.GONE);
-                        signInButton.setVisibility(View.VISIBLE);
+                exchangeServerAuthCodeForJWT(userId, serverAuthCode, new SimpleListener<String>() {
+                    @Override
+                    public void onComplete(String result) {
+                        userFinishedAuth();
                     }
-                }
-            });
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private SharedPreferences getSharedPref() {

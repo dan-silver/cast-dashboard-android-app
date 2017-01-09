@@ -51,6 +51,10 @@ public class Dashboard {
 
     private void addOptions(DataSnapshot options, Context ctx) {
         settings = options.getValue(AppSettingsBindings.class);
+
+        if (settings == null) {
+            settings = new AppSettingsBindings();
+        }
         settings.initDefaults(ctx);
     }
 
