@@ -3,6 +3,7 @@ package com.silver.dan.castdemo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -31,6 +32,10 @@ public class WidgetList extends Fragment implements OnDragListener {
 
     @BindView(R.id.widgetList)
     RecyclerView widgetList;
+
+    @BindView(R.id.swipeContainer)
+    SwipeRefreshLayout mSwipeContainer;
+
     private WidgetListAdapter adapter;
 
     public WidgetList() {
@@ -54,7 +59,7 @@ public class WidgetList extends Fragment implements OnDragListener {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         widgetList.setAdapter(adapter);
         widgetList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -63,6 +68,27 @@ public class WidgetList extends Fragment implements OnDragListener {
         ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(widgetList);
+
+
+        mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                MainActivity.dashboard.clearData();
+                adapter.notifyDataSetChanged();
+                MainActivity.dashboard.loadFromFirebase(view.getContext(), new Dashboard.OnLoadCallback() {
+                    @Override
+                    public void onReady() {
+                        mSwipeContainer.setRefreshing(false);
+                        adapter.notifyItemRangeInserted(0, adapter.getItemCount());
+                    }
+
+                    @Override
+                    public void onError() {
+                        mSwipeContainer.setRefreshing(false);
+                    }
+                });
+            }
+        });
     }
 
     @OnClick(R.id.fab)

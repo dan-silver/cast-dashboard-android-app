@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class Dashboard {
-    List<Widget> widgets;
+    List<Widget> widgets = new ArrayList<>();;
     AppSettingsBindings settings;
 
     public Widget getWidgetById(String widgetKey) {
@@ -30,6 +30,11 @@ public class Dashboard {
             }
         }
         return null;
+    }
+
+    public void clearData() {
+        this.widgets.clear();
+        this.settings = null;
     }
 
     interface OnLoadCallback  {
@@ -77,7 +82,6 @@ public class Dashboard {
 
     }
     private void addWidgets(DataSnapshot rawWidgets) {
-        List<Widget> widgets = new ArrayList<>();
         for (DataSnapshot nextWidget : rawWidgets.getChildren()) {
             Widget widget = nextWidget.getValue(Widget.class);
 
@@ -95,6 +99,5 @@ public class Dashboard {
                 return w1.position < w2.position ? -1 : 1;
             }
         });
-        this.widgets = widgets;
     }
 }

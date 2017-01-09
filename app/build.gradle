@@ -53,6 +53,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:support-annotations:25.1.0'
     compile 'com.android.support:recyclerview-v7:25.1.0'
+
     compile 'com.google.android.gms:play-services-cast:10.0.1'
     compile 'com.google.android.gms:play-services-maps:10.0.1'
     compile 'com.google.android.gms:play-services-location:10.0.1'
