@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,7 +67,7 @@ class FirebaseMigration {
             }
         };
 
-        DatabaseReference dashboardsRef = mDatabase.child("users").child(LoginActivity.user.getUid());
+        DatabaseReference dashboardsRef = mDatabase.child("users").child(AuthHelper.user.getUid());
         dashboardsRef.addListenerForSingleValueEvent(postListener);
     }
 

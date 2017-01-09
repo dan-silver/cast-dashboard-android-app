@@ -192,7 +192,7 @@ public class AppSettingsBindings extends BaseObservable {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase
             .child("users")
-            .child(LoginActivity.user.getUid())
+            .child(AuthHelper.user.getUid())
             .child("options");
     }
 

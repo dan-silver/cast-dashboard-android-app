@@ -1,5 +1,6 @@
 package com.silver.dan.castdemo.widgets;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.silver.dan.castdemo.Widget;
@@ -16,7 +17,7 @@ abstract public class UIWidget {
 
     public abstract JSONObject getContent() throws JSONException;
 
-    public int requestPermissions() {
+    public int requestPermissions(Activity activity) {
         return -1;
     }
 
@@ -40,14 +41,14 @@ abstract public class UIWidget {
 
     public abstract void init();
 
-    public void setOnCanBeCreatedOrEditedListener(CanBeCreatedListener listener) {
+    public void setOnCanBeCreatedOrEditedListener(Activity activity, CanBeCreatedListener listener) {
         this.canBeCreatedListener = listener;
         if (canBeCreated()) {
             listener.onCanBeCreated();
         } else {
             // request the permissions for the widget, and set the callback key
-            int requirementsToCreateWidget = requestPermissions();
-            this.canBeCreatedListener.setRequiredCondition(requirementsToCreateWidget);
+            int permissionRequestCallbackKey = requestPermissions(activity);
+            this.canBeCreatedListener.setRequestCallbackReturnCode(permissionRequestCallbackKey);
         }
     }
 }

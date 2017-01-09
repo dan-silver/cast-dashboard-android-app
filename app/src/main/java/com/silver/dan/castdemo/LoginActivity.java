@@ -11,23 +11,18 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.auth0.android.jwt.JWT;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.gson.JsonObject;
-import com.koushikdutta.ion.Ion;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
@@ -39,7 +34,6 @@ import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWr
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private static final String DEVICE_MIGRATED_TO_FIREBASE = "MIGRATED_TO_FIREBASE";
     public static String LOGOUT = "LOGOUT";
-    private FirebaseAuth mAuth;
 
     @BindView(R.id.sign_in_button)
     com.google.android.gms.common.SignInButton signInButton;
@@ -50,10 +44,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private static GoogleApiClient mGoogleApiClient;
     private int RC_SIGN_IN = 10000;
-
-    static FirebaseUser user;
-    static String userJwt;
-    static Set<Scope> grantedScopes;
 
     private String SHARED_PREFS = "SHARED_PREFS_USER_FLOW";
 
@@ -66,18 +56,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         loadingSpinner.setVisibility(View.INVISIBLE);
 
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.web_client_id))
-                .requestServerAuthCode(getString(R.string.web_client_id), false)
-                .requestEmail()
-                .build();
-
-        mAuth = FirebaseAuth.getInstance();
+        final AuthHelper googleAuthHelper = new AuthHelper(getApplicationContext());
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleAuthHelper.getGoogleGSO())
                 .enableAutoManage(this, this)
                 .build();
 
@@ -94,16 +77,40 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (shouldLogout) {
                     return;
-//                }
-//                FirebaseUser user = firebaseAuth.getCurrentUser();
-//                if (user != null) {
-//                    LoginActivity.user = user;
-//
-////                    userFinishedAuth();
                 }
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user == null) {
+                    return;
+                }
+
+
+                // crack open jwt from saved storage, see if it's not expired
+                // check if firebaseUserId == user.id (from below)
+                // if so, save jwt, scopes to AuthHelper static fields
+
+                String serviceJwt = googleAuthHelper.getSavedServiceJwt();
+                if (serviceJwt == null) return;
+                    JWT jwt = new JWT(serviceJwt);
+
+                    String firebaseUserId = jwt.getClaim("firebaseUserId").asString();
+                    List<String> scopes = jwt.getClaim("grantedScopes").asList(String.class);
+                    Set<Scope> grantedScopes = new HashSet<>();
+
+                    for (String scope : scopes) {
+                        grantedScopes.add(new Scope(scope));
+                    }
+
+                    if (firebaseUserId.equals(user.getUid())) {
+                        googleAuthHelper.setServiceJwt(serviceJwt);
+                        googleAuthHelper.setNewUserInfo(user, grantedScopes);
+                        AuthHelper.user = user;
+
+                        userFinishedAuth();
+                    }
+
             }
         };
-        mAuth.addAuthStateListener(mAuthListener);
+        FirebaseAuth.getInstance().addAuthStateListener(mAuthListener);
 
 
         // Moving here because we can't do this on stock widget creation since they might sync an
@@ -122,12 +129,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     static boolean restoreUser() {
-        if (LoginActivity.user != null) {
+        if (AuthHelper.user != null) {
             return true;
         }
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
-            LoginActivity.user = user;
+            AuthHelper.user = user;
             return true;
         }
         return false;
@@ -158,58 +165,20 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
-    interface SimpleListener<t> {
-        void onComplete(t result);
-        void onError(Exception e);
-    }
-
-    private void exchangeServerAuthCodeForJWT(String firebaseUserId, String authCode, final SimpleListener<String> jwtCallback) {
-        Ion.with(getApplicationContext())
-            .load(getString(R.string.APP_URL) + "/exchangeServerAuthCodeForJWT")
-            .setBodyParameter("serverCode", authCode)
-            .setBodyParameter("firebaseUserId", firebaseUserId)
-            .asJsonObject()
-            .setCallback(new com.koushikdutta.async.future.FutureCallback<JsonObject>() {
-                @Override
-                public void onCompleted(Exception e, JsonObject result) {
-                    if (e != null) {
-                        jwtCallback.onError(e);
-                        return;
-                    }
-                    jwtCallback.onComplete(result.get("serviceAccessToken").getAsString());
-                }
-            });
-    }
-
     private void firebaseAuthWithGoogle(final GoogleSignInAccount acct) {
         loadingSpinner.setVisibility(View.VISIBLE);
         signInButton.setVisibility(View.GONE);
 
-        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
-        mAuth.signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+
+        AuthHelper authHelper = new AuthHelper(getApplicationContext());
+        authHelper.completeCommonAuth(acct, new SimpleCallback<String>() {
             @Override
-            public void onSuccess(AuthResult authResult) {
-                LoginActivity.user = authResult.getUser();
-                String userId = authResult.getUser().getUid();
-                String serverAuthCode = acct.getServerAuthCode();
-                LoginActivity.grantedScopes = acct.getGrantedScopes();
-
-                exchangeServerAuthCodeForJWT(userId, serverAuthCode, new SimpleListener<String>() {
-                    @Override
-                    public void onComplete(String jwt) {
-                        LoginActivity.userJwt = jwt;
-                        userFinishedAuth();
-                    }
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
-                });
+            public void onComplete(String result) {
+                userFinishedAuth();
             }
-        })
-        .addOnFailureListener(new OnFailureListener() {
+
             @Override
-            public void onFailure(@NonNull Exception e) {
+            public void onError(Exception e) {
                 Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -259,6 +228,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     public void signout() {
+        AuthHelper.signout();
         mGoogleApiClient.connect();
         mGoogleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
             @Override

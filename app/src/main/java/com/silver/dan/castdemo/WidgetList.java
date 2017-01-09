@@ -76,6 +76,7 @@ public class WidgetList extends Fragment implements OnDragListener {
             add(Widget.WidgetType.RSS);
             add(Widget.WidgetType.STOCKS);
             add(Widget.WidgetType.WEATHER);
+            add(Widget.WidgetType.GOOGLE_CALENDAR);
         }};
 
         new MaterialDialog.Builder(getContext())
@@ -102,16 +103,15 @@ public class WidgetList extends Fragment implements OnDragListener {
                             @Override
                             public void onCanBeCreated() {
                                 widget.save();
+                                widget.initWidgetSettings(getContext());
 
                                 adapter.addWidget(widget);
-
-                                widget.initWidgetSettings(getContext());
 
                                 CastCommunicator.sendWidget(widget, getContext());
 
                             }
                         };
-                        widget.getUIWidget(getContext()).setOnCanBeCreatedOrEditedListener(listener);
+                        widget.getUIWidget(getContext()).setOnCanBeCreatedOrEditedListener(getActivity(), listener);
 
                         if (!widget.getUIWidget(getContext()).canBeCreated()) {
                             widgetCanBeCreatedListeners.add(listener);

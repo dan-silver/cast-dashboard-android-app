@@ -31,7 +31,7 @@ import java.util.TimeZone;
 public class CalendarWidget extends UIWidget {
 
     @Override
-    public int requestPermissions() {
+    public int requestPermissions(Activity activity) {
         ActivityCompat.requestPermissions((Activity) context,
                 new String[]{Manifest.permission.READ_CALENDAR},
                 CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR);
@@ -77,9 +77,9 @@ public class CalendarWidget extends UIWidget {
         widget.initOption(CalendarSettings.SHOW_EVENTS_UNTIL, 30);
         widget.initOption(CalendarSettings.CALENDAR_ENABLED, "");
 
-        if (!canBeCreated()) {
-            requestPermissions();
-        }
+//        if (!canBeCreated()) {
+//            requestPermissions();
+//        }
     }
 
 

@@ -68,7 +68,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
     private void completeSetup() {
         // lookup widget in the database
         // display appropriate settings for that widget type
-        setTitle(getApplicationContext().getString(widget.getHumanNameRes()) + " Widget");
+        setTitle(widget.getHumanNameRes());
 
         WidgetSettingsFragment typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
 

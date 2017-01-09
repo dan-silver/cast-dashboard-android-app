@@ -13,7 +13,7 @@ public abstract class CanBeCreatedListener {
         return key == requiredCondition;
     }
 
-    void setRequiredCondition(int condition) {
+    void setRequestCallbackReturnCode(int condition) {
         this.requiredCondition = condition;
     }
 }

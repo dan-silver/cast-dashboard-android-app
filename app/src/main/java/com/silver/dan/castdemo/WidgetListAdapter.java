@@ -166,7 +166,7 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
 
                     }
                 };
-                uiWidget.setOnCanBeCreatedOrEditedListener(listener);
+                uiWidget.setOnCanBeCreatedOrEditedListener(mainActivity, listener);
 
                 if (!uiWidget.canBeCreated()) {
                     widgetCanBeCreatedListeners.add(listener);

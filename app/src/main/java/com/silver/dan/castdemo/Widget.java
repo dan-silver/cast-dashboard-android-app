@@ -23,6 +23,7 @@ import com.silver.dan.castdemo.widgets.CalendarWidget;
 import com.silver.dan.castdemo.widgets.ClockWidget;
 import com.silver.dan.castdemo.widgets.CountdownWidget;
 import com.silver.dan.castdemo.widgets.FreeTextWidget;
+import com.silver.dan.castdemo.widgets.GoogleCalendarWidget;
 import com.silver.dan.castdemo.widgets.MapWidget;
 import com.silver.dan.castdemo.widgets.RSSWidget;
 import com.silver.dan.castdemo.widgets.StocksWidget;
@@ -81,6 +82,8 @@ public class Widget extends BaseModel {
             case CUSTOM_TEXT:
                 widget = new FreeTextWidget(context, this);
                 break;
+            case GOOGLE_CALENDAR:
+                widget = new GoogleCalendarWidget(context, this);
         }
         return widget;
     }
@@ -93,7 +96,8 @@ public class Widget extends BaseModel {
         WEATHER(5, R.string.weather, R.drawable.ic_cloud_queue_24dp),
         RSS(6, R.string.rss_feed, R.drawable.ic_rss_feed_black_24px),
         COUNTDOWN(7, R.string.countdown_timer, R.drawable.ic_timer_black_24dp),
-        CUSTOM_TEXT(8, R.string.custom_text, R.drawable.ic_insert_comment_black_24dp);
+        CUSTOM_TEXT(8, R.string.custom_text, R.drawable.ic_insert_comment_black_24dp),
+        GOOGLE_CALENDAR(9, R.string.google_calendar, R.drawable.ic_today_24dp);
 
         private int value;
         private int icon;

@@ -21,6 +21,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.cast.ApplicationMetadata;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -33,6 +36,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
+import com.silver.dan.castdemo.settingsFragments.GoogleCalendarSettings;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -201,13 +205,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
 
         TextView displayName = (TextView) header.findViewById(R.id.userDisplayName);
-        displayName.setText(LoginActivity.user.getDisplayName());
+        displayName.setText(AuthHelper.user.getDisplayName());
 
         TextView email = (TextView) header.findViewById(R.id.userEmail);
-        email.setText(LoginActivity.user.getEmail());
+        email.setText(AuthHelper.user.getEmail());
 
         ImageView profilePhoto = (ImageView) header.findViewById(R.id.userPhoto);
-        Picasso.with(getApplicationContext()).load(LoginActivity.user.getPhotoUrl()).into(profilePhoto);
+        Picasso.with(getApplicationContext()).load(AuthHelper.user.getPhotoUrl()).into(profilePhoto);
     }
 
     private void selectDrawerItem(MenuItem menuItem) {
@@ -323,6 +327,30 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 }
             }
         }
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == GoogleCalendarSettings.PERMISSIONS_REQUEST_READ_GOOGLE_CALENDAR) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
+            if (result.isSuccess()) {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                AuthHelper authHelper = new AuthHelper(this);
+                authHelper.completeCommonAuth(account, new SimpleCallback<String>() {
+                    @Override
+                    public void onComplete(String result) {
+                        widgetListFrag.processPermissionReceivedCallback(GoogleCalendarSettings.PERMISSIONS_REQUEST_READ_GOOGLE_CALENDAR, true);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        widgetListFrag.processPermissionReceivedCallback(GoogleCalendarSettings.PERMISSIONS_REQUEST_READ_GOOGLE_CALENDAR, false);
+                    }
+                });
+            } else {
+                widgetListFrag.processPermissionReceivedCallback(GoogleCalendarSettings.PERMISSIONS_REQUEST_READ_GOOGLE_CALENDAR, false);
+            }
+        }
+
     }
 
     @Override
