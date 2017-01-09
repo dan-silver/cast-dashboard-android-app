@@ -46,9 +46,9 @@ public class GoogleCalendarWidget extends UIWidget {
         scopes.add(new Scope(RequiredScope));
 
         GoogleApiClient mGoogleApiClient = new GoogleApiClient
-                .Builder(context)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, authHelper.getGoogleGSO(scopes))
-                .build();
+            .Builder(context)
+            .addApi(Auth.GOOGLE_SIGN_IN_API, authHelper.getGoogleGSO(scopes))
+            .build();
 
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         activity.startActivityForResult(signInIntent, GoogleCalendarSettings.PERMISSIONS_REQUEST_READ_GOOGLE_CALENDAR);
@@ -78,11 +78,8 @@ public class GoogleCalendarWidget extends UIWidget {
     public class Calendar {
         public boolean enabled;
         public String summary;
-        public String timeZone;
         public String id;
         public String backgroundColor;
-        public String foregroundColor;
-        public String accessRole;
 //        "kind": "calendar#calendarListEntry",
 //                "etag": "\"1462156477999000\"",
 //                "id": "n654t8kcu32etu6lo9osnhkh24@group.calendar.google.com",
@@ -107,40 +104,37 @@ public class GoogleCalendarWidget extends UIWidget {
 
     public void getCalendars(String accessToken, final SimpleCallback<List<Calendar>> callback) {
         Ion.with(context)
-                .load("https://www.googleapis.com/calendar/v3/users/me/calendarList")
-                .setHeader("Authorization", "Bearer " + accessToken)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject result) {
-                        if (e != null) {
-                            callback.onError(e);
-                            return;
-                        }
-                        JsonArray calendars = result.get("items").getAsJsonArray();
-
-                        List<String> enabledCalendars = getEnabledCalendars();
-
-                        List<Calendar> calendars1 = new ArrayList<>();
-                        for (int i=0; i<calendars.size(); i++) {
-                            JsonObject rawCal = calendars.get(i).getAsJsonObject();
-                            Calendar cal = new Calendar();
-
-                            cal.summary = rawCal.get("summary").getAsString();
-                            cal.timeZone = rawCal.get("timeZone").getAsString();
-                            cal.id = rawCal.get("id").getAsString();
-                            cal.backgroundColor = rawCal.get("backgroundColor").getAsString();
-                            cal.foregroundColor = rawCal.get("foregroundColor").getAsString();
-                            cal.accessRole = rawCal.get("accessRole").getAsString();
-                            cal.enabled = enabledCalendars.contains(cal.id);
-
-                            calendars1.add(cal);
-
-                        }
-
-                        callback.onComplete(calendars1);
+            .load("https://www.googleapis.com/calendar/v3/users/me/calendarList")
+            .setHeader("Authorization", "Bearer " + accessToken)
+            .asJsonObject()
+            .setCallback(new FutureCallback<JsonObject>() {
+                @Override
+                public void onCompleted(Exception e, JsonObject result) {
+                    if (e != null) {
+                        callback.onError(e);
+                        return;
                     }
-                });
+                    JsonArray calendars = result.get("items").getAsJsonArray();
+
+                    List<String> enabledCalendars = getEnabledCalendars();
+
+                    List<Calendar> calendars1 = new ArrayList<>();
+                    for (int i=0; i<calendars.size(); i++) {
+                        JsonObject rawCal = calendars.get(i).getAsJsonObject();
+                        Calendar cal = new Calendar();
+
+                        cal.summary = rawCal.get("summary").getAsString();
+                        cal.id = rawCal.get("id").getAsString();
+                        cal.backgroundColor = rawCal.get("backgroundColor").getAsString();
+                        cal.enabled = enabledCalendars.contains(cal.id);
+
+                        calendars1.add(cal);
+
+                    }
+
+                    callback.onComplete(calendars1);
+                }
+            });
     }
 
     @Override

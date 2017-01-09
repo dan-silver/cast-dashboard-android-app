@@ -85,17 +85,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
 
     public void switchToFragment(final Fragment destinationFrag, final boolean addToBackStack) {
-//        new Handler().post(new Runnable() {
-//            public void run() {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.main_fragment, destinationFrag);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.main_fragment, destinationFrag);
 
-                if (addToBackStack)
-                    transaction.addToBackStack(null);
+        if (addToBackStack)
+            transaction.addToBackStack(null);
 
-                transaction.commit();
-//            }
-//        });
+        transaction.commit();
     }
 
     @Override
