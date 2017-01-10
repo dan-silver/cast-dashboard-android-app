@@ -156,12 +156,29 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         mCastManager.reconnectSessionIfPossible();
 
-
         mCastConsumer = new DataCastConsumerImpl() {
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-                sendAllOptions();
-                CastCommunicator.sendAllWidgets(getApplicationContext());
+                AuthHelper.getGoogleAccessToken(getApplicationContext(), new SimpleCallback<String>() {
+                    @Override
+                    public void onComplete(String googleAccessToken) {
+                        JSONObject creds = new JSONObject();
+                        try {
+                            creds.put("GOOGLE_ACCESS_TOKEN", googleAccessToken);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        CastCommunicator.sendJSON("CREDENTIALS", creds);
+                        sendAllOptions();
+                        CastCommunicator.sendAllWidgets(getApplicationContext());
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
             }
         };
 

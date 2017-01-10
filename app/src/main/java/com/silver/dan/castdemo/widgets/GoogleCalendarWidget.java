@@ -17,6 +17,7 @@ import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.settingsFragments.GoogleCalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -63,7 +64,7 @@ public class GoogleCalendarWidget extends UIWidget {
 
     @Override
     public void init() {
-        widget.initOption(GoogleCalendarSettings.GOOGLE_SHOW_EVENT_LOCATIONS, true);
+        widget.initOption(GoogleCalendarSettings.GOOGLE_SHOW_EVENT_LOCATIONS, false);
         widget.initOption(GoogleCalendarSettings.GOOGLE_SHOW_EVENTS_UNTIL, 30);
         widget.initOption(GoogleCalendarSettings.GOOGLE_CALENDARS_ENABLED, "");
     }
@@ -71,7 +72,18 @@ public class GoogleCalendarWidget extends UIWidget {
     @Override
     public JSONObject getContent() throws JSONException {
         JSONObject json = new JSONObject();
-        json.put("CALENDAR_IDS", getEnabledCalendars());
+
+        List<String> calIds = getEnabledCalendars();
+
+        JSONArray calendarIdsArray = new JSONArray();
+        for (String ticker: calIds) {
+            calendarIdsArray.put(ticker);
+        }
+
+        json.put("CALENDAR_IDS", calendarIdsArray);
+        json.put("GOOGLE_SHOW_EVENTS_UNTIL", widget.loadOrInitOption(GoogleCalendarSettings.GOOGLE_SHOW_EVENTS_UNTIL, context).getIntValue());
+        json.put("GOOGLE_SHOW_EVENT_LOCATIONS", widget.loadOrInitOption(GoogleCalendarSettings.GOOGLE_SHOW_EVENT_LOCATIONS, context).getBooleanValue());
+
         return json;
     }
 

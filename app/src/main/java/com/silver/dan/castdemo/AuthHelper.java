@@ -123,7 +123,7 @@ public class AuthHelper {
 
 
     // implements caching on expiresAt field
-    public void getAccessToken(final SimpleCallback<String> callback) {
+    public static void getGoogleAccessToken(Context context, final SimpleCallback<String> callback) {
         if (AuthHelper.googleAccessToken != null) {
             Date now = new Date();
 

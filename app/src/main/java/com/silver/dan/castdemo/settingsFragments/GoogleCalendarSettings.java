@@ -96,8 +96,7 @@ public class GoogleCalendarSettings extends WidgetSettingsFragment {
 
     public void updateCalendarListContents() {
         // query for the list of calendars
-        AuthHelper authHelper = new AuthHelper(getContext());
-        authHelper.getAccessToken(new SimpleCallback<String>() {
+        AuthHelper.getGoogleAccessToken(getContext(), new SimpleCallback<String>() {
             @Override
             public void onComplete(String accessToken) {
                 GoogleCalendarWidget calendarWidget = (GoogleCalendarWidget) widget.getUIWidget(getContext());
