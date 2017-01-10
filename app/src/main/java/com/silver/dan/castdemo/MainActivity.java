@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             options.put(AppSettingsBindings.WIDGET_TRANSPARENCY, dashboard.settings.getWidgetTransparencyUI());
             options.put(AppSettingsBindings.TEXT_COLOR, dashboard.settings.getTextColorHextStr());
             options.put(AppSettingsBindings.SCREEN_PADDING, dashboard.settings.getScreenPaddingUI());
-            options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.getLanguage());
+            options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.toString());
             options.put(AppSettingsBindings.SLIDESHOW_INTERVAL, dashboard.settings.getSlideshowInterval());
 
         } catch (JSONException e) {
