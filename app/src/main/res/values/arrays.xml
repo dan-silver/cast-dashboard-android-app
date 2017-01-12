@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="newWidgetDialogList">
-        <item>@string/calendar</item>
+        <item>@string/google_calendar</item>
         <item>@string/clock</item>
         <item>@string/countdown_timer</item>
         <item>@string/custom_text</item>
@@ -9,7 +9,6 @@
         <item>@string/rss_feed</item>
         <item>@string/stocks</item>
         <item>@string/weather</item>
-        <item>@string/google_calendar</item>
     </string-array>
     <string-array name="backgroundTypeList">
         <item>@string/slideshow</item>

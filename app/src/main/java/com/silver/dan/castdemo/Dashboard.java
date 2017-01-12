@@ -20,6 +20,7 @@ import java.util.List;
 public class Dashboard {
     List<Widget> widgets = new ArrayList<>();;
     AppSettingsBindings settings;
+    OnLoadCallback onDataRefreshListener;
 
     public Widget getWidgetById(String widgetKey) {
         if (widgets == null)
@@ -35,6 +36,13 @@ public class Dashboard {
     public void clearData() {
         this.widgets.clear();
         this.settings = null;
+    }
+
+    public void setOnDataRefreshListener(OnLoadCallback callback) {
+        if (this.settings != null) {
+            callback.onReady();
+        }
+        this.onDataRefreshListener = callback;
     }
 
     interface OnLoadCallback  {
@@ -69,11 +77,16 @@ public class Dashboard {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 addOptions(dataSnapshot.child("options"), ctx);
                 addWidgets(dataSnapshot.child("widgets"));
+                if (onDataRefreshListener != null)
+                    onDataRefreshListener.onReady();
                 callback.onReady();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                if (onDataRefreshListener != null)
+                    onDataRefreshListener.onError();
+
                 callback.onError();
             }
         };
@@ -86,6 +99,11 @@ public class Dashboard {
             Widget widget = nextWidget.getValue(Widget.class);
 
             widget.guid = nextWidget.getKey();
+
+            // native calendar widgets are deprecated
+            // @todo eventually just remove them from database to remove this logic?
+            if (widget.type == Widget.WidgetType.CALENDAR.getValue())
+                continue;
 
             Widget.loadOptions(widget);
             widgets.add(widget);

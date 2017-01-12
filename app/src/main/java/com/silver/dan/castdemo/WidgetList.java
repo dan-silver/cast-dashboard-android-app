@@ -94,7 +94,7 @@ public class WidgetList extends Fragment implements OnDragListener {
     @OnClick(R.id.fab)
     public void addWidget() {
         final ArrayList<Widget.WidgetType> widgetTypes = new ArrayList<Widget.WidgetType>() {{
-            add(Widget.WidgetType.CALENDAR);
+            add(Widget.WidgetType.GOOGLE_CALENDAR);
             add(Widget.WidgetType.CLOCK);
             add(Widget.WidgetType.COUNTDOWN);
             add(Widget.WidgetType.CUSTOM_TEXT);
@@ -102,7 +102,6 @@ public class WidgetList extends Fragment implements OnDragListener {
             add(Widget.WidgetType.RSS);
             add(Widget.WidgetType.STOCKS);
             add(Widget.WidgetType.WEATHER);
-            add(Widget.WidgetType.GOOGLE_CALENDAR);
         }};
 
         new MaterialDialog.Builder(getContext())

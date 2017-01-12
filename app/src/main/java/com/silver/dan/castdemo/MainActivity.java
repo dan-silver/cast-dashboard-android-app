@@ -159,23 +159,23 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         mCastConsumer = new DataCastConsumerImpl() {
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-                AuthHelper.getGoogleAccessToken(getApplicationContext(), new SimpleCallback<String>() {
+                JSONObject creds = new JSONObject();
+                try {
+                    creds.put("SERVICE_ACCESS_TOKEN", AuthHelper.userJwt);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                CastCommunicator.sendJSON("CREDENTIALS", creds);
+
+                dashboard.setOnDataRefreshListener(new Dashboard.OnLoadCallback() {
                     @Override
-                    public void onComplete(String googleAccessToken) {
-                        JSONObject creds = new JSONObject();
-                        try {
-                            creds.put("GOOGLE_ACCESS_TOKEN", googleAccessToken);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        CastCommunicator.sendJSON("CREDENTIALS", creds);
+                    public void onReady() {
                         sendAllOptions();
                         CastCommunicator.sendAllWidgets(getApplicationContext());
-
                     }
 
                     @Override
-                    public void onError(Exception e) {
+                    public void onError() {
 
                     }
                 });
@@ -190,11 +190,19 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         setupNavBarUserInfo();
 
+        dashboard = new Dashboard();
+        loadDashboard();
+
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        CastCommunicator.init(mCastManager, dashboard, getResources().getString(R.string.namespace));
+
+        switchToFragment(new LoadingFragment(), false);
+    }
+
+    private void loadDashboard() {
         // load options and widgets
-        dashboard = new Dashboard();
         dashboard.loadFromFirebase(getApplicationContext(), new Dashboard.OnLoadCallback() {
             @Override
             public void onReady() {
@@ -207,10 +215,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
             }
         });
-
-        CastCommunicator.init(mCastManager, dashboard, getResources().getString(R.string.namespace));
-
-        switchToFragment(new LoadingFragment(), false);
     }
 
     private void setupNavBarUserInfo() {
@@ -320,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     @Override
     protected void onResume() {
         super.onResume();
+
         mCastManager = DataCastManager.getInstance();
         if (mCastManager != null) {
             mCastManager.addDataCastConsumer(mCastConsumer);

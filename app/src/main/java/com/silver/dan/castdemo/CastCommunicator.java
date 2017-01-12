@@ -102,7 +102,7 @@ public class CastCommunicator {
         for (Widget widget : CastCommunicator.dashboard.widgets) {
             widgetsArr.put(widget.getJSONContent(context));
         }
-        CastCommunicator.sendWidgets(widgetsArr);
+        CastCommunicator.sendJSON("allWidgets", widgetsArr);
     }
 
     private static void sendWidgets(JSONArray widgetsArr) {
