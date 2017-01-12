@@ -35,7 +35,6 @@ import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCas
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.raizlabs.android.dbflow.config.FlowConfig;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.GoogleCalendarSettings;
 import com.squareup.picasso.Picasso;
 
@@ -381,17 +380,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(MainActivity.TAG, "Error connecting to google services");
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR: {
-                boolean granted = grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                widgetListFrag.processPermissionReceivedCallback(CalendarSettings.MY_PERMISSIONS_REQUEST_READ_CALENDAR, granted);
-            }
-        }
     }
 
 }

@@ -6,7 +6,6 @@ import android.util.Log;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ModelContainer;
@@ -16,10 +15,8 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
-import com.silver.dan.castdemo.settingsFragments.CalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
-import com.silver.dan.castdemo.widgets.CalendarWidget;
 import com.silver.dan.castdemo.widgets.ClockWidget;
 import com.silver.dan.castdemo.widgets.CountdownWidget;
 import com.silver.dan.castdemo.widgets.FreeTextWidget;
@@ -60,9 +57,6 @@ public class Widget extends BaseModel {
         switch (getWidgetType()) {
             case STOCKS:
                 widget = new StocksWidget(context, this);
-                break;
-            case CALENDAR:
-                widget = new CalendarWidget(context, this);
                 break;
             case MAP:
                 widget = new MapWidget(context, this);
@@ -242,33 +236,14 @@ public class Widget extends BaseModel {
 
         Map<String, Map<String, String>> optionsMap = new HashMap<>();
 
-        List<WidgetOption> enabledCalendars = new ArrayList<>();
         List<WidgetOption> savedStocks = new ArrayList<>();
         for (WidgetOption opt : this.getOptions()) {
-            if (opt.key.equals(CalendarSettings.CALENDAR_ENABLED)) {
-                enabledCalendars.add(opt);
-                continue;
-            }
-
             if (opt.key.equals(StocksSettings.STOCK_IN_LIST)) {
                 savedStocks.add(opt);
                 continue;
             }
 
             optionsMap.put(opt.key, opt.toMap());
-        }
-
-
-        if (enabledCalendars.size() > 0) {
-            WidgetOption enabledCalendarsOption = new WidgetOption();
-            enabledCalendarsOption.key = CalendarSettings.CALENDAR_ENABLED;
-            List<String> enabledCalIds = new ArrayList<>();
-            for (WidgetOption cal : enabledCalendars)
-                enabledCalIds.add(cal.value);
-
-            enabledCalendarsOption.setValue(enabledCalIds);
-
-            optionsMap.put(CalendarSettings.CALENDAR_ENABLED, enabledCalendarsOption.toMap());
         }
 
         if (savedStocks.size() > 0) {
