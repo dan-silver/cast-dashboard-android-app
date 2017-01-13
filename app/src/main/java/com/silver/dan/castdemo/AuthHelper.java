@@ -3,9 +3,7 @@ package com.silver.dan.castdemo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.Scope;
@@ -15,7 +13,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
@@ -37,8 +34,8 @@ public class AuthHelper {
     static String userJwt;
     public static Set<Scope> grantedScopes;
 
-    static String googleAccessToken;
-    static Date googleAccessTokenExpiresAt;
+    private static String googleAccessToken;
+    private static Date googleAccessTokenExpiresAt;
 
     private final Context context;
 
@@ -102,6 +99,7 @@ public class AuthHelper {
 
                     @Override
                     public void onComplete(String jwt) {
+                        clearGoogleTokenCache();
                         SharedPreferences prefs = context.getSharedPreferences(AuthHelperSharedPreferences, Context.MODE_PRIVATE);
                         prefs.edit().putString(SERVICE_JWT, jwt).apply();
                         callback.onComplete(jwt);
@@ -121,6 +119,10 @@ public class AuthHelper {
         });
     }
 
+
+    public void clearGoogleTokenCache() {
+        AuthHelper.googleAccessToken = null;
+    }
 
     // implements caching on expiresAt field
     public static void getGoogleAccessToken(Context context, final SimpleCallback<String> callback) {

@@ -45,8 +45,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private static GoogleApiClient mGoogleApiClient;
     private int RC_SIGN_IN = 10000;
 
-    private String SHARED_PREFS = "SHARED_PREFS_USER_FLOW";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,23 +88,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                 String serviceJwt = googleAuthHelper.getSavedServiceJwt();
                 if (serviceJwt == null) return;
-                    JWT jwt = new JWT(serviceJwt);
+                JWT jwt = new JWT(serviceJwt);
 
-                    String firebaseUserId = jwt.getClaim("firebaseUserId").asString();
-                    List<String> scopes = jwt.getClaim("grantedScopes").asList(String.class);
-                    Set<Scope> grantedScopes = new HashSet<>();
+                String firebaseUserId = jwt.getClaim("firebaseUserId").asString();
+                List<String> scopes = jwt.getClaim("grantedScopes").asList(String.class);
+                Set<Scope> grantedScopes = new HashSet<>();
 
-                    for (String scope : scopes) {
-                        grantedScopes.add(new Scope(scope));
-                    }
+                for (String scope : scopes) {
+                    grantedScopes.add(new Scope(scope));
+                }
 
-                    if (firebaseUserId.equals(user.getUid())) {
-                        googleAuthHelper.setServiceJwt(serviceJwt);
-                        googleAuthHelper.setNewUserInfo(user, grantedScopes);
-                        AuthHelper.user = user;
+                if (firebaseUserId.equals(user.getUid())) {
+                    googleAuthHelper.setServiceJwt(serviceJwt); // @todo why? didn't we just get this from authhelper?
+                    googleAuthHelper.setNewUserInfo(user, grantedScopes);
+                    AuthHelper.user = user;
 
-                        userFinishedAuth();
-                    }
+                    userFinishedAuth();
+                }
 
             }
         };
@@ -180,11 +178,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             @Override
             public void onError(Exception e) {
                 Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                loadingSpinner.setVisibility(View.GONE);
+                signInButton.setVisibility(View.VISIBLE);
             }
         });
     }
 
     private SharedPreferences getSharedPref() {
+        String SHARED_PREFS = "SHARED_PREFS_USER_FLOW";
         return getApplicationContext().getSharedPreferences(SHARED_PREFS, 0);
     }
 

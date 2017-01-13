@@ -103,6 +103,11 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         widget.delete();
     }
 
+    public void refreshSecondaryTitles() {
+        notifyDataSetChanged();
+//        http://stackoverflow.com/a/38132573/2517012
+    }
+
 
     class WidgetViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
         TextView topHeader;
@@ -147,30 +152,18 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         final UIWidget uiWidget = widget.getUIWidget(mainActivity);
 
         customViewHolder.topHeader.setText(mainActivity.getApplicationContext().getString(widget.getHumanNameRes()));
-        customViewHolder.bottomHeader.setText(uiWidget.getWidgetPreviewSecondaryHeader());
 
+        customViewHolder.bottomHeader.setText(uiWidget.getWidgetPreviewSecondaryHeader());
 
         customViewHolder.typeIcon.setImageResource(widget.getIconResource());
 
         customViewHolder.listItemView.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                CanBeCreatedListener listener = new CanBeCreatedListener() {
-                    @Override
-                    public void onCanBeCreated() {
-                        Intent intent = new Intent(mainActivity, WidgetSettingsActivity.class);
-                        intent.putExtra(Widget.GUID, widget.guid);
+                Intent intent = new Intent(mainActivity, WidgetSettingsActivity.class);
+                intent.putExtra(Widget.GUID, widget.guid);
 
-                        mainActivity.startActivityForResult(intent, WidgetSettingsActivity.REQUEST_CODE);
-
-                    }
-                };
-                uiWidget.setOnCanBeCreatedOrEditedListener(mainActivity, listener);
-
-                if (!uiWidget.canBeCreated()) {
-                    widgetCanBeCreatedListeners.add(listener);
-                }
+                mainActivity.startActivityForResult(intent, WidgetSettingsActivity.REQUEST_CODE);
             }
         });
 

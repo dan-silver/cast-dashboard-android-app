@@ -26,7 +26,7 @@ public class ClockWidget extends UIWidget {
     @Override
     public JSONObject getContent() throws JSONException {
         JSONObject options = new JSONObject();
-        options.put(ClockSettings.SHOW_SECONDS, widget.getOption(ClockSettings.SHOW_SECONDS).getBooleanValue());
+        options.put(ClockSettings.SHOW_SECONDS, widget.loadOrInitOption(ClockSettings.SHOW_SECONDS, context).getBooleanValue());
         return options;
     }
 

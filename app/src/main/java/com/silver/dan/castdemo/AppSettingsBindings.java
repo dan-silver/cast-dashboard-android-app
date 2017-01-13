@@ -55,8 +55,10 @@ public class AppSettingsBindings extends BaseObservable {
     static String WIDGET_COLOR = "WIDGET_COLOR";
     static String TEXT_COLOR = "TEXT_COLOR";
     static String SCREEN_PADDING = "SCREEN_PADDING";
-    static String LOCALE = "LOCALE";
     static String SLIDESHOW_INTERVAL = "SLIDESHOW_INTERVAL";
+
+    static String LOCALE = "LOCALE";
+    static final String LANGUAGE_CODE = "LANGUAGE_CODE";
 
 
     @Deprecated

@@ -13,8 +13,6 @@ abstract public class UIWidget {
     public Widget widget;
     public Context context;
 
-    public CanBeCreatedListener canBeCreatedListener;
-
     public abstract JSONObject getContent() throws JSONException;
 
     public int requestPermissions(Activity activity) {
@@ -40,15 +38,4 @@ abstract public class UIWidget {
     }
 
     public abstract void init();
-
-    public void setOnCanBeCreatedOrEditedListener(Activity activity, CanBeCreatedListener listener) {
-        this.canBeCreatedListener = listener;
-        if (canBeCreated()) {
-            listener.onCanBeCreated();
-        } else {
-            // request the permissions for the widget, and set the callback key
-            int permissionRequestCallbackKey = requestPermissions(activity);
-            this.canBeCreatedListener.setRequestCallbackReturnCode(permissionRequestCallbackKey);
-        }
-    }
 }

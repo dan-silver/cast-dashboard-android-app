@@ -32,7 +32,7 @@ public class StocksWidget extends UIWidget {
 
     @Override
     public JSONObject getContent() throws JSONException {
-        WidgetOption savedStocks = widget.getOption(StocksSettings.STOCK_IN_LIST);
+        WidgetOption savedStocks = widget.loadOrInitOption(StocksSettings.STOCK_IN_LIST, context);
         List<String> stockTickers = savedStocks.getList();
 
         JSONObject json = new JSONObject();
@@ -53,7 +53,7 @@ public class StocksWidget extends UIWidget {
 
     @Override
     public String getWidgetPreviewSecondaryHeader() {
-        WidgetOption savedStocksOption = widget.getOption(StocksSettings.STOCK_IN_LIST);
+        WidgetOption savedStocksOption = widget.loadOrInitOption(StocksSettings.STOCK_IN_LIST, context);
         List<String> tickers = savedStocksOption.getList();
         if (tickers.size() == 0) {
             return "No stocks selected";

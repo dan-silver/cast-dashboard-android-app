@@ -16,6 +16,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.silver.dan.castdemo.widgetList.OnDragListener;
 import com.silver.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
 import com.silver.dan.castdemo.widgets.CanBeCreatedListener;
+import com.silver.dan.castdemo.widgets.UIWidget;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -133,12 +134,18 @@ public class WidgetList extends Fragment implements OnDragListener {
                                 adapter.addWidget(widget);
 
                                 CastCommunicator.sendWidget(widget, getContext());
-
                             }
                         };
-                        widget.getUIWidget(getContext()).setOnCanBeCreatedOrEditedListener(getActivity(), listener);
 
-                        if (!widget.getUIWidget(getContext()).canBeCreated()) {
+
+                        UIWidget uiWidget = widget.getUIWidget(getContext());
+                        if (uiWidget.canBeCreated()) {
+                            listener.onCanBeCreated();
+                        } else {
+                            // request the permissions for the widget, and set the callback key
+                            int permissionRequestCallbackKey = uiWidget.requestPermissions(getActivity());
+                            listener.setRequestCallbackReturnCode(permissionRequestCallbackKey);
+
                             widgetCanBeCreatedListeners.add(listener);
                         }
 
@@ -151,6 +158,7 @@ public class WidgetList extends Fragment implements OnDragListener {
     @Override
     public void onResume() {
         super.onResume();
+        adapter.refreshSecondaryTitles();
         ((MainActivity) getActivity()).setDrawerItemChecked(MainActivity.NAV_VIEW_WIDGETS_ITEM);
     }
 

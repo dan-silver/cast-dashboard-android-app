@@ -8,6 +8,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -126,7 +127,14 @@ public class GoogleCalendarWidget extends UIWidget {
                         callback.onError(e);
                         return;
                     }
-                    JsonArray calendars = result.get("items").getAsJsonArray();
+                    JsonElement itemsRes = result.get("items");
+
+                    if (itemsRes == null) {
+                        callback.onError(new Exception("no items object in json response from users/me/calendarList"));
+                        return;
+                    }
+
+                    JsonArray calendars = itemsRes.getAsJsonArray();
 
                     List<String> enabledCalendars = getEnabledCalendars();
 

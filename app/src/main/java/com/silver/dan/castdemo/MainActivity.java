@@ -1,6 +1,8 @@
 package com.silver.dan.castdemo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,6 +23,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -54,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public static final int NAV_VIEW_WIDGETS_ITEM = 0;
     public static final int NAV_VIEW_OPTIONS_LAYOUT_ITEM = 1;
     public static final int NAV_VIEW_OPTIONS_THEME_ITEM = 2;
+    private static final String SHARED_PREF_UPDATE_NOTICE = "SHARED_PREF_UPDATE_NOTICE";
+    private static final String SHARED_PREF_UPDATE_NOTICE_LAST_VERSION = "SHARED_PREF_UPDATE_NOTICE_LAST_VERSION";
 
 
     //drawer
@@ -158,14 +163,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         mCastConsumer = new DataCastConsumerImpl() {
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-                JSONObject creds = new JSONObject();
-                try {
-                    creds.put("SERVICE_ACCESS_TOKEN", AuthHelper.userJwt);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                CastCommunicator.sendJSON("CREDENTIALS", creds);
-
+                sendCredentials();
                 dashboard.setOnDataRefreshListener(new Dashboard.OnLoadCallback() {
                     @Override
                     public void onReady() {
@@ -190,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         setupNavBarUserInfo();
 
         dashboard = new Dashboard();
-        loadDashboard();
+        loadDashboard(); // SLOW!!!!!!!
 
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -198,7 +196,51 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         CastCommunicator.init(mCastManager, dashboard, getResources().getString(R.string.namespace));
 
         switchToFragment(new LoadingFragment(), false);
+
+
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = getPackageManager()
+                    .getPackageInfo(getPackageName(), 0);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (packageInfo != null) {
+            int versionCode = packageInfo.versionCode;
+            SharedPreferences settings = this.getSharedPreferences(SHARED_PREF_UPDATE_NOTICE, 0);
+
+            if (settings.getInt(SHARED_PREF_UPDATE_NOTICE_LAST_VERSION, -1) != versionCode) {
+                displayUpgradeNotice(versionCode);
+
+                settings.edit().putInt(SHARED_PREF_UPDATE_NOTICE_LAST_VERSION, versionCode).apply();
+            }
+        }
     }
+
+    private void displayUpgradeNotice(int versionCode) {
+        if (versionCode != 39) {
+            return;
+        }
+
+        new MaterialDialog.Builder(this)
+                .title("What's new")
+                .content(R.string.changelog)
+                .positiveText(R.string.str_continue)
+                .show();
+    }
+
+    public void sendCredentials() {
+        JSONObject creds = new JSONObject();
+        try {
+            creds.put("SERVICE_ACCESS_TOKEN", AuthHelper.userJwt);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        CastCommunicator.sendJSON("CREDENTIALS", creds);
+    }
+
 
     private void loadDashboard() {
         // load options and widgets
@@ -285,6 +327,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             options.put(AppSettingsBindings.TEXT_COLOR, dashboard.settings.getTextColorHextStr());
             options.put(AppSettingsBindings.SCREEN_PADDING, dashboard.settings.getScreenPaddingUI());
             options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.toString());
+            options.put(AppSettingsBindings.LANGUAGE_CODE, getResources().getConfiguration().locale.getLanguage());
             options.put(AppSettingsBindings.SLIDESHOW_INTERVAL, dashboard.settings.getSlideshowInterval());
 
         } catch (JSONException e) {
@@ -355,6 +398,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 authHelper.completeCommonAuth(account, new SimpleCallback<String>() {
                     @Override
                     public void onComplete(String result) {
+                        sendCredentials(); // Receiver must get new jwt for new google access token that has permissions to Google Calendar
                         widgetListFrag.processPermissionReceivedCallback(GoogleCalendarSettings.PERMISSIONS_REQUEST_READ_GOOGLE_CALENDAR, true);
                     }
 
