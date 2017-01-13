@@ -2,8 +2,10 @@ package com.silver.dan.castdemo.settingsFragments;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.silver.dan.castdemo.R;
@@ -17,6 +19,9 @@ public class TwoLineSettingItem extends SettingItem {
 
     @BindView(R.id.two_line_settings_item_sub_header)
     TextView subHeader;
+
+    @BindView(R.id.two_line_settings_item_icon)
+    ImageView icon;
 
     public TwoLineSettingItem(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -39,6 +44,10 @@ public class TwoLineSettingItem extends SettingItem {
         inflater.inflate(R.layout.two_line_settings_item, this, true);
         ButterKnife.bind(this);
         init(attrs);
+    }
+
+    public void setIcon(Drawable drawable) {
+        icon.setImageDrawable(drawable);
     }
 
     public void setHeaderText(String text) {

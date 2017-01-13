@@ -1,20 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <TextView
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/setting_text_size"
-        android:textColor="@color/primary_text"
-        android:text="Header"
-        android:id="@+id/two_line_settings_item_header"/>
-    <TextView
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/setting_text_size"
+            android:textColor="@color/primary_text"
+            android:text="Header"
+            android:id="@+id/two_line_settings_item_header"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sub Header"
+            android:textColor="@color/secondary_text"
+            android:textSize="@dimen/setting_text_secondary"
+            android:id="@+id/two_line_settings_item_sub_header"/>
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/two_line_settings_item_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sub Header"
-        android:textColor="@color/secondary_text"
-        android:textSize="@dimen/setting_text_secondary"
-        android:id="@+id/two_line_settings_item_sub_header"/>
-</LinearLayout>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
+
+</RelativeLayout>

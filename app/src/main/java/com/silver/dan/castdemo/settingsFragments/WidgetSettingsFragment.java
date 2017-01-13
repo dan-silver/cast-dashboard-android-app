@@ -1,12 +1,20 @@
 package com.silver.dan.castdemo.settingsFragments;
 
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import com.android.vending.billing.IInAppBillingService;
+import com.silver.dan.castdemo.BillingHelper;
 import com.silver.dan.castdemo.CastCommunicator;
 import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
+import com.silver.dan.castdemo.SimpleCallback;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 
@@ -18,9 +26,9 @@ public abstract class WidgetSettingsFragment extends Fragment {
     protected Widget widget;
     protected int scrollViewHeaderLayout = -1;
 
-
     public static String WIDGET_HEIGHT = "WIDGET_HEIGHT";
     public static String SCROLL_INTERVAL = "SCROLL_INTERVAL";
+    public static String REFRESH_INTERVAL = "REFRESH_INTERVAL_SECONDS";
 
     @Nullable
     @BindView(R.id.widget_height)
@@ -30,11 +38,20 @@ public abstract class WidgetSettingsFragment extends Fragment {
     @BindView(R.id.widget_scroll_interval)
     TwoLineSettingItem scrollInterval;
 
+    @Nullable
+    @BindView(R.id.widget_refresh_interval)
+    TwoLineSettingItem widgetRefreshInterval;
+
     // percentage of screen height
     WidgetOption optionWidgetHeight;
 
     // scroll interval in seconds
     WidgetOption optionScrollInterval;
+
+    // how often to refresh the widget
+    WidgetOption optionRefreshInterval;
+
+    private IInAppBillingService mService;
 
 
     protected void refreshWidget() {
@@ -47,6 +64,16 @@ public abstract class WidgetSettingsFragment extends Fragment {
 
     protected WidgetOption loadOrInitOption(String property) {
         return widget.loadOrInitOption(property, getContext());
+    }
+
+
+    @Optional
+    @OnClick(R.id.widget_refresh_interval)
+    public void changeRefreshInterval() {
+        if (BillingHelper.hasPurchased)
+            return;
+
+        BillingHelper.purchaseUpgrade(mService);
     }
 
     @Optional
@@ -88,6 +115,16 @@ public abstract class WidgetSettingsFragment extends Fragment {
             scrollInterval.setSubHeaderText(optionScrollInterval.getIntValue() + " " + getString(R.string.seconds));
     }
 
+    public void updateRefreshIntervalText() {
+        if (widgetRefreshInterval == null) return;
+
+        widgetRefreshInterval.setSubHeaderText("Refresh every " + optionRefreshInterval.getIntValue() / 60 + " " + getString(R.string.minutes));
+    }
+
+    public void updateRefreshIntervalAfterPurchase() {
+
+    }
+
     abstract public void initView();
 
     @Override
@@ -96,6 +133,43 @@ public abstract class WidgetSettingsFragment extends Fragment {
         Bundle bundle = this.getArguments();
         String widgetKey = bundle.getString(Widget.GUID);
         this.widget = MainActivity.dashboard.getWidgetById(widgetKey);
+
+
+        ServiceConnection mServiceConn = new ServiceConnection() {
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mService = null;
+            }
+
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mService = IInAppBillingService.Stub.asInterface(service);
+                BillingHelper.fetchUpgradedStatus(mService, new SimpleCallback<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean upgraded) {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+
+
+            }
+        };
+
+        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        getActivity().bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+
+        BillingHelper.init(getActivity());
+    }
+
+    protected void supportWidgetRefreshInterval() {
+        optionRefreshInterval = loadOrInitOption(WidgetSettingsFragment.REFRESH_INTERVAL);
+        updateRefreshIntervalText();
     }
 
     protected void supportWidgetHeightOption() {
@@ -121,6 +195,10 @@ public abstract class WidgetSettingsFragment extends Fragment {
         return scrollViewHeaderLayout;
     }
 
-}
 
+    public void onPurchasedUpgrade() {
+        updateRefreshIntervalAfterPurchase(); // updates the option to 5 minutes, or whatever per widget
+        updateRefreshIntervalText();
+    }
+}
 

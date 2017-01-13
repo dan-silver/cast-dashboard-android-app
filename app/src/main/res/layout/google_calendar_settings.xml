@@ -55,4 +55,6 @@
     <include layout="@layout/setting_line_break"/>
     <include layout="@layout/widget_scroll_interval"/>
     <include layout="@layout/setting_line_break"/>
+    <include layout="@layout/widget_refresh_interval"/>
+    <include layout="@layout/setting_line_break"/>
 </LinearLayout>

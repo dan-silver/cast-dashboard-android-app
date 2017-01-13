@@ -77,5 +77,7 @@
 
         Google Calendar refreshes every 10 minutes, even if your phone is no longer casting. Enjoy!
     </string>
+    <string name="widget_refresh_interval">Refresh</string>
+    <string name="minutes">minutes</string>
 
 </resources>

@@ -43,6 +43,9 @@ import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWr
 
 public class Widget extends BaseModel {
     @Exclude
+    private static final int DEFAULT_REFRESH_INTERVAL_NORMAL = 600; // 10 minutes
+
+    @Exclude
     private static int DEFAULT_WIDGET_HEIGHT = 60;
 
     @Exclude
@@ -412,6 +415,14 @@ public class Widget extends BaseModel {
         // global widget properties
         initOption(WidgetSettingsFragment.WIDGET_HEIGHT, DEFAULT_WIDGET_HEIGHT);
         initOption(WidgetSettingsFragment.SCROLL_INTERVAL, DEFAULT_SCROLL_INTERVAL);
+
+        int refreshInterval;
+        if (BillingHelper.hasPurchased)
+            refreshInterval = 300; // 5 minutes
+        else
+            refreshInterval = DEFAULT_REFRESH_INTERVAL_NORMAL;
+
+        initOption(WidgetSettingsFragment.REFRESH_INTERVAL, refreshInterval);
 
         // start widget specific properties
         getUIWidget(context).init();

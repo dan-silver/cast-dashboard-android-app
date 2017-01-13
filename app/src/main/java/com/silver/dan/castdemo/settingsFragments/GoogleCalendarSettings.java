@@ -3,6 +3,7 @@ package com.silver.dan.castdemo.settingsFragments;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -60,6 +61,13 @@ public class GoogleCalendarSettings extends WidgetSettingsFragment {
     }
 
     @Override
+
+    public void updateRefreshIntervalAfterPurchase() {
+        optionRefreshInterval.update(300);
+    }
+
+
+        @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -140,6 +148,7 @@ public class GoogleCalendarSettings extends WidgetSettingsFragment {
 
         supportWidgetHeightOption();
         supportWidgetScrollInterval();
+        supportWidgetRefreshInterval();
 
         eventLocations.setChecked(optionShowEventLocations.getBooleanValue());
         eventLocations.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -155,5 +164,9 @@ public class GoogleCalendarSettings extends WidgetSettingsFragment {
 
         updateCalendarListContents();
         updateCalendarUntilTextView();
+
+
+        if (widgetRefreshInterval != null)
+            widgetRefreshInterval.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_1484313736_star));
     }
 }

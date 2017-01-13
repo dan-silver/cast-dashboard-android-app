@@ -41,12 +41,25 @@
         android:background="@android:color/white"
         app:itemTextColor="@color/drawer_item"
         app:headerLayout="@layout/nav_drawer_header">
+        <Button
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="match_parent"
+            android:layout_marginTop="50dp"
+            android:background="@color/accent"
+            android:id="@+id/upgrade_btn"
+            android:padding="10dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/mdtp_white"
+            android:layout_gravity="center"
+            android:text="Upgrade to PRO"/>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
             android:clickable="true"
+            android:layout_gravity="bottom"
             android:orientation="vertical"
             android:layout_marginBottom="20dp">
 
@@ -54,7 +67,7 @@
                 android:id="@+id/logout_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
+                android:layout_gravity="bottom"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 android:paddingLeft="20dp"

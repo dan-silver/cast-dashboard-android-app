@@ -16,9 +16,14 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.silver.dan.castdemo.BillingHelper.UPGRADE_RETURN_CODE;
 
 public class WidgetSettingsActivity extends AppCompatActivity {
     public static int REQUEST_CODE = 7774;
@@ -35,6 +40,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
     FrameLayout scrollViewHeader;
 
     private String widgetKey = null;
+    private WidgetSettingsFragment typeSettingsFragment;
 
 
     @Override
@@ -70,7 +76,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
         // display appropriate settings for that widget type
         setTitle(widget.getHumanNameRes());
 
-        WidgetSettingsFragment typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
+        typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString(Widget.GUID, widget.guid);
@@ -109,6 +115,16 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+
+    public void onActivityResult(int requestCode, int resultCode, final Intent intent) {
+        if (requestCode == UPGRADE_RETURN_CODE) {
+            if (BillingHelper.extractHasPurchased(resultCode, intent)) {
+                typeSettingsFragment.onPurchasedUpgrade();
+            }
+        }
+
     }
 
 }

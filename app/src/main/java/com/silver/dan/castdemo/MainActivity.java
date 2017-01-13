@@ -1,11 +1,15 @@
 package com.silver.dan.castdemo;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -20,10 +24,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -51,6 +57,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.silver.dan.castdemo.BillingHelper.UPGRADE_RETURN_CODE;
+
 public class MainActivity extends AppCompatActivity implements OnSettingChangedListener, GoogleApiClient.OnConnectionFailedListener {
 
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -70,7 +78,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @BindView(R.id.top_toolbar)
     Toolbar top_toolbar;
+
+    @BindView(R.id.upgrade_btn)
+    Button upgradeBtn;
+
     public static Dashboard dashboard;
+    private ServiceConnection mServiceConn;
 
     @OnClick(R.id.logout_btn)
     public void logout() {
@@ -80,12 +93,18 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         finish();
     }
 
+    @OnClick(R.id.upgrade_btn)
+    public void upgrade() {
+        BillingHelper.purchaseUpgrade(mService);
+    }
+
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
     private static DataCastManager mCastManager;
     private DataCastConsumer mCastConsumer;
     private WidgetList widgetListFrag;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+    IInAppBillingService mService;
 
 
     public void switchToFragment(final Fragment destinationFrag, final boolean addToBackStack) {
@@ -95,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         if (addToBackStack)
             transaction.addToBackStack(null);
 
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
     @Override
@@ -217,7 +236,50 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 settings.edit().putInt(SHARED_PREF_UPDATE_NOTICE_LAST_VERSION, versionCode).apply();
             }
         }
+
+
+        mServiceConn = new ServiceConnection() {
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mService = null;
+            }
+
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mService = IInAppBillingService.Stub.asInterface(service);
+                BillingHelper.fetchUpgradedStatus(mService, new SimpleCallback<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean upgraded) {
+                        upgradeBtn.setVisibility(upgraded ? View.GONE : View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+
+
+            }
+        };
+
+        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+
+        BillingHelper.init(this);
+
+
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mService != null) {
+            unbindService(mServiceConn);
+        }
+    }
+
 
     private void displayUpgradeNotice(int versionCode) {
         if (versionCode != 39) {
@@ -389,7 +451,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         }
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == GoogleCalendarSettings.PERMISSIONS_REQUEST_READ_GOOGLE_CALENDAR) {
+        else if (requestCode == GoogleCalendarSettings.PERMISSIONS_REQUEST_READ_GOOGLE_CALENDAR) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
             if (result.isSuccess()) {
                 // Google Sign In was successful, authenticate with Firebase
@@ -410,7 +472,16 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             } else {
                 widgetListFrag.processPermissionReceivedCallback(GoogleCalendarSettings.PERMISSIONS_REQUEST_READ_GOOGLE_CALENDAR, false);
             }
+        } else if (requestCode == UPGRADE_RETURN_CODE) {
+            if (BillingHelper.extractHasPurchased(resultCode, intent)) {
+                onPurchasedUpgrade();
+            }
         }
+
+    }
+
+    private void onPurchasedUpgrade() {
+        upgradeBtn.setVisibility(View.GONE);
 
     }
 
@@ -425,5 +496,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(MainActivity.TAG, "Error connecting to google services");
     }
+
+
 
 }

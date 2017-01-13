@@ -20,7 +20,6 @@ import com.silver.dan.castdemo.widgets.UIWidget;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
