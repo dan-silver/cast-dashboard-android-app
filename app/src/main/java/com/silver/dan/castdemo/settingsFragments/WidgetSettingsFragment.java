@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.silver.dan.castdemo.BillingHelper;
@@ -168,6 +170,15 @@ public abstract class WidgetSettingsFragment extends Fragment {
     }
 
     protected void supportWidgetRefreshInterval() {
+        if (widgetRefreshInterval != null) {
+            if (BillingHelper.hasPurchased){
+                widgetRefreshInterval.setVisibility(View.GONE);
+            } else{
+                widgetRefreshInterval.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_1484313736_star));
+            }
+
+        }
+
         optionRefreshInterval = loadOrInitOption(WidgetSettingsFragment.REFRESH_INTERVAL);
         updateRefreshIntervalText();
     }
@@ -198,7 +209,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
 
     public void onPurchasedUpgrade() {
         updateRefreshIntervalAfterPurchase(); // updates the option to 5 minutes, or whatever per widget
-        updateRefreshIntervalText();
+        supportWidgetRefreshInterval();
     }
 }
 

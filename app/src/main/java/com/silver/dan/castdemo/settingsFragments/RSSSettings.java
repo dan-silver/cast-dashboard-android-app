@@ -71,6 +71,7 @@ public class RSSSettings extends WidgetSettingsFragment {
 
         supportWidgetHeightOption();
         supportWidgetScrollInterval();
+        supportWidgetRefreshInterval();
         updateFeedURLText();
 
         displayDates.setChecked(showDatesOption.getBooleanValue());

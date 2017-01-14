@@ -15,6 +15,7 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+import com.silver.dan.castdemo.settingsFragments.GoogleCalendarSettings;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 import com.silver.dan.castdemo.widgets.ClockWidget;
@@ -322,7 +323,7 @@ public class Widget extends BaseModel {
     }
 
     @Exclude
-    JSONObject getJSONContent(Context applicationContext) {
+    JSONObject getJSONContent(Context context) {
         JSONObject payload = new JSONObject();
 
         try {
@@ -330,15 +331,17 @@ public class Widget extends BaseModel {
             payload.put("id", guid);
             payload.put("position", position);
 
-            JSONObject data = getUIWidget(applicationContext).getContent();
+            JSONObject data = getUIWidget(context).getContent();
+
+            data.put("REFRESH_INTERVAL_SECONDS", loadOrInitOption(WidgetSettingsFragment.REFRESH_INTERVAL, context).getIntValue());
 
             // if the widget has overridden the height, send it in the data {} so it can be quickly updated via the updateWidgetProperty channel
-            WidgetOption height = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT, applicationContext);
+            WidgetOption height = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT, context);
             if (height != null) {
                 data.put(WidgetSettingsFragment.WIDGET_HEIGHT, height.getIntValue());
             }
 
-            WidgetOption scrollInterval = loadOrInitOption(WidgetSettingsFragment.SCROLL_INTERVAL, applicationContext);
+            WidgetOption scrollInterval = loadOrInitOption(WidgetSettingsFragment.SCROLL_INTERVAL, context);
             if (scrollInterval != null) {
                 data.put(WidgetSettingsFragment.SCROLL_INTERVAL, scrollInterval.getIntValue());
             }

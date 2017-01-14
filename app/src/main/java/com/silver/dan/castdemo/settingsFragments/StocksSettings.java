@@ -63,6 +63,7 @@ public class StocksSettings extends WidgetSettingsFragment {
 
         supportWidgetHeightOption();
         supportWidgetScrollInterval();
+        supportWidgetRefreshInterval();
 
         final SimpleCursorAdapter dropDownMenuAdapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
                 new String[]{"name", "ticker"},

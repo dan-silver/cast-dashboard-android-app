@@ -9,23 +9,11 @@
     <com.silver.dan.castdemo.settingsFragments.SettingItem
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
-            android:text="Your calendars will be synced every 10 minutes."
-            android:layout_width="wrap_content"
-            android:textSize="@dimen/setting_text_size"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView" />
-    </com.silver.dan.castdemo.settingsFragments.SettingItem>
-
-
-    <com.silver.dan.castdemo.settingsFragments.SettingItem
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/calendar_list"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             xmlns:tools="http://schemas.android.com/tools"
             tools:listitem="@layout/calendar_select"/>
 
@@ -50,11 +38,5 @@
         android:layout_height="wrap_content"
         android:id="@+id/show_events_until"
         app:headerText="@string/calendar_duration"/>
-    <include layout="@layout/setting_line_break"/>
-    <include layout="@layout/widget_height"/>
-    <include layout="@layout/setting_line_break"/>
-    <include layout="@layout/widget_scroll_interval"/>
-    <include layout="@layout/setting_line_break"/>
-    <include layout="@layout/widget_refresh_interval"/>
-    <include layout="@layout/setting_line_break"/>
+    <include layout="@layout/scrollable_widget_settings"/>
 </LinearLayout>

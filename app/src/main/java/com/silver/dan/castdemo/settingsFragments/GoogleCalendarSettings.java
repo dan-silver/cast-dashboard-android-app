@@ -166,7 +166,5 @@ public class GoogleCalendarSettings extends WidgetSettingsFragment {
         updateCalendarUntilTextView();
 
 
-        if (widgetRefreshInterval != null)
-            widgetRefreshInterval.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_1484313736_star));
     }
 }
