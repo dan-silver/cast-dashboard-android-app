@@ -70,7 +70,7 @@ dependencies {
     compile 'com.github.QuadFlask:colorpicker:0.0.12'
 
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
-    compile 'com.wdullaer:materialdatetimepicker:2.5.0'
+    compile 'com.wdullaer:materialdatetimepicker:3.1.0'
 
     compile 'jp.wasabeef:richeditor-android:1.2.1'
 
@@ -87,9 +87,6 @@ dependencies {
 
     compile 'jp.wasabeef:recyclerview-animators:2.2.5'
     compile 'com.auth0.android:jwtdecode:1.1.0'
-
-
-    compile 'com.android.volley:volley:1.0.0'
 
 }
 
