@@ -119,7 +119,7 @@ public class CountdownSettings extends WidgetSettingsFragment {
         TimePickerDialog dpd = TimePickerDialog.newInstance(
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
-                    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+                    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
                         Calendar curDate = Calendar.getInstance();
                         curDate.setTime(dateOption.getDate());
 
