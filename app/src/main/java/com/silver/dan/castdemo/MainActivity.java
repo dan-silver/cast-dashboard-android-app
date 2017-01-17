@@ -7,7 +7,6 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -26,7 +25,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,8 +42,6 @@ import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumer;
 import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.raizlabs.android.dbflow.config.FlowConfig;
-import com.raizlabs.android.dbflow.config.FlowManager;
 import com.silver.dan.castdemo.settingsFragments.GoogleCalendarSettings;
 import com.squareup.picasso.Picasso;
 
@@ -126,9 +122,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
         ButterKnife.bind(this);
-
-        FlowManager.init(new FlowConfig.Builder(this).build());
-
 
         // Set the adapter for the list view
         Menu menu = navView.getMenu();

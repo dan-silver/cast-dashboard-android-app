@@ -13,11 +13,7 @@ import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.raizlabs.android.dbflow.sql.language.Select;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

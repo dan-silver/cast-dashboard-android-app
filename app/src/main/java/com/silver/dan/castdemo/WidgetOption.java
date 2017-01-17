@@ -5,15 +5,6 @@ import android.text.TextUtils;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.raizlabs.android.dbflow.annotation.Column;
-import com.raizlabs.android.dbflow.annotation.ForeignKey;
-import com.raizlabs.android.dbflow.annotation.ModelContainer;
-import com.raizlabs.android.dbflow.annotation.PrimaryKey;
-import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.structure.BaseModel;
-import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -23,34 +14,20 @@ import java.util.Map;
 
 import static com.silver.dan.castdemo.Widget.getFirebaseDashboardWidgetsRef;
 
-@ModelContainer
-@Table(database = WidgetDatabase.class)
 @IgnoreExtraProperties
-public class WidgetOption extends BaseModel {
+public class WidgetOption {
 
     @Exclude
     Widget widgetRef;
 
-    @PrimaryKey(autoincrement = true)
-    @Exclude
-    public long id;
-
-    @Column
     @Exclude
     public String key;
 
-    @Column
     public String value;
 
     public WidgetOption() {
     }
 
-    @Exclude
-    void saveFirebase() {
-        getOptionsRef()
-                .child(this.key)
-                .setValue(this.toMap());
-    }
 
     @Exclude
     private DatabaseReference getOptionsRef() {
@@ -68,15 +45,8 @@ public class WidgetOption extends BaseModel {
     }
 
 
-    @Column
-    @ForeignKey(saveForeignKeyModel = false)
-    @Exclude
-    @Deprecated
-    ForeignKeyContainer<Widget> widgetForeignKeyContainer;
-
     @Exclude
     public void associateWidget(Widget widget) {
-        widgetForeignKeyContainer = FlowManager.getContainerAdapter(Widget.class).toForeignKeyContainer(widget);
 
         // keep this line, remove container eventually
         this.widgetRef = widget;
@@ -113,9 +83,10 @@ public class WidgetOption extends BaseModel {
     }
 
     @Exclude
-    @Override
     public void save() {
-        saveFirebase();
+        getOptionsRef()
+                .child(this.key)
+                .setValue(this.toMap());
     }
 
     @Exclude

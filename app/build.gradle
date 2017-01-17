@@ -13,8 +13,8 @@ android {
         applicationId "com.silver.dan.castdemo"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 47
-        versionName "1.5.3"
+        versionCode 48
+        versionName "1.5.4"
 
         multiDexEnabled true
     }
@@ -95,19 +95,6 @@ dependencies {
 
 
 apply plugin: 'com.neenbedankt.android-apt'
-
-def dbflow_version = "3.0.0-beta6"
-// or dbflow_version = "develop-SNAPSHOT" for grabbing latest dependency in your project on the develop branch
-
-dependencies {
-    apt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
-    compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
-
-    // sql-cipher database encryption (optional)
-    compile "com.github.Raizlabs.DBFlow:dbflow-sqlcipher:${dbflow_version}"
-
-}
 
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

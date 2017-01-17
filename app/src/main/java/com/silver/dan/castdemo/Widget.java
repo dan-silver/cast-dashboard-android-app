@@ -7,13 +7,6 @@ import android.util.Log;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-import com.raizlabs.android.dbflow.annotation.Column;
-import com.raizlabs.android.dbflow.annotation.ModelContainer;
-import com.raizlabs.android.dbflow.annotation.OneToMany;
-import com.raizlabs.android.dbflow.annotation.PrimaryKey;
-import com.raizlabs.android.dbflow.annotation.Table;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 import com.silver.dan.castdemo.widgets.ClockWidget;
 import com.silver.dan.castdemo.widgets.CountdownWidget;
@@ -32,11 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@ModelContainer
-@Table(database = WidgetDatabase.class)
 @IgnoreExtraProperties
 
-public class Widget extends BaseModel {
+public class Widget {
     @Exclude
     public static final int DEFAULT_REFRESH_INTERVAL_NORMAL = 600; // 10 minutes
 
@@ -154,12 +145,7 @@ public class Widget extends BaseModel {
 
 
     @Exclude
-    @Override
     public void save() {
-        saveFirebaseOnly();
-    }
-
-    void saveFirebaseOnly() {
         getFirebaseWidgetRef().setValue(this.toMap());
     }
 
@@ -170,10 +156,8 @@ public class Widget extends BaseModel {
     }
 
     @Exclude
-    @Override
     public void delete() {
         getFirebaseWidgetRef().removeValue();
-        super.delete();
     }
 
     @Exclude
@@ -181,18 +165,12 @@ public class Widget extends BaseModel {
         return WidgetType.getEnumByValue(type);
     }
 
-    @Exclude
-    @PrimaryKey(autoincrement = true)
-    @Deprecated
-    public long id;
 
-    @Column
     public int type;
 
     @Exclude
     public String guid;
 
-    @Column
     public int position;
 
     // needs to be accessible for DELETE
@@ -239,20 +217,6 @@ public class Widget extends BaseModel {
         this.type = type.getValue();
     }
 
-
-
-    @Exclude
-    @Deprecated
-    @OneToMany(methods = {OneToMany.Method.SAVE, OneToMany.Method.DELETE}, variableName = "options")
-    public List<WidgetOption> getOptions() {
-//        if (options == null || options.isEmpty()) {
-            options = SQLite.select()
-                    .from(WidgetOption.class)
-                    .where(WidgetOption_Table.widgetForeignKeyContainer_id.eq(id))
-                    .queryList();
-//        }
-        return options;
-    }
 
 
     @Exclude

@@ -137,38 +137,41 @@ public class StocksSettings extends WidgetSettingsFragment {
         }));
 
         // query the db to get the saved stocks
-        String tickerQueryStr = "";
-        for (String ticker : optionSavedStocks.getList()) {
-            tickerQueryStr += ticker + "+";
-        }
+        if (optionSavedStocks.getList().size() > 0) {
 
-        Ion.with(getContext())
-                .load("http://finance.yahoo.com/d/quotes.csv?s=" + tickerQueryStr + "&f=sn")
-                .asInputStream()
-                .setCallback(new FutureCallback<InputStream>() {
-                    @Override
-                    public void onCompleted(Exception e, InputStream is) {
-                        if (e != null) {
-                            Log.e(MainActivity.TAG, e.toString());
-                            return;
-                        }
+            String tickerQueryStr = "";
+            for (String ticker : optionSavedStocks.getList()) {
+                tickerQueryStr += ticker + "+";
+            }
 
-
-                        CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(is)));
-                        try {
-                            List stockLines = reader.readAll();
-                            for (int i=0; i<stockLines.size(); i++) {
-                                String[] parsedStockLine = (String[]) stockLines.get(i);
-                                StockInfo info = new StockInfo(parsedStockLine[0], parsedStockLine[1]);
-                                stockListAdapter.addStock(info);
+            Ion.with(getContext())
+                    .load("http://finance.yahoo.com/d/quotes.csv?s=" + tickerQueryStr + "&f=sn")
+                    .asInputStream()
+                    .setCallback(new FutureCallback<InputStream>() {
+                        @Override
+                        public void onCompleted(Exception e, InputStream is) {
+                            if (e != null) {
+                                Log.e(MainActivity.TAG, e.toString());
+                                return;
                             }
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                        stockListAdapter.notifyDataSetChanged();
-                    }
-                });
 
+
+                            List<StockInfo> stocksToList = new ArrayList<>();
+                            CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(is)));
+                            try {
+                                List stockLines = reader.readAll();
+                                for (int i = 0; i < stockLines.size(); i++) {
+                                    String[] parsedStockLine = (String[]) stockLines.get(i);
+                                    StockInfo info = new StockInfo(parsedStockLine[0], parsedStockLine[1]);
+                                    stocksToList.add(info);
+                                }
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                            stockListAdapter.addStocks(stocksToList);
+                        }
+                    });
+        }
 
 
     }
@@ -176,37 +179,48 @@ public class StocksSettings extends WidgetSettingsFragment {
     public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.ViewHolder> {
         private ArrayList<StockInfo> mDataset;
 
-        public void addStock(StockInfo stock) {
-            mDataset.add(0, stock);
-            notifyDataSetChanged();
+        void addStock(StockInfo stock) {
+            ArrayList<StockInfo> stocks = new ArrayList<>();
+            stocks.add(stock);
+            addStocks(stocks);
         }
 
-        public void deleteStock(int position) {
+        void addStocks(final List<StockInfo> stocks) {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mDataset.addAll(0, stocks);
+                    notifyDataSetChanged();
+                }
+            });
+        }
+
+        void deleteStock(int position) {
             mDataset.remove(position);
             notifyDataSetChanged();
         }
 
-        public StockInfo getStock(int position) {
+        StockInfo getStock(int position) {
             return mDataset.get(position);
         }
 
         // Provide a reference to the views for each data item
         // Complex data items may need more than one view per item, and
         // you provide access to all the views for a data item in a view holder
-        public class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder {
             // each data item is just a string in this case
-            public TextView mCompanyName;
-            public TextView mStockTicker;
+            TextView mCompanyName;
+            TextView mStockTicker;
 
 
-            public ViewHolder(View v) {
+            ViewHolder(View v) {
                 super(v);
                 mStockTicker = (TextView) v.findViewById(R.id.stock_ticker);
                 mCompanyName = (TextView) v.findViewById(R.id.company_name);
             }
         }
 
-        public StockListAdapter(ArrayList<StockInfo> myDataset) {
+        StockListAdapter(ArrayList<StockInfo> myDataset) {
             mDataset = myDataset;
         }
 
