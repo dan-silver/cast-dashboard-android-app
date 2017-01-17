@@ -13,10 +13,7 @@ import com.raizlabs.android.dbflow.annotation.OneToMany;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.BaseModel;
-import com.silver.dan.castdemo.settingsFragments.GoogleCalendarSettings;
-import com.silver.dan.castdemo.settingsFragments.StocksSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 import com.silver.dan.castdemo.widgets.ClockWidget;
 import com.silver.dan.castdemo.widgets.CountdownWidget;
@@ -31,12 +28,9 @@ import com.silver.dan.castdemo.widgets.WeatherWidget;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWrites;
 
 @ModelContainer
 @Table(database = WidgetDatabase.class)
@@ -157,23 +151,16 @@ public class Widget extends BaseModel {
     }
 
 
-    @Exclude
-    void saveFirstTimeWithMigration() {
-        getFirebaseWidgetRef().setValue(this.toMapFirstTimeMigration());
-    }
 
 
     @Exclude
     @Override
     public void save() {
-        if (!useFirebaseForReadsAndWrites)
-            super.save();
         saveFirebaseOnly();
     }
 
     void saveFirebaseOnly() {
-        if (useFirebaseForReadsAndWrites)
-            getFirebaseWidgetRef().setValue(this.toMap());
+        getFirebaseWidgetRef().setValue(this.toMap());
     }
 
     void savePosition() {
@@ -231,47 +218,6 @@ public class Widget extends BaseModel {
 
 
 
-    // Migrate old list format to string CSV
-    // the dbflow implementation didn't use unique keys, firebase we do
-
-    @Exclude
-    public Map<String, Object> toMapFirstTimeMigration() {
-        Map<String, Object> widgetMap = toMap();
-
-        Map<String, Map<String, String>> optionsMap = new HashMap<>();
-
-        List<WidgetOption> savedStocks = new ArrayList<>();
-        for (WidgetOption opt : this.getOptions()) {
-            if (opt.key.equals(StocksSettings.STOCK_IN_LIST)) {
-                savedStocks.add(opt);
-                continue;
-            }
-
-            optionsMap.put(opt.key, opt.toMap());
-        }
-
-        if (savedStocks.size() > 0) {
-            WidgetOption savedStocksOption = new WidgetOption();
-            savedStocksOption.key = StocksSettings.STOCK_IN_LIST;
-            List<String> stockTickers = new ArrayList<>();
-            for (WidgetOption stock : savedStocks) {
-                Stock selectedStock = new Select().from(Stock.class).where(Stock_Table._id.is(stock.getIntValue())).querySingle();
-                if (selectedStock != null)
-                    stockTickers.add(selectedStock.getTicker());
-            }
-
-            savedStocksOption.setValue(stockTickers);
-
-            optionsMap.put(StocksSettings.STOCK_IN_LIST, savedStocksOption.toMap());
-        }
-
-
-
-        widgetMap.put("optionsMap", optionsMap);
-
-        return widgetMap;
-    }
-
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -311,15 +257,7 @@ public class Widget extends BaseModel {
 
     @Exclude
     public WidgetOption getOption(String key) {
-        if (useFirebaseForReadsAndWrites) {
-            return this.optionsMap.get(key);
-        }
-
-        return SQLite.select()
-                .from(WidgetOption.class)
-                .where(WidgetOption_Table.widgetForeignKeyContainer_id.eq(id))
-                .and(WidgetOption_Table.key.eq(key))
-                .querySingle();
+        return this.optionsMap.get(key);
     }
 
     public int getRefreshInterval() {

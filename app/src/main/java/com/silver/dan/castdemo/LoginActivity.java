@@ -1,8 +1,6 @@
 package com.silver.dan.castdemo;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,10 +27,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWrites;
-
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
-    private static final String DEVICE_MIGRATED_TO_FIREBASE = "MIGRATED_TO_FIREBASE";
     public static String LOGOUT = "LOGOUT";
 
     @BindView(R.id.sign_in_button)
@@ -111,19 +106,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FirebaseAuth.getInstance().addAuthStateListener(mAuthListener);
 
 
-        // Moving here because we can't do this on stock widget creation since they might sync an
-        // account that has one
-        // 
-        // Make sure that the stocks have been dumped into db, only happens on first app launch
-        // in async call
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                Stock.insertAllStocks(getApplicationContext());
-            }
-        });
-
-
     }
 
     static boolean restoreUser() {
@@ -184,36 +166,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         });
     }
 
-    private SharedPreferences getSharedPref() {
-        String SHARED_PREFS = "SHARED_PREFS_USER_FLOW";
-        return getApplicationContext().getSharedPreferences(SHARED_PREFS, 0);
-    }
-
-    private boolean hasMigrated() {
-        return getSharedPref().getBoolean(DEVICE_MIGRATED_TO_FIREBASE, false);
-    }
-
-    private void setHasMigrated(boolean migrated) {
-        getSharedPref().edit().putBoolean(DEVICE_MIGRATED_TO_FIREBASE, migrated).apply();
-    }
-
     private void userFinishedAuth() {
-        if (hasMigrated()) {
-            useFirebaseForReadsAndWrites = true;
-            launchMainActivity();
-            return;
-        }
-
-        FirebaseMigration migration = new FirebaseMigration();
-        migration.start(getApplicationContext(), new FirebaseMigration.SimpleCompletionListener() {
-            @Override
-            public void onComplete() {
-                setHasMigrated(true);
-                useFirebaseForReadsAndWrites = true;
-                launchMainActivity();
-            }
-        });
-
+        launchMainActivity();
     }
 
     private void launchMainActivity() {

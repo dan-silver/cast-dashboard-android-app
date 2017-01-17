@@ -8,12 +8,10 @@ import java.io.Serializable;
 public class StockInfo implements Serializable {
     private String ticker;
     private String name;
-    private long id;
 
-    public StockInfo(String ticker, String name, long id) {
+    public StockInfo(String ticker, String name) {
         this.ticker = ticker;
         this.name = name;
-        this.id = id;
     }
 
     public String getTicker() {
@@ -29,11 +27,4 @@ public class StockInfo implements Serializable {
         return name;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 }

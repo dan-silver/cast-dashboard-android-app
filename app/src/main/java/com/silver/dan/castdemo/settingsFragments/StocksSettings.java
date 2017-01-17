@@ -1,35 +1,35 @@
 package com.silver.dan.castdemo.settingsFragments;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.FilterQueryProvider;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.raizlabs.android.dbflow.sql.language.ConditionGroup;
-import com.raizlabs.android.dbflow.sql.language.Delete;
-import com.raizlabs.android.dbflow.sql.language.Select;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.RecyclerItemClickListener;
-import com.silver.dan.castdemo.Stock;
 import com.silver.dan.castdemo.StockInfo;
-import com.silver.dan.castdemo.Stock_Table;
 import com.silver.dan.castdemo.WidgetOption;
-import com.silver.dan.castdemo.WidgetOption_Table;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import au.com.bytecode.opencsv.CSVReader;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -65,51 +65,37 @@ public class StocksSettings extends WidgetSettingsFragment {
         supportWidgetScrollInterval();
         supportWidgetRefreshInterval();
 
-        final SimpleCursorAdapter dropDownMenuAdapter = new SimpleCursorAdapter(getContext(), R.layout.stock_auto_complete_dropdown, null,
-                new String[]{"name", "ticker"},
-                new int[]{R.id.company_name, R.id.stock_ticker},
-                0);
-
-        dropDownMenuAdapter.setFilterQueryProvider(new FilterQueryProvider() {
-            public Cursor runQuery(CharSequence hint) {
-
-                ConditionGroup query = ConditionGroup.clause().orAll(Stock_Table.name.like("%" + hint + "%"), Stock_Table.ticker.like("%" + hint + "%"));
-                return new Select().from(Stock.class).where(query).query();
-            }
-        });
-
-        SimpleCursorAdapter.CursorToStringConverter converter = new SimpleCursorAdapter.CursorToStringConverter() {
-            @Override
-            public CharSequence convertToString(Cursor cursor) {
-                int desiredColumn = cursor.getColumnIndex("name");
-                return cursor.getString(desiredColumn);
-            }
-        };
-
-        dropDownMenuAdapter.setCursorToStringConverter(converter);
+        final GetStockSuggestionsAdapter dropDownMenuAdapter = new GetStockSuggestionsAdapter(getContext());
 
         addStock.setAdapter(dropDownMenuAdapter);
 
         addStock.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Stock selectedStock = new Select().from(Stock.class).where(Stock_Table._id.is(id)).querySingle();
+                StockInfo selectedStock = dropDownMenuAdapter.getItem(position);
 
                 if (selectedStock == null) {
                     return;
                 }
-
                 String ticker = selectedStock.getTicker();
-
                 List<String> stockTickers = optionSavedStocks.getList();
 
-                if (!stockTickers.contains(ticker)) {
-                    stockTickers.add(ticker);
-                    optionSavedStocks.update(stockTickers);
+                boolean isNewStock = true;
+                for (String savedTicker : stockTickers) {
+                    if (savedTicker.equals(ticker)) {
+                        isNewStock = false;
+                        break;
+                    }
                 }
 
 
-                stockListAdapter.addStock(selectedStock);
+                if (isNewStock) {
+                    stockTickers.add(ticker);
+                    optionSavedStocks.update(stockTickers);
+                    stockListAdapter.addStock(selectedStock);
+                }
+
+
                 addStock.clearListSelection();
                 addStock.setText("");
 
@@ -151,25 +137,44 @@ public class StocksSettings extends WidgetSettingsFragment {
         }));
 
         // query the db to get the saved stocks
+        String tickerQueryStr = "";
         for (String ticker : optionSavedStocks.getList()) {
-            Stock stock = new Select().from(Stock.class).where(Stock_Table.ticker.is(ticker)).querySingle();
-
-            if (stock == null) continue;
-
-            StockInfo info = new StockInfo(stock.getTicker(), stock.getName(), stock.get_id());
-
-            stockListAdapter.addStock(info);
+            tickerQueryStr += ticker + "+";
         }
+
+        Ion.with(getContext())
+                .load("http://finance.yahoo.com/d/quotes.csv?s=" + tickerQueryStr + "&f=sn")
+                .asInputStream()
+                .setCallback(new FutureCallback<InputStream>() {
+                    @Override
+                    public void onCompleted(Exception e, InputStream is) {
+                        if (e != null) {
+                            Log.e(MainActivity.TAG, e.toString());
+                            return;
+                        }
+
+
+                        CSVReader reader = new CSVReader(new BufferedReader(new InputStreamReader(is)));
+                        try {
+                            List stockLines = reader.readAll();
+                            for (int i=0; i<stockLines.size(); i++) {
+                                String[] parsedStockLine = (String[]) stockLines.get(i);
+                                StockInfo info = new StockInfo(parsedStockLine[0], parsedStockLine[1]);
+                                stockListAdapter.addStock(info);
+                            }
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                        stockListAdapter.notifyDataSetChanged();
+                    }
+                });
+
+
 
     }
 
     public class StockListAdapter extends RecyclerView.Adapter<StockListAdapter.ViewHolder> {
         private ArrayList<StockInfo> mDataset;
-
-        public void addStock(Stock selectedStock) {
-            StockInfo stock = new StockInfo(selectedStock.getTicker(), selectedStock.getName(), selectedStock.get_id());
-            addStock(stock);
-        }
 
         public void addStock(StockInfo stock) {
             mDataset.add(0, stock);

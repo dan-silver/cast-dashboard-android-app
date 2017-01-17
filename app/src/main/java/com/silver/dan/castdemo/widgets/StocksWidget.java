@@ -2,9 +2,6 @@ package com.silver.dan.castdemo.widgets;
 
 import android.content.Context;
 
-import com.raizlabs.android.dbflow.sql.language.Select;
-import com.silver.dan.castdemo.Stock;
-import com.silver.dan.castdemo.Stock_Table;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.settingsFragments.StocksSettings;
@@ -64,21 +61,9 @@ public class StocksWidget extends UIWidget {
 
         ArrayList<String> stocksString = new ArrayList<>();
 
-
         for (String ticker: tickers) {
-            Stock stock = new Select().from(Stock.class).where(Stock_Table.ticker.is(ticker)).querySingle();
-
-            if (stock == null) {
-                continue;
-            }
-
-            // in the case of 1, use the company name
-            if (tickers.size() == 1) {
-                return stock.getName();
-            }
-
             //otherwise use the ticker
-            stocksString.add(stock.getTicker());
+            stocksString.add(ticker);
             if (stocksString.size() > 4) {
                 break;
             }

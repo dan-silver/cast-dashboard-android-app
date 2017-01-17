@@ -88,6 +88,9 @@ dependencies {
     compile 'jp.wasabeef:recyclerview-animators:2.2.5'
     compile 'com.auth0.android:jwtdecode:1.1.0'
 
+
+    compile 'com.android.volley:volley:1.0.0'
+
 }
 
 

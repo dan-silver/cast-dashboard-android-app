@@ -15,14 +15,12 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWrites;
 import static com.silver.dan.castdemo.Widget.getFirebaseDashboardWidgetsRef;
 
 @ModelContainer
@@ -117,10 +115,6 @@ public class WidgetOption extends BaseModel {
     @Exclude
     @Override
     public void save() {
-        if (!useFirebaseForReadsAndWrites)
-            super.save();
-
-
         saveFirebase();
     }
 
