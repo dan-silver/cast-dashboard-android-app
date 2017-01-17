@@ -61,13 +61,6 @@ public class GoogleCalendarSettings extends WidgetSettingsFragment {
     }
 
     @Override
-
-    public void updateRefreshIntervalAfterPurchase() {
-        optionRefreshInterval.update(300);
-    }
-
-
-        @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[], @NonNull int[] grantResults) {
         switch (requestCode) {

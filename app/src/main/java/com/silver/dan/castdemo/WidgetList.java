@@ -3,6 +3,7 @@ package com.silver.dan.castdemo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,6 +71,7 @@ public class WidgetList extends Fragment implements OnDragListener {
         mItemTouchHelper.attachToRecyclerView(widgetList);
 
 
+        mSwipeContainer.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.ccl_grey600));
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

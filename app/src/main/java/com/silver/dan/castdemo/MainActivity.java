@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -81,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @BindView(R.id.upgrade_btn)
     Button upgradeBtn;
+
+    ImageView userUpgradedBadge;
 
     public static Dashboard dashboard;
     private ServiceConnection mServiceConn;
@@ -250,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 BillingHelper.fetchUpgradedStatus(mService, new SimpleCallback<Boolean>() {
                     @Override
                     public void onComplete(Boolean upgraded) {
-                        upgradeBtn.setVisibility(upgraded ? View.GONE : View.VISIBLE);
+                        updateUpgradeButtonVisibility(upgraded);
                     }
 
                     @Override
@@ -270,6 +274,17 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         BillingHelper.init(this);
 
 
+    }
+
+    public void updateUpgradeButtonVisibility(final boolean upgraded) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                upgradeBtn.setVisibility(upgraded ? View.GONE : View.VISIBLE);
+
+                userUpgradedBadge.setVisibility(upgraded ? View.VISIBLE : View.GONE);
+            }
+        });
     }
 
     @Override
@@ -322,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     private void setupNavBarUserInfo() {
         View header = navView.getHeaderView(0);
+        userUpgradedBadge = (ImageView) navView.getHeaderView(0).findViewById(R.id.userUpgradedBadge);
 
 
         TextView displayName = (TextView) header.findViewById(R.id.userDisplayName);
@@ -428,6 +444,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     @Override
     protected void onResume() {
         super.onResume();
+        updateUpgradeButtonVisibility(BillingHelper.hasPurchased);
 
         mCastManager = DataCastManager.getInstance();
         if (mCastManager != null) {
@@ -481,8 +498,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     }
 
     private void onPurchasedUpgrade() {
-        upgradeBtn.setVisibility(View.GONE);
-
+        updateUpgradeButtonVisibility(true);
     }
 
     @Override

@@ -59,7 +59,6 @@ public class BillingHelper {
                         // list empty when PRO not purchased
                         hasPurchased = purchaseDataList.size() != 0;
                         callback.onComplete(hasPurchased);
-
                     }
 
 

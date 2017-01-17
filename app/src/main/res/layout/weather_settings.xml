@@ -23,4 +23,6 @@
         android:id="@+id/weather_degrees_unit"
         app:headerText="@string/temperature_units"/>
     <include layout="@layout/setting_line_break"/>
+    <include layout="@layout/widget_refresh_interval"/>
+    <include layout="@layout/setting_line_break"/>
 </LinearLayout>

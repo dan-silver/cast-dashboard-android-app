@@ -169,6 +169,8 @@ public class WeatherSettings extends WidgetSettingsFragment {
 
         updateWeatherUnitsTextView();
         updateWeatherModeTextView();
+        supportWidgetRefreshInterval();
+
 
     }
 }

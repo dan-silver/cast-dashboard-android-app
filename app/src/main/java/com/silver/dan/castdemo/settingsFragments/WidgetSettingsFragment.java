@@ -9,7 +9,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
+import android.widget.Toast;
 
 import com.android.vending.billing.IInAppBillingService;
 import com.silver.dan.castdemo.BillingHelper;
@@ -30,7 +30,6 @@ public abstract class WidgetSettingsFragment extends Fragment {
 
     public static String WIDGET_HEIGHT = "WIDGET_HEIGHT";
     public static String SCROLL_INTERVAL = "SCROLL_INTERVAL";
-    public static String REFRESH_INTERVAL = "REFRESH_INTERVAL_SECONDS";
 
     @Nullable
     @BindView(R.id.widget_height)
@@ -49,9 +48,6 @@ public abstract class WidgetSettingsFragment extends Fragment {
 
     // scroll interval in seconds
     WidgetOption optionScrollInterval;
-
-    // how often to refresh the widget
-    WidgetOption optionRefreshInterval;
 
     private IInAppBillingService mService;
 
@@ -72,8 +68,15 @@ public abstract class WidgetSettingsFragment extends Fragment {
     @Optional
     @OnClick(R.id.widget_refresh_interval)
     public void changeRefreshInterval() {
-        if (BillingHelper.hasPurchased)
+        if (BillingHelper.hasPurchased) {
+            Context context = getContext();
+            CharSequence text = "You're upgraded! We'll refresh this widget every " + getRefreshIntervalText();
+            int duration = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
             return;
+        }
 
         BillingHelper.purchaseUpgrade(mService);
     }
@@ -120,12 +123,13 @@ public abstract class WidgetSettingsFragment extends Fragment {
     public void updateRefreshIntervalText() {
         if (widgetRefreshInterval == null) return;
 
-        widgetRefreshInterval.setSubHeaderText("Refresh every " + optionRefreshInterval.getIntValue() / 60 + " " + getString(R.string.minutes));
+        widgetRefreshInterval.setSubHeaderText("Refresh every " + getRefreshIntervalText());
     }
 
-    public void updateRefreshIntervalAfterPurchase() {
-
+    private String getRefreshIntervalText() {
+        return widget.getRefreshInterval() / 60 + " " + getString(R.string.minutes);
     }
+
 
     abstract public void initView();
 
@@ -135,7 +139,6 @@ public abstract class WidgetSettingsFragment extends Fragment {
         Bundle bundle = this.getArguments();
         String widgetKey = bundle.getString(Widget.GUID);
         this.widget = MainActivity.dashboard.getWidgetById(widgetKey);
-
 
         ServiceConnection mServiceConn = new ServiceConnection() {
             @Override
@@ -172,14 +175,13 @@ public abstract class WidgetSettingsFragment extends Fragment {
     protected void supportWidgetRefreshInterval() {
         if (widgetRefreshInterval != null) {
             if (BillingHelper.hasPurchased){
-                widgetRefreshInterval.setVisibility(View.GONE);
+                widgetRefreshInterval.setIcon(null);
             } else{
                 widgetRefreshInterval.setIcon(ContextCompat.getDrawable(getContext(), R.drawable.ic_1484313736_star));
             }
 
         }
 
-        optionRefreshInterval = loadOrInitOption(WidgetSettingsFragment.REFRESH_INTERVAL);
         updateRefreshIntervalText();
     }
 
@@ -208,7 +210,6 @@ public abstract class WidgetSettingsFragment extends Fragment {
 
 
     public void onPurchasedUpgrade() {
-        updateRefreshIntervalAfterPurchase(); // updates the option to 5 minutes, or whatever per widget
         supportWidgetRefreshInterval();
     }
 }

@@ -74,6 +74,13 @@ public class WidgetSettingsActivity extends AppCompatActivity {
     private void completeSetup() {
         // lookup widget in the database
         // display appropriate settings for that widget type
+
+
+        if (widget == null)
+            finish(); // error case? if widget is null, go back to main activity
+
+
+
         setTitle(widget.getHumanNameRes());
 
         typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
@@ -119,12 +126,12 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
 
     public void onActivityResult(int requestCode, int resultCode, final Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == UPGRADE_RETURN_CODE) {
             if (BillingHelper.extractHasPurchased(resultCode, intent)) {
                 typeSettingsFragment.onPurchasedUpgrade();
+                CastCommunicator.sendAllWidgets(this); // refresh intervals have changed
             }
         }
-
     }
-
 }

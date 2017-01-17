@@ -29,14 +29,28 @@
             android:layout_marginStart="5dp"
             android:orientation="vertical" >
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:id="@+id/userDisplayName"
-                android:text="Shohel Rana"
-                android:textColor="@color/mdtp_white"
-                android:textSize="20sp" />
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/userDisplayName"
+                    android:text="Shohel Rana"
+                    android:textColor="@color/mdtp_white"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_1484313736_star"
+                    android:id="@+id/userUpgradedBadge"
+                    android:contentDescription="Upgraded" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -52,5 +66,6 @@
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
+
 
 </FrameLayout>

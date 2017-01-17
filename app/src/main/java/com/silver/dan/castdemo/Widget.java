@@ -44,7 +44,7 @@ import static com.silver.dan.castdemo.FirebaseMigration.useFirebaseForReadsAndWr
 
 public class Widget extends BaseModel {
     @Exclude
-    private static final int DEFAULT_REFRESH_INTERVAL_NORMAL = 600; // 10 minutes
+    public static final int DEFAULT_REFRESH_INTERVAL_NORMAL = 600; // 10 minutes
 
     @Exclude
     private static int DEFAULT_WIDGET_HEIGHT = 60;
@@ -322,6 +322,13 @@ public class Widget extends BaseModel {
                 .querySingle();
     }
 
+    public int getRefreshInterval() {
+        if (BillingHelper.hasPurchased)
+            return 300; // 5 minutes
+        else
+            return DEFAULT_REFRESH_INTERVAL_NORMAL;
+    }
+
     @Exclude
     JSONObject getJSONContent(Context context) {
         JSONObject payload = new JSONObject();
@@ -333,7 +340,7 @@ public class Widget extends BaseModel {
 
             JSONObject data = getUIWidget(context).getContent();
 
-            data.put("REFRESH_INTERVAL_SECONDS", loadOrInitOption(WidgetSettingsFragment.REFRESH_INTERVAL, context).getIntValue());
+            data.put("REFRESH_INTERVAL_SECONDS", getRefreshInterval());
 
             // if the widget has overridden the height, send it in the data {} so it can be quickly updated via the updateWidgetProperty channel
             WidgetOption height = loadOrInitOption(WidgetSettingsFragment.WIDGET_HEIGHT, context);
@@ -418,14 +425,6 @@ public class Widget extends BaseModel {
         // global widget properties
         initOption(WidgetSettingsFragment.WIDGET_HEIGHT, DEFAULT_WIDGET_HEIGHT);
         initOption(WidgetSettingsFragment.SCROLL_INTERVAL, DEFAULT_SCROLL_INTERVAL);
-
-        int refreshInterval;
-        if (BillingHelper.hasPurchased)
-            refreshInterval = 300; // 5 minutes
-        else
-            refreshInterval = DEFAULT_REFRESH_INTERVAL_NORMAL;
-
-        initOption(WidgetSettingsFragment.REFRESH_INTERVAL, refreshInterval);
 
         // start widget specific properties
         getUIWidget(context).init();
