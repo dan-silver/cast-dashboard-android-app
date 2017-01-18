@@ -84,6 +84,9 @@ public class BillingHelper {
 
                 Bundle buyIntentBundle;
                 try {
+                    if (mService == null) {
+                        return;
+                    }
                     buyIntentBundle = mService.getBuyIntent(3, activity.getPackageName(),
                             "cast_dashboard_pro", "subs", UUID.randomUUID().toString());
 
