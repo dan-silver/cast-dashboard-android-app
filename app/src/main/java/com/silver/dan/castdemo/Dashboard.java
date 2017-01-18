@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class Dashboard {
-    List<Widget> widgets = new ArrayList<>();;
+    List<Widget> widgets = new ArrayList<>();
     AppSettingsBindings settings;
     private OnLoadCallback onDataRefreshListener;
 
