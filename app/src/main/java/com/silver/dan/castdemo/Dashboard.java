@@ -20,7 +20,7 @@ import java.util.List;
 public class Dashboard {
     List<Widget> widgets = new ArrayList<>();;
     AppSettingsBindings settings;
-    OnLoadCallback onDataRefreshListener;
+    private OnLoadCallback onDataRefreshListener;
 
     public Widget getWidgetById(String widgetKey) {
         if (widgets == null)

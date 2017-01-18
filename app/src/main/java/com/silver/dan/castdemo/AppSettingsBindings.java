@@ -46,7 +46,7 @@ public class AppSettingsBindings extends BaseObservable {
 
 
     @Exclude
-    public AppSettingsHelperFragment appSettings;
+    private AppSettingsHelperFragment appSettings;
 
     static String COLUMN_COUNT = "COLUMN_COUNT";
     static String BACKGROUND_TYPE = "BACKGROUND_TYPE";
@@ -59,11 +59,6 @@ public class AppSettingsBindings extends BaseObservable {
 
     static String LOCALE = "LOCALE";
     static final String LANGUAGE_CODE = "LANGUAGE_CODE";
-
-
-    @Deprecated
-    static String SHARED_PREFS_OPTIONS = "SHARED_PREFS_OPTIONS";
-
 
     public AppSettingsBindings() {
     }
@@ -214,33 +209,6 @@ public class AppSettingsBindings extends BaseObservable {
 
         getFirebaseDashboardOptionsRef().setValue(settings);
 
-    }
-
-    @Exclude
-    public void loadAllSettingsFromSharedPreferences(Context context) {
-        SharedPreferences settings = context.getSharedPreferences(SHARED_PREFS_OPTIONS, 0);
-
-        // Don't use setters here because we don't want to trigger a sendMessage() to TV
-        numberOfColumns = settings.getInt(COLUMN_COUNT, 2);
-        int iDashBackgroundColor = settings.getInt(BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.tv_background));
-        dashBackgroundColor = ColorConverter.intToString(iDashBackgroundColor);
-
-        int iWidgetColor = settings.getInt(WIDGET_COLOR, ContextCompat.getColor(context, R.color.md_material_blue_800));
-        widgetColor = ColorConverter.intToString(iWidgetColor);
-
-        int iTextColor = settings.getInt(TEXT_COLOR, ContextCompat.getColor(context, R.color.tv_text_light));
-        textColor = ColorConverter.intToString(iTextColor);
-
-        backgroundType = settings.getInt(BACKGROUND_TYPE, 0);
-        if (BackgroundType.values()[backgroundType] == BackgroundType.PICTURE) {
-            backgroundType = BackgroundType.SLIDESHOW.getValue();
-        }
-
-
-        widgetTransparency = settings.getInt(WIDGET_TRANSPARENCY, 15); //15% x 2 + 50 = 80/100
-        screenPadding = settings.getInt(SCREEN_PADDING, 15);
-
-        slideshowInterval = settings.getInt(SLIDESHOW_INTERVAL, 30);
     }
 
     @Exclude

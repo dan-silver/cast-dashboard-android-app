@@ -173,11 +173,6 @@ public class Widget {
 
     public int position;
 
-    // needs to be accessible for DELETE
-    @Exclude
-    @Deprecated
-    List<WidgetOption> options;
-
     // for firebase
     public Map<String, WidgetOption> optionsMap;
 
