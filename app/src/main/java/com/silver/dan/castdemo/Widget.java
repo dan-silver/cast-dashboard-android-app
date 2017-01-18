@@ -22,11 +22,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @IgnoreExtraProperties
-
 public class Widget {
     @Exclude
     public static final int DEFAULT_REFRESH_INTERVAL_NORMAL = 600; // 10 minutes

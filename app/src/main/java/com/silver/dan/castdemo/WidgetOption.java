@@ -21,7 +21,7 @@ public class WidgetOption {
     Widget widgetRef;
 
     @Exclude
-    public String key;
+    String key;
 
     public String value;
 
@@ -37,7 +37,7 @@ public class WidgetOption {
     }
 
     @Exclude
-    public Map<String, String> toMap() {
+    private Map<String, String> toMap() {
         HashMap<String, String> result = new HashMap<>();
         result.put("value", value);
 
@@ -46,9 +46,7 @@ public class WidgetOption {
 
 
     @Exclude
-    public void associateWidget(Widget widget) {
-
-        // keep this line, remove container eventually
+    void associateWidget(Widget widget) {
         this.widgetRef = widget;
     }
 
