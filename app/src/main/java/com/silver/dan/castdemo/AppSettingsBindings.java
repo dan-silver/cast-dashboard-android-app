@@ -1,18 +1,14 @@
 package com.silver.dan.castdemo;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.support.v4.content.ContextCompat;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.silver.dan.castdemo.SettingEnums.BackgroundType;
 import com.silver.dan.castdemo.Util.ColorConverter;
 

@@ -2,7 +2,6 @@ package com.silver.dan.castdemo.settingsFragments;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +25,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by dan on 1/16/17.
@@ -124,7 +121,7 @@ public class GetStockSuggestionsAdapter extends BaseAdapter implements Filterabl
 
                 }
 
-            } catch (IOException | JSONException e) {
+            } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
 

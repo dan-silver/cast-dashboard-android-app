@@ -1,22 +1,16 @@
 package com.silver.dan.castdemo.settingsFragments;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
-import com.android.vending.billing.IInAppBillingService;
 import com.silver.dan.castdemo.BillingHelper;
 import com.silver.dan.castdemo.CastCommunicator;
 import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
-import com.silver.dan.castdemo.SimpleCallback;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
 import com.silver.dan.castdemo.WidgetSettingsActivity;

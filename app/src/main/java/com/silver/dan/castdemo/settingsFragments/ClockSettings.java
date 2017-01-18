@@ -12,7 +12,6 @@ import com.silver.dan.castdemo.WidgetOption;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnCheckedChanged;
 
 public class ClockSettings extends WidgetSettingsFragment {
 

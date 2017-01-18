@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.settingsFragments.ClockSettings;
-import com.silver.dan.castdemo.settingsFragments.CountdownSettings;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import org.json.JSONException;
