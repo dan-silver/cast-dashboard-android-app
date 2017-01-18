@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     @OnClick(R.id.upgrade_btn)
     public void upgrade() {
-        BillingHelper.purchaseUpgrade(mService);
+        BillingHelper.purchaseUpgrade(mService, this);
     }
 
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
@@ -244,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mService = IInAppBillingService.Stub.asInterface(service);
-                BillingHelper.fetchUpgradedStatus(mService, new SimpleCallback<Boolean>() {
+                BillingHelper.fetchUpgradedStatus(mService, getPackageName(), new SimpleCallback<Boolean>() {
                     @Override
                     public void onComplete(Boolean upgraded) {
                         updateUpgradeButtonVisibility(upgraded);
@@ -264,7 +264,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         serviceIntent.setPackage("com.android.vending");
         bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
 
-        BillingHelper.init(this);
 
 
     }

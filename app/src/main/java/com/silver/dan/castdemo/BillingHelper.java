@@ -24,10 +24,10 @@ import static android.app.Activity.RESULT_OK;
 public class BillingHelper {
     public static int UPGRADE_RETURN_CODE = 20002;
 
-    private static Activity activity;
+
     public static boolean hasPurchased = false;
 
-    public static void fetchUpgradedStatus(final IInAppBillingService mService, final SimpleCallback<Boolean> callback) {
+    public static void fetchUpgradedStatus(final IInAppBillingService mService, final String packageName, final SimpleCallback<Boolean> callback) {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 ArrayList<String> skuList = new ArrayList<> ();
@@ -36,7 +36,7 @@ public class BillingHelper {
                 querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
 
                 try {
-                    Bundle activeSubs = mService.getPurchases(3, activity.getPackageName(), "subs", null);
+                    Bundle activeSubs = mService.getPurchases(3, packageName, "subs", null);
 
 
 
@@ -74,11 +74,7 @@ public class BillingHelper {
 
     }
 
-    public static void init(Activity activity) {
-        BillingHelper.activity = activity;
-    }
-
-    public static void purchaseUpgrade(final IInAppBillingService mService) {
+    public static void purchaseUpgrade(final IInAppBillingService mService, final Activity activity) {
         Thread t = new Thread(new Runnable() {
             public void run() {
 

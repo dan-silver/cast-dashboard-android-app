@@ -19,6 +19,7 @@ import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.SimpleCallback;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
+import com.silver.dan.castdemo.WidgetSettingsActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -49,7 +50,6 @@ public abstract class WidgetSettingsFragment extends Fragment {
     // scroll interval in seconds
     WidgetOption optionScrollInterval;
 
-    private IInAppBillingService mService;
 
 
     protected void refreshWidget() {
@@ -78,7 +78,7 @@ public abstract class WidgetSettingsFragment extends Fragment {
             return;
         }
 
-        BillingHelper.purchaseUpgrade(mService);
+        BillingHelper.purchaseUpgrade(((WidgetSettingsActivity) getActivity()).mService, getActivity());
     }
 
     @Optional
@@ -140,36 +140,6 @@ public abstract class WidgetSettingsFragment extends Fragment {
         String widgetKey = bundle.getString(Widget.GUID);
         this.widget = MainActivity.dashboard.getWidgetById(widgetKey);
 
-        ServiceConnection mServiceConn = new ServiceConnection() {
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                mService = null;
-            }
-
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                mService = IInAppBillingService.Stub.asInterface(service);
-                BillingHelper.fetchUpgradedStatus(mService, new SimpleCallback<Boolean>() {
-                    @Override
-                    public void onComplete(Boolean upgraded) {
-
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-
-                    }
-                });
-
-
-            }
-        };
-
-        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        getActivity().bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-
-        BillingHelper.init(getActivity());
     }
 
     protected void supportWidgetRefreshInterval() {

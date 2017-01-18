@@ -1,8 +1,11 @@
 package com.silver.dan.castdemo;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +16,7 @@ import android.widget.FrameLayout;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.vending.billing.IInAppBillingService;
 import com.silver.dan.castdemo.settingsFragments.WidgetSettingsFragment;
 
 import butterknife.BindView;
@@ -36,7 +40,9 @@ public class WidgetSettingsActivity extends AppCompatActivity {
     FrameLayout scrollViewHeader;
 
     private String widgetKey = null;
-    private WidgetSettingsFragment typeSettingsFragment;
+
+    public IInAppBillingService mService;
+    private ServiceConnection mServiceConn;
 
 
     @Override
@@ -79,7 +85,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
 
         setTitle(widget.getHumanNameRes());
 
-        typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
+        WidgetSettingsFragment typeSettingsFragment = widget.getUIWidget(getApplicationContext()).createSettingsFragment();
 
         Bundle bundle = new Bundle();
         bundle.putString(Widget.GUID, widget.guid);
@@ -95,6 +101,37 @@ public class WidgetSettingsActivity extends AppCompatActivity {
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             inflater.inflate(typeSettingsFragment.getScrollViewHeader(), scrollViewHeader, true);
         }
+
+        mServiceConn = new ServiceConnection() {
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                mService = null;
+            }
+
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                mService = IInAppBillingService.Stub.asInterface(service);
+                BillingHelper.fetchUpgradedStatus(mService, getPackageName(), new SimpleCallback<Boolean>() {
+                    @Override
+                    public void onComplete(Boolean upgraded) {
+
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+
+                    }
+                });
+
+
+            }
+        };
+
+        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
+        serviceIntent.setPackage("com.android.vending");
+        bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
+
+
     }
 
     @OnClick(R.id.widget_settings_delete_button)
@@ -125,9 +162,21 @@ public class WidgetSettingsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == UPGRADE_RETURN_CODE) {
             if (BillingHelper.extractHasPurchased(resultCode, intent)) {
+
+                WidgetSettingsFragment typeSettingsFragment = ((WidgetSettingsFragment) getSupportFragmentManager().findFragmentById(R.id.widget_settings_type_specific));
+
                 typeSettingsFragment.onPurchasedUpgrade();
                 CastCommunicator.sendAllWidgets(this); // refresh intervals have changed
             }
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mServiceConn != null) {
+            unbindService(mServiceConn);
         }
     }
 }

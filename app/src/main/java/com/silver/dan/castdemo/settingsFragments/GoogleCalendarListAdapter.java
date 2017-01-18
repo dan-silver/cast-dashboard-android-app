@@ -35,8 +35,12 @@ public class GoogleCalendarListAdapter extends RecyclerView.Adapter<GoogleCalend
         }
     }
 
-    public GoogleCalendarListAdapter(List<GoogleCalendarWidget.Calendar> myDataset, Widget widget) {
-        calendars.addAll(myDataset);
+    public void addCalendars(List<GoogleCalendarWidget.Calendar> calendars) {
+        this.calendars.addAll(calendars);
+        notifyItemRangeInserted(0, calendars.size());
+    }
+
+    public GoogleCalendarListAdapter(Widget widget) {
         this.widget = widget;
     }
 

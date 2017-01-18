@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.OvershootInterpolator;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
@@ -25,6 +26,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 public class GoogleCalendarSettings extends WidgetSettingsFragment {
 
@@ -48,6 +50,7 @@ public class GoogleCalendarSettings extends WidgetSettingsFragment {
 
     @BindView(R.id.show_events_until)
     TwoLineSettingItem showEventsUntil;
+    private GoogleCalendarListAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -104,9 +107,7 @@ public class GoogleCalendarSettings extends WidgetSettingsFragment {
                 calendarWidget.getCalendars(accessToken, new SimpleCallback<List<GoogleCalendarWidget.Calendar>>() {
                     @Override
                     public void onComplete(List<GoogleCalendarWidget.Calendar> calendars) {
-
-                        GoogleCalendarListAdapter mAdapter = new GoogleCalendarListAdapter(calendars, widget);
-                        calendarList.setAdapter(mAdapter);
+                        mAdapter.addCalendars(calendars);
                     }
 
                     @Override
@@ -154,6 +155,10 @@ public class GoogleCalendarSettings extends WidgetSettingsFragment {
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         calendarList.setLayoutManager(mLayoutManager);
+        calendarList.setItemAnimator(new SlideInUpAnimator(new OvershootInterpolator(1f)));
+
+        mAdapter = new GoogleCalendarListAdapter(widget);
+        calendarList.setAdapter(mAdapter);
 
         updateCalendarListContents();
         updateCalendarUntilTextView();
