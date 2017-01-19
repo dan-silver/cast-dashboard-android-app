@@ -6,7 +6,8 @@ public enum BackgroundType {
     SLIDESHOW(0, R.string.slideshow),
     SOLID_COLOR(1, R.string.solid_color),
     @Deprecated
-    PICTURE(2, R.string.picture);
+    PICTURE(2, R.string.picture),
+    PICASA_ALBUM(3, R.string.google_photos_album);
 
     private int value;
     private int humanNameRes;

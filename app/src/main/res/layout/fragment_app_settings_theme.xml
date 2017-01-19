@@ -28,6 +28,21 @@
 
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="@{settings.backgroundType == BackgroundType.PICASA_ALBUM ? View.VISIBLE : View.GONE}">
+
+                <include layout="@layout/setting_line_break" />
+
+                <com.silver.dan.castdemo.settingsFragments.TwoLineSettingItem
+                    android:layout_width="match_parent"
+                    app:headerText="@string/album_name"
+                    android:id="@+id/albumName"
+                    app:subHeaderText='@{settings.backgroundGooglePhotosAlbumName}'
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
 
             <LinearLayout

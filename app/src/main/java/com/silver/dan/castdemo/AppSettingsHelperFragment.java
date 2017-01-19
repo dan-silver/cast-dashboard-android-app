@@ -10,6 +10,7 @@ import com.silver.dan.castdemo.Util.ColorConverter;
 
 public class AppSettingsHelperFragment extends Fragment {
 
+    public static final int PERMISSION_RESULT_CODE_GOOGLE_ALBUMS = 4445;
     OnSettingChangedListener mCallback;
     android.databinding.ViewDataBinding viewModel;
     AppSettingsBindings bindings;

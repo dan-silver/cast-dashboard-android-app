@@ -66,8 +66,10 @@ public class Widget {
                 break;
             case GOOGLE_CALENDAR:
                 widget = new GoogleCalendarWidget(context, this);
+                break;
             case IFRAME:
                 widget = new IFrameWidget(context, this);
+                break;
         }
         return widget;
     }

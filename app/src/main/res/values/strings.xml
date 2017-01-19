@@ -68,6 +68,7 @@
     <string name="countdown_timer_text" translatable="false">Countdown Timer Text</string>
     <string name="a_wonderful_day" translatable="false">A Wonderful Day!</string>
     <string name="custom_text">Custom Text</string>
+    <string name="album_name" translatable="false">Album</string>
 
     <string name="log_out" translatable="false">Log Out</string>
     <string name="str_continue" translatable="false">Continue</string>
@@ -81,5 +82,6 @@
     <string name="minutes">minutes</string>
     <string name="custom_website_iframe">Custom Website (IFRAME)</string>
     <string name="website_url">Website URL</string>
+    <string name="google_photos_album">Google Photos Album</string>
 
 </resources>

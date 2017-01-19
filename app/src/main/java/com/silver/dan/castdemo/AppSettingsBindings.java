@@ -40,6 +40,12 @@ public class AppSettingsBindings extends BaseObservable {
     @Bindable
     public Integer slideshowInterval;
 
+    @Bindable
+    public String backgroundGooglePhotosAlbumId;
+
+    @Bindable
+    public String backgroundGooglePhotosAlbumName;
+
 
     @Exclude
     private AppSettingsHelperFragment appSettings;
@@ -52,6 +58,8 @@ public class AppSettingsBindings extends BaseObservable {
     static String TEXT_COLOR = "TEXT_COLOR";
     static String SCREEN_PADDING = "SCREEN_PADDING";
     static String SLIDESHOW_INTERVAL = "SLIDESHOW_INTERVAL";
+    static String BACKGROUND_GOOGLE_ALBUM_ID = "BACKGROUND_GOOGLE_ALBUM_ID";
+    static String BACKGROUND_GOOGLE_ALBUM_NAME = "BACKGROUND_GOOGLE_ALBUM_NAME";
 
     static String LOCALE = "LOCALE";
     static final String LANGUAGE_CODE = "LANGUAGE_CODE";
@@ -84,6 +92,14 @@ public class AppSettingsBindings extends BaseObservable {
 
         if (slideshowInterval == null)
             slideshowInterval = 30;
+
+        if (backgroundGooglePhotosAlbumId == null) {
+            backgroundGooglePhotosAlbumId = "";
+        }
+
+        if (backgroundGooglePhotosAlbumName == null) {
+            backgroundGooglePhotosAlbumName = "";
+        }
 
         addOnPropertyChangedCallback(new OnPropertyChangedCallback() {
             @Override
@@ -203,6 +219,13 @@ public class AppSettingsBindings extends BaseObservable {
         settings.put("slideshowInterval", slideshowInterval);
         settings.put("screenPadding", screenPadding);
 
+        // firebase cannot have null values
+        if (!backgroundGooglePhotosAlbumId.equals(""))
+            settings.put("backgroundGooglePhotosAlbumId", backgroundGooglePhotosAlbumId);
+
+        if (!backgroundGooglePhotosAlbumName.equals(""))
+            settings.put("backgroundGooglePhotosAlbumName", backgroundGooglePhotosAlbumName);
+
         getFirebaseDashboardOptionsRef().setValue(settings);
 
     }
@@ -217,6 +240,23 @@ public class AppSettingsBindings extends BaseObservable {
         this.widgetTransparency = widgetTransparency;
         notifyPropertyChanged(BR.widgetTransparency);
         appSettings.mCallback.onSettingChanged(WIDGET_TRANSPARENCY, getWidgetTransparencyUI());
+    }
+
+    @Exclude
+    public void setBackgroundGooglePhotosAlbum(String albumName, String albumId) {
+        this.backgroundGooglePhotosAlbumName = albumName;
+        this.backgroundGooglePhotosAlbumId = albumId;
+        notifyPropertyChanged(BR.backgroundGooglePhotosAlbumName);
+        notifyPropertyChanged(BR.backgroundGooglePhotosAlbumId);
+        appSettings.mCallback.onSettingChanged(backgroundGooglePhotosAlbumId, getGooglePhotosAlbumId());
+    }
+
+    private String getGooglePhotosAlbumId() {
+        return backgroundGooglePhotosAlbumId;
+    }
+
+    private String getGooglePhotosAlbumName() {
+        return backgroundGooglePhotosAlbumName;
     }
 
     @Exclude

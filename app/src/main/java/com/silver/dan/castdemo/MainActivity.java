@@ -1,5 +1,6 @@
 package com.silver.dan.castdemo;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -282,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mService != null) {
+        if (mServiceConn != null) {
             unbindService(mServiceConn);
         }
     }
@@ -484,6 +485,31 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         } else if (requestCode == UPGRADE_RETURN_CODE) {
             if (BillingHelper.extractHasPurchased(resultCode, intent)) {
                 onPurchasedUpgrade();
+            }
+        } else if (requestCode == AppSettingsTheme.PERMISSION_RESULT_CODE_GOOGLE_ALBUMS) {
+            if (resultCode == Activity.RESULT_OK) {
+                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(intent);
+                if (result.isSuccess()) {
+                    // Google Sign In was successful, authenticate with Firebase
+                    GoogleSignInAccount account = result.getSignInAccount();
+                    AuthHelper authHelper = new AuthHelper(this);
+                    authHelper.completeCommonAuth(account, new SimpleCallback<String>() {
+                        @Override
+                        public void onComplete(String result) {
+                            sendCredentials(); // Receiver must get new jwt for new google access token that has permissions to Google Calendar
+
+                            AppSettingsTheme themeSettings = ((AppSettingsTheme) getSupportFragmentManager().findFragmentById(R.id.main_fragment));
+
+                            themeSettings.selectGooglePhotosAlbum();
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            //@todo
+                        }
+                    });
+
+                }
             }
         }
 

@@ -110,9 +110,9 @@ public class WidgetList extends Fragment implements OnDragListener {
         new MaterialDialog.Builder(getContext())
                 .title("New Widget")
                 .items(R.array.newWidgetDialogList)
-                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         final Widget widget = new Widget();
 
                         widget.setType(widgetTypes.get(which));
@@ -151,7 +151,6 @@ public class WidgetList extends Fragment implements OnDragListener {
                             widgetCanBeCreatedListeners.add(listener);
                         }
 
-                        return true;
                     }
                 })
                 .show();

@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -132,6 +133,8 @@ public class WidgetOption {
         String[] stringArray = this.value.split(",");
         List<String> items = new ArrayList<>();
         Collections.addAll(items, stringArray);
+
+        items.removeAll(Arrays.asList("", null)); //http://stackoverflow.com/questions/5520693/in-java-remove-empty-elements-from-a-list-of-strings
 
 
         if (items.size() == 1 && items.get(0).length() == 0)
