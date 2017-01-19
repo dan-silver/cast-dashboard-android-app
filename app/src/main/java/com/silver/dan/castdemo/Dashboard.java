@@ -105,6 +105,9 @@ public class Dashboard {
             if (widget.type == Widget.WidgetType.CALENDAR.getValue())
                 continue;
 
+            if (widget.getWidgetType() == null)
+                continue;
+
             Widget.loadOptions(widget);
             widgets.add(widget);
         }

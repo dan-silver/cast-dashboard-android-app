@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.silver.dan.castdemo.settingsFragments.SettingItem
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/website_url"
+                android:inputType="textUri"
+                android:id="@+id/iframe_url"
+                android:textSize="@dimen/setting_text_size"
+                android:textColor="@color/primary_text"/>
+        </android.support.design.widget.TextInputLayout>
+    </com.silver.dan.castdemo.settingsFragments.SettingItem>
+
+    <include layout="@layout/setting_line_break"/>
+    <include layout="@layout/widget_height"/>
+    <include layout="@layout/setting_line_break"/>
+    <include layout="@layout/widget_refresh_interval"/>
+    <include layout="@layout/setting_line_break"/>
+
+</LinearLayout>

@@ -79,5 +79,7 @@
     </string>
     <string name="widget_refresh_interval">Refresh</string>
     <string name="minutes">minutes</string>
+    <string name="custom_website_iframe">Custom Website (IFRAME)</string>
+    <string name="website_url">Website URL</string>
 
 </resources>
