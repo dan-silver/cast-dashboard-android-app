@@ -178,6 +178,11 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
                         if (newBackgroundType.equals(BackgroundType.PICASA_ALBUM)) {
                             // check for pro
 
+                            if (!BillingHelper.hasPurchased) {
+                                ((MainActivity) getActivity()).upgrade();
+                                return false;
+                            }
+
                             // get permission
                             final String requiredScope = "https://picasaweb.google.com/data/feed/api/user/default";
 

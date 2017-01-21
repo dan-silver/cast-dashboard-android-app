@@ -20,7 +20,7 @@ import java.util.List;
 public class Dashboard {
     List<Widget> widgets = new ArrayList<>();
     AppSettingsBindings settings;
-    private OnLoadCallback onDataRefreshListener;
+    private OnCompleteCallback onDataRefreshListener;
 
     public Widget getWidgetById(String widgetKey) {
         if (widgets == null)
@@ -38,17 +38,11 @@ public class Dashboard {
         this.settings = null;
     }
 
-    public void setOnDataRefreshListener(OnLoadCallback callback) {
+    public void setOnDataRefreshListener(OnCompleteCallback callback) {
         if (this.settings != null) {
-            callback.onReady();
+            callback.onComplete();
         }
         this.onDataRefreshListener = callback;
-    }
-
-    interface OnLoadCallback  {
-        void onReady();
-
-        void onError();
     }
 
     public Dashboard() {
@@ -71,23 +65,23 @@ public class Dashboard {
         settings.initDefaults(ctx);
     }
 
-    void loadFromFirebase(final Context ctx, final OnLoadCallback callback) {
+    void loadFromFirebase(final Context ctx, final OnCompleteCallback callback) {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 addOptions(dataSnapshot.child("options"), ctx);
                 addWidgets(dataSnapshot.child("widgets"));
                 if (onDataRefreshListener != null)
-                    onDataRefreshListener.onReady();
-                callback.onReady();
+                    onDataRefreshListener.onComplete();
+                callback.onComplete();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 if (onDataRefreshListener != null)
-                    onDataRefreshListener.onError();
+                    onDataRefreshListener.onError(databaseError.toException());
 
-                callback.onError();
+                callback.onError(databaseError.toException());
             }
         };
 

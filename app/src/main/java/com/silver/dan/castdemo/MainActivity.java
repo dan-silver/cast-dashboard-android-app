@@ -181,15 +181,15 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             @Override
             public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
                 sendCredentials();
-                dashboard.setOnDataRefreshListener(new Dashboard.OnLoadCallback() {
+                dashboard.setOnDataRefreshListener(new OnCompleteCallback() {
                     @Override
-                    public void onReady() {
+                    public void onComplete() {
                         sendAllOptions();
                         CastCommunicator.sendAllWidgets(getApplicationContext());
                     }
 
                     @Override
-                    public void onError() {
+                    public void onError(Exception e) {
 
                     }
                 });
@@ -314,15 +314,15 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     private void loadDashboard() {
         // load options and widgets
-        dashboard.loadFromFirebase(getApplicationContext(), new Dashboard.OnLoadCallback() {
+        dashboard.loadFromFirebase(getApplicationContext(), new OnCompleteCallback() {
             @Override
-            public void onReady() {
+            public void onComplete() {
                 widgetListFrag = new WidgetList();
                 switchToFragment(widgetListFrag, false);
             }
 
             @Override
-            public void onError() {
+            public void onError(Exception e) {
 
             }
         });
@@ -400,7 +400,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.toString());
             options.put(AppSettingsBindings.LANGUAGE_CODE, getResources().getConfiguration().locale.getLanguage());
             options.put(AppSettingsBindings.SLIDESHOW_INTERVAL, dashboard.settings.getSlideshowInterval());
-
+            options.put(AppSettingsBindings.BACKGROUND_GOOGLE_ALBUM_ID, dashboard.settings.backgroundGooglePhotosAlbumId);
+            options.put(AppSettingsBindings.BACKGROUND_GOOGLE_ALBUM_NAME, dashboard.settings.backgroundGooglePhotosAlbumName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -532,5 +533,27 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     }
 
 
+    public void onWidgetsLoaded(final SimpleCallback<Dashboard> callback) {
+        if (dashboard != null) {
+            callback.onComplete(dashboard);
+            return;
+        }
 
+        dashboard = new Dashboard();
+        dashboard.loadFromFirebase(getApplicationContext(), new OnCompleteCallback() {
+            @Override
+            public void onComplete() {
+                callback.onComplete(dashboard);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                callback.onError(e);
+
+            }
+        });
+
+
+
+    }
 }

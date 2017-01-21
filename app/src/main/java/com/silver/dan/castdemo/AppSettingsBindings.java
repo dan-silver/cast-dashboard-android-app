@@ -58,8 +58,8 @@ public class AppSettingsBindings extends BaseObservable {
     static String TEXT_COLOR = "TEXT_COLOR";
     static String SCREEN_PADDING = "SCREEN_PADDING";
     static String SLIDESHOW_INTERVAL = "SLIDESHOW_INTERVAL";
-    static String BACKGROUND_GOOGLE_ALBUM_ID = "BACKGROUND_GOOGLE_ALBUM_ID";
-    static String BACKGROUND_GOOGLE_ALBUM_NAME = "BACKGROUND_GOOGLE_ALBUM_NAME";
+    static String BACKGROUND_GOOGLE_ALBUM_ID = "backgroundGooglePhotosAlbumId";
+    static String BACKGROUND_GOOGLE_ALBUM_NAME = "backgroundGooglePhotosAlbumName";
 
     static String LOCALE = "LOCALE";
     static final String LANGUAGE_CODE = "LANGUAGE_CODE";
@@ -221,10 +221,10 @@ public class AppSettingsBindings extends BaseObservable {
 
         // firebase cannot have null values
         if (!backgroundGooglePhotosAlbumId.equals(""))
-            settings.put("backgroundGooglePhotosAlbumId", backgroundGooglePhotosAlbumId);
+            settings.put(BACKGROUND_GOOGLE_ALBUM_ID, backgroundGooglePhotosAlbumId);
 
         if (!backgroundGooglePhotosAlbumName.equals(""))
-            settings.put("backgroundGooglePhotosAlbumName", backgroundGooglePhotosAlbumName);
+            settings.put(BACKGROUND_GOOGLE_ALBUM_NAME, backgroundGooglePhotosAlbumName);
 
         getFirebaseDashboardOptionsRef().setValue(settings);
 
@@ -248,7 +248,8 @@ public class AppSettingsBindings extends BaseObservable {
         this.backgroundGooglePhotosAlbumId = albumId;
         notifyPropertyChanged(BR.backgroundGooglePhotosAlbumName);
         notifyPropertyChanged(BR.backgroundGooglePhotosAlbumId);
-        appSettings.mCallback.onSettingChanged(backgroundGooglePhotosAlbumId, getGooglePhotosAlbumId());
+        appSettings.mCallback.onSettingChanged(BACKGROUND_GOOGLE_ALBUM_ID, getGooglePhotosAlbumId());
+        appSettings.mCallback.onSettingChanged(BACKGROUND_GOOGLE_ALBUM_NAME, getGooglePhotosAlbumName());
     }
 
     private String getGooglePhotosAlbumId() {

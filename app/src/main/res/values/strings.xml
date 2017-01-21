@@ -80,8 +80,10 @@
     </string>
     <string name="widget_refresh_interval">Refresh</string>
     <string name="minutes">minutes</string>
-    <string name="custom_website_iframe">Custom Website (IFRAME)</string>
-    <string name="website_url">Website URL</string>
-    <string name="google_photos_album">Google Photos Album</string>
+    <string name="custom_website_iframe" translatable="false">Custom Website (IFRAME)</string>
+    <string name="website_url" translatable="false">Website URL</string>
+    <string name="google_photos_album" translatable="false">Google Photos Album</string>
+    <string name="pro_iap_code" translatable="false">cast_pro_2</string>
+    <string name="google_photos_album_pro" translatable="false">Google Photos Album (PRO)</string>
 
 </resources>

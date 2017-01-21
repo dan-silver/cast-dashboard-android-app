@@ -32,6 +32,7 @@ public class BillingHelper {
             public void run() {
                 ArrayList<String> skuList = new ArrayList<> ();
                 skuList.add("cast_dashboard_pro");
+                skuList.add("cast_pro_2");
                 Bundle querySkus = new Bundle();
                 querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
 
@@ -84,7 +85,7 @@ public class BillingHelper {
                         return;
                     }
                     buyIntentBundle = mService.getBuyIntent(3, activity.getPackageName(),
-                            "cast_dashboard_pro", "subs", UUID.randomUUID().toString());
+                            activity.getString(R.string.pro_iap_code), "subs", UUID.randomUUID().toString());
 
                     PendingIntent pendingIntent = buyIntentBundle.getParcelable("BUY_INTENT");
                     if (pendingIntent == null) {
