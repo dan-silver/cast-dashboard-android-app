@@ -48,11 +48,12 @@ public class WidgetList extends Fragment implements OnDragListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final WidgetList _this  = this;
-        ((MainActivity) getActivity()).onWidgetsLoaded(new SimpleCallback<Dashboard>() {
+        adapter = new WidgetListAdapter((MainActivity) getActivity(), this);
+        MainActivity.dashboard.onLoaded(getContext(), new OnCompleteCallback() {
             @Override
-            public void onComplete(Dashboard dashboard) {
-                adapter = new WidgetListAdapter(dashboard.widgets, (MainActivity) getActivity(), _this, widgetCanBeCreatedListeners);
+            public void onComplete() {
+                adapter.setWidgets(MainActivity.dashboard.getWidgetList());
+                adapter.notifyItemRangeInserted(0, MainActivity.dashboard.getWidgetList().size());
             }
 
             @Override
@@ -87,12 +88,14 @@ public class WidgetList extends Fragment implements OnDragListener {
             @Override
             public void onRefresh() {
                 MainActivity.dashboard.clearData();
+                adapter.setWidgets(new ArrayList<Widget>());
                 adapter.notifyDataSetChanged();
-                MainActivity.dashboard.loadFromFirebase(view.getContext(), new OnCompleteCallback() {
+                MainActivity.dashboard.onLoaded(getContext(), new OnCompleteCallback() {
                     @Override
                     public void onComplete() {
                         mSwipeContainer.setRefreshing(false);
-                        adapter.notifyItemRangeInserted(0, adapter.getItemCount());
+                        adapter.setWidgets(MainActivity.dashboard.getWidgetList());
+                        adapter.notifyItemRangeInserted(0, MainActivity.dashboard.getWidgetList().size());
                     }
 
                     @Override

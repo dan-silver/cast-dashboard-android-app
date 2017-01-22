@@ -29,8 +29,7 @@ import java.util.List;
 class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetViewHolder> implements ItemTouchHelperAdapter {
 
     private final MainActivity mainActivity;
-    private final ArrayList<CanBeCreatedListener> widgetCanBeCreatedListeners; // ref to WidgetList.javas copy
-    private List<Widget> widgetList;
+    private List<Widget> widgetList = new ArrayList<>();
     private final OnDragListener mDragStartListener;
 
     @Override
@@ -46,11 +45,9 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
         syncWidgetPositions();
     }
 
-    WidgetListAdapter(List<Widget> widgetList, MainActivity activity, OnDragListener dragStartListener, ArrayList<CanBeCreatedListener> widgetCanBeCreatedListeners) {
-        this.widgetList = widgetList;
+    WidgetListAdapter(MainActivity activity, OnDragListener dragStartListener) {
         this.mainActivity = activity;
         mDragStartListener = dragStartListener;
-        this.widgetCanBeCreatedListeners = widgetCanBeCreatedListeners;
 
     }
 
@@ -104,6 +101,10 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
     public void refreshSecondaryTitles() {
         notifyDataSetChanged();
 //        http://stackoverflow.com/a/38132573/2517012
+    }
+
+    public void setWidgets(List<Widget> widgets) {
+        widgetList = widgets;
     }
 
 
@@ -185,6 +186,6 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
 
     @Override
     public int getItemCount() {
-        return (null != widgetList ? widgetList.size() : 0);
+        return (null == widgetList ? 0 : widgetList.size());
     }
 }

@@ -50,6 +50,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -190,7 +191,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
                     @Override
                     public void onError(Exception e) {
-
+                        Bundle bundle = new Bundle();
+                        bundle.putString("ERROR", e.toString());
+                        mFirebaseAnalytics.logEvent("ON_CONNECTED_REFRESH_ON_ERROR", bundle);
                     }
                 });
             }
@@ -205,14 +208,28 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         setupNavBarUserInfo();
 
         dashboard = new Dashboard();
-        loadDashboard(); // SLOW!!!!!!!
+        CastCommunicator.init(mCastManager, dashboard, getResources().getString(R.string.namespace));
+
+        // load options and widgets
+        switchToFragment(new LoadingFragment(), false);
+        dashboard.onLoaded(getApplicationContext(), new OnCompleteCallback() {
+            @Override
+            public void onComplete() {
+                widgetListFrag = new WidgetList();
+                switchToFragment(widgetListFrag, false);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Bundle bundle = new Bundle();
+                bundle.putString("ERROR", e.toString());
+                mFirebaseAnalytics.logEvent("ON_DASHBOARD_LOADED_ON_ERROR", bundle);
+            }
+        });
 
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-        CastCommunicator.init(mCastManager, dashboard, getResources().getString(R.string.namespace));
-
-        switchToFragment(new LoadingFragment(), false);
 
 
         PackageInfo packageInfo = null;
@@ -312,21 +329,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     }
 
 
-    private void loadDashboard() {
-        // load options and widgets
-        dashboard.loadFromFirebase(getApplicationContext(), new OnCompleteCallback() {
-            @Override
-            public void onComplete() {
-                widgetListFrag = new WidgetList();
-                switchToFragment(widgetListFrag, false);
-            }
-
-            @Override
-            public void onError(Exception e) {
-
-            }
-        });
-    }
 
     private void setupNavBarUserInfo() {
         View header = navView.getHeaderView(0);
@@ -388,25 +390,40 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     }
 
     private void sendAllOptions() {
-        JSONObject options = new JSONObject();
-        try {
-            options.put(AppSettingsBindings.COLUMN_COUNT, dashboard.settings.getNumberOfColumnsUI());
-            options.put(AppSettingsBindings.BACKGROUND_COLOR, dashboard.settings.getBackgroundColorHexStr());
-            options.put(AppSettingsBindings.WIDGET_COLOR, dashboard.settings.getWidgetColorHexStr());
-            options.put(AppSettingsBindings.BACKGROUND_TYPE, dashboard.settings.getBackgroundTypeUI());
-            options.put(AppSettingsBindings.WIDGET_TRANSPARENCY, dashboard.settings.getWidgetTransparencyUI());
-            options.put(AppSettingsBindings.TEXT_COLOR, dashboard.settings.getTextColorHextStr());
-            options.put(AppSettingsBindings.SCREEN_PADDING, dashboard.settings.getScreenPaddingUI());
-            options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.toString());
-            options.put(AppSettingsBindings.LANGUAGE_CODE, getResources().getConfiguration().locale.getLanguage());
-            options.put(AppSettingsBindings.SLIDESHOW_INTERVAL, dashboard.settings.getSlideshowInterval());
-            options.put(AppSettingsBindings.BACKGROUND_GOOGLE_ALBUM_ID, dashboard.settings.backgroundGooglePhotosAlbumId);
-            options.put(AppSettingsBindings.BACKGROUND_GOOGLE_ALBUM_NAME, dashboard.settings.backgroundGooglePhotosAlbumName);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        dashboard.onLoaded(getApplicationContext(), new OnCompleteCallback() {
+            @Override
+            public void onComplete() {
+                JSONObject options = new JSONObject();
+                try {
+                    options.put(AppSettingsBindings.COLUMN_COUNT, dashboard.settings.getNumberOfColumnsUI());
+                    options.put(AppSettingsBindings.BACKGROUND_COLOR, dashboard.settings.getBackgroundColorHexStr());
+                    options.put(AppSettingsBindings.WIDGET_COLOR, dashboard.settings.getWidgetColorHexStr());
+                    options.put(AppSettingsBindings.BACKGROUND_TYPE, dashboard.settings.getBackgroundTypeUI());
+                    options.put(AppSettingsBindings.WIDGET_TRANSPARENCY, dashboard.settings.getWidgetTransparencyUI());
+                    options.put(AppSettingsBindings.TEXT_COLOR, dashboard.settings.getTextColorHextStr());
+                    options.put(AppSettingsBindings.SCREEN_PADDING, dashboard.settings.getScreenPaddingUI());
+                    options.put(AppSettingsBindings.LOCALE, getResources().getConfiguration().locale.toString());
+                    options.put(AppSettingsBindings.LANGUAGE_CODE, getResources().getConfiguration().locale.getLanguage());
+                    options.put(AppSettingsBindings.SLIDESHOW_INTERVAL, dashboard.settings.getSlideshowInterval());
+                    options.put(AppSettingsBindings.BACKGROUND_GOOGLE_ALBUM_ID, dashboard.settings.backgroundGooglePhotosAlbumId);
+                    options.put(AppSettingsBindings.BACKGROUND_GOOGLE_ALBUM_NAME, dashboard.settings.backgroundGooglePhotosAlbumName);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-        CastCommunicator.sendJSON("options", options);
+                CastCommunicator.sendJSON("options", options);
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Bundle bundle = new Bundle();
+                bundle.putString("ERROR", e.toString());
+                mFirebaseAnalytics.logEvent("SEND_ALL_OPTIONS_LOADED_ON_ERROR", bundle);
+
+            }
+        });
+
     }
 
 
@@ -530,30 +547,5 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(MainActivity.TAG, "Error connecting to google services");
-    }
-
-
-    public void onWidgetsLoaded(final SimpleCallback<Dashboard> callback) {
-        if (dashboard != null) {
-            callback.onComplete(dashboard);
-            return;
-        }
-
-        dashboard = new Dashboard();
-        dashboard.loadFromFirebase(getApplicationContext(), new OnCompleteCallback() {
-            @Override
-            public void onComplete() {
-                callback.onComplete(dashboard);
-            }
-
-            @Override
-            public void onError(Exception e) {
-                callback.onError(e);
-
-            }
-        });
-
-
-
     }
 }

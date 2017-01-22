@@ -11,10 +11,10 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.silver.dan.castdemo"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 25
-        versionCode 49
-        versionName "1.5.5"
+        versionCode 52
+        versionName "1.5.8"
 
         multiDexEnabled true
     }

@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 public class Dashboard {
-    List<Widget> widgets = new ArrayList<>();
+    private List<Widget> widgets;
     AppSettingsBindings settings;
     private OnCompleteCallback onDataRefreshListener;
 
@@ -34,7 +34,7 @@ public class Dashboard {
     }
 
     public void clearData() {
-        this.widgets.clear();
+        this.widgets = null;
         this.settings = null;
     }
 
@@ -88,7 +88,10 @@ public class Dashboard {
         getFirebaseUserDashboardReference().addListenerForSingleValueEvent(postListener);
 
     }
+
+
     private void addWidgets(DataSnapshot rawWidgets) {
+        widgets = new ArrayList<>();
         for (DataSnapshot nextWidget : rawWidgets.getChildren()) {
             Widget widget = nextWidget.getValue(Widget.class);
 
@@ -112,6 +115,31 @@ public class Dashboard {
                 if(w1.position == w2.position)
                     return 0;
                 return w1.position < w2.position ? -1 : 1;
+            }
+        });
+    }
+
+    public List<Widget> getWidgetList() {
+        return widgets;
+    }
+
+
+    public void onLoaded(Context context, final OnCompleteCallback callback) {
+        if (widgets != null) {
+            callback.onComplete();
+            return;
+        }
+
+        loadFromFirebase(context, new OnCompleteCallback() {
+            @Override
+            public void onComplete() {
+                callback.onComplete();
+            }
+
+            @Override
+            public void onError(Exception e) {
+                callback.onError(e);
+
             }
         });
     }

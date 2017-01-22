@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 public class CastCommunicator {
     private static DataCastManager mCastManager;
@@ -99,7 +100,7 @@ public class CastCommunicator {
         }
 
         JSONArray widgetsArr = new JSONArray();
-        for (Widget widget : CastCommunicator.dashboard.widgets) {
+        for (Widget widget : CastCommunicator.dashboard.getWidgetList()) {
             widgetsArr.put(widget.getJSONContent(context));
         }
         CastCommunicator.sendJSON("allWidgets", widgetsArr);
@@ -108,5 +109,4 @@ public class CastCommunicator {
     private static void sendWidgets(JSONArray widgetsArr) {
         CastCommunicator.sendJSON("widgets", widgetsArr);
     }
-
 }
