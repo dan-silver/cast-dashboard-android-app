@@ -115,8 +115,9 @@ public class BillingHelper {
             try {
                 JSONObject jo = new JSONObject(purchaseData);
 //                    String sku = jo.getString("productId");
-                if (jo.getInt("purchaseState") == 0)
+                if (jo.getInt("purchaseState") == 0) {
                     return true;
+                }
             }
             catch (JSONException e) {
                 e.printStackTrace();

@@ -27,7 +27,7 @@ import java.util.Set;
  */
 
 public class AuthHelper {
-    public String AuthHelperSharedPreferences = "AuthHelperSharedPreferences";
+    private String AuthHelperSharedPreferences = "AuthHelperSharedPreferences";
     private String SERVICE_JWT = "SERVICE_JWT";
 
     public static FirebaseUser user;
@@ -48,7 +48,7 @@ public class AuthHelper {
 
 
     // Configure Google Sign In
-    public GoogleSignInOptions getGoogleGSO() {
+    GoogleSignInOptions getGoogleGSO() {
         return getGoogleGSO(new HashSet<Scope>());
     }
 
@@ -65,7 +65,7 @@ public class AuthHelper {
         return gsoBuilder.build();
     }
 
-    public String getSavedServiceJwt() {
+    String getSavedServiceJwt() {
         SharedPreferences prefs = context.getSharedPreferences(AuthHelperSharedPreferences, Context.MODE_PRIVATE);
         String jwt = prefs.getString(SERVICE_JWT, "");
         if (jwt.equals("")) {
@@ -74,16 +74,16 @@ public class AuthHelper {
         return jwt;
     }
 
-    public void setServiceJwt(String userJwt) {
+    void setServiceJwt(String userJwt) {
         AuthHelper.userJwt = userJwt;
     }
 
-    public void setNewUserInfo(FirebaseUser user, Set<Scope> grantedScopes) {
+    void setNewUserInfo(FirebaseUser user, Set<Scope> grantedScopes) {
         AuthHelper.user = user;
         AuthHelper.grantedScopes = grantedScopes;
     }
 
-    public void completeCommonAuth(final GoogleSignInAccount acct, final SimpleCallback<String> callback) {
+    void completeCommonAuth(final GoogleSignInAccount acct, final SimpleCallback<String> callback) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
 
         mAuth.signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -120,7 +120,7 @@ public class AuthHelper {
     }
 
 
-    public void clearGoogleTokenCache() {
+    private void clearGoogleTokenCache() {
         AuthHelper.googleAccessToken = null;
     }
 
@@ -159,13 +159,13 @@ public class AuthHelper {
 
     }
 
-    public static void signout() {
+    static void signout() {
         AuthHelper.googleAccessToken = null;
         AuthHelper.googleAccessTokenExpiresAt = null;
     }
 
 
-    void exchangeServerAuthCodeForJWT(String firebaseUserId, String authCode, Set<Scope> grantedScopes, final SimpleCallback<String> jwtCallback) {
+    private void exchangeServerAuthCodeForJWT(String firebaseUserId, String authCode, Set<Scope> grantedScopes, final SimpleCallback<String> jwtCallback) {
         Ion.with(context)
                 .load(context.getString(R.string.APP_URL) + "/exchangeServerAuthCodeForJWT")
                 .setBodyParameter("serverCode", authCode)

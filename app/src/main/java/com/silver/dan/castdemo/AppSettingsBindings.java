@@ -67,7 +67,7 @@ public class AppSettingsBindings extends BaseObservable {
     public AppSettingsBindings() {
     }
 
-    public void initDefaults(Context context) {
+    void initDefaults(Context context) {
         // default settings
         if (dashBackgroundColor == null)
             dashBackgroundColor = ColorConverter.intToString(ContextCompat.getColor(context, R.color.tv_background));
@@ -151,17 +151,17 @@ public class AppSettingsBindings extends BaseObservable {
     }
 
     @Exclude
-    public String getTextColorHextStr() {
+    String getTextColorHextStr() {
         return textColor;
     }
 
     @Exclude
-    public String getBackgroundColorHexStr() {
+    String getBackgroundColorHexStr() {
         return dashBackgroundColor;
     }
 
     @Exclude
-    public String getWidgetColorHexStr() {
+    String getWidgetColorHexStr() {
         return widgetColor;
     }
 

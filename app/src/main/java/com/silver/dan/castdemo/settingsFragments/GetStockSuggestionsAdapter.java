@@ -30,8 +30,6 @@ import java.util.List;
  * Created by dan on 1/16/17.
  */
 public class GetStockSuggestionsAdapter extends BaseAdapter implements Filterable {
-
-    private static final int MAX_RESULTS = 10;
     private Context mContext;
     private List<StockInfo> resultList = new ArrayList<>();
 

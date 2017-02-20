@@ -46,7 +46,7 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         ButterKnife.bind(this, view);
 
         viewModel = FragmentAppSettingsThemeBinding.bind(view);
-        bindings = MainActivity.dashboard.settings;
+        bindings = MainActivity.getDashboard().settings;
         bindings.init(this);
         ((FragmentAppSettingsThemeBinding) viewModel).setSettings(bindings);
 
@@ -81,11 +81,10 @@ public class AppSettingsTheme extends AppSettingsHelperFragment {
         new MaterialDialog.Builder(getContext())
                 .title(R.string.slideshowSpeed)
                 .items(optionLabels)
-                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                .itemsCallback(new MaterialDialog.ListCallback() {
                     @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         bindings.setSlideshowInterval(options.get(which));
-                        return true;
                     }
                 })
                 .show();

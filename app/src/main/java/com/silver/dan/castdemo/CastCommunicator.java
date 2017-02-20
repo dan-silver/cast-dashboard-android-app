@@ -13,12 +13,10 @@ import java.util.List;
 
 public class CastCommunicator {
     private static DataCastManager mCastManager;
-    private static Dashboard dashboard;
     private static String namespace;
 
-    public static void init(DataCastManager mCastManager, Dashboard dashboard, String namespace) {
+    public static void init(DataCastManager mCastManager, String namespace) {
         CastCommunicator.mCastManager = mCastManager;
-        CastCommunicator.dashboard = dashboard;
         CastCommunicator.namespace = namespace;
     }
 
@@ -91,16 +89,12 @@ public class CastCommunicator {
         CastCommunicator.sendWidgets(widgetsArr);
     }
 
-    static void sendAllWidgets(Context context) {
+    static void sendAllWidgets(Context context, Dashboard dashboard) {
         if (!mCastManager.isConnected())
             return;
 
-        if (CastCommunicator.dashboard == null) {
-            throw new Error("dashboard is not set yet");
-        }
-
         JSONArray widgetsArr = new JSONArray();
-        for (Widget widget : CastCommunicator.dashboard.getWidgetList()) {
+        for (Widget widget : dashboard.getWidgetList()) {
             widgetsArr.put(widget.getJSONContent(context));
         }
         CastCommunicator.sendJSON("allWidgets", widgetsArr);

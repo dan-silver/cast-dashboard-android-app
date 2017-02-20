@@ -69,7 +69,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
         Bundle b = getIntent().getExtras();
         widgetKey = b.getString(Widget.GUID);
 
-        widget = MainActivity.dashboard.getWidgetById(widgetKey);
+        widget = MainActivity.getDashboard().getWidgetById(widgetKey);
         completeSetup();
     }
 
@@ -166,7 +166,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                 WidgetSettingsFragment typeSettingsFragment = ((WidgetSettingsFragment) getSupportFragmentManager().findFragmentById(R.id.widget_settings_type_specific));
 
                 typeSettingsFragment.onPurchasedUpgrade();
-                CastCommunicator.sendAllWidgets(this); // refresh intervals have changed
+                CastCommunicator.sendAllWidgets(this, MainActivity.getDashboard()); // refresh intervals have changed
             }
         }
     }

@@ -132,7 +132,11 @@ public abstract class WidgetSettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         String widgetKey = bundle.getString(Widget.GUID);
-        this.widget = MainActivity.dashboard.getWidgetById(widgetKey);
+        this.widget = MainActivity.getDashboard().getWidgetById(widgetKey);
+
+        if (this.widget == null) {
+            getActivity().finish();
+        }
 
     }
 

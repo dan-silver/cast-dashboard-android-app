@@ -13,8 +13,8 @@ android {
         applicationId "com.silver.dan.castdemo"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 52
-        versionName "1.5.8"
+        versionCode 55
+        versionName "1.5.11"
 
         multiDexEnabled true
     }
@@ -47,22 +47,22 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:support-v4:25.1.0'
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:support-annotations:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:support-v4:25.1.1'
+    compile 'com.android.support:design:25.1.1'
+    compile 'com.android.support:appcompat-v7:25.1.1'
+    compile 'com.android.support:support-annotations:25.1.1'
+    compile 'com.android.support:recyclerview-v7:25.1.1'
 
-    compile 'com.google.android.gms:play-services-cast:10.0.1'
-    compile 'com.google.android.gms:play-services-maps:10.0.1'
-    compile 'com.google.android.gms:play-services-location:10.0.1'
-    compile 'com.google.android.gms:play-services-places:10.0.1'
+    compile 'com.google.android.gms:play-services-cast:10.2.0'
+    compile 'com.google.android.gms:play-services-maps:10.2.0'
+    compile 'com.google.android.gms:play-services-location:10.2.0'
+    compile 'com.google.android.gms:play-services-places:10.2.0'
 
-    compile 'com.jakewharton:butterknife:8.4.0'
-    compile 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.jakewharton:butterknife:8.5.1'
+    compile 'com.jakewharton:butterknife-compiler:8.5.1'
 
-    compile('com.github.afollestad.material-dialogs:core:0.9.1.0@aar') {
+    compile('com.afollestad.material-dialogs:core:0.9.2.3@aar') {
         transitive = true
     }
     compile 'net.sf.opencsv:opencsv:2.3'
@@ -70,7 +70,7 @@ dependencies {
     compile 'com.github.QuadFlask:colorpicker:0.0.12'
 
     compile group: 'com.google.guava', name: 'guava', version: '18.0'
-    compile 'com.wdullaer:materialdatetimepicker:3.1.0'
+    compile 'com.wdullaer:materialdatetimepicker:3.1.2'
 
     compile 'jp.wasabeef:richeditor-android:1.2.1'
 
@@ -78,12 +78,12 @@ dependencies {
     compile 'com.koushikdutta.ion:ion:2.1.9'
 
 
-    compile 'com.google.firebase:firebase-core:10.0.1'
-    compile 'com.google.firebase:firebase-auth:10.0.1'
-    compile 'com.google.firebase:firebase-database:10.0.1'
-    compile 'com.google.firebase:firebase-crash:10.0.1'
+    compile 'com.google.firebase:firebase-core:10.2.0'
+    compile 'com.google.firebase:firebase-auth:10.2.0'
+    compile 'com.google.firebase:firebase-database:10.2.0'
+    compile 'com.google.firebase:firebase-crash:10.2.0'
 
-    compile 'com.google.android.gms:play-services-auth:10.0.1'
+    compile 'com.google.android.gms:play-services-auth:10.2.0'
 
     compile 'jp.wasabeef:recyclerview-animators:2.2.5'
     compile 'com.auth0.android:jwtdecode:1.1.0'

@@ -50,7 +50,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -65,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public static final int NAV_VIEW_WIDGETS_ITEM = 0;
     public static final int NAV_VIEW_OPTIONS_LAYOUT_ITEM = 1;
     public static final int NAV_VIEW_OPTIONS_THEME_ITEM = 2;
-    private static final String SHARED_PREF_UPDATE_NOTICE = "SHARED_PREF_UPDATE_NOTICE";
-    private static final String SHARED_PREF_UPDATE_NOTICE_LAST_VERSION = "SHARED_PREF_UPDATE_NOTICE_LAST_VERSION";
 
 
     //drawer
@@ -84,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
     ImageView userUpgradedBadge;
 
-    public static Dashboard dashboard;
+    private static Dashboard dashboard;
     private ServiceConnection mServiceConn;
 
     @OnClick(R.id.logout_btn)
@@ -186,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                     @Override
                     public void onComplete() {
                         sendAllOptions();
-                        CastCommunicator.sendAllWidgets(getApplicationContext());
+                        CastCommunicator.sendAllWidgets(getApplicationContext(), getDashboard());
                     }
 
                     @Override
@@ -207,12 +204,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         setupNavBarUserInfo();
 
-        dashboard = new Dashboard();
-        CastCommunicator.init(mCastManager, dashboard, getResources().getString(R.string.namespace));
+        CastCommunicator.init(mCastManager, getResources().getString(R.string.namespace));
 
         // load options and widgets
         switchToFragment(new LoadingFragment(), false);
-        dashboard.onLoaded(getApplicationContext(), new OnCompleteCallback() {
+        getDashboard().onLoaded(getApplicationContext(), new OnCompleteCallback() {
             @Override
             public void onComplete() {
                 widgetListFrag = new WidgetList();
@@ -229,29 +225,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-
-
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = getPackageManager()
-                    .getPackageInfo(getPackageName(), 0);
-
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        if (packageInfo != null) {
-            int versionCode = packageInfo.versionCode;
-            SharedPreferences settings = this.getSharedPreferences(SHARED_PREF_UPDATE_NOTICE, 0);
-
-            if (settings.getInt(SHARED_PREF_UPDATE_NOTICE_LAST_VERSION, -1) != versionCode) {
-                displayUpgradeNotice(versionCode);
-
-                settings.edit().putInt(SHARED_PREF_UPDATE_NOTICE_LAST_VERSION, versionCode).apply();
-            }
-        }
-
 
         mServiceConn = new ServiceConnection() {
             @Override
@@ -303,19 +276,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         if (mServiceConn != null) {
             unbindService(mServiceConn);
         }
-    }
-
-
-    private void displayUpgradeNotice(int versionCode) {
-        if (versionCode != 39) {
-            return;
-        }
-
-        new MaterialDialog.Builder(this)
-                .title("What's new")
-                .content(R.string.changelog)
-                .positiveText(R.string.str_continue)
-                .show();
     }
 
     public void sendCredentials() {
@@ -390,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     }
 
     private void sendAllOptions() {
-        dashboard.onLoaded(getApplicationContext(), new OnCompleteCallback() {
+        getDashboard().onLoaded(getApplicationContext(), new OnCompleteCallback() {
             @Override
             public void onComplete() {
                 JSONObject options = new JSONObject();
@@ -424,6 +384,13 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             }
         });
 
+    }
+
+    public static Dashboard getDashboard() {
+        if (dashboard == null) {
+            dashboard = new Dashboard();
+        }
+        return dashboard;
     }
 
 
@@ -465,6 +432,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     }
 
     public void onActivityResult(int requestCode, int resultCode, final Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == WidgetSettingsActivity.REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 if (intent.hasExtra(Widget.DELETE_WIDGET)) {

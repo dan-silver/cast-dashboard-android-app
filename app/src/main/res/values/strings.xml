@@ -72,12 +72,6 @@
 
     <string name="log_out" translatable="false">Log Out</string>
     <string name="str_continue" translatable="false">Continue</string>
-    <string name="changelog" translatable="false">
-        Important update notice!
-        We have replaced the Android calendar widget with Google Calendars. Since we need access, the widget will have to be created again.
-
-        Google Calendar refreshes every 10 minutes, even if your phone is no longer casting. Enjoy!
-    </string>
     <string name="widget_refresh_interval">Refresh</string>
     <string name="minutes">minutes</string>
     <string name="custom_website_iframe" translatable="false">Custom Website (IFRAME)</string>

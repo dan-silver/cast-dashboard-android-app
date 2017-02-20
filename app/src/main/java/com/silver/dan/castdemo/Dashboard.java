@@ -33,12 +33,12 @@ public class Dashboard {
         return null;
     }
 
-    public void clearData() {
+    void clearData() {
         this.widgets = null;
         this.settings = null;
     }
 
-    public void setOnDataRefreshListener(OnCompleteCallback callback) {
+    void setOnDataRefreshListener(OnCompleteCallback callback) {
         if (this.settings != null) {
             callback.onComplete();
         }
@@ -49,7 +49,7 @@ public class Dashboard {
 
     }
 
-    public static DatabaseReference getFirebaseUserDashboardReference() {
+    static DatabaseReference getFirebaseUserDashboardReference() {
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase
             .child("users")
@@ -65,7 +65,7 @@ public class Dashboard {
         settings.initDefaults(ctx);
     }
 
-    void loadFromFirebase(final Context ctx, final OnCompleteCallback callback) {
+    private void loadFromFirebase(final Context ctx, final OnCompleteCallback callback) {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -124,23 +124,12 @@ public class Dashboard {
     }
 
 
-    public void onLoaded(Context context, final OnCompleteCallback callback) {
+    void onLoaded(Context context, final OnCompleteCallback callback) {
         if (widgets != null) {
             callback.onComplete();
             return;
         }
 
-        loadFromFirebase(context, new OnCompleteCallback() {
-            @Override
-            public void onComplete() {
-                callback.onComplete();
-            }
-
-            @Override
-            public void onError(Exception e) {
-                callback.onError(e);
-
-            }
-        });
+        loadFromFirebase(context, callback);
     }
 }

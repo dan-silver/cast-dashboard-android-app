@@ -49,11 +49,11 @@ public class WidgetList extends Fragment implements OnDragListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new WidgetListAdapter((MainActivity) getActivity(), this);
-        MainActivity.dashboard.onLoaded(getContext(), new OnCompleteCallback() {
+        MainActivity.getDashboard().onLoaded(getContext(), new OnCompleteCallback() {
             @Override
             public void onComplete() {
-                adapter.setWidgets(MainActivity.dashboard.getWidgetList());
-                adapter.notifyItemRangeInserted(0, MainActivity.dashboard.getWidgetList().size());
+                adapter.setWidgets(MainActivity.getDashboard().getWidgetList());
+                adapter.notifyItemRangeInserted(0, MainActivity.getDashboard().getWidgetList().size());
             }
 
             @Override
@@ -87,15 +87,15 @@ public class WidgetList extends Fragment implements OnDragListener {
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                MainActivity.dashboard.clearData();
+                MainActivity.getDashboard().clearData();
                 adapter.setWidgets(new ArrayList<Widget>());
                 adapter.notifyDataSetChanged();
-                MainActivity.dashboard.onLoaded(getContext(), new OnCompleteCallback() {
+                MainActivity.getDashboard().onLoaded(getContext(), new OnCompleteCallback() {
                     @Override
                     public void onComplete() {
                         mSwipeContainer.setRefreshing(false);
-                        adapter.setWidgets(MainActivity.dashboard.getWidgetList());
-                        adapter.notifyItemRangeInserted(0, MainActivity.dashboard.getWidgetList().size());
+                        adapter.setWidgets(MainActivity.getDashboard().getWidgetList());
+                        adapter.notifyItemRangeInserted(0, MainActivity.getDashboard().getWidgetList().size());
                     }
 
                     @Override
