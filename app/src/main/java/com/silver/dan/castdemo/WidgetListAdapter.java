@@ -93,8 +93,8 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
 
     void deleteWidget(Widget widget) {
         int index = widgetList.indexOf(widget);
-        notifyItemRemoved(index);
         this.widgetList.remove(widget);
+        notifyItemRemoved(index);
         widget.delete();
     }
 

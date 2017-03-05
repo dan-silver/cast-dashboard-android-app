@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 
+
 import com.silver.dan.castdemo.databinding.FragmentAppSettingsLayoutBinding;
 
 import butterknife.BindView;

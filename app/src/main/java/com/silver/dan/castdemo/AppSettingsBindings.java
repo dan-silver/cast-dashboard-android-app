@@ -48,7 +48,7 @@ public class AppSettingsBindings extends BaseObservable {
 
 
     @Exclude
-    private AppSettingsHelperFragment appSettings;
+    public AppSettingsHelperFragment appSettings;
 
     static String COLUMN_COUNT = "COLUMN_COUNT";
     static String BACKGROUND_TYPE = "BACKGROUND_TYPE";
