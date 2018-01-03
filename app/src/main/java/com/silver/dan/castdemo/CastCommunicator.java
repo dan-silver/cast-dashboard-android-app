@@ -2,24 +2,11 @@ package com.silver.dan.castdemo;
 
 import android.content.Context;
 
-import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.util.List;
-
 public class CastCommunicator {
-    private static DataCastManager mCastManager;
-    private static String namespace;
-
-    public static void init(DataCastManager mCastManager, String namespace) {
-        CastCommunicator.mCastManager = mCastManager;
-        CastCommunicator.namespace = namespace;
-    }
-
     public static void sendWidgetProperty(Widget widget, String property, Object value) {
         try {
             JSONObject propertyValue = new JSONObject();
@@ -66,33 +53,22 @@ public class CastCommunicator {
     }
 
     private static void sendJSONContainer(final JSONObject container) {
-        if (!mCastManager.isConnected())
-            return;
-
         new Runnable() {
             public void run() {
-                try {
-                    mCastManager.sendDataMessage(container.toString(), CastCommunicator.namespace);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (MainActivity.mHelloWorldChannel != null) {
+                    MainActivity.mHelloWorldChannel.sendMessage(MainActivity.mCastSession, container.toString());
                 }
             }
         }.run();
     }
 
     public static void sendWidget(Widget widget, Context context) {
-        if (!mCastManager.isConnected())
-            return;
-
         JSONArray widgetsArr = new JSONArray();
         widgetsArr.put(widget.getJSONContent(context));
         CastCommunicator.sendWidgets(widgetsArr);
     }
 
     static void sendAllWidgets(Context context, Dashboard dashboard) {
-        if (!mCastManager.isConnected())
-            return;
-
         JSONArray widgetsArr = new JSONArray();
         for (Widget widget : dashboard.getWidgetList()) {
             widgetsArr.put(widget.getJSONContent(context));

@@ -7,16 +7,14 @@ android {
             storeFile file('/home/dan/android-keys.jks')
         }
     }
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.silver.dan.castdemo"
         minSdkVersion 21
-        targetSdkVersion 25
-        versionCode 56
-        versionName "1.5.12"
-
-        multiDexEnabled true
+        targetSdkVersion 26
+        versionCode 57
+        versionName "1.6.0"
     }
     buildTypes {
         release {
@@ -48,53 +46,46 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     //noinspection GradleCompatible
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:support-annotations:25.2.0'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.android.support:mediarouter-v7:25.2.0' // only needed because gms play services -cast is using old version?
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:support-annotations:27.0.2'
+    compile 'com.android.support:recyclerview-v7:26.1.0'
 
+    compile 'com.google.android.gms:play-services-cast:11.8.0'
+    compile 'com.google.android.gms:play-services-maps:11.8.0'
+    compile 'com.google.android.gms:play-services-location:11.8.0'
+    compile 'com.google.android.gms:play-services-places:11.8.0'
+    compile 'com.google.android.gms:play-services-auth:11.8.0'
+    compile 'com.google.android.gms:play-services-cast-framework:11.8.0'
+    compile 'com.jakewharton:butterknife:8.8.1'
 
-    compile 'com.google.android.gms:play-services-cast:10.2.0'
-    compile 'com.google.android.gms:play-services-maps:10.2.0'
-    compile 'com.google.android.gms:play-services-location:10.2.0'
-    compile 'com.google.android.gms:play-services-places:10.2.0'
-    compile 'com.google.android.gms:play-services-auth:10.2.0'
-//
-    compile 'com.jakewharton:butterknife:8.5.1'
-    compile 'com.jakewharton:butterknife-compiler:8.5.1'
-
-    compile('com.afollestad.material-dialogs:core:0.9.3.0@aar') {
-        transitive = true
-    }
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
     compile 'net.sf.opencsv:opencsv:2.3'
-    compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.9.1'
-    compile 'com.github.QuadFlask:colorpicker:0.0.12'
 
-    compile group: 'com.google.guava', name: 'guava', version: '20.0'
+    compile 'com.github.QuadFlask:colorpicker:0.0.13'
+
     compile 'com.wdullaer:materialdatetimepicker:3.1.2'
 
     compile 'jp.wasabeef:richeditor-android:1.2.1'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.koushikdutta.ion:ion:2.1.9'
+    compile 'com.koushikdutta.ion:ion:2.2.1'
 
 
-    compile 'com.google.firebase:firebase-core:10.2.0'
-    compile 'com.google.firebase:firebase-auth:10.2.0'
-    compile 'com.google.firebase:firebase-database:10.2.0'
-    compile 'com.google.firebase:firebase-crash:10.2.0'
+    compile 'com.google.firebase:firebase-core:11.8.0'
+    compile 'com.google.firebase:firebase-auth:11.8.0'
+    compile 'com.google.firebase:firebase-database:11.8.0'
+    compile 'com.google.firebase:firebase-crash:11.8.0'
 
 
     compile 'jp.wasabeef:recyclerview-animators:2.2.5'
-    compile 'com.auth0.android:jwtdecode:1.1.0'
+    compile 'com.auth0.android:jwtdecode:1.1.1'
+
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
 }
-
-
-apply plugin: 'com.neenbedankt.android-apt'
 
 // ADD THIS AT THE BOTTOM
 apply plugin: 'com.google.gms.google-services'

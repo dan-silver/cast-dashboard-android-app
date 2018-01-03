@@ -1,11 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">Cast Dashboard</string>
 
-    <string name="namespace" translatable="false">urn:x-cast:com.google.cast.sample.helloworld</string>
     <string name="media_route_menu_title" translatable="false">Play on&#8230;</string>
     <string name="navigation_drawer_open" translatable="false">open</string>
     <string name="navigation_drawer_close" translatable="false">closed</string>
-
 
     <!--Widget Types-->
     <string name="calendar">Android Calendar</string>
@@ -74,8 +72,6 @@
     <string name="str_continue" translatable="false">Continue</string>
     <string name="widget_refresh_interval">Refresh</string>
     <string name="minutes">minutes</string>
-    <string name="custom_website_iframe" translatable="false">Custom Website (IFRAME)</string>
-    <string name="website_url" translatable="false">Website URL</string>
     <string name="google_photos_album" translatable="false">Google Photos Album</string>
     <string name="pro_iap_code" translatable="false">cast_pro_2</string>
     <string name="google_photos_album_pro" translatable="false">Google Photos Album (PRO)</string>

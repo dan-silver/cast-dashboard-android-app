@@ -5,9 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -29,28 +26,26 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.vending.billing.IInAppBillingService;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.cast.ApplicationMetadata;
+import com.google.android.gms.cast.framework.CastButtonFactory;
+import com.google.android.gms.cast.framework.CastContext;
+import com.google.android.gms.cast.framework.CastSession;
+import com.google.android.gms.cast.framework.SessionManagerListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.libraries.cast.companionlibrary.cast.BaseCastManager;
-import com.google.android.libraries.cast.companionlibrary.cast.CastConfiguration;
-import com.google.android.libraries.cast.companionlibrary.cast.DataCastManager;
-import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumer;
-import com.google.android.libraries.cast.companionlibrary.cast.callbacks.DataCastConsumerImpl;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.silver.dan.castdemo.cast.CastChannel;
 import com.silver.dan.castdemo.settingsFragments.GoogleCalendarSettings;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -98,8 +93,11 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     }
 
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
-    private static DataCastManager mCastManager;
-    private DataCastConsumer mCastConsumer;
+
+    private CastContext mCastContext;
+    static CastSession mCastSession;
+    static CastChannel mHelloWorldChannel;
+
     private WidgetList widgetListFrag;
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -147,7 +145,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
         mDrawerToggle.syncState();
 
-
         navView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -157,54 +154,12 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                     }
                 });
 
-
-        BaseCastManager.checkGooglePlayServices(this);
-        CastConfiguration.Builder options = new CastConfiguration.Builder(getResources().getString(R.string.app_id))
-                .enableAutoReconnect()
-                .enableWifiReconnection()
-                .addNamespace(getResources().getString(R.string.namespace))
-                .setLaunchOptions(false, Locale.getDefault());
-
-        if (BuildConfig.DEBUG)
-            options.enableDebug();
-
-        DataCastManager.initialize(this, options.build());
-
-        mCastManager = DataCastManager.getInstance();
-        mCastManager.setStopOnDisconnect(false);
-
-        mCastManager.reconnectSessionIfPossible();
-
-        mCastConsumer = new DataCastConsumerImpl() {
-            @Override
-            public void onApplicationConnected(ApplicationMetadata appMetadata, String applicationStatus, String sessionId, boolean wasLaunched) {
-                sendCredentials();
-                dashboard.setOnDataRefreshListener(new OnCompleteCallback() {
-                    @Override
-                    public void onComplete() {
-                        sendAllOptions();
-                        CastCommunicator.sendAllWidgets(getApplicationContext(), getDashboard());
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString("ERROR", e.toString());
-                        mFirebaseAnalytics.logEvent("ON_CONNECTED_REFRESH_ON_ERROR", bundle);
-                    }
-                });
-            }
-        };
-
-
         if (!LoginActivity.restoreUser()) {
             logout();
             return;
         }
 
         setupNavBarUserInfo();
-
-        CastCommunicator.init(mCastManager, getResources().getString(R.string.namespace));
 
         // load options and widgets
         switchToFragment(new LoadingFragment(), false);
@@ -222,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 mFirebaseAnalytics.logEvent("ON_DASHBOARD_LOADED_ON_ERROR", bundle);
             }
         });
-
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
@@ -246,17 +200,14 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
 
                     }
                 });
-
-
             }
         };
+
+        mCastContext = CastContext.getSharedInstance(this);
 
         Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
         serviceIntent.setPackage("com.android.vending");
         bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-
-
-
     }
 
     public void updateUpgradeButtonVisibility(final boolean upgraded) {
@@ -288,20 +239,17 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         CastCommunicator.sendJSON("CREDENTIALS", creds);
     }
 
-
-
     private void setupNavBarUserInfo() {
         View header = navView.getHeaderView(0);
-        userUpgradedBadge = (ImageView) navView.getHeaderView(0).findViewById(R.id.userUpgradedBadge);
+        userUpgradedBadge = navView.getHeaderView(0).findViewById(R.id.userUpgradedBadge);
 
-
-        TextView displayName = (TextView) header.findViewById(R.id.userDisplayName);
+        TextView displayName = header.findViewById(R.id.userDisplayName);
         displayName.setText(AuthHelper.user.getDisplayName());
 
-        TextView email = (TextView) header.findViewById(R.id.userEmail);
+        TextView email = header.findViewById(R.id.userEmail);
         email.setText(AuthHelper.user.getEmail());
 
-        ImageView profilePhoto = (ImageView) header.findViewById(R.id.userPhoto);
+        ImageView profilePhoto = header.findViewById(R.id.userPhoto);
         Picasso.with(getApplicationContext()).load(AuthHelper.user.getPhotoUrl()).into(profilePhoto);
     }
 
@@ -329,23 +277,21 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         }
 
         mDrawer.closeDrawer(GravityCompat.START);
-
     }
 
     private void uncheckAllMenuItems() {
         for (MenuItem item : menuItems) {
             item.setChecked(false);
         }
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        mCastManager.addMediaRouterButton(menu, R.id.media_route_menu_item);
-
+        CastButtonFactory.setUpMediaRouteButton(getApplicationContext(),
+                menu,
+                R.id.media_route_menu_item);
         return true;
     }
 
@@ -418,17 +364,28 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         CastCommunicator.sendJSON("order", widgetsOrder);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Unregister cast session listener
+        mCastContext.getSessionManager().removeSessionManagerListener(mSessionManagerListener,
+                CastSession.class);
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateUpgradeButtonVisibility(BillingHelper.hasPurchased);
 
-        mCastManager = DataCastManager.getInstance();
-        if (mCastManager != null) {
-            mCastManager.addDataCastConsumer(mCastConsumer);
+        // Register cast session listener
+        mCastContext.getSessionManager().addSessionManagerListener(mSessionManagerListener,
+                CastSession.class);
+        if (mCastSession == null) {
+            // Get the current session if there is one
+            mCastSession = mCastContext.getSessionManager().getCurrentCastSession();
         }
 
+        updateUpgradeButtonVisibility(BillingHelper.hasPurchased);
     }
 
     public void onActivityResult(int requestCode, int resultCode, final Intent intent) {
@@ -515,5 +472,113 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(MainActivity.TAG, "Error connecting to google services");
+    }
+
+
+    private SessionManagerListener<CastSession> mSessionManagerListener
+            = new SessionManagerListener<CastSession>() {
+        @Override
+        public void onSessionStarting(CastSession castSession) {
+            // ignore
+        }
+
+        @Override
+        public void onSessionStarted(CastSession castSession, String sessionId) {
+            Log.v(TAG, "Session started");
+            mCastSession = castSession;
+            invalidateOptionsMenu();
+            startCustomMessageChannel();
+
+            sendCredentials();
+            dashboard.setOnDataRefreshListener(new OnCompleteCallback() {
+                @Override
+                public void onComplete() {
+                    sendAllOptions();
+                    CastCommunicator.sendAllWidgets(getApplicationContext(), getDashboard());
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ERROR", e.toString());
+                    mFirebaseAnalytics.logEvent("ON_CONNECTED_REFRESH_ON_ERROR", bundle);
+                }
+            });
+
+        }
+
+        @Override
+        public void onSessionStartFailed(CastSession castSession, int error) {
+            // ignore
+        }
+
+        @Override
+        public void onSessionEnding(CastSession castSession) {
+            // ignore
+        }
+
+        @Override
+        public void onSessionEnded(CastSession castSession, int error) {
+            Log.d(TAG, "Session ended");
+            if (mCastSession == castSession) {
+                cleanupSession();
+            }
+            invalidateOptionsMenu();
+        }
+
+        @Override
+        public void onSessionSuspended(CastSession castSession, int reason) {
+            // ignore
+        }
+
+        @Override
+        public void onSessionResuming(CastSession castSession, String sessionId) {
+            // ignore
+        }
+
+        @Override
+        public void onSessionResumed(CastSession castSession, boolean wasSuspended) {
+            Log.d(TAG, "Session resumed");
+            mCastSession = castSession;
+            invalidateOptionsMenu();
+        }
+
+        @Override
+        public void onSessionResumeFailed(CastSession castSession, int error) {
+            // ignore
+        }
+    };
+
+    private void startCustomMessageChannel() {
+        if (mCastSession != null && mHelloWorldChannel == null) {
+            mHelloWorldChannel = new CastChannel(getString(R.string.namespace));
+            try {
+                mCastSession.setMessageReceivedCallbacks(mHelloWorldChannel.getNamespace(),
+                        mHelloWorldChannel);
+                Log.d(TAG, "Message channel started");
+            } catch (IOException e) {
+                Log.d(TAG, "Error starting message channel", e);
+                mHelloWorldChannel = null;
+            }
+        }
+    }
+
+    private void cleanupSession() {
+        closeCustomMessageChannel();
+        mCastSession = null;
+    }
+
+
+    private void closeCustomMessageChannel() {
+        if (mCastSession != null && mHelloWorldChannel != null) {
+            try {
+                mCastSession.removeMessageReceivedCallbacks(mHelloWorldChannel.getNamespace());
+                Log.d(TAG, "Message channel closed");
+            } catch (IOException e) {
+                Log.d(TAG, "Error closing message channel", e);
+            } finally {
+                mHelloWorldChannel = null;
+            }
+        }
     }
 }

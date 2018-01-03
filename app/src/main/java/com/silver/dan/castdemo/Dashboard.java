@@ -2,6 +2,7 @@ package com.silver.dan.castdemo;
 
 import android.content.Context;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +51,9 @@ public class Dashboard {
     }
 
     static DatabaseReference getFirebaseUserDashboardReference() {
+        if (AuthHelper.user == null) {
+            return null;
+        }
         DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
         return mDatabase
             .child("users")
@@ -85,7 +89,9 @@ public class Dashboard {
             }
         };
 
-        getFirebaseUserDashboardReference().addListenerForSingleValueEvent(postListener);
+        DatabaseReference userRef = getFirebaseUserDashboardReference();
+        if (userRef != null)
+            userRef.addListenerForSingleValueEvent(postListener);
 
     }
 

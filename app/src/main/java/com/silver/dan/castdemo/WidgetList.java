@@ -1,6 +1,7 @@
 package com.silver.dan.castdemo;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -64,7 +65,7 @@ public class WidgetList extends Fragment implements OnDragListener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.widget_list, container, false);
         ButterKnife.bind(this, view);
 
@@ -72,7 +73,7 @@ public class WidgetList extends Fragment implements OnDragListener {
     }
 
     @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         widgetList.setAdapter(adapter);
         widgetList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -164,7 +165,6 @@ public class WidgetList extends Fragment implements OnDragListener {
 
                             widgetCanBeCreatedListeners.add(listener);
                         }
-
                     }
                 })
                 .show();
