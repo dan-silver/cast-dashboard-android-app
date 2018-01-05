@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.cast.framework.CastSession;
 import com.silver.dan.castdemo.widgetList.OnDragListener;
 import com.silver.dan.castdemo.widgetList.SimpleItemTouchHelperCallback;
 import com.silver.dan.castdemo.widgets.CanBeCreatedListener;
@@ -83,7 +84,6 @@ public class WidgetList extends Fragment implements OnDragListener {
         mItemTouchHelper = new ItemTouchHelper(callback);
         mItemTouchHelper.attachToRecyclerView(widgetList);
 
-
         mSwipeContainer.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.ccl_grey600));
         mSwipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -119,7 +119,6 @@ public class WidgetList extends Fragment implements OnDragListener {
             add(Widget.WidgetType.RSS);
             add(Widget.WidgetType.STOCKS);
             add(Widget.WidgetType.WEATHER);
-//            add(Widget.WidgetType.IFRAME);
         }};
 
         new MaterialDialog.Builder(getContext())
@@ -150,7 +149,11 @@ public class WidgetList extends Fragment implements OnDragListener {
 
                                 adapter.addWidget(widget);
 
-                                CastCommunicator.sendWidget(widget, getContext());
+                                CastSession session = MainActivity.mCastSession;
+
+                                if (session != null) {
+                                    (new CastCommunicator(session)).sendWidget(widget, getContext());
+                                }
                             }
                         };
 

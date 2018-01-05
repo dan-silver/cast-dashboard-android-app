@@ -1,7 +1,6 @@
 package com.silver.dan.castdemo;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import com.silver.dan.castdemo.widgetList.ItemTouchHelperAdapter;
 import com.silver.dan.castdemo.widgetList.ItemTouchHelperViewHolder;
 import com.silver.dan.castdemo.widgetList.OnDragListener;
-import com.silver.dan.castdemo.widgets.CanBeCreatedListener;
 import com.silver.dan.castdemo.widgets.UIWidget;
 
 import org.json.JSONException;
@@ -36,19 +34,14 @@ class WidgetListAdapter extends RecyclerView.Adapter<WidgetListAdapter.WidgetVie
     public void onItemMove(int fromPosition, int toPosition) {
         Collections.swap(widgetList, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                mainActivity.onItemMoved(saveWidgetsOrder());
-            }
-        });
+        mainActivity.onItemMoved(saveWidgetsOrder());
+
         syncWidgetPositions();
     }
 
     WidgetListAdapter(MainActivity activity, OnDragListener dragStartListener) {
         this.mainActivity = activity;
         mDragStartListener = dragStartListener;
-
     }
 
     @Override

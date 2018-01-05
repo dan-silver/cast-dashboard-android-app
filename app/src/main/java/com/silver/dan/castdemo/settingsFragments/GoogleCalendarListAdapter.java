@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.silver.dan.castdemo.CastCommunicator;
+import com.silver.dan.castdemo.MainActivity;
 import com.silver.dan.castdemo.R;
 import com.silver.dan.castdemo.Widget;
 import com.silver.dan.castdemo.WidgetOption;
@@ -29,8 +30,8 @@ public class GoogleCalendarListAdapter extends RecyclerView.Adapter<GoogleCalend
 
         public CalendarViewHolder(View v) {
             super(v);
-            this.calendarName = (TextView) v.findViewById(R.id.calendar_name);
-            this.calendarEnabled = (CheckBox) v.findViewById(R.id.calendar_enabled);
+            this.calendarName = v.findViewById(R.id.calendar_name);
+            this.calendarEnabled = v.findViewById(R.id.calendar_enabled);
             this.calendarColor = v.findViewById(R.id.calendar_color);
         }
     }
@@ -70,8 +71,6 @@ public class GoogleCalendarListAdapter extends RecyclerView.Adapter<GoogleCalend
                 WidgetOption calendarEnabled = widget.loadOrInitOption(GoogleCalendarSettings.GOOGLE_CALENDARS_ENABLED, buttonView.getContext());
                 List<String> enabledIds = calendarEnabled.getList();
 
-
-
                 if (isChecked) {
                     if (enabledIds.contains(calendar.id)) {
                         // already there
@@ -83,7 +82,7 @@ public class GoogleCalendarListAdapter extends RecyclerView.Adapter<GoogleCalend
                 }
 
                 calendarEnabled.update(enabledIds);
-                CastCommunicator.sendWidget(widget, holder.calendarName.getContext());
+                new CastCommunicator(MainActivity.mCastSession).sendWidget(widget, holder.calendarName.getContext());
 
             }
         });

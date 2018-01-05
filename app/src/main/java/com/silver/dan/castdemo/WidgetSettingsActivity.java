@@ -144,8 +144,6 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        CastCommunicator.deleteWidget(widget);
-
 
                         Intent resultIntent = new Intent();
                         resultIntent.putExtra(Widget.DELETE_WIDGET, widget.guid);
@@ -166,7 +164,7 @@ public class WidgetSettingsActivity extends AppCompatActivity {
                 WidgetSettingsFragment typeSettingsFragment = ((WidgetSettingsFragment) getSupportFragmentManager().findFragmentById(R.id.widget_settings_type_specific));
 
                 typeSettingsFragment.onPurchasedUpgrade();
-                CastCommunicator.sendAllWidgets(this, MainActivity.getDashboard()); // refresh intervals have changed
+//                CastCommunicator.sendAllWidgets(this, MainActivity.getDashboard()); // refresh intervals have changed
             }
         }
     }

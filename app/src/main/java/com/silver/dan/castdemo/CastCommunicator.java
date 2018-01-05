@@ -2,35 +2,43 @@ package com.silver.dan.castdemo;
 
 import android.content.Context;
 
+import com.google.android.gms.cast.framework.CastSession;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CastCommunicator {
-    public static void sendWidgetProperty(Widget widget, String property, Object value) {
+    CastSession mCastSession;
+
+    public CastCommunicator(CastSession session) {
+        this.mCastSession = session;
+    }
+
+    public void sendWidgetProperty(Widget widget, String property, Object value) {
         try {
             JSONObject propertyValue = new JSONObject();
             propertyValue.put("widgetId", widget.guid);
             propertyValue.put("property", property);
             propertyValue.put("value", value);
-            CastCommunicator.sendJSON("widgetProperty", propertyValue);
+            sendJSON("widgetProperty", propertyValue);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    static void deleteWidget(Widget widget) {
+    void deleteWidget(Widget widget) {
         try {
             JSONObject info = new JSONObject();
             info.put("id", widget.guid);
-            CastCommunicator.sendJSON("deleteWidget", info);
+            sendJSON("deleteWidget", info);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
 
-    static void sendJSON(final String key, final JSONObject payload) {
+    void sendJSON(final String key, final JSONObject payload) {
         JSONObject container = new JSONObject();
 
         try {
@@ -41,7 +49,7 @@ public class CastCommunicator {
         sendJSONContainer(container);
     }
 
-    private static void sendJSON(final String key, final JSONArray payload) {
+    private void sendJSON(final String key, final JSONArray payload) {
         JSONObject container = new JSONObject();
 
         try {
@@ -49,34 +57,30 @@ public class CastCommunicator {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        CastCommunicator.sendJSONContainer(container);
+        sendJSONContainer(container);
     }
 
-    private static void sendJSONContainer(final JSONObject container) {
-        new Runnable() {
-            public void run() {
-                if (MainActivity.mHelloWorldChannel != null) {
-                    MainActivity.mHelloWorldChannel.sendMessage(MainActivity.mCastSession, container.toString());
-                }
-            }
-        }.run();
+    private void sendJSONContainer(final JSONObject container) {
+        if (MainActivity.mHelloWorldChannel != null) {
+            MainActivity.mHelloWorldChannel.sendMessage(mCastSession, container.toString());
+        }
     }
 
-    public static void sendWidget(Widget widget, Context context) {
+    public void sendWidget(Widget widget, Context context) {
         JSONArray widgetsArr = new JSONArray();
         widgetsArr.put(widget.getJSONContent(context));
-        CastCommunicator.sendWidgets(widgetsArr);
+        sendWidgets(widgetsArr);
     }
 
-    static void sendAllWidgets(Context context, Dashboard dashboard) {
+    void sendAllWidgets(Context context, Dashboard dashboard) {
         JSONArray widgetsArr = new JSONArray();
         for (Widget widget : dashboard.getWidgetList()) {
             widgetsArr.put(widget.getJSONContent(context));
         }
-        CastCommunicator.sendJSON("allWidgets", widgetsArr);
+        sendJSON("allWidgets", widgetsArr);
     }
 
-    private static void sendWidgets(JSONArray widgetsArr) {
-        CastCommunicator.sendJSON("widgets", widgetsArr);
+    private void sendWidgets(JSONArray widgetsArr) {
+        sendJSON("widgets", widgetsArr);
     }
 }

@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public static final int NAV_VIEW_OPTIONS_LAYOUT_ITEM = 1;
     public static final int NAV_VIEW_OPTIONS_THEME_ITEM = 2;
 
-
     //drawer
     @BindView(R.id.nvView)
     NavigationView navView;
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     private ArrayList<MenuItem> menuItems = new ArrayList<>();
 
     private CastContext mCastContext;
-    static CastSession mCastSession;
+    public static CastSession mCastSession;
     static CastChannel mHelloWorldChannel;
 
     private WidgetList widgetListFrag;
@@ -119,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.drawer_layout);
         ButterKnife.bind(this);
+        mCastContext = CastContext.getSharedInstance(this);
+
 
         // Set the adapter for the list view
         Menu menu = navView.getMenu();
@@ -203,8 +204,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
             }
         };
 
-        mCastContext = CastContext.getSharedInstance(this);
-
         Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
         serviceIntent.setPackage("com.android.vending");
         bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
@@ -236,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        CastCommunicator.sendJSON("CREDENTIALS", creds);
+        (new CastCommunicator(mCastSession)).sendJSON("CREDENTIALS", creds);
     }
 
     private void setupNavBarUserInfo() {
@@ -317,7 +316,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                     e.printStackTrace();
                 }
 
-                CastCommunicator.sendJSON("options", options);
+                (new CastCommunicator(mCastSession)).sendJSON("options", options);
 
             }
 
@@ -349,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
         JSONObject options = new JSONObject();
         try {
             options.put(setting, value);
-            CastCommunicator.sendJSON("options", options);
+            (new CastCommunicator(mCastSession)).sendJSON("options", options);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -361,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     }
 
     public void onItemMoved(JSONObject widgetsOrder) {
-        CastCommunicator.sendJSON("order", widgetsOrder);
+        (new CastCommunicator(mCastSession)).sendJSON("order", widgetsOrder);
     }
 
     @Override
@@ -396,7 +395,9 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                     new Handler().post(new Runnable() {
                         public void run() {
                             String widgetIdToDelete = intent.getStringExtra(Widget.DELETE_WIDGET);
-                            widgetListFrag.deleteWidget(dashboard.getWidgetById(widgetIdToDelete));
+                            Widget widget = dashboard.getWidgetById(widgetIdToDelete);
+                            new CastCommunicator(mCastSession).deleteWidget(widget);
+                            widgetListFrag.deleteWidget(widget);
                         }
                     });
                 }
@@ -455,7 +456,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 }
             }
         }
-
     }
 
     private void onPurchasedUpgrade() {
@@ -473,7 +473,6 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.e(MainActivity.TAG, "Error connecting to google services");
     }
-
 
     private SessionManagerListener<CastSession> mSessionManagerListener
             = new SessionManagerListener<CastSession>() {
@@ -494,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements OnSettingChangedL
                 @Override
                 public void onComplete() {
                     sendAllOptions();
-                    CastCommunicator.sendAllWidgets(getApplicationContext(), getDashboard());
+                    (new CastCommunicator(mCastSession)).sendAllWidgets(getApplicationContext(), getDashboard());
                 }
 
                 @Override

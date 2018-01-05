@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.google.android.gms.cast.framework.CastSession;
 import com.silver.dan.castdemo.BillingHelper;
 import com.silver.dan.castdemo.CastCommunicator;
 import com.silver.dan.castdemo.MainActivity;
@@ -44,14 +45,21 @@ public abstract class WidgetSettingsFragment extends Fragment {
     // scroll interval in seconds
     WidgetOption optionScrollInterval;
 
-
-
     protected void refreshWidget() {
-        CastCommunicator.sendWidget(widget, getContext());
+
+
+        if (MainActivity.mCastSession != null) {
+
+            (new CastCommunicator(MainActivity.mCastSession)).sendWidget(widget, getContext());
+        }
     }
 
     protected void updateWidgetProperty(String property, Object value) {
-        CastCommunicator.sendWidgetProperty(widget, property, value);
+        CastSession session = MainActivity.mCastSession;
+
+        if (session != null) {
+            (new CastCommunicator(session)).sendWidgetProperty(widget, property, value);
+        }
     }
 
     protected WidgetOption loadOrInitOption(String property) {
